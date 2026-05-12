@@ -896,7 +896,7 @@
    SECTION 3: CURATED PROPERTIES (Horizontal Grid)
    ========================================================================== */
 .curated-properties-section {
-  width: 1280px;
+  width: 1440px;
   max-width: calc(100% - 158px);
   margin: 80px auto;
   box-sizing: border-box;
@@ -1051,7 +1051,7 @@
    SECTION 4: POPULAR OFFERS OF PROPERTY (2x2 Horizontal Layout)
    ========================================================================== */
 .popular-offers-section {
-  width: 1280px; /* Standardizes container width with other page sections */
+  width: 1440px; /* Standardizes container width with other page sections */
   max-width: calc(100% - 158px);
   margin: 60px auto 120px auto;
   box-sizing: border-box;

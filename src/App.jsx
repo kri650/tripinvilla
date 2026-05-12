@@ -1089,11 +1089,12 @@ export default function App() {
 
                     <div className="villa-card-rating-row">
                       <div className="rating-pill">
-                        <Star size={11} fill="#FFFFFF" color="#FFFFFF" />
                         <span>{villa.rating}</span>
                       </div>
-                      <span className="rating-desc-excellent">Excellent</span>
-                      <span className="rating-reviews-count">{villa.reviews}</span>
+                      <div className="rating-text-stack">
+                        <span className="rating-desc-excellent">Excellent</span>
+                        <span className="rating-reviews-count">{villa.reviews}</span>
+                      </div>
                     </div>
 
                     <div className="villa-card-price-row">
