@@ -85,3 +85,374 @@ input:focus, select:focus {
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
 }
+
+/* ==========================================
+   SEARCH RESULTS PAGE STYLING
+   ========================================== */
+.search-results-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 32px;
+  max-width: 1320px;
+  margin: 40px auto 80px;
+  padding: 0 24px;
+}
+
+.search-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.map-preview-box {
+  width: 100%;
+  height: 200px;
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #E5E7EB;
+  background: #E5E7EB;
+}
+
+.map-preview-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.btn-explore-map {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #58A429;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(88, 164, 41, 0.3);
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-explore-map:hover {
+  background: #4A8E20;
+  transform: translateX(-50%) scale(1.05);
+}
+
+.sidebar-filter-block {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+}
+
+.filter-block-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.filter-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.filter-checkbox-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.filter-checkbox-item label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #4B5563;
+  cursor: pointer;
+}
+
+.filter-checkbox-item input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #0C6DC4;
+  cursor: pointer;
+}
+
+.filter-count {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+.price-range-slider {
+  width: 100%;
+  margin: 16px 0;
+}
+
+.budget-inputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.budget-inputs input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+}
+
+.search-main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.search-results-count {
+  font-size: 28px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+}
+
+.search-sort-tabs {
+  display: flex;
+  background: white;
+  border-radius: 12px;
+  padding: 6px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  overflow-x: auto;
+}
+
+.sort-tab {
+  flex: 1;
+  padding: 12px 16px;
+  background: transparent;
+  border: none;
+  border-right: 1px solid #E5E7EB;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.sort-tab:last-child {
+  border-right: none;
+}
+
+.sort-tab.active {
+  color: #0C6DC4;
+}
+
+.sort-tab:hover {
+  color: #111827;
+  background: #F9FAFB;
+}
+
+.search-horizontal-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.horizontal-property-card {
+  display: flex;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+  transition: all 0.2s ease;
+  height: 280px;
+}
+
+.horizontal-property-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.06);
+  border-color: #93C5FD;
+}
+
+.horiz-card-img {
+  width: 320px;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.horiz-card-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.horiz-card-info {
+  flex: 1;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.horiz-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.horiz-card-header h3 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.premium-badge {
+  background: #58A429;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.horiz-card-header p {
+  color: #6B7280;
+  font-size: 14px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fav-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #E5E7EB;
+  background: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.fav-btn:hover {
+  background: #F3F4F6;
+  border-color: #D1D5DB;
+}
+
+.horiz-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+  color: #4B5563;
+}
+
+.rating-badge {
+  background: #58A429;
+  color: white;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.horiz-card-inclusions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+}
+
+.inclusion-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #4B5563;
+  font-weight: 500;
+}
+
+.horiz-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px dashed #E5E7EB;
+}
+
+.horiz-card-price p {
+  font-size: 13px;
+  color: #9CA3AF;
+  margin: 0 0 4px 0;
+  text-decoration: line-through;
+}
+
+.horiz-card-price h4 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #58A429;
+  margin: 0;
+}
+
+.horiz-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-view-details {
+  background: transparent;
+  color: #0C6DC4;
+  border: 1px solid #0C6DC4;
+  padding: 10px 24px;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-view-details:hover {
+  background: #EFF6FF;
+}
+
+.btn-call-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid #58A429;
+  color: #58A429;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-call-icon:hover {
+  background: #F0FDF4;
+}
