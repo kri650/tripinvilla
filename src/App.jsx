@@ -552,6 +552,23 @@ const savedUserReviewsFeed = [
 
 export default function App() {
   const [activeMenu, setActiveMenu] = useState('Home');
+  const [popularOffers, setPopularOffers] = useState([]);
+
+  useEffect(() => {
+    const fetchOffers = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/offers/frontend');
+        if (res.ok) {
+          const data = await res.json();
+          setPopularOffers(data || []);
+        }
+      } catch (err) {
+        console.error('Error fetching frontend offers:', err);
+      }
+    };
+    fetchOffers();
+  }, []);
+
   const [activeSearchTab, setActiveSearchTab] = useState('Villas');
   const [activeDestTab, setActiveDestTab] = useState('Destinations');
   const [activePropCategory, setActivePropCategory] = useState('Apartments');
@@ -3752,30 +3769,53 @@ export default function App() {
 
             {/* 2x2 Grid Layout */}
             <div className="popular-offers-grid">
-              {popularOffersList.map((offer, idx) => (
-                <div key={idx} className="offer-horizontal-card">
-                  <div className="offer-card-img-wrap">
-                    <img src={offer.img} alt={offer.title} />
-                    {(idx === 0 || idx === 3) && (
-                      <span className="exclusive-offer-badge">Exclusive Offer</span>
-                    )}
-                  </div>
+              {((popularOffers && popularOffers.length > 0) ? popularOffers.slice(0, 4) : popularOffersList).map((offer, idx) => {
+                const isDynamic = offer.property_id || offer.propertyName;
+                const title = isDynamic ? `${offer.propertyName || offer.property_id?.name} - ${offer.room_type || offer.room || 'Deluxe Room'}` : offer.title;
+                const subtitle = isDynamic ? `${offer.category} | ${offer.food_type || offer.foods} | ${offer.description}` : offer.subtitle;
+                const discount = isDynamic ? `${offer.offer_percent || offer.offerPercent}` : (offer.discount || '30% OFF');
+                const img = isDynamic 
+                  ? (offer.property_id?.images?.[0] || 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=600&q=80') 
+                  : offer.img;
 
-                  <div className="offer-card-content">
-                    <h3 className="offer-card-title">{offer.title}</h3>
-                    <p className="offer-card-subtitle">{offer.subtitle}</p>
-                    
-                    <div className="offer-card-discount-row">
-                      <span className="discount-label">Up to</span>
-                      <span className="discount-value-highlight">30% OFF</span>
+                return (
+                  <div key={idx} className="offer-horizontal-card">
+                    <div className="offer-card-img-wrap">
+                      <img src={img} alt={title} />
+                      {(idx % 2 === 0) && (
+                        <span className="exclusive-offer-badge">Exclusive Offer</span>
+                      )}
                     </div>
 
-                    <div className="offer-card-actions">
-                      <button className="btn-villa-action outline-blue" style={{ width: '136px' }} onClick={() => setActiveMenu('Detail')}>View Stays</button>
+                    <div className="offer-card-content">
+                      <h3 className="offer-card-title">{title}</h3>
+                      <p className="offer-card-subtitle">{subtitle}</p>
+                      
+                      <div className="offer-card-discount-row">
+                        <span className="discount-label">Up to</span>
+                        <span className="discount-value-highlight">{discount}</span>
+                      </div>
+
+                      <div className="offer-card-actions">
+                        <button 
+                          className="btn-villa-action outline-blue" 
+                          style={{ width: '136px' }} 
+                          onClick={() => {
+                            if (isDynamic && offer.property_id) {
+                              setSelectedProperty(offer.property_id);
+                              setActiveMenu('Detail');
+                            } else {
+                              setActiveMenu('Detail');
+                            }
+                          }}
+                        >
+                          View Stays
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
           </div>
