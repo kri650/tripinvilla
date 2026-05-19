@@ -602,6 +602,7 @@ export default function App() {
 
   // Recommended Page Wishlist toggled list
   const [recWishlist, setRecWishlist] = useState([0, 2]);
+  const [mockWishlistedTitles, setMockWishlistedTitles] = useState([]);
 
   // List Your Place Page Collapsible FAQ Active Index
   const [activeFaq, setActiveFaq] = useState(0);
@@ -840,7 +841,7 @@ export default function App() {
         const data = await res.json();
         if (data && data.properties) {
           setLiveProperties(data.properties);
-          setActiveMenu('Properties');
+          setActiveMenu('Search');
           const f = data.extractedFilters || {};
           if (f.city) setWhere(f.city);
           if (f.type) setActivePropCategory(f.type + 's');
@@ -848,12 +849,12 @@ export default function App() {
       } else {
         // fallback to regular search
         fetchProperties({ search: where });
-        setActiveMenu('Properties');
+        setActiveMenu('Search');
       }
     } catch (e) {
       console.error('AI Search error:', e);
       fetchProperties({ search: where });
-      setActiveMenu('Properties');
+      setActiveMenu('Search');
     } finally {
       setAiSearchLoading(false);
     }
@@ -919,7 +920,7 @@ export default function App() {
   }, [resendTimer]);
 
   const handleSearch = () => {
-    setActiveMenu('Properties');
+    setActiveMenu('Search');
     setAiSearchLabel('');
     // When a text search is active, don't restrict by type
     if (where && where.trim()) {
@@ -943,6 +944,19 @@ export default function App() {
     setFeaturedOnly(false);
     setAiSearchLabel('');
     fetchProperties({});
+  };
+
+  const toggleMockWishlist = (title) => {
+    if (!token) {
+      setAuthMode('login');
+      setAuthModalOpen(true);
+      return;
+    }
+    if (mockWishlistedTitles.includes(title)) {
+      setMockWishlistedTitles(mockWishlistedTitles.filter(t => t !== title));
+    } else {
+      setMockWishlistedTitles([...mockWishlistedTitles, title]);
+    }
   };
 
   const mapDbProperties = (dbProps, defaultList) => {
@@ -1264,6 +1278,7 @@ export default function App() {
           <div className="nav-pill-wrapper">
             {navItems.map((item, index) => {
               const isActive = (activeMenu === item.name) || 
+                               (activeMenu === 'Search' && item.name === 'Properties') ||
                                (activeMenu === 'Detail' && item.name === 'Properties') || 
                                (activeMenu === 'Profile' && item.name === 'Properties') || 
                                (activeMenu === 'Enquiries' && item.name === 'My Enquiries');
@@ -3445,8 +3460,8 @@ export default function App() {
         </div>
       )}
 
-      {/* VIEW D: PROPERTIES LIST PAGE VIEW */}
-      {activeMenu === 'Properties' && (
+      {/* VIEW D: SEARCH RESULTS VIEW */}
+      {activeMenu === 'Search' && (
         <div className="search-results-page fade-in">
           <div className="search-results-layout">
             
@@ -3633,6 +3648,180 @@ export default function App() {
             </div>
 
           </div>
+        </div>
+      )}
+
+      {/* VIEW D2: ORIGINAL PROPERTIES GRID VIEW */}
+      {activeMenu === 'Properties' && (
+        <div className="properties-page-layout fade-in">
+          
+          {/* Sub Categories Scroll selector */}
+          <div className="properties-categories-scroller">
+            <div className="properties-categories-inner">
+              {propertyCategories.map((cat) => {
+                const isSelected = activePropCategory === cat.name;
+                return (
+                  <button
+                    key={cat.name}
+                    className={`prop-cat-outline-btn ${isSelected ? 'active' : ''}`}
+                    onClick={() => {
+                      setActivePropCategory(cat.name);
+                      fetchProperties({ type: cat.name });
+                      setActiveMenu('Search');
+                    }}
+                  >
+                    <span className="prop-cat-icon">{cat.icon}</span>
+                    <span>{cat.name}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* SECTION A: Best Villas Around You */}
+          <div className="villas-around-section" style={{ marginTop: '40px' }}>
+            <div className="section-title-wrap">
+              <h2 className="section-main-headline">
+                Best <span className="highlight-sharp-blue-box">Villas</span> Around You
+              </h2>
+              <p className="section-sub-headline">
+                Choose from homestays, villas, apartments, resorts and more—stays that fit your travel style.
+              </p>
+            </div>
+
+            <div className="villas-grid">
+              {propertiesVillasList.map((villa, idx) => {
+                const isLiked = mockWishlistedTitles.includes(villa.title);
+                return (
+                  <div key={idx} className="villa-card">
+                    <div className="villa-card-img-wrap">
+                      <img src={villa.img} alt={villa.title} />
+                      <button className="wishlist-btn-circle" onClick={() => toggleMockWishlist(villa.title)}>
+                        <Heart size={16} fill={isLiked ? '#EF4444' : 'none'} color={isLiked ? '#EF4444' : '#111827'} />
+                      </button>
+                    </div>
+                    
+                    <div className="villa-card-content">
+                      <h3 className="villa-card-title">{villa.title}</h3>
+                      
+                      <div className="villa-card-location">
+                        <MapPin size={13} color="#9CA3AF" />
+                        <span>{villa.location}</span>
+                      </div>
+
+                      {/* 2x2 Custom Structural Grid */}
+                      <div className="property-specs-grid-2x2">
+                        <div className="prop-spec-item">
+                          <Maximize size={12} color="#8A99AD" />
+                          <span>Area Size: {villa.area}</span>
+                        </div>
+                        <div className="prop-spec-item">
+                          <Bed size={12} color="#8A99AD" />
+                          <span>Beds: {villa.beds}</span>
+                        </div>
+                        <div className="prop-spec-item">
+                          <DoorClosed size={12} color="#8A99AD" />
+                          <span>Rooms: {villa.rooms}</span>
+                        </div>
+                        <div className="prop-spec-item">
+                          <Users size={12} color="#8A99AD" />
+                          <span>Guests: {villa.guests}</span>
+                        </div>
+                      </div>
+
+                      <div className="villa-card-price-row" style={{ marginTop: '4px' }}>
+                        <span className="price-label">Starting from</span>
+                        <span className="price-value-highlight">{villa.price}/night</span>
+                      </div>
+
+                      <div className="villa-card-actions">
+                        <button className="btn-villa-action outline-blue" onClick={() => { setSelectedProperty(villa); setActiveMenu('Detail'); }}>View Details</button>
+                        <button className="btn-villa-action outline-green" onClick={() => { setSelectedProperty(villa); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="view-more-btn-container">
+              <button className="btn-view-more">View More</button>
+            </div>
+
+          </div>
+
+          {/* SECTION B: Best Homestays Around You */}
+          <div className="villas-around-section" style={{ margin: '80px auto' }}>
+            <div className="section-title-wrap">
+              <h2 className="section-main-headline">
+                Best <span className="highlight-sharp-blue-box">Homestays</span> Around You
+              </h2>
+              <p className="section-sub-headline">
+                Choose from homestays, villas, apartments, resorts and more—stays that fit your travel style.
+              </p>
+            </div>
+
+            <div className="villas-grid">
+              {propertiesHomestaysList.map((homestay, idx) => {
+                const isLiked = mockWishlistedTitles.includes(homestay.title);
+                return (
+                  <div key={idx} className="villa-card">
+                    <div className="villa-card-img-wrap">
+                      <img src={homestay.img} alt={homestay.title} />
+                      <button className="wishlist-btn-circle" onClick={() => toggleMockWishlist(homestay.title)}>
+                        <Heart size={16} fill={isLiked ? '#EF4444' : 'none'} color={isLiked ? '#EF4444' : '#111827'} />
+                      </button>
+                    </div>
+                    
+                    <div className="villa-card-content">
+                      <h3 className="villa-card-title">{homestay.title}</h3>
+                      
+                      <div className="villa-card-location">
+                        <MapPin size={13} color="#9CA3AF" />
+                        <span>{homestay.location}</span>
+                      </div>
+
+                      {/* 2x2 Custom Structural Grid */}
+                      <div className="property-specs-grid-2x2">
+                        <div className="prop-spec-item">
+                          <Maximize size={12} color="#8A99AD" />
+                          <span>Area Size: {homestay.area}</span>
+                        </div>
+                        <div className="prop-spec-item">
+                          <Bed size={12} color="#8A99AD" />
+                          <span>Beds: {homestay.beds}</span>
+                        </div>
+                        <div className="prop-spec-item">
+                          <DoorClosed size={12} color="#8A99AD" />
+                          <span>Rooms: {homestay.rooms}</span>
+                        </div>
+                        <div className="prop-spec-item">
+                          <Users size={12} color="#8A99AD" />
+                          <span>Guests: {homestay.guests}</span>
+                        </div>
+                      </div>
+
+                      <div className="villa-card-price-row" style={{ marginTop: '4px' }}>
+                        <span className="price-label">Starting from</span>
+                        <span className="price-value-highlight">{homestay.price}/night</span>
+                      </div>
+
+                      <div className="villa-card-actions">
+                        <button className="btn-villa-action outline-blue" onClick={() => { setSelectedProperty(homestay); setActiveMenu('Detail'); }}>View Details</button>
+                        <button className="btn-villa-action outline-green" onClick={() => { setSelectedProperty(homestay); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="view-more-btn-container">
+              <button className="btn-view-more">View More</button>
+            </div>
+
+          </div>
+
         </div>
       )}
 
