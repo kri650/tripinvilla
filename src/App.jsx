@@ -593,6 +593,13 @@ export default function App() {
   const [contactMessage, setContactMessage] = useState('');
   const [contactAgreed, setContactAgreed] = useState(false);
 
+  // Guest Enquiry form states
+  const [guestEnquiryName, setGuestEnquiryName] = useState('');
+  const [guestEnquiryPhone, setGuestEnquiryPhone] = useState('');
+  const [guestEnquiryEmail, setGuestEnquiryEmail] = useState('');
+  const [guestEnquiryMessage, setGuestEnquiryMessage] = useState('');
+  const [guestEnquirySubmitting, setGuestEnquirySubmitting] = useState(false);
+
   // Recommended Page Wishlist toggled list
   const [recWishlist, setRecWishlist] = useState([0, 2]);
 
@@ -1043,6 +1050,48 @@ export default function App() {
       setOtpError('Failed to verify OTP code. Please check connection.');
     } finally {
       setOtpLoading(false);
+    }
+  };
+
+  const handleEnquirySubmit = async (e) => {
+    e.preventDefault();
+    const propToUse = selectedProperty || activeDetailProp;
+    if (!propToUse || !propToUse._id) {
+      alert('Error: No active property selected.');
+      return;
+    }
+
+    try {
+      setGuestEnquirySubmitting(true);
+      const res = await fetch(`${API_BASE}/enquiries`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          property_id: propToUse._id,
+          user_name: guestEnquiryName,
+          phone: guestEnquiryPhone,
+          email: guestEnquiryEmail,
+          query: guestEnquiryMessage
+        })
+      });
+
+      if (res.ok) {
+        alert('Your enquiry has been sent to the property owner successfully!');
+        setGuestEnquiryName('');
+        setGuestEnquiryPhone('');
+        setGuestEnquiryEmail('');
+        setGuestEnquiryMessage('');
+      } else {
+        const errorData = await res.json();
+        alert(errorData.message || 'Failed to submit enquiry.');
+      }
+    } catch (err) {
+      console.error('Error submitting enquiry:', err);
+      alert('Failed to connect to the server.');
+    } finally {
+      setGuestEnquirySubmitting(false);
     }
   };
 
@@ -3056,6 +3105,70 @@ export default function App() {
                       </button>
                     )}
 
+                  </div>
+
+                  {/* Contact Owner / Enquire Now form */}
+                  <div className="enquiry-card-sidebar" style={{ marginTop: '20px', background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '20px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', boxSizing: 'border-box', width: '100%', display: 'flex', flexDirection: 'column' }}>
+                    <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginTop: 0, marginBottom: '14px', fontFamily: '"Outfit", sans-serif', borderBottom: '1px solid #F3F4F6', paddingBottom: '8px' }}>
+                      Contact Owner / Enquire Now
+                    </h3>
+                    <form onSubmit={handleEnquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <label style={{ fontSize: '11px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Your Name*</label>
+                        <input 
+                          type="text" 
+                          value={guestEnquiryName}
+                          onChange={(e) => setGuestEnquiryName(e.target.value)}
+                          required 
+                          placeholder="e.g. John Doe"
+                          style={{ padding: '8px 12px', fontSize: '12.5px', border: '1px solid #D1D5DB', borderRadius: '6px', outline: 'none', background: '#ffffff', color: '#111827' }}
+                        />
+                      </div>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <label style={{ fontSize: '11px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Phone Number*</label>
+                        <input 
+                          type="tel" 
+                          value={guestEnquiryPhone}
+                          onChange={(e) => setGuestEnquiryPhone(e.target.value)}
+                          required 
+                          placeholder="e.g. +91 9876543210"
+                          style={{ padding: '8px 12px', fontSize: '12.5px', border: '1px solid #D1D5DB', borderRadius: '6px', outline: 'none', background: '#ffffff', color: '#111827' }}
+                        />
+                      </div>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <label style={{ fontSize: '11px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Email Address*</label>
+                        <input 
+                          type="email" 
+                          value={guestEnquiryEmail}
+                          onChange={(e) => setGuestEnquiryEmail(e.target.value)}
+                          required 
+                          placeholder="e.g. john@example.com"
+                          style={{ padding: '8px 12px', fontSize: '12.5px', border: '1px solid #D1D5DB', borderRadius: '6px', outline: 'none', background: '#ffffff', color: '#111827' }}
+                        />
+                      </div>
+
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                        <label style={{ fontSize: '11px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Query / Message*</label>
+                        <textarea 
+                          value={guestEnquiryMessage}
+                          onChange={(e) => setGuestEnquiryMessage(e.target.value)}
+                          required 
+                          rows={3}
+                          placeholder="Write your query to the owner..."
+                          style={{ padding: '8px 12px', fontSize: '12.5px', border: '1px solid #D1D5DB', borderRadius: '6px', outline: 'none', resize: 'none', background: '#ffffff', color: '#111827' }}
+                        />
+                      </div>
+
+                      <button 
+                        type="submit" 
+                        disabled={guestEnquirySubmitting}
+                        style={{ marginTop: '6px', background: '#2563eb', color: '#ffffff', fontWeight: 600, fontSize: '13px', padding: '10px', border: 'none', borderRadius: '6px', cursor: 'pointer', transition: 'background 0.2s', opacity: guestEnquirySubmitting ? 0.7 : 1 }}
+                      >
+                        {guestEnquirySubmitting ? 'Sending...' : 'Submit Enquiry'}
+                      </button>
+                    </form>
                   </div>
                 </>
               );
