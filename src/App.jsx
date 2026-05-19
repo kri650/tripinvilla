@@ -586,6 +586,15 @@ export default function App() {
   const [verifiedOnly, setVerifiedOnly] = useState(false);
   const [featuredOnly, setFeaturedOnly] = useState(false);
 
+  // Search Results Filter States
+  const [filterMinPrice, setFilterMinPrice] = useState('');
+  const [filterMaxPrice, setFilterMaxPrice] = useState('');
+  const [filterPriceSlider, setFilterPriceSlider] = useState(50000);
+  const [filterSelectedTypes, setFilterSelectedTypes] = useState([]);
+  const [filterSelectedAmenities, setFilterSelectedAmenities] = useState([]);
+  const [filterMinRating, setFilterMinRating] = useState(0);
+  const [searchSortBy, setSearchSortBy] = useState('popularity');
+
   // Contact Us Form States
   const [contactName, setContactName] = useState('');
   const [contactPhone, setContactPhone] = useState('');
@@ -3477,25 +3486,28 @@ export default function App() {
                 <h4 className="filter-block-title">Property Type</h4>
                 <div className="filter-checkbox-list">
                   {[
-                    { label: 'Hotel', count: 122 },
-                    { label: 'Villa', count: 12 },
-                    { label: 'Resorts', count: 12 },
-                    { label: 'Motels', count: 12 },
-                    { label: 'Cottages', count: 12 },
-                    { label: 'Bungalows', count: 12 },
-                    { label: 'Apartments', count: 12 }
-                  ].map((type, i) => (
-                    <div key={i} className="filter-checkbox-item">
-                      <label>
-                        <input type="checkbox" checked={activePropCategory.includes(type.label) || activePropCategory === 'More+'} onChange={() => {
-                          setActivePropCategory(type.label);
-                          fetchProperties({ type: type.label, search: where });
-                        }} />
-                        {type.label}
-                      </label>
-                      <span className="filter-count">({type.count})</span>
-                    </div>
-                  ))}
+                    'Hotel', 'Villa', 'Resort', 'Motel', 'Cottage', 'Bungalow', 'Apartment', 'Homestay'
+                  ].map((typeLabel, i) => {
+                    const isChecked = filterSelectedTypes.includes(typeLabel);
+                    return (
+                      <div key={i} className="filter-checkbox-item">
+                        <label>
+                          <input type="checkbox" checked={isChecked} onChange={() => {
+                            const updated = isChecked
+                              ? filterSelectedTypes.filter(t => t !== typeLabel)
+                              : [...filterSelectedTypes, typeLabel];
+                            setFilterSelectedTypes(updated);
+                            if (updated.length === 1) {
+                              fetchProperties({ type: updated[0], search: where });
+                            } else if (updated.length === 0) {
+                              fetchProperties({ search: where });
+                            }
+                          }} />
+                          {typeLabel}
+                        </label>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -3503,37 +3515,67 @@ export default function App() {
               <div className="sidebar-filter-block">
                 <h4 className="filter-block-title">Price Per Night</h4>
                 <div className="price-range-slider">
-                   <input type="range" min="100" max="1000" style={{ width: '100%', accentColor: '#111827' }} />
+                   <input
+                     type="range" min="500" max="100000" step="500"
+                     value={filterPriceSlider}
+                     onChange={e => setFilterPriceSlider(Number(e.target.value))}
+                     onMouseUp={() => fetchProperties({ search: where, maxPrice: filterPriceSlider })}
+                     onTouchEnd={() => fetchProperties({ search: where, maxPrice: filterPriceSlider })}
+                     style={{ width: '100%', accentColor: '#111827' }}
+                   />
                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '600', marginTop: '8px' }}>
-                      <span>₹ 100</span>
-                      <span>₹ 1000</span>
+                      <span>₹ 500</span>
+                      <span>₹ {filterPriceSlider.toLocaleString('en-IN')}</span>
                    </div>
                 </div>
                 <h4 className="filter-block-title" style={{ marginTop: '24px', marginBottom: '12px' }}>Your Budget</h4>
                 <div className="budget-inputs">
-                  <input type="text" placeholder="Min" />
+                  <input
+                    type="number"
+                    placeholder="Min"
+                    value={filterMinPrice}
+                    onChange={e => setFilterMinPrice(e.target.value)}
+                    style={{ width: '70px' }}
+                  />
                   <span style={{ fontSize: '12px', color: '#6B7280' }}>To</span>
-                  <input type="text" placeholder="Max" />
-                  <button style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><ArrowRight size={18} color="#111827" /></button>
+                  <input
+                    type="number"
+                    placeholder="Max"
+                    value={filterMaxPrice}
+                    onChange={e => setFilterMaxPrice(e.target.value)}
+                    style={{ width: '70px' }}
+                  />
+                  <button
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    onClick={() => fetchProperties({ search: where, minPrice: filterMinPrice || undefined, maxPrice: filterMaxPrice || undefined })}
+                  >
+                    <ArrowRight size={18} color="#111827" />
+                  </button>
                 </div>
               </div>
 
-              {/* Star Category Filter */}
+              {/* Star Category / Rating Filter */}
               <div className="sidebar-filter-block">
-                <h4 className="filter-block-title">Star Category</h4>
+                <h4 className="filter-block-title">Minimum Rating</h4>
                 <div className="filter-checkbox-list">
                   {[5, 4, 3, 2].map((star, i) => (
                     <div key={i} className="filter-checkbox-item">
                       <label style={{ display: 'flex', alignItems: 'center' }}>
-                        <input type="checkbox" defaultChecked={star === 5} />
-                        {star} Star
+                        <input
+                          type="checkbox"
+                          checked={filterMinRating === star}
+                          onChange={() => {
+                            const newVal = filterMinRating === star ? 0 : star;
+                            setFilterMinRating(newVal);
+                          }}
+                        />
+                        {star}+ Stars
                         <div style={{ display: 'flex', marginLeft: '6px', gap: '2px' }}>
                           {Array(5).fill(0).map((_, idx) => (
                             <Star key={idx} size={12} fill={idx < star ? "#0C6DC4" : "#E5E7EB"} color={idx < star ? "#0C6DC4" : "#E5E7EB"} />
                           ))}
                         </div>
                       </label>
-                      <span className="filter-count">({star === 5 ? 122 : 12})</span>
                     </div>
                   ))}
                 </div>
@@ -3543,51 +3585,124 @@ export default function App() {
               <div className="sidebar-filter-block">
                 <h4 className="filter-block-title">Amenities</h4>
                 <div className="filter-checkbox-list">
-                  {['Swimming Pool', 'WiFi', 'Parking', 'Barbeque', 'Lift/Elevator', 'Bonfire'].map((amenity, i) => (
-                    <div key={i} className="filter-checkbox-item">
-                      <label>
-                        <input type="checkbox" />
-                        {amenity}
-                      </label>
-                      <span className="filter-count">({i === 0 ? 122 : 12})</span>
-                    </div>
-                  ))}
+                  {['Swimming Pool', 'WiFi', 'Parking', 'Barbeque', 'Lift/Elevator', 'Bonfire'].map((amenity, i) => {
+                    const isChecked = filterSelectedAmenities.includes(amenity);
+                    return (
+                      <div key={i} className="filter-checkbox-item">
+                        <label>
+                          <input type="checkbox" checked={isChecked} onChange={() => {
+                            setFilterSelectedAmenities(isChecked
+                              ? filterSelectedAmenities.filter(a => a !== amenity)
+                              : [...filterSelectedAmenities, amenity]
+                            );
+                          }} />
+                          {amenity}
+                        </label>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
+              {/* Clear All Filters button */}
+              <button
+                onClick={() => {
+                  setFilterSelectedTypes([]);
+                  setFilterSelectedAmenities([]);
+                  setFilterMinPrice('');
+                  setFilterMaxPrice('');
+                  setFilterPriceSlider(50000);
+                  setFilterMinRating(0);
+                  setSearchSortBy('popularity');
+                  fetchProperties({ search: where });
+                }}
+                style={{ width: '100%', marginTop: '16px', padding: '10px', background: '#F3F4F6', border: '1px solid #E5E7EB', borderRadius: '10px', fontSize: '13px', fontWeight: 600, color: '#374151', cursor: 'pointer' }}
+              >
+                Clear All Filters
+              </button>
             </div>
 
             {/* Main Results Column */}
             <div className="search-main-content">
-              <h2 className="search-results-count">{currentPropertiesVillas.length} Properties In {where || "Goa"}</h2>
+              <h2 className="search-results-count">
+                {(() => {
+                  let displayList = currentPropertiesVillas;
+                  if (filterSelectedTypes.length > 0) {
+                    displayList = displayList.filter(p => filterSelectedTypes.some(t => p.type?.toLowerCase() === t.toLowerCase() || p.category?.toLowerCase() === t.toLowerCase()));
+                  }
+                  if (filterMinRating > 0) {
+                    displayList = displayList.filter(p => (p.rating || 0) >= filterMinRating);
+                  }
+                  if (filterSelectedAmenities.length > 0) {
+                    displayList = displayList.filter(p => {
+                      const propAmenities = (p.amenities || []).map(a => a.toLowerCase());
+                      return filterSelectedAmenities.some(a => propAmenities.some(pa => pa.includes(a.toLowerCase())));
+                    });
+                  }
+                  return `${displayList.length} Properties In ${where || 'India'}`;
+                })()}
+              </h2>
               
               <div className="search-sort-tabs">
-                <button className="sort-tab active">Popularity</button>
-                <button className="sort-tab">Price (Low to High)</button>
-                <button className="sort-tab">Price (High to Low)</button>
-                <button className="sort-tab">Offer Included</button>
-                <button className="sort-tab">User Rating (Highest)</button>
+                {[['popularity', 'Popularity'], ['price_low', 'Price (Low to High)'], ['price_high', 'Price (High to Low)'], ['offer', 'Offer Included'], ['rating', 'User Rating (Highest)']].map(([key, label]) => (
+                  <button key={key} className={`sort-tab ${searchSortBy === key ? 'active' : ''}`} onClick={() => setSearchSortBy(key)}>{label}</button>
+                ))}
               </div>
 
               <div className="search-horizontal-list">
-                {currentPropertiesVillas.length === 0 ? (
-                  <div style={{ textAlign: 'center', padding: '60px', background: 'white', borderRadius: '20px', border: '1px solid #E5E7EB' }}>
-                    <Search size={40} color="#0C6DC4" style={{ marginBottom: '16px' }} />
-                    <h3 style={{ fontSize: '20px', color: '#111827', marginBottom: '8px' }}>No properties found</h3>
-                    <p style={{ color: '#6B7280', marginBottom: '20px' }}>Try adjusting your filters or search criteria.</p>
-                    <button className="btn-view-details" onClick={handleClearAll}>Clear Filters</button>
-                  </div>
-                ) : (
-                  currentPropertiesVillas.map((property, idx) => {
+                {(() => {
+                  let displayList = [...currentPropertiesVillas];
+                  // Apply type filter
+                  if (filterSelectedTypes.length > 0) {
+                    displayList = displayList.filter(p => filterSelectedTypes.some(t => p.type?.toLowerCase() === t.toLowerCase() || p.category?.toLowerCase() === t.toLowerCase()));
+                  }
+                  // Apply rating filter
+                  if (filterMinRating > 0) {
+                    displayList = displayList.filter(p => (p.rating || 0) >= filterMinRating);
+                  }
+                  // Apply amenities filter
+                  if (filterSelectedAmenities.length > 0) {
+                    displayList = displayList.filter(p => {
+                      const propAmenities = (p.amenities || []).map(a => a.toLowerCase());
+                      return filterSelectedAmenities.some(a => propAmenities.some(pa => pa.includes(a.toLowerCase())));
+                    });
+                  }
+                  // Apply sort
+                  if (searchSortBy === 'price_low') {
+                    displayList.sort((a, b) => {
+                      const pa = Number(String(a.price || a.bestRoomRate || 0).replace(/[^\d]/g, ''));
+                      const pb = Number(String(b.price || b.bestRoomRate || 0).replace(/[^\d]/g, ''));
+                      return pa - pb;
+                    });
+                  } else if (searchSortBy === 'price_high') {
+                    displayList.sort((a, b) => {
+                      const pa = Number(String(a.price || a.bestRoomRate || 0).replace(/[^\d]/g, ''));
+                      const pb = Number(String(b.price || b.bestRoomRate || 0).replace(/[^\d]/g, ''));
+                      return pb - pa;
+                    });
+                  } else if (searchSortBy === 'rating') {
+                    displayList.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                  } else if (searchSortBy === 'offer') {
+                    displayList.sort((a, b) => (b.hasActiveOffer ? 1 : 0) - (a.hasActiveOffer ? 1 : 0));
+                  }
+                  if (displayList.length === 0) return (
+                    <div style={{ textAlign: 'center', padding: '60px', background: 'white', borderRadius: '20px', border: '1px solid #E5E7EB' }}>
+                      <Search size={40} color="#0C6DC4" style={{ marginBottom: '16px' }} />
+                      <h3 style={{ fontSize: '20px', color: '#111827', marginBottom: '8px' }}>No properties found</h3>
+                      <p style={{ color: '#6B7280', marginBottom: '20px' }}>Try adjusting your filters or search criteria.</p>
+                      <button className="btn-view-details" onClick={handleClearAll}>Clear Filters</button>
+                    </div>
+                  );
+                  return displayList.map((property, idx) => {
                     const isWishlisted = user && user.wishlist && user.wishlist.some(w => w._id === property._id || w === property._id);
                     return (
                       <div key={idx} className="horizontal-property-card">
                         <div className="horiz-card-img">
-                          <img src={property.img} alt={property.title} />
+                          <img src={property.img || property.image} alt={property.title || property.propertyName} />
                         </div>
                         <div className="horiz-card-info">
                           <div className="horiz-card-header">
                             <div>
-                              <h3>{property.title} {idx === 0 && <span className="premium-badge"><Star size={10} fill="white" /> Premium</span>}</h3>
+                              <h3>{property.title || property.propertyName} {idx === 0 && <span className="premium-badge"><Star size={10} fill="white" /> Premium</span>}</h3>
                               <p><MapPin size={14} color="#9CA3AF" /> {property.location}</p>
                             </div>
                             <button 
@@ -3616,7 +3731,7 @@ export default function App() {
                           </div>
                           
                           <div className="horiz-card-rating">
-                            <span className="rating-badge">{property.rating}</span>
+                            <span className="rating-badge">{property.rating || '4.8'}</span>
                             <span style={{display: 'flex', flexDirection: 'column'}}>
                               <span style={{color: '#4B5563', fontWeight: '500'}}>Excellent</span>
                               <span style={{ color: '#9CA3AF', fontSize: '13px' }}>{property.reviews || '3,245 Genuine Reviews'}</span>
@@ -3631,8 +3746,8 @@ export default function App() {
 
                           <div className="horiz-card-footer">
                             <div className="horiz-card-price">
-                              <p>₹{parseInt(property.price.replace(/[^\d]/g, '')) + 500}/night</p>
-                              <h4>{property.price}/night</h4>
+                              <p>₹{(Number(String(property.price || property.bestRoomRate || 0).replace(/[^\d]/g, '')) + 500).toLocaleString('en-IN')}/night</p>
+                              <h4>₹{Number(String(property.price || property.bestRoomRate || 0).replace(/[^\d]/g, '')).toLocaleString('en-IN')}/night</h4>
                             </div>
                             <div className="horiz-card-actions">
                               <button className="btn-view-details" onClick={() => { setSelectedProperty(property); setActiveMenu('Detail'); }}>View Details</button>
@@ -3642,8 +3757,8 @@ export default function App() {
                         </div>
                       </div>
                     );
-                  })
-                )}
+                  });
+                })()}
               </div>
             </div>
 
