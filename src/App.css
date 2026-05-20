@@ -1670,9 +1670,8 @@
 
 .detail-image-gallery {
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  grid-gap: 12px;
-  height: 440px; /* Upgraded to 440px for highly premium cinematic proportions */
+  grid-gap: 8px;
+  height: 440px;
   min-height: 440px;
   max-height: 440px;
   overflow: hidden;

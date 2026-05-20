@@ -3259,24 +3259,30 @@ export default function App() {
                   <div className="detail-image-gallery" style={{
                     gridTemplateColumns: propImages.length <= 1 ? '1fr' : '1.6fr 1fr'
                   }}>
+                    {/* Large main image */}
                     <div className="gallery-master-img">
                       <img src={propImages[0]} alt={activeDetailProp.title} />
                     </div>
+
+                    {/* Right 2x2 grid */}
                     {propImages.length > 1 && (
-                      <div className="gallery-sub-images">
-                        <div className="sub-img-wrap">
-                          <img src={propImages[1]} alt={`${activeDetailProp.title} View 1`} />
-                        </div>
-                        {propImages[2] && (
-                          <div className="sub-img-wrap overlay">
-                            <img src={propImages[2]} alt={`${activeDetailProp.title} View 2`} />
-                            {propImages.length > 3 && (
-                              <div className="gallery-count-layer">
-                                <span>View {propImages.length - 2} more</span>
-                              </div>
-                            )}
-                          </div>
-                        )}
+                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '6px', height: '440px' }}>
+                        {[1, 2, 3, 4].map((i) => {
+                          const imgSrc = propImages[i];
+                          if (!imgSrc) return null;
+                          const isLast = i === 4 || (i === propImages.length - 1 && propImages.length <= 5);
+                          const remaining = propImages.length - 5;
+                          return (
+                            <div key={i} style={{ position: 'relative', overflow: 'hidden', height: '100%', borderRadius: i === 2 ? '0 8px 0 0' : i === 4 ? '0 0 8px 0' : '0' }}>
+                              <img src={imgSrc} alt={`${activeDetailProp.title} view ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                              {isLast && remaining > 0 && (
+                                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.52)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
+                                  <span style={{ color: '#fff', fontWeight: 700, fontSize: '15px', letterSpacing: '0.3px' }}>View {remaining} more</span>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
                       </div>
                     )}
                   </div>
@@ -3430,11 +3436,11 @@ export default function App() {
               {(propertyRooms && propertyRooms.length > 0 ? propertyRooms : roomOptions).map((room, idx) => (
                 <div key={idx} className="room-vertical-card">
                   <div className="room-card-img-wrap">
-                    <img src={room.img || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80'} alt={room.title} />
+                    <img src={room.room_image_url || room.img || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80'} alt={room.room_type || room.title} />
                   </div>
                   <div className="room-card-info-wrap">
                     <div className="room-card-mid-col">
-                      <h4 className="room-card-title">{room.title}</h4>
+                      <h4 className="room-card-title">{room.room_type || room.title}</h4>
                       
                       <div className="room-card-bullets-list">
                         {(room.offers || []).map((off, oIdx) => (
@@ -3454,25 +3460,25 @@ export default function App() {
                       <div className="room-card-traits-grid">
                         <div className="trait-lbl-item">
                           <Bed size={12} color="#8A99AD" />
-                          <span>Beds: {room.beds}</span>
+                          <span>Beds: {room.bed_type || room.beds || '2 Beds'}</span>
                         </div>
                         <div className="trait-lbl-item">
                           <DoorClosed size={12} color="#8A99AD" />
-                          <span>Rooms: {room.rooms}</span>
+                          <span>Rooms: {room.rooms || '1 Room'}</span>
                         </div>
                         <div className="trait-lbl-item">
                           <Users size={12} color="#8A99AD" />
-                          <span>Guests: {room.guests}</span>
+                          <span>Guests: {room.guests || '3 Person'}</span>
                         </div>
                       </div>
                     </div>
 
                     <div className="room-card-pricing-col">
                       <span className="room-taxes-label">+212 taxes & fees per room per night</span>
-                      {room.originalPrice && (
-                        <span className="room-old-strike">₹{Number(room.originalPrice).toLocaleString('en-IN')}/night</span>
+                      {(room.original_price || room.originalPrice) && (
+                        <span className="room-old-strike">₹{Number(room.original_price || room.originalPrice).toLocaleString('en-IN')}/night</span>
                       )}
-                      <span className="room-green-val">₹{Number(room.price || 1400).toLocaleString('en-IN')}/night</span>
+                      <span className="room-green-val">₹{Number(room.price_per_room || room.price || 1400).toLocaleString('en-IN')}/night</span>
                       
                       {hostContactRevealed ? (
                         <button className="btn-view-contact-green revealed-active" style={{ width: '100%', marginTop: '10px', background: '#38A169', boxShadow: '0 4px 12px rgba(56, 161, 105, 0.3)' }}>
@@ -3518,8 +3524,12 @@ export default function App() {
                 <div className="landmarks-stack">
                   {(dynamicLandmarks.length > 0 ? dynamicLandmarks : landmarks).map((mark, idx) => (
                     <div key={idx} className="landmark-row-item">
-                      <div className="landmark-avatar-circle">
-                        <MapPin size={14} color="var(--primary-blue)" />
+                      <div className="landmark-avatar-circle" style={mark.landmark_image_url ? { padding: 0, overflow: 'hidden', background: 'none', border: 'none', width: '44px', height: '44px', borderRadius: '10px', flexShrink: 0 } : {}}>
+                        {mark.landmark_image_url ? (
+                          <img src={mark.landmark_image_url} alt={mark.landmark_name || mark.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px', display: 'block' }} />
+                        ) : (
+                          <MapPin size={14} color="var(--primary-blue)" />
+                        )}
                       </div>
                       <div className="landmark-texts">
                         <span className="landmark-title-name">{mark.landmark_name || mark.name}</span>
