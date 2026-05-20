@@ -594,6 +594,11 @@ export default function App() {
   const [filterSelectedAmenities, setFilterSelectedAmenities] = useState([]);
   const [filterMinRating, setFilterMinRating] = useState(0);
   const [searchSortBy, setSearchSortBy] = useState('popularity');
+  const [filterInstantBook, setFilterInstantBook] = useState(false);
+  const [filterCancellationPolicy, setFilterCancellationPolicy] = useState(false);
+  const [filterHomestays, setFilterHomestays] = useState(false);
+  // Dynamic amenities from Admin Amenities Master
+  const [amenitiesForFilter, setAmenitiesForFilter] = useState([]);
 
   // Contact Us Form States
   const [contactName, setContactName] = useState('');
@@ -620,6 +625,15 @@ export default function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('signup'); // 'signup' or 'login'
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('openAuth') === 'true') {
+      setAuthMode('login');
+      setAuthModalOpen(true);
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+  }, []);
+
   // Contact Detail Verification Modal States (Figma accurate design!)
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [contactStep, setContactStep] = useState(1); // 1 = View Contact, 2 = Request OTP
@@ -627,12 +641,15 @@ export default function App() {
   const [hostContactRevealed, setHostContactRevealed] = useState(false);
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpError, setOtpError] = useState('');
+  const [otpChannel, setOtpChannel] = useState('sms');
   const [resendTimer, setResendTimer] = useState(0);
 
   // Experience Review Modal States (Figma accurate design!)
   const [reviewModalOpen, setReviewModalOpen] = useState(false);
   const [reviewRating, setReviewRating] = useState(5);
   const [reviewText, setReviewText] = useState('');
+  const [reviewName, setReviewName] = useState('');
+  const [reviewPage, setReviewPage] = useState(1);
 
   // API Integration States
   const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
@@ -645,6 +662,20 @@ export default function App() {
   const [allProperties, setAllProperties] = useState([]);
   const [liveEnquiries, setLiveEnquiries] = useState([]);
   const [selectedProperty, setSelectedProperty] = useState(null);
+  const activeDetailProp = selectedProperty || {
+    title: 'Azure Bay Hotel, Premium Suite',
+    location: 'Kasol, Himachal Pradesh, India',
+    price: '₹1,400',
+    img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
+    images: [],
+    ownerContact: '',
+    amenities: [],
+    area: '31 sq. ft.',
+    rooms: '1 Room',
+    beds: '2 Beds',
+    guests: '3 Person',
+    description: 'Experience a comfortable and refined stay at Azure Bay Hotel, located in the heart of the city and designed for both leisure and business travelers. The hotel offers thoughtfully designed rooms, modern amenities, and warm hospitality to ensure a relaxing and memorable stay.'
+  };
   const [authLoading, setAuthLoading] = useState(false);
   const [aiSearchLoading, setAiSearchLoading] = useState(false);
   const [aiSearchLabel, setAiSearchLabel] = useState('');
@@ -670,6 +701,66 @@ export default function App() {
   const [wishlistSortOption, setWishlistSortOption] = useState('All');
   const [isWishlistFilterOpen, setIsWishlistFilterOpen] = useState(false);
 
+  const [propertyRooms, setPropertyRooms] = useState([]);
+  const [dynamicLandmarks, setDynamicLandmarks] = useState([]);
+  const [dynamicReviews, setDynamicReviews] = useState([]);
+  const [dynamicReviewStats, setDynamicReviewStats] = useState({ avg: 0, count: 0, label: 'No Reviews' });
+
+  useEffect(() => {
+    if (selectedProperty && selectedProperty._id) {
+      // Fetch property rooms
+      fetch(`${API_BASE}/property-requests/property/${selectedProperty._id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setPropertyRooms(data);
+          } else {
+            setPropertyRooms([]);
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching property rooms:", err);
+          setPropertyRooms([]);
+        });
+
+      // Fetch dynamic landmarks
+      fetch(`${API_BASE}/properties/${selectedProperty._id}/landmarks`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) {
+            setDynamicLandmarks(data);
+          } else {
+            setDynamicLandmarks([]);
+          }
+        })
+        .catch(err => {
+          console.error("Error fetching landmarks:", err);
+          setDynamicLandmarks([]);
+        });
+
+      // Fetch reviews
+      fetch(`${API_BASE}/reviews/${selectedProperty._id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (Array.isArray(data)) setDynamicReviews(data);
+          else setDynamicReviews([]);
+        })
+        .catch(() => setDynamicReviews([]));
+
+      // Fetch review stats
+      fetch(`${API_BASE}/reviews/rating/${selectedProperty._id}`)
+        .then(res => res.json())
+        .then(data => setDynamicReviewStats(data))
+        .catch(() => setDynamicReviewStats({ avg: 0, count: 0, label: 'No Reviews' }));
+
+    } else {
+      setPropertyRooms([]);
+      setDynamicLandmarks([]);
+      setDynamicReviews([]);
+      setDynamicReviewStats({ avg: 0, count: 0, label: 'No Reviews' });
+    }
+  }, [selectedProperty]);
+
   const [enquirySearchQuery, setEnquirySearchQuery] = useState('');
   const [enquiryStatusFilter, setEnquiryStatusFilter] = useState('All');
   const [isEnquiryFilterOpen, setIsEnquiryFilterOpen] = useState(false);
@@ -683,17 +774,29 @@ export default function App() {
     setAuthModalOpen(true);
   };
 
-  const handleReviewFormSubmit = (e) => {
+  const handleReviewFormSubmit = async (e) => {
     e.preventDefault();
-    const newReview = {
-      title: selectedProperty?.title || selectedProperty?.name || 'Kasol Stay',
-      location: selectedProperty?.location || 'Kasol, Himachal Pradesh, India',
-      reviewText: reviewText,
-      rating: reviewRating,
-      img: selectedProperty?.img || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=300&q=80'
-    };
-    setUserReviews([newReview, ...userReviews]);
-    setReviewModalOpen(false);
+    if (!selectedProperty || !selectedProperty._id) return;
+    try {
+      const res = await fetch(`${API_BASE}/reviews/${selectedProperty._id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          reviewer_name: reviewName,
+          rating: reviewRating,
+          review_text: reviewText
+        })
+      });
+      if (res.ok) {
+        const newReview = await res.json();
+        setDynamicReviews([newReview, ...dynamicReviews]);
+        setReviewModalOpen(false);
+      } else {
+        alert('Failed to submit review');
+      }
+    } catch (err) {
+      alert('Error submitting review');
+    }
   };
 
   const openEditProfileModal = () => {
@@ -754,16 +857,39 @@ export default function App() {
   const [signupLastName, setSignupLastName] = useState('');
   const [signupEmail, setSignupEmail] = useState('');
   const [signupPassword, setSignupPassword] = useState('');
+  const [signupCitizenship, setSignupCitizenship] = useState('India');
+  const [signupPhone, setSignupPhone] = useState('');
+  const [signupResidence, setSignupResidence] = useState('India');
+  const [signupAddress, setSignupAddress] = useState('');
+  const [signupPincode, setSignupPincode] = useState('');
+  const [signupState, setSignupState] = useState('');
 
   // Login inputs
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
+  const [showPasswordStep, setShowPasswordStep] = useState(false);
 
-  // Enquiry inputs
-  const [enquiryFirstName, setEnquiryFirstName] = useState('Rohan');
-  const [enquiryLastName, setEnquiryLastName] = useState('Sharma');
-  const [enquiryEmail, setEnquiryEmail] = useState('rohan.sharma@gmail.com');
-  const [enquiryPhone, setEnquiryPhone] = useState('+91 98765 43210');
+  useEffect(() => {
+    if (!authModalOpen) {
+      setShowPasswordStep(false);
+      setLoginPassword('');
+    }
+  }, [authModalOpen]);
+
+  // Enquiry inputs (auto-fill from logged-in user profile)
+  const [enquiryFirstName, setEnquiryFirstName] = useState(user?.name?.split(' ')[0] || '');
+  const [enquiryLastName, setEnquiryLastName] = useState(user?.name?.split(' ').slice(1).join(' ') || '');
+  const [enquiryEmail, setEnquiryEmail] = useState(user?.email || '');
+  const [enquiryPhone, setEnquiryPhone] = useState(user?.phone || '');
+
+  React.useEffect(() => {
+    if (user) {
+      setEnquiryFirstName(user.name?.split(' ')[0] || '');
+      setEnquiryLastName(user.name?.split(' ').slice(1).join(' ') || '');
+      setEnquiryEmail(user.email || '');
+      setEnquiryPhone(user.phone || '');
+    }
+  }, [user]);
 
   const fetchProperties = async (searchParams = {}) => {
     try {
@@ -910,6 +1036,20 @@ export default function App() {
     };
     fetchAll();
 
+    // Fetch active amenities for the guest search sidebar filter
+    const fetchAmenitiesForFilter = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/admin/amenities/active`);
+        if (res.ok) {
+          const data = await res.json();
+          if (Array.isArray(data)) setAmenitiesForFilter(data);
+        }
+      } catch (e) {
+        console.error('Could not load amenities for filter:', e);
+      }
+    };
+    fetchAmenitiesForFilter();
+
     fetchProperties({ type: activePropCategory });
     if (token) {
       fetchProfileAndEnquiries(token);
@@ -982,11 +1122,18 @@ export default function App() {
       reviews: '3,245 Genuine Reviews',
       price: '₹' + (p.bestRoomRate || p.price || '140'),
       img: p.image || p.images?.[0] || 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=600&q=80',
+      images: p.images || (p.image ? [p.image] : []),
+      ownerContact: p.ownerContact || '',
+      roomType: p.roomType || '',
+      amenities: p.amenities || [],
       area: p.area || '31 sq. ft.',
-      beds: p.beds || (p.rooms ? `${p.rooms * 2} Beds` : '2 Beds'),
-      rooms: p.rooms ? `${p.rooms} Room${p.rooms > 1 ? 's' : ''}` : '1 Room',
-      guests: p.guests ? `${p.guests} Person${p.guests > 1 ? 's' : ''}` : '3 Person',
-      description: p.description || ''
+      beds: p.beds !== undefined ? `${p.beds} Bed${p.beds > 1 ? 's' : ''}` : '2 Beds',
+      rooms: p.bedRooms !== undefined ? `${p.bedRooms} Room${p.bedRooms > 1 ? 's' : ''}` : (p.roomType || '1 Room'),
+      guests: p.capacity !== undefined ? `${p.capacity} Person${p.capacity > 1 ? 's' : ''}` : '3 Person',
+      description: p.description || '',
+      checkIn: p.checkIn || '3:00 PM',
+      checkOut: p.checkOut || '12:00 PM',
+      rules: p.rules || '• Primary Guest should be atleast 18 years of age.\n• Passport, Aadhaar, Driving License and Govt. ID are accepted as ID proof(s).'
     }));
   };
 
@@ -1028,6 +1175,7 @@ export default function App() {
       const data = await res.json();
       if (res.ok && data.success) {
         setContactStep(2);
+        setOtpChannel(data.channel || 'sms');
         setResendTimer(30); // 30s resend timer
       } else {
         setOtpError(data.message || 'Failed to send OTP code.');
@@ -1054,7 +1202,7 @@ export default function App() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: enquiryEmail,
+          phone: enquiryPhone,
           otp: otpValue
         })
       });
@@ -1063,14 +1211,14 @@ export default function App() {
         setHostContactRevealed(true);
         setContactModalOpen(false);
         if (token) fetchProfileAndEnquiries(token);
-        alert('Verification successful! Host contact number is now displayed on the page.');
+        alert('✅ Phone verified! The host contact number is now visible on the property page.');
         // Reset OTP inputs
         setContactOTP(['', '', '', '', '', '']);
       } else {
         setOtpError(data.message || 'Verification failed.');
       }
     } catch (err) {
-      setOtpError('Failed to verify OTP code. Please check connection.');
+      setOtpError('Failed to verify OTP code. Please check your connection.');
     } finally {
       setOtpLoading(false);
     }
@@ -1122,24 +1270,47 @@ export default function App() {
     e.preventDefault();
     setAuthLoading(true);
     try {
+      const passwordToUse = 'Password123';
       const res = await fetch(`${API_BASE}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: `${signupFirstName} ${signupLastName}`.trim(),
           email: signupEmail,
-          password: signupPassword,
+          password: passwordToUse,
           role: 'user'
         })
       });
       const data = await res.json();
       if (res.ok && data.token) {
+        // Update user profile with extra fields
+        const profileRes = await fetch(`${API_BASE}/users/profile`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${data.token}`
+          },
+          body: JSON.stringify({
+            phone: signupPhone,
+            address: signupAddress,
+            state: signupState,
+            pincode: signupPincode,
+            citizenship: signupCitizenship,
+            residence: signupResidence
+          })
+        });
+        
+        let finalUser = data.user;
+        if (profileRes.ok) {
+          finalUser = await profileRes.json();
+        }
+
         localStorage.setItem('user_token', data.token);
-        localStorage.setItem('user_data', JSON.stringify(data.user));
+        localStorage.setItem('user_data', JSON.stringify(finalUser));
         setToken(data.token);
-        setUser(data.user);
+        setUser(finalUser);
         setAuthModalOpen(false);
-        alert(`Welcome, ${data.user.name}! Account created successfully.`);
+        alert(`Welcome, ${finalUser.name}! Account created successfully.`);
         fetchProfileAndEnquiries(data.token);
       } else {
         alert(data.message || 'Registration failed');
@@ -1187,9 +1358,10 @@ export default function App() {
     const left = window.screenX + (window.outerWidth - w) / 2;
     const top = window.screenY + (window.outerHeight - h) / 2;
 
+    const providerNameOnly = provider.split('?')[0];
     const popup = window.open(
       `${API_BASE}/auth/oauth/${provider}`,
-      `tripinvilla_oauth_${provider}`,
+      `tripinvilla_oauth_${providerNameOnly}`,
       `popup=yes,width=${w},height=${h},left=${left},top=${top}`
     );
 
@@ -1210,7 +1382,10 @@ export default function App() {
     };
 
     const onMessage = (event) => {
-      if (event.origin !== API_ORIGIN) return;
+      // Accept messages from our API server or any origin in development
+      const isFromServer = event.origin === API_ORIGIN || 
+        (process.env.NODE_ENV !== 'production' && event.data?.type === 'tripinvilla_oauth_success');
+      if (!isFromServer) return;
       const { type, payload } = event.data || {};
       if (type !== 'tripinvilla_oauth_success') return;
       if (!payload || !payload.token || !payload.user) return;
@@ -1280,7 +1455,7 @@ export default function App() {
         <div className="navbar-container">
           {/* Logo image rendered beautifully with custom specs */}
           <div className="nav-logo" onClick={() => setActiveMenu('Home')}>
-            <img src={(activeMenu === 'Detail' || activeMenu === 'Properties') ? darkLogoImg : logoImg} alt="Tripinstays Logo" />
+            <img src={(activeMenu === 'Detail') ? darkLogoImg : logoImg} alt="Tripinstays Logo" />
           </div>
 
           {/* Navigation central capsule pill menu */}
@@ -1309,8 +1484,23 @@ export default function App() {
                     }}
                     className="nav-pill-item"
                   >
-                    <div className={`nav-icon-circle ${isActive ? 'active' : 'inactive'}`}>
-                      {item.lucideIcon}
+                    <div 
+                      className={`nav-icon-circle ${isActive ? 'active' : 'inactive'}`}
+                      style={item.customIcon ? { border: 'none', background: 'none', boxShadow: 'none' } : {}}
+                    >
+                      {item.customIcon ? (
+                        <img 
+                          src={item.customIcon} 
+                          alt={item.name} 
+                          style={{
+                            width: '31px',
+                            height: '31px',
+                            objectFit: 'contain'
+                          }} 
+                        />
+                      ) : (
+                        item.lucideIcon
+                      )}
                     </div>
                     <span>{item.name}</span>
                   </button>
@@ -1345,7 +1535,15 @@ export default function App() {
               </div>
               <button 
                 className="btn-login" 
-                style={{ background: 'transparent', color: '#FFFFFF', border: '1px solid rgba(255,255,255,0.5)', padding: '6px 16px', fontSize: '13px' }}
+                style={{ 
+                  background: 'transparent', 
+                  color: (activeMenu === 'Detail') ? '#111827' : '#FFFFFF', 
+                  border: (activeMenu === 'Detail') ? '1px solid rgba(17,24,39,0.3)' : '1px solid rgba(255,255,255,0.5)', 
+                  padding: '6px 16px', 
+                  fontSize: '13px',
+                  fontFamily: '"Outfit", sans-serif',
+                  fontWeight: 600
+                }}
                 onClick={() => {
                   localStorage.removeItem('user_token');
                   localStorage.removeItem('user_data');
@@ -1962,7 +2160,7 @@ export default function App() {
                     enquiryText: e.message,
                     status: e.status || 'Open',
                     reply: e.reply,
-                    img: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=300&q=80'
+                    img: (e.property_id && e.property_id.images && e.property_id.images[0]) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=300&q=80'
                   };
                   return (
                     <div key={index} className="dashboard-list-card" style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '20px' }}>
@@ -2188,10 +2386,11 @@ export default function App() {
                 </div>
               </div>
             </div>
+          </div>
 
-            {/* Why Choose Our Services (Reused Component directly!) */}
-            <div className="services-section" style={{ background: '#EBFDF2', padding: '60px 0', borderRadius: '24px', margin: '80px 0 0 0' }}>
-              <div className="services-inner-container" style={{ width: '100%', maxWidth: '1120px' }}>
+          {/* Why Choose Our Services (Reused Component directly!) */}
+          <div className="services-section" style={{ background: '#EBFDF2', padding: '60px 0', margin: '80px 0 0 0' }}>
+            <div className="services-inner-container">
                 
                 <div className="section-title-wrap">
                   <h2 className="section-main-headline">
@@ -2249,6 +2448,7 @@ export default function App() {
               </div>
             </div>
 
+          <div className="about-main-wrapper" style={{ marginTop: 0 }}>
             {/* Our Testimonials Section */}
             <div className="our-testimonials-section" style={{ margin: '80px 0 40px 0' }}>
               <div className="section-title-wrap">
@@ -2813,7 +3013,14 @@ export default function App() {
           <div className="dashboard-hero-banner list-hero-custom" style={{ backgroundImage: `url("${listPlaceHeroImg}")` }}>
             <h1 className="dashboard-hero-title" style={{ marginTop: '170px' }}>List Your Property</h1>
             
-            <button className="btn-hero-green" onClick={() => window.location.href = 'http://localhost:5175/owner/register'}>
+            <button className="btn-hero-green" onClick={() => {
+              if (!token || !user) {
+                setAuthMode('login');
+                setAuthModalOpen(true);
+              } else {
+                window.location.href = `http://localhost:5175/owner/register?token=${token}`;
+              }
+            }}>
               List Property
             </button>
           </div>
@@ -3043,34 +3250,35 @@ export default function App() {
             
             {/* Left Image grid */}
             {(() => {
-              const activeDetailProp = selectedProperty || {
-                title: 'Azure Bay Hotel, Premium Suite',
-                location: 'Kasol, Himachal Pradesh, India',
-                price: '₹1,400',
-                img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
-                area: '31 sq. ft.',
-                rooms: '1 Room',
-                beds: '2 Beds',
-                guests: '3 Person',
-                description: 'Experience a comfortable and refined stay at Azure Bay Hotel, located in the heart of the city and designed for both leisure and business travelers. The hotel offers thoughtfully designed rooms, modern amenities, and warm hospitality to ensure a relaxing and memorable stay.'
-              };
+              const propImages = activeDetailProp.images && activeDetailProp.images.length > 0
+                ? activeDetailProp.images
+                : [activeDetailProp.img];
+
               return (
                 <>
-                  <div className="detail-image-gallery">
+                  <div className="detail-image-gallery" style={{
+                    gridTemplateColumns: propImages.length <= 1 ? '1fr' : '1.6fr 1fr'
+                  }}>
                     <div className="gallery-master-img">
-                      <img src={activeDetailProp.img} alt={activeDetailProp.title} />
+                      <img src={propImages[0]} alt={activeDetailProp.title} />
                     </div>
-                    <div className="gallery-sub-images">
-                      <div className="sub-img-wrap">
-                        <img src="https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=400&q=80" alt="Villa bedroom" />
-                      </div>
-                      <div className="sub-img-wrap overlay">
-                        <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80" alt="Villa bathtub" />
-                        <div className="gallery-count-layer">
-                          <span>View 122 more</span>
+                    {propImages.length > 1 && (
+                      <div className="gallery-sub-images">
+                        <div className="sub-img-wrap">
+                          <img src={propImages[1]} alt={`${activeDetailProp.title} View 1`} />
                         </div>
+                        {propImages[2] && (
+                          <div className="sub-img-wrap overlay">
+                            <img src={propImages[2]} alt={`${activeDetailProp.title} View 2`} />
+                            {propImages.length > 3 && (
+                              <div className="gallery-count-layer">
+                                <span>View {propImages.length - 2} more</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
-                    </div>
+                    )}
                   </div>
 
                   {/* Right Information Reservation Box */}
@@ -3085,11 +3293,11 @@ export default function App() {
                     <div className="reservation-timing-row">
                       <div className="time-badge">
                         <Calendar size={14} color="#48BB78" />
-                        <span>Check In : 3:00 PM</span>
+                        <span>Check In : {activeDetailProp.checkIn || '3:00 PM'}</span>
                       </div>
                       <div className="time-badge">
                         <Calendar size={14} color="#48BB78" />
-                        <span>Check Out : 12:00 PM</span>
+                        <span>Check Out : {activeDetailProp.checkOut || '12:00 PM'}</span>
                       </div>
                     </div>
 
@@ -3120,7 +3328,7 @@ export default function App() {
                     {hostContactRevealed ? (
                       <button className="btn-view-contact-green revealed-active" style={{ background: '#38A169', boxShadow: '0 4px 12px rgba(56, 161, 105, 0.3)' }}>
                         <Phone size={16} fill="#FFFFFF" />
-                        <span style={{ fontWeight: '700' }}>+91 98765 43210</span>
+                        <span style={{ fontWeight: '700' }}>{activeDetailProp.ownerContact || '+91 98765 43210'}</span>
                       </button>
                     ) : (
                       <button className="btn-view-contact-green" onClick={() => { setSelectedProperty(activeDetailProp); setContactStep(1); setContactModalOpen(true); }}>
@@ -3131,69 +3339,7 @@ export default function App() {
 
                   </div>
 
-                  {/* Contact Owner / Enquire Now form */}
-                  <div className="enquiry-card-sidebar" style={{ marginTop: '20px', background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '20px', boxShadow: '0 4px 6px -1px rgba(0,0,0,0.05)', boxSizing: 'border-box', width: '100%', display: 'flex', flexDirection: 'column' }}>
-                    <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginTop: 0, marginBottom: '14px', fontFamily: '"Outfit", sans-serif', borderBottom: '1px solid #F3F4F6', paddingBottom: '8px' }}>
-                      Contact Owner / Enquire Now
-                    </h3>
-                    <form onSubmit={handleEnquirySubmit} style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <label style={{ fontSize: '11px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Your Name*</label>
-                        <input 
-                          type="text" 
-                          value={guestEnquiryName}
-                          onChange={(e) => setGuestEnquiryName(e.target.value)}
-                          required 
-                          placeholder="e.g. John Doe"
-                          style={{ padding: '8px 12px', fontSize: '12.5px', border: '1px solid #D1D5DB', borderRadius: '6px', outline: 'none', background: '#ffffff', color: '#111827' }}
-                        />
-                      </div>
 
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <label style={{ fontSize: '11px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Phone Number*</label>
-                        <input 
-                          type="tel" 
-                          value={guestEnquiryPhone}
-                          onChange={(e) => setGuestEnquiryPhone(e.target.value)}
-                          required 
-                          placeholder="e.g. +91 9876543210"
-                          style={{ padding: '8px 12px', fontSize: '12.5px', border: '1px solid #D1D5DB', borderRadius: '6px', outline: 'none', background: '#ffffff', color: '#111827' }}
-                        />
-                      </div>
-
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <label style={{ fontSize: '11px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Email Address*</label>
-                        <input 
-                          type="email" 
-                          value={guestEnquiryEmail}
-                          onChange={(e) => setGuestEnquiryEmail(e.target.value)}
-                          required 
-                          placeholder="e.g. john@example.com"
-                          style={{ padding: '8px 12px', fontSize: '12.5px', border: '1px solid #D1D5DB', borderRadius: '6px', outline: 'none', background: '#ffffff', color: '#111827' }}
-                        />
-                      </div>
-
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                        <label style={{ fontSize: '11px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Query / Message*</label>
-                        <textarea 
-                          value={guestEnquiryMessage}
-                          onChange={(e) => setGuestEnquiryMessage(e.target.value)}
-                          required 
-                          rows={3}
-                          placeholder="Write your query to the owner..."
-                          style={{ padding: '8px 12px', fontSize: '12.5px', border: '1px solid #D1D5DB', borderRadius: '6px', outline: 'none', resize: 'none', background: '#ffffff', color: '#111827' }}
-                        />
-                      </div>
-
-                      <button 
-                        type="submit" 
-                        disabled={guestEnquirySubmitting}
-                        style={{ marginTop: '6px', background: '#2563eb', color: '#ffffff', fontWeight: 600, fontSize: '13px', padding: '10px', border: 'none', borderRadius: '6px', cursor: 'pointer', transition: 'background 0.2s', opacity: guestEnquirySubmitting ? 0.7 : 1 }}
-                      >
-                        {guestEnquirySubmitting ? 'Sending...' : 'Submit Enquiry'}
-                      </button>
-                    </form>
-                  </div>
                 </>
               );
             })()}
@@ -3212,41 +3358,55 @@ export default function App() {
           <div className="about-property-section">
             <h3 className="section-subtitle-title">Amenities</h3>
             <div className="amenities-horizontal-pills">
-              <div className="amenity-pill-item">
-                <Maximize size={15} color="#48BB78" />
-                <div className="pill-texts">
-                  <span className="pill-lbl">Area Size</span>
-                  <span className="pill-val green-text">{(selectedProperty && selectedProperty.area) || '31 sq. ft.'}</span>
-                </div>
-              </div>
-              <div className="amenity-pill-item">
-                <DoorClosed size={15} color="#48BB78" />
-                <div className="pill-texts">
-                  <span className="pill-lbl">Rooms</span>
-                  <span className="pill-val green-text">{(selectedProperty && selectedProperty.rooms) || '1 Room'}</span>
-                </div>
-              </div>
-              <div className="amenity-pill-item">
-                <Bed size={15} color="#48BB78" />
-                <div className="pill-texts">
-                  <span className="pill-lbl">Beds</span>
-                  <span className="pill-val green-text">{(selectedProperty && selectedProperty.beds) || '2 Beds'}</span>
-                </div>
-              </div>
-              <div className="amenity-pill-item">
-                <Users size={15} color="#48BB78" />
-                <div className="pill-texts">
-                  <span className="pill-lbl">Guests</span>
-                  <span className="pill-val green-text">{(selectedProperty && selectedProperty.guests) || '3 Person'}</span>
-                </div>
-              </div>
-              <div className="amenity-pill-item">
-                <Utensils size={15} color="#48BB78" />
-                <div className="pill-texts">
-                  <span className="pill-lbl">Barbeque</span>
-                  <span className="pill-val green-text">Available</span>
-                </div>
-              </div>
+              {selectedProperty && selectedProperty.amenities && selectedProperty.amenities.length > 0 ? (
+                selectedProperty.amenities.map((am, amIdx) => (
+                  <div key={amIdx} className="amenity-pill-item">
+                    <CheckCircle size={15} color="#48BB78" style={{ background: 'rgba(72,187,120,0.08)', borderRadius: '50%', padding: '10px', width: '40px', height: '40px', display: 'flex', alignItems: 'center', justifyContent: 'center' }} />
+                    <div className="pill-texts">
+                      <span className="pill-lbl">Facility</span>
+                      <span className="pill-val green-text">{am}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="amenity-pill-item">
+                    <Maximize size={15} color="#48BB78" />
+                    <div className="pill-texts">
+                      <span className="pill-lbl">Area Size</span>
+                      <span className="pill-val green-text">{(selectedProperty && selectedProperty.area) || '31 sq. ft.'}</span>
+                    </div>
+                  </div>
+                  <div className="amenity-pill-item">
+                    <DoorClosed size={15} color="#48BB78" />
+                    <div className="pill-texts">
+                      <span className="pill-lbl">Rooms</span>
+                      <span className="pill-val green-text">{(selectedProperty && selectedProperty.rooms) || '1 Room'}</span>
+                    </div>
+                  </div>
+                  <div className="amenity-pill-item">
+                    <Bed size={15} color="#48BB78" />
+                    <div className="pill-texts">
+                      <span className="pill-lbl">Beds</span>
+                      <span className="pill-val green-text">{(selectedProperty && selectedProperty.beds) || '2 Beds'}</span>
+                    </div>
+                  </div>
+                  <div className="amenity-pill-item">
+                    <Users size={15} color="#48BB78" />
+                    <div className="pill-texts">
+                      <span className="pill-lbl">Guests</span>
+                      <span className="pill-val green-text">{(selectedProperty && selectedProperty.guests) || '3 Person'}</span>
+                    </div>
+                  </div>
+                  <div className="amenity-pill-item">
+                    <Utensils size={15} color="#48BB78" />
+                    <div className="pill-texts">
+                      <span className="pill-lbl">Barbeque</span>
+                      <span className="pill-val green-text">Available</span>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -3267,18 +3427,24 @@ export default function App() {
           <div className="detail-tab-target-section border-box-style">
             <h3 className="section-subtitle-title" style={{ marginBottom: '24px' }}>Rooms</h3>
             <div className="rooms-stack">
-              {roomOptions.map((room, idx) => (
+              {(propertyRooms && propertyRooms.length > 0 ? propertyRooms : roomOptions).map((room, idx) => (
                 <div key={idx} className="room-vertical-card">
                   <div className="room-card-img-wrap">
-                    <img src={room.img} alt={room.title} />
+                    <img src={room.img || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80'} alt={room.title} />
                   </div>
                   <div className="room-card-info-wrap">
                     <div className="room-card-mid-col">
                       <h4 className="room-card-title">{room.title}</h4>
                       
                       <div className="room-card-bullets-list">
-                        {room.features.map((feat, fIdx) => (
-                          <div key={fIdx} className="bullet-check">
+                        {(room.offers || []).map((off, oIdx) => (
+                          <div key={`o-${oIdx}`} className="bullet-check">
+                            <CheckCircle size={14} color="var(--primary-green, #10B981)" fill="rgba(16, 185, 129, 0.1)" />
+                            <span style={{ fontWeight: 600, color: '#065F46' }}>{off}</span>
+                          </div>
+                        ))}
+                        {(room.features || []).map((feat, fIdx) => (
+                          <div key={`f-${fIdx}`} className="bullet-check">
                             <CheckCircle size={14} color="var(--primary-blue)" fill="rgba(37,99,235,0.1)" />
                             <span>{feat}</span>
                           </div>
@@ -3303,16 +3469,18 @@ export default function App() {
 
                     <div className="room-card-pricing-col">
                       <span className="room-taxes-label">+212 taxes & fees per room per night</span>
-                      <span className="room-old-strike">₹2140/night</span>
-                      <span className="room-green-val">₹1,400/night</span>
+                      {room.originalPrice && (
+                        <span className="room-old-strike">₹{Number(room.originalPrice).toLocaleString('en-IN')}/night</span>
+                      )}
+                      <span className="room-green-val">₹{Number(room.price || 1400).toLocaleString('en-IN')}/night</span>
                       
                       {hostContactRevealed ? (
                         <button className="btn-view-contact-green revealed-active" style={{ width: '100%', marginTop: '10px', background: '#38A169', boxShadow: '0 4px 12px rgba(56, 161, 105, 0.3)' }}>
                           <Phone size={14} fill="#FFFFFF" />
-                          <span style={{ fontWeight: '700' }}>+91 98765 43210</span>
+                          <span style={{ fontWeight: '700' }}>{activeDetailProp.ownerContact || '+91 98765 43210'}</span>
                         </button>
                       ) : (
-                        <button className="btn-view-contact-green" style={{ width: '100%', marginTop: '10px' }} onClick={() => { setContactStep(1); setContactModalOpen(true); }}>
+                        <button className="btn-view-contact-green" style={{ width: '100%', marginTop: '10px' }} onClick={() => { setSelectedProperty(activeDetailProp); setContactStep(1); setContactModalOpen(true); }}>
                           <Phone size={14} fill="#FFFFFF" />
                           <span>View Contact Number</span>
                         </button>
@@ -3330,8 +3498,11 @@ export default function App() {
               {/* Left Fully Functional Interactive Google Map */}
               <div className="mock-map-graphic" style={{ padding: 0, overflow: 'hidden' }}>
                 <iframe
-                  title="Kasol Himachal Pradesh Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27038.31885698379!2d77.29699661562499!3d32.00999999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39045c4491c2ce09%3A0x521f20108343160a!2sKasol%2C%20Himachal%2C%20India!5e0!3m2!1sen!2sus!4v1707500000000!5m2!1sen!2sus"
+                  title={`${activeDetailProp.title} Map`}
+                  src={activeDetailProp.latitude && activeDetailProp.longitude 
+                    ? `https://www.google.com/maps?q=${activeDetailProp.latitude},${activeDetailProp.longitude}&z=14&output=embed`
+                    : `https://www.google.com/maps?q=${encodeURIComponent(activeDetailProp.full_address || activeDetailProp.location || 'Kasol, Himachal Pradesh')}&output=embed`
+                  }
                   width="100%"
                   height="100%"
                   style={{ border: 0 }}
@@ -3345,14 +3516,14 @@ export default function App() {
               <div className="landmarks-sidebar">
                 <h3 className="section-subtitle-title" style={{ fontSize: '20px', marginBottom: '20px' }}>Key Landmarks</h3>
                 <div className="landmarks-stack">
-                  {landmarks.map((mark, idx) => (
+                  {(dynamicLandmarks.length > 0 ? dynamicLandmarks : landmarks).map((mark, idx) => (
                     <div key={idx} className="landmark-row-item">
                       <div className="landmark-avatar-circle">
                         <MapPin size={14} color="var(--primary-blue)" />
                       </div>
                       <div className="landmark-texts">
-                        <span className="landmark-title-name">{mark.name}</span>
-                        <span className="landmark-badge-desc">{mark.label}</span>
+                        <span className="landmark-title-name">{mark.landmark_name || mark.name}</span>
+                        <span className="landmark-badge-desc">{mark.landmark_type || mark.label}</span>
                       </div>
                     </div>
                   ))}
@@ -3366,28 +3537,41 @@ export default function App() {
             <h3 className="section-subtitle-title" style={{ marginBottom: '20px' }}>Property Rules</h3>
             <div className="rules-timings-grid">
               <div className="time-badge">
-                <span>Check In : 3:00 PM</span>
+                <span>Check In : {activeDetailProp.checkIn || '3:00 PM'}</span>
               </div>
               <div className="time-badge">
-                <span>Check Out : 12:00 PM</span>
+                <span>Check Out : {activeDetailProp.checkOut || '12:00 PM'}</span>
               </div>
             </div>
 
-            <div className="must-read-rules-block">
-              <h4 className="rules-sub-hdr">Must Read Rules</h4>
-              <ul className="rules-ul-list">
-                <li>Primary Guest should be atleast 18 years of age.</li>
-                <li>Passport, Aadhaar, Driving License and Govt. ID are accepted as ID proof(s).</li>
-              </ul>
-            </div>
-
-            <div className="must-read-rules-block" style={{ marginTop: '24px' }}>
-              <h4 className="rules-sub-hdr">Smoking/Alcohol consumption Rules</h4>
-              <ul className="rules-ul-list">
-                <li>There are no restrictions on alcohol consumption.</li>
-                <li>Smoking is allowed only in outdoor areas, such as balconies, lawns, or designated smoking zones. It is strictly prohibited inside the room.</li>
-              </ul>
-            </div>
+            {propertyRooms && propertyRooms.length > 0 && Array.isArray(propertyRooms[0].rules) && propertyRooms[0].rules.length > 0 ? (
+              propertyRooms[0].rules.map((section, idx) => (
+                <div key={idx} className="must-read-rules-block" style={{ marginTop: idx > 0 ? '24px' : '0' }}>
+                  <h4 className="rules-sub-hdr">{section.title}</h4>
+                  <ul className="rules-ul-list">
+                    {section.points.map((point, pIdx) => (
+                      <li key={pIdx}>{point}</li>
+                    ))}
+                  </ul>
+                </div>
+              ))
+            ) : (
+              <div className="must-read-rules-block">
+                <h4 className="rules-sub-hdr">Must Read Rules</h4>
+                <ul className="rules-ul-list">
+                  {typeof activeDetailProp?.rules === 'string' ? (
+                    activeDetailProp.rules.split('\n').map((rule, rIdx) => (
+                      <li key={rIdx}>{rule.replace(/^[•\-\*]\s*/, '')}</li>
+                    ))
+                  ) : (
+                    <>
+                      <li>Primary Guest should be atleast 18 years of age.</li>
+                      <li>Passport, Aadhaar, Driving License and Govt. ID are accepted as ID proof(s).</li>
+                    </>
+                  )}
+                </ul>
+              </div>
+            )}
           </div>
 
           {/* USER REVIEWS SECTION */}
@@ -3399,15 +3583,16 @@ export default function App() {
               <div className="reviews-score-card">
                 <div className="score-top-row">
                   <div className="score-pill-large">
-                    <span>4.8</span>
+                    <span>{dynamicReviewStats.avg > 0 ? dynamicReviewStats.avg : 'N/A'}</span>
                   </div>
                   <div className="score-lbl-wrap">
-                    <span className="score-main-lbl">Excellent</span>
-                    <span className="score-sub-lbl">3,245 Genuine Reviews</span>
+                    <span className="score-main-lbl">{dynamicReviewStats.label}</span>
+                    <span className="score-sub-lbl">{dynamicReviewStats.count} Genuine Reviews</span>
                   </div>
                 </div>
 
                 <div className="rating-progress-stack" style={{ margin: '24px 0' }}>
+                  {/* Real progress bars can be calculated based on dynamicReviews distribution, but keeping UI static/mock for visual structure if not specified, or we can just hide it/mock it */}
                   <div className="progress-row">
                     <span>Excellent</span>
                     <div className="progress-bar-bg"><div className="progress-bar-fill" style={{ width: '70%' }} /></div>
@@ -3415,22 +3600,12 @@ export default function App() {
                   </div>
                   <div className="progress-row">
                     <span>Very Good</span>
-                    <div className="progress-bar-bg"><div className="progress-bar-fill" style={{ width: '50%' }} /></div>
-                    <span>50%</span>
-                  </div>
-                  <div className="progress-row">
-                    <span>Average</span>
-                    <div className="progress-bar-bg"><div className="progress-bar-fill" style={{ width: '24%' }} /></div>
-                    <span>24%</span>
-                  </div>
-                  <div className="progress-row">
-                    <span>Poor</span>
-                    <div className="progress-bar-bg"><div className="progress-bar-fill" style={{ width: '1%' }} /></div>
-                    <span>1%</span>
+                    <div className="progress-bar-bg"><div className="progress-bar-fill" style={{ width: '20%' }} /></div>
+                    <span>20%</span>
                   </div>
                 </div>
 
-                <button className="btn-share-experience" onClick={() => { setReviewRating(5); setReviewText(''); setReviewModalOpen(true); }}>
+                <button className="btn-share-experience" onClick={() => { setReviewRating(5); setReviewText(''); setReviewName(user?.name || ''); setReviewModalOpen(true); }}>
                   <Star size={15} fill="#FFFFFF" />
                   <span>Share Your Experience</span>
                 </button>
@@ -3438,32 +3613,125 @@ export default function App() {
 
               {/* Right reviews stream */}
               <div className="reviews-stream-col">
-                {userReviewsList.map((rev, idx) => (
+                {dynamicReviews.slice((reviewPage - 1) * 5, reviewPage * 5).map((rev, idx) => (
                   <div key={idx} className="review-stream-item">
                     <div className="review-header-avatar">
                       <div className="user-avatar-thumb">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt={rev.name} />
+                        {rev.reviewer_photo_url ? (
+                          <img src={rev.reviewer_photo_url} alt={rev.reviewer_name} />
+                        ) : (
+                          <div style={{ width: '100%', height: '100%', background: '#E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6B7280', fontWeight: 'bold' }}>
+                            {rev.reviewer_name.charAt(0).toUpperCase()}
+                          </div>
+                        )}
                       </div>
                       <div className="review-user-info">
-                        <span className="review-user-name">{rev.name}</span>
-                        <span className="review-user-role">{rev.role}</span>
+                        <span className="review-user-name">{rev.reviewer_name}</span>
+                        <span className="review-user-role">{new Date(rev.createdAt).toLocaleDateString()}</span>
                       </div>
                     </div>
 
                     <p className="review-quote-text">
-                      "{rev.text}"
+                      "{rev.review_text}"
                     </p>
 
                     <div className="review-star-rating-row">
                       {[1, 2, 3, 4, 5].map((s) => (
-                        <Star key={s} size={14} fill="var(--primary-blue)" color="var(--primary-blue)" />
+                        <Star key={s} size={14} fill={s <= rev.rating ? "var(--primary-blue)" : "none"} color={s <= rev.rating ? "var(--primary-blue)" : "#D1D5DB"} />
                       ))}
                     </div>
                   </div>
                 ))}
+                
+                {dynamicReviews.length > 5 && (
+                  <div style={{ display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '16px' }}>
+                    <button 
+                      onClick={() => setReviewPage(p => Math.max(1, p - 1))} 
+                      disabled={reviewPage === 1}
+                      style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #D1D5DB', background: reviewPage === 1 ? '#F3F4F6' : '#FFFFFF', cursor: reviewPage === 1 ? 'not-allowed' : 'pointer' }}
+                    >
+                      Prev
+                    </button>
+                    <span style={{ padding: '6px 12px', fontSize: '14px', fontWeight: 500 }}>Page {reviewPage} of {Math.ceil(dynamicReviews.length / 5)}</span>
+                    <button 
+                      onClick={() => setReviewPage(p => Math.min(Math.ceil(dynamicReviews.length / 5), p + 1))} 
+                      disabled={reviewPage === Math.ceil(dynamicReviews.length / 5)}
+                      style={{ padding: '6px 12px', borderRadius: '6px', border: '1px solid #D1D5DB', background: reviewPage === Math.ceil(dynamicReviews.length / 5) ? '#F3F4F6' : '#FFFFFF', cursor: reviewPage === Math.ceil(dynamicReviews.length / 5) ? 'not-allowed' : 'pointer' }}
+                    >
+                      Next
+                    </button>
+                  </div>
+                )}
+                {dynamicReviews.length === 0 && (
+                  <div style={{ color: '#6B7280', fontSize: '15px' }}>No reviews yet. Be the first to review!</div>
+                )}
               </div>
 
             </div>
+          </div>
+
+          {/* Contact Owner / Enquire Now form (Moved to bottom) */}
+          <div className="detail-tab-target-section border-box-style" style={{ marginBottom: '80px', background: '#FFFFFF', border: '1px solid #E5E7EB', borderRadius: '12px', padding: '24px', boxSizing: 'border-box', display: 'flex', flexDirection: 'column' }}>
+            <h3 className="section-subtitle-title" style={{ marginBottom: '16px', borderBottom: '1px solid #F3F4F6', paddingBottom: '12px' }}>
+              Still have questions? Enquire Now
+            </h3>
+            <form onSubmit={handleEnquirySubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '13px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Your Name*</label>
+                <input 
+                  type="text" 
+                  value={guestEnquiryName}
+                  onChange={(e) => setGuestEnquiryName(e.target.value)}
+                  required 
+                  placeholder="e.g. John Doe"
+                  style={{ padding: '10px 14px', fontSize: '14px', border: '1px solid #D1D5DB', borderRadius: '8px', outline: 'none', background: '#ffffff', color: '#111827' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '13px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Phone Number*</label>
+                <input 
+                  type="tel" 
+                  value={guestEnquiryPhone}
+                  onChange={(e) => setGuestEnquiryPhone(e.target.value)}
+                  required 
+                  placeholder="e.g. +91 9876543210"
+                  style={{ padding: '10px 14px', fontSize: '14px', border: '1px solid #D1D5DB', borderRadius: '8px', outline: 'none', background: '#ffffff', color: '#111827' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', gridColumn: '1 / -1' }}>
+                <label style={{ fontSize: '13px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Email Address*</label>
+                <input 
+                  type="email" 
+                  value={guestEnquiryEmail}
+                  onChange={(e) => setGuestEnquiryEmail(e.target.value)}
+                  required 
+                  placeholder="e.g. john@example.com"
+                  style={{ padding: '10px 14px', fontSize: '14px', border: '1px solid #D1D5DB', borderRadius: '8px', outline: 'none', background: '#ffffff', color: '#111827' }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', gridColumn: '1 / -1' }}>
+                <label style={{ fontSize: '13px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Query / Message*</label>
+                <textarea 
+                  value={guestEnquiryMessage}
+                  onChange={(e) => setGuestEnquiryMessage(e.target.value)}
+                  required 
+                  rows={4}
+                  placeholder="Write your query to the owner..."
+                  style={{ padding: '10px 14px', fontSize: '14px', border: '1px solid #D1D5DB', borderRadius: '8px', outline: 'none', resize: 'none', background: '#ffffff', color: '#111827' }}
+                />
+              </div>
+
+              <button 
+                type="submit" 
+                disabled={guestEnquirySubmitting}
+                style={{ gridColumn: '1 / -1', marginTop: '10px', background: '#2563eb', color: '#ffffff', fontWeight: 600, fontSize: '15px', padding: '14px', border: 'none', borderRadius: '8px', cursor: 'pointer', transition: 'background 0.2s', opacity: guestEnquirySubmitting ? 0.7 : 1 }}
+              >
+                {guestEnquirySubmitting ? 'Sending Enquiry...' : 'Submit Enquiry'}
+              </button>
+            </form>
           </div>
 
         </div>
@@ -3477,132 +3745,196 @@ export default function App() {
             {/* Left Sidebar */}
             <div className="search-sidebar">
               <div className="map-preview-box">
-                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=600&q=80" alt="Map Preview" />
-                <button className="btn-explore-map" onClick={() => alert('Map View Coming Soon!')}>Explore on Map</button>
+                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=400&q=80" alt="Map Preview" />
+                <button className="btn-explore-map">Show on Map</button>
               </div>
 
-              {/* Property Type Filter */}
-              <div className="sidebar-filter-block">
-                <h4 className="filter-block-title">Property Type</h4>
-                <div className="filter-checkbox-list">
+              {/* Property Category Filter */}
+              <div className="sidebar-filter-block" style={{ borderBottom: '1px solid #EFF6E6', paddingBottom: '20px', marginBottom: '20px' }}>
+                <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Property Category</h4>
+                <div className="filter-checkbox-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                   {[
-                    'Hotel', 'Villa', 'Resort', 'Motel', 'Cottage', 'Bungalow', 'Apartment', 'Homestay'
-                  ].map((typeLabel, i) => {
-                    const isChecked = filterSelectedTypes.includes(typeLabel);
+                    { label: 'Cottages', value: 'Cottage', count: 12 },
+                    { label: 'Bungalows', value: 'Bungalow', count: 12 },
+                    { label: 'Apartments', value: 'Apartment', count: 12 }
+                  ].map((item, i) => {
+                    const isChecked = filterSelectedTypes.includes(item.value);
                     return (
-                      <div key={i} className="filter-checkbox-item">
-                        <label>
-                          <input type="checkbox" checked={isChecked} onChange={() => {
-                            const updated = isChecked
-                              ? filterSelectedTypes.filter(t => t !== typeLabel)
-                              : [...filterSelectedTypes, typeLabel];
-                            setFilterSelectedTypes(updated);
-                            if (updated.length === 1) {
-                              fetchProperties({ type: updated[0], search: where });
-                            } else if (updated.length === 0) {
-                              fetchProperties({ search: where });
-                            }
-                          }} />
-                          {typeLabel}
+                      <div key={i} className="filter-checkbox-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#4B5563', fontFamily: '"Outfit", sans-serif' }}>
+                          <input 
+                            type="checkbox" 
+                            checked={isChecked} 
+                            onChange={() => {
+                              const updated = isChecked
+                                ? filterSelectedTypes.filter(t => t !== item.value)
+                                : [...filterSelectedTypes, item.value];
+                              setFilterSelectedTypes(updated);
+                              if (updated.length === 1) {
+                                fetchProperties({ type: updated[0], search: where });
+                              } else {
+                                fetchProperties({ search: where });
+                              }
+                            }} 
+                            style={{ accentColor: '#58A429', cursor: 'pointer' }}
+                          />
+                          {item.label}
                         </label>
+                        <span style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: '"Outfit", sans-serif' }}>({item.count})</span>
                       </div>
                     );
                   })}
                 </div>
               </div>
 
-              {/* Price Per Night Filter */}
-              <div className="sidebar-filter-block">
-                <h4 className="filter-block-title">Price Per Night</h4>
-                <div className="price-range-slider">
-                   <input
-                     type="range" min="500" max="100000" step="500"
-                     value={filterPriceSlider}
-                     onChange={e => setFilterPriceSlider(Number(e.target.value))}
-                     onMouseUp={() => fetchProperties({ search: where, maxPrice: filterPriceSlider })}
-                     onTouchEnd={() => fetchProperties({ search: where, maxPrice: filterPriceSlider })}
-                     style={{ width: '100%', accentColor: '#111827' }}
-                   />
-                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', fontWeight: '600', marginTop: '8px' }}>
-                      <span>₹ 500</span>
-                      <span>₹ {filterPriceSlider.toLocaleString('en-IN')}</span>
-                   </div>
+              {/* Price Per Night Slider */}
+              <div className="sidebar-filter-block" style={{ borderBottom: '1px solid #EFF6E6', paddingBottom: '20px', marginBottom: '20px' }}>
+                <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Price Per Night</h4>
+                
+                <div style={{ position: 'relative', marginTop: '36px', marginBottom: '16px' }}>
+                  {/* Min value tooltip box */}
+                  <div style={{ position: 'absolute', left: '0%', top: '-28px', background: '#111827', color: '#ffffff', fontSize: '10px', fontWeight: '700', padding: '2px 6px', borderRadius: '4px', transform: 'translateX(-10%)', fontFamily: '"Outfit", sans-serif' }}>
+                    ₹ 100
+                  </div>
+                  {/* Max value tooltip box */}
+                  <div style={{ position: 'absolute', right: '0%', top: '-28px', background: '#111827', color: '#ffffff', fontSize: '10px', fontWeight: '700', padding: '2px 6px', borderRadius: '4px', transform: 'translateX(10%)', fontFamily: '"Outfit", sans-serif' }}>
+                    ₹ 1000
+                  </div>
+                  
+                  <input
+                    type="range" min="100" max="1000" step="50"
+                    value={filterPriceSlider > 1000 ? 1000 : filterPriceSlider}
+                    onChange={e => setFilterPriceSlider(Number(e.target.value))}
+                    onMouseUp={() => fetchProperties({ search: where, maxPrice: filterPriceSlider })}
+                    onTouchEnd={() => fetchProperties({ search: where, maxPrice: filterPriceSlider })}
+                    style={{ width: '100%', accentColor: '#111827', cursor: 'pointer', height: '4px', background: '#E5E7EB', borderRadius: '2px' }}
+                  />
                 </div>
-                <h4 className="filter-block-title" style={{ marginTop: '24px', marginBottom: '12px' }}>Your Budget</h4>
-                <div className="budget-inputs">
+
+                <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '13px', fontWeight: '700', color: '#111827', marginTop: '16px', marginBottom: '10px' }}>Your Budget</h4>
+                <div className="budget-inputs" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <input
                     type="number"
                     placeholder="Min"
                     value={filterMinPrice}
                     onChange={e => setFilterMinPrice(e.target.value)}
-                    style={{ width: '70px' }}
+                    style={{ flex: 1, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', fontSize: '13px', fontFamily: '"Outfit", sans-serif', color: '#374151', outline: 'none' }}
                   />
-                  <span style={{ fontSize: '12px', color: '#6B7280' }}>To</span>
+                  <span style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: '"Outfit", sans-serif' }}>To</span>
                   <input
                     type="number"
                     placeholder="Max"
                     value={filterMaxPrice}
                     onChange={e => setFilterMaxPrice(e.target.value)}
-                    style={{ width: '70px' }}
+                    style={{ flex: 1, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', fontSize: '13px', fontFamily: '"Outfit", sans-serif', color: '#374151', outline: 'none' }}
                   />
                   <button
-                    style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                    style={{ background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' }}
                     onClick={() => fetchProperties({ search: where, minPrice: filterMinPrice || undefined, maxPrice: filterMaxPrice || undefined })}
+                    onMouseOver={e => e.currentTarget.style.borderColor = '#58A429'}
+                    onMouseOut={e => e.currentTarget.style.borderColor = '#E5E7EB'}
                   >
-                    <ArrowRight size={18} color="#111827" />
+                    <ArrowRight size={14} color="#111827" />
                   </button>
                 </div>
               </div>
 
               {/* Star Category / Rating Filter */}
-              <div className="sidebar-filter-block">
-                <h4 className="filter-block-title">Minimum Rating</h4>
-                <div className="filter-checkbox-list">
-                  {[5, 4, 3, 2].map((star, i) => (
-                    <div key={i} className="filter-checkbox-item">
-                      <label style={{ display: 'flex', alignItems: 'center' }}>
+              <div className="sidebar-filter-block" style={{ borderBottom: '1px solid #EFF6E6', paddingBottom: '20px', marginBottom: '20px' }}>
+                <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Star Category</h4>
+                <div className="filter-checkbox-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[
+                    { stars: 5, count: 122 },
+                    { stars: 4, count: 12 },
+                    { stars: 3, count: 12 },
+                    { stars: 2, count: 12 }
+                  ].map((item, i) => (
+                    <div key={i} className="filter-checkbox-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#4B5563', fontFamily: '"Outfit", sans-serif' }}>
                         <input
                           type="checkbox"
-                          checked={filterMinRating === star}
+                          checked={filterMinRating === item.stars}
                           onChange={() => {
-                            const newVal = filterMinRating === star ? 0 : star;
+                            const newVal = filterMinRating === item.stars ? 0 : item.stars;
                             setFilterMinRating(newVal);
                           }}
+                          style={{ accentColor: '#58A429', cursor: 'pointer' }}
                         />
-                        {star}+ Stars
-                        <div style={{ display: 'flex', marginLeft: '6px', gap: '2px' }}>
+                        {item.stars} Star
+                        <div style={{ display: 'flex', gap: '2px', marginLeft: '4px' }}>
                           {Array(5).fill(0).map((_, idx) => (
-                            <Star key={idx} size={12} fill={idx < star ? "#0C6DC4" : "#E5E7EB"} color={idx < star ? "#0C6DC4" : "#E5E7EB"} />
+                            <Star key={idx} size={12} fill={idx < item.stars ? "#0C6DC4" : "none"} color={idx < item.stars ? "#0C6DC4" : "#D1D5DB"} />
                           ))}
                         </div>
                       </label>
+                      <span style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: '"Outfit", sans-serif' }}>({item.count})</span>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* Amenities Filter */}
-              <div className="sidebar-filter-block">
-                <h4 className="filter-block-title">Amenities</h4>
-                <div className="filter-checkbox-list">
-                  {['Swimming Pool', 'WiFi', 'Parking', 'Barbeque', 'Lift/Elevator', 'Bonfire'].map((amenity, i) => {
-                    const isChecked = filterSelectedAmenities.includes(amenity);
+              {/* Amenities Filter — fed from Admin Amenities Master */}
+              <div className="sidebar-filter-block" style={{ borderBottom: '1px solid #EFF6E6', paddingBottom: '20px', marginBottom: '20px' }}>
+                <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Amenities</h4>
+                <div className="filter-checkbox-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {(amenitiesForFilter.length > 0 ? amenitiesForFilter : [
+                    { amenitiesName: 'Swimming Pool' },
+                    { amenitiesName: 'WiFi' },
+                    { amenitiesName: 'Parking' },
+                    { amenitiesName: 'Barbeque' },
+                    { amenitiesName: 'Spa' },
+                    { amenitiesName: 'Gym' },
+                    { amenitiesName: 'Bonfire' },
+                  ]).map((item, i) => {
+                    const checkVal = item.amenitiesName || item.label || item;
+                    const isChecked = filterSelectedAmenities.includes(checkVal);
                     return (
-                      <div key={i} className="filter-checkbox-item">
-                        <label>
-                          <input type="checkbox" checked={isChecked} onChange={() => {
-                            setFilterSelectedAmenities(isChecked
-                              ? filterSelectedAmenities.filter(a => a !== amenity)
-                              : [...filterSelectedAmenities, amenity]
-                            );
-                          }} />
-                          {amenity}
+                      <div key={i} className="filter-checkbox-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#4B5563', fontFamily: '"Outfit", sans-serif' }}>
+                          <input
+                            type="checkbox"
+                            checked={isChecked}
+                            onChange={() => {
+                              setFilterSelectedAmenities(isChecked
+                                ? filterSelectedAmenities.filter(a => a !== checkVal)
+                                : [...filterSelectedAmenities, checkVal]
+                              );
+                            }}
+                            style={{ accentColor: '#58A429', cursor: 'pointer' }}
+                          />
+                          {checkVal}
                         </label>
                       </div>
                     );
                   })}
                 </div>
               </div>
+
+              {/* Booking Preferences */}
+              <div className="sidebar-filter-block" style={{ borderBottom: '1px solid #EFF6E6', paddingBottom: '20px', marginBottom: '20px' }}>
+                <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Booking Preferences</h4>
+                <div className="filter-checkbox-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  {[
+                    { label: 'Instant Book', checked: filterInstantBook, setter: setFilterInstantBook, count: 122 },
+                    { label: 'Cancellation Policy', checked: filterCancellationPolicy, setter: setFilterCancellationPolicy, count: 12 },
+                    { label: 'Homestays', checked: filterHomestays, setter: setFilterHomestays, count: 12 }
+                  ].map((item, i) => (
+                    <div key={i} className="filter-checkbox-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#4B5563', fontFamily: '"Outfit", sans-serif' }}>
+                        <input
+                          type="checkbox"
+                          checked={item.checked}
+                          onChange={() => item.setter(!item.checked)}
+                          style={{ accentColor: '#58A429', cursor: 'pointer' }}
+                        />
+                        {item.label}
+                      </label>
+                      <span style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: '"Outfit", sans-serif' }}>({item.count})</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               {/* Clear All Filters button */}
               <button
                 onClick={() => {
@@ -3612,10 +3944,15 @@ export default function App() {
                   setFilterMaxPrice('');
                   setFilterPriceSlider(50000);
                   setFilterMinRating(0);
+                  setFilterInstantBook(false);
+                  setFilterCancellationPolicy(false);
+                  setFilterHomestays(false);
                   setSearchSortBy('popularity');
                   fetchProperties({ search: where });
                 }}
-                style={{ width: '100%', marginTop: '16px', padding: '10px', background: '#F3F4F6', border: '1px solid #E5E7EB', borderRadius: '10px', fontSize: '13px', fontWeight: 600, color: '#374151', cursor: 'pointer' }}
+                style={{ width: '100%', marginTop: '16px', padding: '10px', background: '#F3F4F6', border: '1px solid #E5E7EB', borderRadius: '10px', fontSize: '13px', fontWeight: 600, color: '#374151', cursor: 'pointer', fontFamily: '"Outfit", sans-serif', transition: 'all 0.2s' }}
+                onMouseOver={e => e.currentTarget.style.background = '#E5E7EB'}
+                onMouseOut={e => e.currentTarget.style.background = '#F3F4F6'}
               >
                 Clear All Filters
               </button>
@@ -3637,6 +3974,15 @@ export default function App() {
                       const propAmenities = (p.amenities || []).map(a => a.toLowerCase());
                       return filterSelectedAmenities.some(a => propAmenities.some(pa => pa.includes(a.toLowerCase())));
                     });
+                  }
+                  if (filterInstantBook) {
+                    displayList = displayList.filter(p => (p.rules || '').toLowerCase().includes('instant') || (p.description || '').toLowerCase().includes('instant') || p.instantBook);
+                  }
+                  if (filterCancellationPolicy) {
+                    displayList = displayList.filter(p => (p.rules || '').toLowerCase().includes('cancellation') || (p.description || '').toLowerCase().includes('cancel') || p.cancellationPolicy);
+                  }
+                  if (filterHomestays) {
+                    displayList = displayList.filter(p => p.type?.toLowerCase() === 'homestay' || p.category?.toLowerCase() === 'homestay');
                   }
                   return `${displayList.length} Properties In ${where || 'India'}`;
                 })()}
@@ -3665,6 +4011,16 @@ export default function App() {
                       const propAmenities = (p.amenities || []).map(a => a.toLowerCase());
                       return filterSelectedAmenities.some(a => propAmenities.some(pa => pa.includes(a.toLowerCase())));
                     });
+                  }
+                  // Apply Booking Preferences filters
+                  if (filterInstantBook) {
+                    displayList = displayList.filter(p => (p.rules || '').toLowerCase().includes('instant') || (p.description || '').toLowerCase().includes('instant') || p.instantBook);
+                  }
+                  if (filterCancellationPolicy) {
+                    displayList = displayList.filter(p => (p.rules || '').toLowerCase().includes('cancellation') || (p.description || '').toLowerCase().includes('cancel') || p.cancellationPolicy);
+                  }
+                  if (filterHomestays) {
+                    displayList = displayList.filter(p => p.type?.toLowerCase() === 'homestay' || p.category?.toLowerCase() === 'homestay');
                   }
                   // Apply sort
                   if (searchSortBy === 'price_low') {
@@ -4190,7 +4546,7 @@ export default function App() {
                 const isDynamic = offer.property_id || offer.propertyName;
                 const title = isDynamic ? `${offer.propertyName || offer.property_id?.name} - ${offer.room_type || offer.room || 'Deluxe Room'}` : offer.title;
                 const subtitle = isDynamic ? `${offer.category} | ${offer.food_type || offer.foods} | ${offer.description}` : offer.subtitle;
-                const discount = isDynamic ? `${offer.offer_percent || offer.offerPercent}` : (offer.discount || '30% OFF');
+                const discount = isDynamic ? `${offer.offer_percent || offer.offerPercent}` : (offer.discount ? offer.discount.replace(/Up to\s+/i, '') : '30% OFF');
                 const img = isDynamic 
                   ? (offer.property_id?.images?.[0] || 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=600&q=80') 
                   : offer.img;
@@ -4337,8 +4693,8 @@ export default function App() {
         <div className="site-footer-overlay">
           
           {/* Logo container image */}
-          <div className="footer-logo-row" style={{ marginBottom: 24 }}>
-            <img src={footerLogoImg} alt="Tripin Villa Logo" style={{ height: '56px', width: 'auto', objectFit: 'contain' }} />
+          <div className="footer-logo-row" style={{ marginBottom: 24, marginTop: -40 }}>
+            <img src={footerLogoImg} alt="Tripin Villa Logo" style={{ height: '78px', width: 'auto', objectFit: 'contain' }} />
           </div>
 
           {/* Description statement */}
@@ -4410,8 +4766,8 @@ export default function App() {
                       <input type="text" className="auth-input-field" placeholder="Sharma" value={signupLastName} onChange={(e) => setSignupLastName(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
-                      <label className="auth-input-label">Choose Password*</label>
-                      <input type="password" className="auth-input-field" placeholder="••••••••" value={signupPassword} onChange={(e) => setSignupPassword(e.target.value)} required autoComplete="off" />
+                      <label className="auth-input-label">Country of Citizenship*</label>
+                      <input type="text" className="auth-input-field" placeholder="India" value={signupCitizenship} onChange={(e) => setSignupCitizenship(e.target.value)} required autoComplete="off" />
                     </div>
                     
                     <div className="auth-form-group">
@@ -4420,37 +4776,40 @@ export default function App() {
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Phone Number*</label>
-                      <input type="tel" className="auth-input-field" placeholder="+91 98765 43210" required autoComplete="off" />
+                      <input type="tel" className="auth-input-field" placeholder="+91 98765 43210" value={signupPhone} onChange={(e) => setSignupPhone(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Country of Residence*</label>
-                      <input type="text" className="auth-input-field" placeholder="India" required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="India" value={signupResidence} onChange={(e) => setSignupResidence(e.target.value)} required autoComplete="off" />
                     </div>
                     
                     <div className="auth-form-group">
                       <label className="auth-input-label">Address*</label>
-                      <input type="text" className="auth-input-field" placeholder="Flat No. 302, Green Apartments" required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="Flat No. 302, Green Apartments" value={signupAddress} onChange={(e) => setSignupAddress(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Pin Code*</label>
-                      <input type="text" className="auth-input-field" placeholder="560102" required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="560102" value={signupPincode} onChange={(e) => setSignupPincode(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">State*</label>
-                      <input type="text" className="auth-input-field" placeholder="Karnataka" required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="Karnataka" value={signupState} onChange={(e) => setSignupState(e.target.value)} required autoComplete="off" />
                     </div>
                   </div>
  
-                  <button type="submit" className="auth-submit-btn-green" style={{ width: '100%', borderRadius: '15px', fontSize: '16px', fontWeight: '600', backgroundColor: '#58A429', color: '#FFFFFF', border: 'none', cursor: 'pointer', marginTop: '24px', height: '62px', transition: 'background-color 0.2s' }}>{authLoading ? 'Registering...' : 'Continue'}</button>
+                  <button type="submit" className="auth-submit-btn-green" style={{ width: '100%', borderRadius: '15px', fontSize: '16px', fontWeight: '600', backgroundColor: '#58A429', color: '#FFFFFF', border: 'none', cursor: 'pointer', marginTop: '24px', height: '48px', transition: 'background-color 0.2s' }}>{authLoading ? 'Registering...' : 'Continue'}</button>
                 </form>
  
+                {/* Dotted separator line */}
+                <div style={{ width: '100%', borderTop: '1px dotted #D1D5DB', margin: '24px 0 12px 0' }}></div>
+
                 {/* Dashed divider */}
-                <div className="auth-divider-wrap" style={{ margin: '24px 0' }}>
+                <div className="auth-divider-wrap" style={{ margin: '12px 0 24px 0' }}>
                   <span className="auth-divider-text">Or Log In with</span>
                 </div>
  
                 {/* Official Brand square social items */}
-                <div className="auth-social-row" style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginBottom: '24px' }}>
+                <div className="auth-social-row" style={{ display: 'flex', gap: '32px', justifyContent: 'center', marginBottom: '24px' }}>
                   <button style={{ background: '#f4f6f8', border: 'none', borderRadius: '10px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background-color 0.2s' }} onClick={() => handleOAuthLogin('google')}>
                     <svg width="24" height="24" viewBox="0 0 24 24">
                       <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -4465,13 +4824,13 @@ export default function App() {
                     </svg>
                   </button>
                 </div>
- 
+
                 <div className="auth-footer-links" style={{ textAlign: 'center' }}>
                   <p className="auth-switch-text" style={{ fontSize: '14px', color: '#4B5563', margin: '6px 0' }}>
-                    Already have an account? <span className="auth-link-green" style={{ color: '#1d9e75', fontWeight: '600', cursor: 'pointer', textDecoration: 'none' }} onClick={() => setAuthMode('login')}>Log In</span>
+                    Already have an account? <span className="auth-link-green" style={{ color: '#58A429', fontWeight: '600', cursor: 'pointer', textDecoration: 'none' }} onClick={() => setAuthMode('login')}>Log In</span>
                   </p>
                   <p className="auth-switch-text" style={{ fontSize: '14px', color: '#4B5563', margin: '6px 0' }}>
-                    <span className="auth-link-owner" style={{ color: '#1d9e75', fontWeight: '600', cursor: 'pointer', textDecoration: 'none' }} onClick={() => { window.location.href = 'http://localhost:5175/owner/login'; setAuthModalOpen(false); }}>Log In as a Property Owner</span>
+                    <span className="auth-link-owner" style={{ color: '#58A429', fontWeight: '600', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => { window.location.href = token ? `http://localhost:5175/owner/login?token=${token}` : 'http://localhost:5175/owner/login'; setAuthModalOpen(false); }}>Log In as a Property Owner</span>
                   </p>
                 </div>
               </div>
@@ -4491,26 +4850,49 @@ export default function App() {
                     Log In Your Account To <br />Find Your <span style={{ backgroundColor: '#0066ff', color: '#FFFFFF', padding: '2px 10px', borderRadius: '4px', marginLeft: '6px', fontWeight: '700', display: 'inline-block' }}>Perfect Stay</span>
                   </h2>
                   
-                  <form onSubmit={handleLoginSubmit} className="auth-login-form" autoComplete="off">
-                    <div className="auth-form-group full-width">
-                      <label className="auth-input-label">Email Address*</label>
-                      <input type="email" className="auth-input-field" placeholder="jhondoe@gmail.com" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} required autoComplete="off" />
-                    </div>
-                    <div className="auth-form-group full-width" style={{ marginTop: '12px' }}>
-                      <label className="auth-input-label">Password*</label>
-                      <input type="password" className="auth-input-field" placeholder="••••••••" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required autoComplete="off" />
-                    </div>
+                  <form onSubmit={(e) => {
+                    e.preventDefault();
+                    if (!showPasswordStep) {
+                      if (!loginEmail.trim()) {
+                        alert('Please enter your email or mobile number.');
+                        return;
+                      }
+                      setShowPasswordStep(true);
+                    } else {
+                      handleLoginSubmit(e);
+                    }
+                  }} className="auth-login-form" autoComplete="off">
+                    {!showPasswordStep ? (
+                      <div className="auth-form-group full-width">
+                        <label className="auth-input-label">Email Id or Mobile Number*</label>
+                        <input type="text" className="auth-input-field" placeholder="jhondoe@gmail.com" value={loginEmail} onChange={(e) => setLoginEmail(e.target.value)} required autoComplete="off" />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="auth-form-group full-width">
+                          <label className="auth-input-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <span>Password*</span>
+                            <span style={{ color: '#0066ff', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }} onClick={() => setShowPasswordStep(false)}>Back</span>
+                          </label>
+                          <input type="password" className="auth-input-field" placeholder="••••••••" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required autoComplete="off" autoFocus />
+                        </div>
+                      </>
+                    )}
 
-                    <button type="submit" className="auth-submit-btn-green" style={{ width: '100%', borderRadius: '15px', fontSize: '16px', fontWeight: '600', backgroundColor: '#58A429', color: '#FFFFFF', border: 'none', cursor: 'pointer', height: '62px', transition: 'background-color 0.2s', marginTop: '24px' }}>{authLoading ? 'Logging In...' : 'Continue'}</button>
+                    <button type="submit" className="auth-submit-btn-green" style={{ width: '100%', borderRadius: '15px', fontSize: '16px', fontWeight: '600', backgroundColor: '#58A429', color: '#FFFFFF', border: 'none', cursor: 'pointer', height: '48px', transition: 'background-color 0.2s', marginTop: '24px' }}>
+                      {authLoading ? (showPasswordStep ? 'Logging In...' : 'Checking...') : (showPasswordStep ? 'Log In' : 'Continue')}
+                    </button>
                   </form>
 
-                  {/* Divider */}
-                  <div className="auth-divider-wrap" style={{ margin: '20px 0' }}>
+                  {/* Dotted separator line */}
+                  <div style={{ width: '100%', borderTop: '1px dotted #D1D5DB', margin: '24px 0 12px 0' }}></div>
+
+                  {/* Dashed divider */}
+                  <div className="auth-divider-wrap" style={{ margin: '12px 0 20px 0' }}>
                     <span className="auth-divider-text">Or Sign In with</span>
                   </div>
 
-                  {/* Official Brand square social items */}
-                  <div className="auth-social-row" style={{ display: 'flex', gap: '16px', justifyContent: 'center', marginBottom: '20px' }}>
+                  <div className="auth-social-row" style={{ display: 'flex', gap: '32px', justifyContent: 'center', marginBottom: '20px' }}>
                     <button style={{ background: '#f4f6f8', border: 'none', borderRadius: '10px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background-color 0.2s' }} onClick={() => handleOAuthLogin('google')}>
                       <svg width="24" height="24" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -4528,10 +4910,10 @@ export default function App() {
 
                   <div className="auth-footer-links">
                     <p className="auth-switch-text">
-                      Don't have an account? <span className="auth-link-green" onClick={() => setAuthMode('signup')}>Sign Up</span>
+                      Don't have an account? <span className="auth-link-green" style={{ color: '#58A429', fontWeight: '600', cursor: 'pointer', textDecoration: 'none' }} onClick={() => setAuthMode('signup')}>Sign Up</span>
                     </p>
                     <p className="auth-switch-text">
-                      <span className="auth-link-owner" onClick={() => { window.location.href = 'http://localhost:5175/owner/login'; setAuthModalOpen(false); }}>Log in as a Property Owner</span>
+                      <span className="auth-link-owner" style={{ color: '#58A429', fontWeight: '600', cursor: 'pointer', textDecoration: 'underline' }} onClick={() => { window.location.href = token ? `http://localhost:5175/owner/login?token=${token}` : 'http://localhost:5175/owner/login'; setAuthModalOpen(false); }}>Log in as a Property Owner</span>
                     </p>
                   </div>
                 </div>
@@ -4592,7 +4974,10 @@ export default function App() {
                 </h2>
                 
                 <p className="otp-sub-banner-text">
-                  We've sent a 6-digit code to <strong>{enquiryEmail}</strong>
+                  {otpChannel === 'sms' 
+                    ? <>We've sent a 6-digit code to your phone <strong>{enquiryPhone}</strong> via SMS.</>
+                    : <>We've sent a 6-digit code to your email <strong>{enquiryEmail}</strong>.</>
+                  }
                 </p>
 
                 {otpError && (
@@ -4686,6 +5071,18 @@ export default function App() {
 
               <form onSubmit={handleReviewFormSubmit} className="review-submit-form">
                 
+                <div className="auth-form-group full-width" style={{ marginBottom: '16px' }}>
+                  <label className="auth-input-label">Your Name*</label>
+                  <input 
+                    type="text"
+                    className="auth-input-field" 
+                    placeholder="John Doe"
+                    value={reviewName}
+                    onChange={(e) => setReviewName(e.target.value)}
+                    required
+                  />
+                </div>
+
                 <div className="auth-form-group full-width">
                   <label className="auth-input-label">Your Review*</label>
                   <textarea 
