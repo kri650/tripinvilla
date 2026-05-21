@@ -1270,14 +1270,13 @@ export default function App() {
     e.preventDefault();
     setAuthLoading(true);
     try {
-      const passwordToUse = 'Password123';
       const res = await fetch(`${API_BASE}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: `${signupFirstName} ${signupLastName}`.trim(),
           email: signupEmail,
-          password: passwordToUse,
+          password: signupPassword,
           role: 'user'
         })
       });
@@ -1581,7 +1580,10 @@ export default function App() {
             <div className="hero-headline-container">
               {activeMenu === 'Properties' ? (
                 <h1 className="hero-headline">
-                  Best Properties In <span className="highlight-sharp-blue-box" style={{ borderRadius: 0, padding: '0 16px' }}>{where ? (where.charAt(0).toUpperCase() + where.slice(1) + (where.toLowerCase() === 'india' ? '' : ', India')) : 'Goa, India'}</span>
+                  {where ? 'Best Properties In ' : 'Best Properties '}
+                  <span className="highlight-sharp-blue-box" style={{ borderRadius: 0, padding: '0 16px' }}>
+                    {where ? (where.charAt(0).toUpperCase() + where.slice(1) + (where.toLowerCase() === 'india' ? '' : ', India')) : 'For You'}
+                  </span>
                 </h1>
               ) : (
                 <h1 className="hero-headline">
@@ -2450,7 +2452,7 @@ export default function App() {
 
           <div className="about-main-wrapper" style={{ marginTop: 0 }}>
             {/* Our Testimonials Section */}
-            <div className="our-testimonials-section" style={{ margin: '80px 0 40px 0' }}>
+            <div className="our-testimonials-section" style={{ margin: '80px 0 20px 0' }}>
               <div className="section-title-wrap">
                 <h2 className="section-main-headline">
                   Our <span className="highlight-sharp-blue-box">Testimonials</span>
@@ -2782,22 +2784,65 @@ export default function App() {
           <div className="terms-document-box">
             <h2 className="terms-document-title">Privacy Policy</h2>
             <div className="terms-document-content">
-              <h3 className="terms-section-header">DATA PROTECTION OVERVIEW</h3>
+              <h3 className="terms-section-header">OVERVIEW</h3>
               <p className="terms-text-p">
-                At Tripinvilla, we take your privacy seriously. This Privacy Policy outlines how we collect, use, and safeguard your personal information when you use our website, booking platform, and customer service channels.
+                This Privacy Policy describes how TripinVilla collects, uses, discloses, and protects your personal information when you visit or make a purchase from our website. By using our website and services, you agree to the collection and use of information in accordance with this policy.
               </p>
               <p className="terms-text-p">
-                We collect information that you provide directly to us, such as when you create an account, update your profile, make a booking, or contact our support team. This includes your name, email address, phone number, and billing information.
-              </p>
-
-              <h3 className="terms-section-header">1 – INFORMATION USAGE</h3>
-              <p className="terms-text-p">
-                We use the information we collect to process bookings, facilitate payment transactions, communicate with you about your reservation, and provide customer support. We also use data to improve our platform security, prevent fraud, and optimize user experience across our digital properties.
+                TripinVilla is committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. We comply with applicable data protection laws and take reasonable measures to protect your data from unauthorized access, misuse, or disclosure.
               </p>
 
-              <h3 className="terms-section-header">2 – DATA SHARING</h3>
-              <p className="terms-text-p" style={{ marginBottom: '40px' }}>
-                We share essential reservation details with verified property owners and hosts to ensure a smooth check-in experience. We never sell your personal information to third-party data brokers or marketing agencies. All payment processing is handled through secure, PCI-compliant payment gateways.
+              <h3 className="terms-section-header">1 – INFORMATION WE COLLECT</h3>
+              <p className="terms-text-p">
+                When you visit our website, we may automatically collect certain information about your device, including information about your web browser, IP address, time zone, and some cookies installed on your device.
+              </p>
+              <p className="terms-text-p">
+                Additionally, when you make a purchase or attempt to make a purchase through the website, we collect certain personal information from you, including your name, billing address, shipping address, payment information, email address, and phone number. We may also collect additional information if you contact customer support or interact with our services.
+              </p>
+
+              <h3 className="terms-section-header">2 – HOW WE USE YOUR INFORMATION</h3>
+              <p className="terms-text-p">
+                TripinVilla uses the collected information for various purposes, including processing transactions, providing customer support, improving our website, and communicating with you about orders, updates, or promotional offers.
+              </p>
+              <p className="terms-text-p">
+                We may also use your information to screen orders for potential risk or fraud and to improve and optimize our website experience. Your information helps us better understand customer preferences and improve our service quality.
+              </p>
+
+              <h3 className="terms-section-header">3 – SHARING YOUR PERSONAL INFORMATION</h3>
+              <p className="terms-text-p">
+                TripinVilla does not sell, rent, or trade your personal information to third parties. However, we may share your information with trusted third-party service providers who assist us in operating our website, conducting business, or servicing you.
+              </p>
+              <p className="terms-text-p">
+                We may also disclose your information when required by law, legal process, or governmental request, or to protect our legal rights and prevent fraud or security issues.
+              </p>
+
+              <h3 className="terms-section-header">4 – DATA SECURITY</h3>
+              <p className="terms-text-p">
+                TripinVilla takes reasonable precautions and follows industry best practices to protect your personal information from loss, misuse, unauthorized access, disclosure, alteration, or destruction.
+              </p>
+              <p className="terms-text-p">
+                All payment information is encrypted and processed through secure payment gateways. While we strive to use commercially acceptable means to protect your personal data, no method of transmission over the Internet is 100% secure.
+              </p>
+
+              <h3 className="terms-section-header">5 – COOKIES AND TRACKING TECHNOLOGIES</h3>
+              <p className="terms-text-p">
+                TripinVilla uses cookies and similar tracking technologies to improve your browsing experience, analyze website traffic, and understand user behavior.
+              </p>
+              <p className="terms-text-p">
+                You can choose to disable cookies through your browser settings. However, disabling cookies may affect certain features and functionality of our website.
+              </p>
+
+              <h3 className="terms-section-header">6 – THIRD-PARTY SERVICES</h3>
+              <p className="terms-text-p">
+                Our website may contain links to third-party websites or services. TripinVilla is not responsible for the privacy practices or content of third-party websites. We encourage users to review the privacy policies of any third-party websites they visit.
+              </p>
+
+              <h3 className="terms-section-header">7 – YOUR RIGHTS</h3>
+              <p className="terms-text-p">
+                You have the right to access, update, or delete your personal information. You may contact us if you wish to review or correct any personal information we hold about you.
+              </p>
+              <p className="terms-text-p">
+                You may also opt out of receiving marketing communications from us at any time by following the unsubscribe instructions included in our emails.
               </p>
             </div>
           </div>
@@ -3327,7 +3372,6 @@ export default function App() {
                       <span className="taxes-subtext">+212 taxes & fees per room per night</span>
                       <div style={{ marginTop: '4px' }}>
                         <span className="highlight-green-detail">{activeDetailProp.price}/night</span>
-                        <span className="room-per-night-label"> room per night</span>
                       </div>
                     </div>
 
@@ -4582,7 +4626,6 @@ export default function App() {
                       <div className="offer-card-actions">
                         <button 
                           className="btn-villa-action outline-blue" 
-                          style={{ width: '136px' }} 
                           onClick={() => {
                             if (isDynamic && offer.property_id) {
                               setSelectedProperty(offer.property_id);
@@ -4769,20 +4812,20 @@ export default function App() {
                   <div className="auth-form-grid-3x3">
                     <div className="auth-form-group">
                       <label className="auth-input-label">First Name*</label>
-                      <input type="text" className="auth-input-field" placeholder="Rohan" value={signupFirstName} onChange={(e) => setSignupFirstName(e.target.value)} required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="Your first name" value={signupFirstName} onChange={(e) => setSignupFirstName(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Last Name*</label>
-                      <input type="text" className="auth-input-field" placeholder="Sharma" value={signupLastName} onChange={(e) => setSignupLastName(e.target.value)} required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="Your surname" value={signupLastName} onChange={(e) => setSignupLastName(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
-                      <label className="auth-input-label">Country of Citizenship*</label>
-                      <input type="text" className="auth-input-field" placeholder="India" value={signupCitizenship} onChange={(e) => setSignupCitizenship(e.target.value)} required autoComplete="off" />
+                      <label className="auth-input-label">Choose Password*</label>
+                      <input type="password" className="auth-input-field" placeholder="Minimum 8 characters" value={signupPassword} onChange={(e) => setSignupPassword(e.target.value)} required autoComplete="off" />
                     </div>
                     
                     <div className="auth-form-group">
                       <label className="auth-input-label">Email Address*</label>
-                      <input type="email" className="auth-input-field" placeholder="jhondoe@gmail.com" value={signupEmail} onChange={(e) => setSignupEmail(e.target.value)} required autoComplete="off" />
+                      <input type="email" className="auth-input-field" placeholder="name@example.com" value={signupEmail} onChange={(e) => setSignupEmail(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Phone Number*</label>
@@ -4790,24 +4833,24 @@ export default function App() {
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Country of Residence*</label>
-                      <input type="text" className="auth-input-field" placeholder="India" value={signupResidence} onChange={(e) => setSignupResidence(e.target.value)} required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="Select your country" value={signupResidence} onChange={(e) => setSignupResidence(e.target.value)} required autoComplete="off" />
                     </div>
                     
                     <div className="auth-form-group">
                       <label className="auth-input-label">Address*</label>
-                      <input type="text" className="auth-input-field" placeholder="Flat No. 302, Green Apartments" value={signupAddress} onChange={(e) => setSignupAddress(e.target.value)} required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="Apartment, street, city" value={signupAddress} onChange={(e) => setSignupAddress(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Pin Code*</label>
-                      <input type="text" className="auth-input-field" placeholder="560102" value={signupPincode} onChange={(e) => setSignupPincode(e.target.value)} required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="Enter postal code" value={signupPincode} onChange={(e) => setSignupPincode(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">State*</label>
-                      <input type="text" className="auth-input-field" placeholder="Karnataka" value={signupState} onChange={(e) => setSignupState(e.target.value)} required autoComplete="off" />
+                      <input type="text" className="auth-input-field" placeholder="Select your state" value={signupState} onChange={(e) => setSignupState(e.target.value)} required autoComplete="off" />
                     </div>
                   </div>
  
-                  <button type="submit" className="auth-submit-btn-green" style={{ width: '100%', borderRadius: '15px', fontSize: '16px', fontWeight: '600', backgroundColor: '#58A429', color: '#FFFFFF', border: 'none', cursor: 'pointer', marginTop: '24px', height: '48px', transition: 'background-color 0.2s' }}>{authLoading ? 'Registering...' : 'Continue'}</button>
+                  <button type="submit" className="auth-submit-btn-green" style={{ width: '100%', borderRadius: '15px', fontSize: '16px', fontWeight: '600', backgroundColor: '#58A429', color: '#FFFFFF', border: 'none', cursor: 'pointer', marginTop: '8px', height: '48px', transition: 'background-color 0.2s' }}>{authLoading ? 'Registering...' : 'Continue'}</button>
                 </form>
  
                 {/* Dotted separator line */}
@@ -4902,7 +4945,7 @@ export default function App() {
                     <span className="auth-divider-text">Or Sign In with</span>
                   </div>
 
-                  <div className="auth-social-row" style={{ display: 'flex', gap: '32px', justifyContent: 'center', marginBottom: '20px' }}>
+                  <div className="auth-social-row" style={{ display: 'flex', gap: '32px', justifyContent: 'center', marginBottom: '4px' }}>
                     <button style={{ background: '#f4f6f8', border: 'none', borderRadius: '10px', width: '50px', height: '50px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'background-color 0.2s' }} onClick={() => handleOAuthLogin('google')}>
                       <svg width="24" height="24" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -4964,7 +5007,7 @@ export default function App() {
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Email Address*</label>
-                      <input type="email" className="auth-input-field" placeholder="jhondoe@gmail.com" value={enquiryEmail} onChange={(e) => setEnquiryEmail(e.target.value)} required />
+                      <input type="email" className="auth-input-field" placeholder="rohan.sharma@gmail.com" value={enquiryEmail} onChange={(e) => setEnquiryEmail(e.target.value)} required />
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Phone Number*</label>
