@@ -3305,29 +3305,38 @@ export default function App() {
                     gridTemplateColumns: propImages.length <= 1 ? '1fr' : '1.6fr 1fr'
                   }}>
                     {/* Large main image */}
-                    <div className="gallery-master-img">
+                    <div className="gallery-master-img" style={{ borderRadius: '12px 0 0 12px', overflow: 'hidden' }}>
                       <img src={propImages[0]} alt={activeDetailProp.title} />
                     </div>
 
-                    {/* Right 2x2 grid */}
+                    {/* Right 2-row stack */}
                     {propImages.length > 1 && (
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr', gap: '6px', height: '440px' }}>
-                        {[1, 2, 3, 4].map((i) => {
-                          const imgSrc = propImages[i];
-                          if (!imgSrc) return null;
-                          const isLast = i === 4 || (i === propImages.length - 1 && propImages.length <= 5);
-                          const remaining = propImages.length - 5;
-                          return (
-                            <div key={i} style={{ position: 'relative', overflow: 'hidden', height: '100%', borderRadius: i === 2 ? '0 8px 0 0' : i === 4 ? '0 0 8px 0' : '0' }}>
-                              <img src={imgSrc} alt={`${activeDetailProp.title} view ${i}`} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-                              {isLast && remaining > 0 && (
-                                <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.52)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                                  <span style={{ color: '#fff', fontWeight: 700, fontSize: '15px', letterSpacing: '0.3px' }}>View {remaining} more</span>
-                                </div>
-                              )}
-                            </div>
-                          );
-                        })}
+                      <div style={{ display: 'grid', gridTemplateRows: '1fr 1fr', gap: '6px', height: '440px' }}>
+                        {/* Top thumbnail: image[1] */}
+                        <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '0 12px 0 0' }}>
+                          <img
+                            src={propImages[1]}
+                            alt={`${activeDetailProp.title} view 2`}
+                            style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                          />
+                        </div>
+
+                        {/* Bottom thumbnail: image[2] with "View X more" overlay */}
+                        {propImages[2] && (
+                          <div style={{ position: 'relative', overflow: 'hidden', borderRadius: '0 0 12px 0' }}>
+                            <img
+                              src={propImages[2]}
+                              alt={`${activeDetailProp.title} view 3`}
+                              style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                            />
+                            {propImages.length > 3 && (
+                              <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.52)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', gap: '4px' }}>
+                                <span style={{ color: '#fff', fontWeight: 700, fontSize: '15px', letterSpacing: '0.3px' }}>View</span>
+                                <span style={{ color: '#fff', fontWeight: 700, fontSize: '15px', letterSpacing: '0.3px' }}>{propImages.length - 3} more</span>
+                              </div>
+                            )}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
