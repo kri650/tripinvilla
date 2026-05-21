@@ -780,12 +780,20 @@ export default function App() {
   const handleReviewFormSubmit = async (e) => {
     e.preventDefault();
     if (!selectedProperty || !selectedProperty._id) return;
+    if (!token) {
+      setAuthMode('login');
+      setAuthModalOpen(true);
+      return;
+    }
     try {
       const res = await fetch(`${API_BASE}/reviews/${selectedProperty._id}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
         body: JSON.stringify({
-          reviewer_name: reviewName,
+          reviewer_name: reviewName || user?.name,
           rating: reviewRating,
           review_text: reviewText
         })
@@ -1010,7 +1018,8 @@ export default function App() {
         localStorage.setItem('user_data', JSON.stringify(profileData));
       }
 
-      const enquiriesRes = await fetch(`${API_BASE}/enquiries`, {
+      // Fetch user's own enquiries (filtered by user_id on server)
+      const enquiriesRes = await fetch(`${API_BASE}/enquiries/user`, {
         headers: { Authorization: `Bearer ${activeToken}` }
       });
       if (enquiriesRes.ok) {
@@ -1240,10 +1249,12 @@ export default function App() {
       const res = await fetch(`${API_BASE}/enquiries`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {})
         },
         body: JSON.stringify({
           property_id: propToUse._id,
+          user_id: user?._id || null,
           user_name: guestEnquiryName,
           phone: guestEnquiryPhone,
           email: guestEnquiryEmail,
@@ -1257,6 +1268,8 @@ export default function App() {
         setGuestEnquiryPhone('');
         setGuestEnquiryEmail('');
         setGuestEnquiryMessage('');
+        // Refresh user's enquiry list so it appears immediately in My Enquiries
+        if (token) fetchProfileAndEnquiries(token);
       } else {
         const errorData = await res.json();
         alert(errorData.message || 'Failed to submit enquiry.');
@@ -3670,10 +3683,17 @@ export default function App() {
                   </div>
                 </div>
 
-                <button className="btn-share-experience" onClick={() => { setReviewRating(5); setReviewText(''); setReviewName(user?.name || ''); setReviewModalOpen(true); }}>
-                  <Star size={15} fill="#FFFFFF" />
-                  <span>Share Your Experience</span>
-                </button>
+                {token && user ? (
+                  <button className="btn-share-experience" onClick={() => { setReviewRating(5); setReviewText(''); setReviewName(user?.name || ''); setReviewModalOpen(true); }}>
+                    <Star size={15} fill="#FFFFFF" />
+                    <span>Share Your Experience</span>
+                  </button>
+                ) : (
+                  <button className="btn-share-experience" style={{ background: '#6B7280' }} onClick={() => { setAuthMode('login'); setAuthModalOpen(true); }}>
+                    <Star size={15} fill="#FFFFFF" />
+                    <span>Login to Review</span>
+                  </button>
+                )}
               </div>
 
               {/* Right reviews stream */}
@@ -4804,50 +4824,91 @@ export default function App() {
       {/* ══ FULL SCREEN IMAGE GALLERY MODAL ══ */}
       {isGalleryOpen && activeDetailProp && (
         <div 
-          className="modal-overlay" 
-          style={{ zIndex: 10000, background: 'rgba(0,0,0,0.92)', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+          style={{ 
+            position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
+            zIndex: 99999, 
+            background: 'rgba(0,0,0,0.92)', 
+            display: 'flex', 
+            alignItems: 'center', 
+            justifyContent: 'center' 
+          }} 
           onClick={() => setIsGalleryOpen(false)}
         >
           <div 
-            className="gallery-modal-content" 
-            style={{ position: 'relative', width: '90%', height: '90%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} 
+            style={{ 
+              position: 'relative', 
+              width: '90vw', 
+              height: '90vh', 
+              display: 'flex', 
+              alignItems: 'center', 
+              justifyContent: 'center' 
+            }} 
             onClick={e => e.stopPropagation()}
           >
+            {/* Close button */}
             <button 
-              className="modal-close-btn" 
-              style={{ position: 'absolute', top: '-40px', right: '0', color: '#fff', background: 'transparent', border: 'none', cursor: 'pointer', padding: '8px' }} 
+              style={{ 
+                position: 'absolute', top: '-50px', right: '0', 
+                color: '#fff', background: 'transparent', border: 'none', 
+                cursor: 'pointer', padding: '8px', lineHeight: 1
+              }} 
               onClick={() => setIsGalleryOpen(false)}
             >
               <X size={32} />
             </button>
             
+            {/* Prev arrow */}
             <button 
-              style={{ position: 'absolute', left: '0', color: '#fff', background: 'rgba(0,0,0,0.5)', border: 'none', cursor: 'pointer', padding: '16px', borderRadius: '50%' }} 
+              style={{ 
+                position: 'absolute', left: '-60px', 
+                color: '#fff', background: 'rgba(255,255,255,0.15)', 
+                border: 'none', cursor: 'pointer', 
+                padding: '14px 16px', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }} 
               onClick={() => setCurrentImageIndex(prev => {
-                const imagesList = activeDetailProp.images && activeDetailProp.images.length > 0 ? activeDetailProp.images : [activeDetailProp.img];
-                return prev === 0 ? imagesList.length - 1 : prev - 1;
+                const imgs = activeDetailProp.images && activeDetailProp.images.length > 0 ? activeDetailProp.images : [activeDetailProp.img];
+                return prev === 0 ? imgs.length - 1 : prev - 1;
               })}
             >
-              <ChevronLeft size={32} />
+              <ChevronLeft size={28} />
             </button>
 
+            {/* Main image */}
             <img 
               src={(activeDetailProp.images && activeDetailProp.images.length > 0 ? activeDetailProp.images : [activeDetailProp.img])[currentImageIndex]} 
-              alt="Gallery view" 
-              style={{ maxHeight: '100%', maxWidth: '85%', objectFit: 'contain', borderRadius: '8px', boxShadow: '0 10px 40px rgba(0,0,0,0.5)' }} 
+              alt={`Gallery view ${currentImageIndex + 1}`}
+              style={{ 
+                maxHeight: '100%', maxWidth: '100%', 
+                objectFit: 'contain', borderRadius: '10px',
+                boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
+                userSelect: 'none'
+              }} 
             />
 
+            {/* Next arrow */}
             <button 
-              style={{ position: 'absolute', right: '0', color: '#fff', background: 'rgba(0,0,0,0.5)', border: 'none', cursor: 'pointer', padding: '16px', borderRadius: '50%' }} 
+              style={{ 
+                position: 'absolute', right: '-60px', 
+                color: '#fff', background: 'rgba(255,255,255,0.15)', 
+                border: 'none', cursor: 'pointer', 
+                padding: '14px 16px', borderRadius: '50%',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }} 
               onClick={() => setCurrentImageIndex(prev => {
-                const imagesList = activeDetailProp.images && activeDetailProp.images.length > 0 ? activeDetailProp.images : [activeDetailProp.img];
-                return prev === imagesList.length - 1 ? 0 : prev + 1;
+                const imgs = activeDetailProp.images && activeDetailProp.images.length > 0 ? activeDetailProp.images : [activeDetailProp.img];
+                return prev === imgs.length - 1 ? 0 : prev + 1;
               })}
             >
-              <ChevronRight size={32} />
+              <ChevronRight size={28} />
             </button>
 
-            <div style={{ position: 'absolute', bottom: '-40px', color: '#fff', fontSize: '18px', fontWeight: '500', tracking: '1px' }}>
+            {/* Image counter */}
+            <div style={{ 
+              position: 'absolute', bottom: '-44px', left: '50%', transform: 'translateX(-50%)',
+              color: '#fff', fontSize: '16px', fontWeight: '500',
+              background: 'rgba(255,255,255,0.1)', padding: '4px 16px', borderRadius: '20px'
+            }}>
               {currentImageIndex + 1} / {(activeDetailProp.images && activeDetailProp.images.length > 0 ? activeDetailProp.images : [activeDetailProp.img]).length}
             </div>
           </div>
