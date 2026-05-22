@@ -19,6 +19,13 @@ import enquiriesIcon from './assets/Group 1707482340 (5).png';
 import aboutIcon from './assets/Group 1707482340.png';
 import recommendIcon from './assets/Group 1707482340 (1).png';
 import listYourPlaceIcon from './assets/Group 1707482340.svg';
+import apartmentIcon from './assets/apartment.png';
+import homestayIcon from './assets/homestay.png';
+import resortIcon from './assets/resorts.png';
+import motelIcon from './assets/motel.png';
+import cottageIcon from './assets/cottage.png';
+import bungalowIcon from './assets/bunglow.png';
+import villaIcon from './assets/villa.png';
 import loginLeftImg from './assets/Group 1707482649.png';
 import rect32Img from './assets/Rectangle 32.png';
 import rect33Img from './assets/Rectangle 33.png';
@@ -168,13 +175,13 @@ const popularOffersList = [
 
 // Additional lists specifically for Properties page
 const propertyCategories = [
-  { name: 'Apartments', icon: <Building size={15} /> },
-  { name: 'Homestays', icon: <Compass size={15} /> },
-  { name: 'Resorts', icon: <Hotel size={15} /> },
-  { name: 'Motels', icon: <Bed size={15} /> },
-  { name: 'Cottages', icon: <Trees size={15} /> },
-  { name: 'Bungalows', icon: <Home size={15} /> },
-  { name: 'Villas', icon: <Building size={15} /> }
+  { name: 'Apartments', iconImg: apartmentIcon },
+  { name: 'Homestays', iconImg: homestayIcon },
+  { name: 'Resorts', iconImg: resortIcon },
+  { name: 'Motels', iconImg: motelIcon },
+  { name: 'Cottages', iconImg: cottageIcon },
+  { name: 'Bungalows', iconImg: bungalowIcon },
+  { name: 'Villas', iconImg: villaIcon }
 ];
 
 const propertiesVillasList = [
@@ -1093,6 +1100,11 @@ export default function App() {
     } else {
       fetchProperties({ price, guests });
     }
+    
+    // Smoothly scroll down to the results section (below the hero area)
+    setTimeout(() => {
+      window.scrollTo({ top: 750, behavior: 'smooth' });
+    }, 100);
   };
 
   const handleClearAll = () => {
@@ -1502,7 +1514,7 @@ export default function App() {
                   >
                     <div 
                       className={`nav-icon-circle ${isActive ? 'active' : 'inactive'}`}
-                      style={item.customIcon ? { border: 'none', background: 'none', boxShadow: 'none' } : {}}
+                      style={item.customIcon && !isActive ? { border: 'none', background: 'none', boxShadow: 'none' } : {}}
                     >
                       {item.customIcon ? (
                         <img 
@@ -1511,14 +1523,17 @@ export default function App() {
                           style={{
                             width: '31px',
                             height: '31px',
-                            objectFit: 'contain'
+                            objectFit: 'contain',
+                            filter: isActive ? 'brightness(0) invert(1)' : 'none'
                           }} 
                         />
                       ) : (
                         item.lucideIcon
                       )}
                     </div>
-                    <span>{item.name}</span>
+                    <span style={{ color: isActive ? 'var(--primary-blue)' : '#FFFFFF', fontWeight: isActive ? 600 : 500 }}>
+                      {item.name}
+                    </span>
                   </button>
                   {/* Vertical separator divider if not the last item */}
                   {index < navItems.length - 1 && <div className="nav-divider" />}
@@ -2022,11 +2037,11 @@ export default function App() {
                 return filtered.map((villa, idx) => {
                   const isWishlisted = user && user.wishlist && user.wishlist.some(w => w._id === villa._id || w === villa._id);
                   return (
-                    <div key={idx} className="villa-card">
-                      <div className="villa-card-img-wrap">
+                    <div key={idx} className="recommend-property-card">
+                      <div className="recommend-card-img-wrap">
                         <img src={villa.img} alt={villa.title} />
                         <button 
-                          className={`wishlist-btn-circle ${isWishlisted ? 'active' : ''}`}
+                          className={`recommend-heart-circle ${isWishlisted ? 'liked' : ''}`}
                           onClick={async (e) => {
                             e.stopPropagation();
                             if (!token) {
@@ -2050,36 +2065,45 @@ export default function App() {
                             }
                           }}
                         >
-                          <Heart size={16} fill={isWishlisted ? '#EF4444' : 'none'} color={isWishlisted ? '#EF4444' : '#111827'} />
+                          <Heart size={16} fill={isWishlisted ? '#EF4444' : 'none'} color={isWishlisted ? '#EF4444' : '#FFFFFF'} />
                         </button>
                       </div>
                       
-                      <div className="villa-card-content">
-                        <h3 className="villa-card-title">{villa.title}</h3>
+                      <div className="recommend-card-info-col">
+                        <h3 className="recommend-card-name-text">{villa.title}</h3>
                         
-                        <div className="villa-card-location">
+                        <div className="recommend-card-location-row">
                           <MapPin size={13} color="#9CA3AF" />
                           <span>{villa.location}</span>
                         </div>
 
-                        <div className="villa-card-rating-row">
-                          <div className="rating-pill">
-                            <span>{villa.rating}</span>
+                        <div className="recommend-specs-2x2-grid">
+                          <div className="recommend-spec-pill">
+                            <Maximize size={12} color="#8A99AD" />
+                            <span>Area Size: {(villa.bedRooms || 2) * 150} sq. ft.</span>
                           </div>
-                          <div className="rating-text-stack">
-                            <span className="rating-desc-excellent">Excellent</span>
-                            <span className="rating-reviews-count">{villa.reviews}</span>
+                          <div className="recommend-spec-pill">
+                            <Bed size={12} color="#8A99AD" />
+                            <span>Beds: {villa.bedRooms || 2} Beds</span>
+                          </div>
+                          <div className="recommend-spec-pill">
+                            <DoorClosed size={12} color="#8A99AD" />
+                            <span>Rooms: {villa.bedRooms || 1} Room</span>
+                          </div>
+                          <div className="recommend-spec-pill">
+                            <Users size={12} color="#8A99AD" />
+                            <span>Guests: {villa.capacity || 3} Person</span>
                           </div>
                         </div>
 
-                        <div className="villa-card-price-row">
+                        <div className="recommend-price-tag-row">
                           <span className="price-label">Starting from</span>
-                          <span className="price-value-highlight">{villa.price}/night</span>
+                          <span className="price-green-bold">{villa.price}/night</span>
                         </div>
 
-                        <div className="villa-card-actions">
-                          <button className="btn-villa-action outline-blue" onClick={() => { setSelectedProperty(villa); setActiveMenu('Detail'); }}>View Details</button>
-                          <button className="btn-villa-action outline-green" onClick={() => { setSelectedProperty(villa); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
+                        <div className="recommend-actions-row">
+                          <button className="recommend-details-btn-blue" onClick={() => { setSelectedProperty(villa); setActiveMenu('Detail'); }}>View Details</button>
+                          <button className="recommend-contact-btn-green" onClick={() => { setSelectedProperty(villa); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
                         </div>
                       </div>
                     </div>
@@ -4227,7 +4251,13 @@ export default function App() {
                       setActiveMenu('Search');
                     }}
                   >
-                    <span className="prop-cat-icon">{cat.icon}</span>
+                    <span className="prop-cat-icon">
+                      {cat.iconImg ? (
+                        <img src={cat.iconImg} alt={cat.name} style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
+                      ) : (
+                        cat.icon
+                      )}
+                    </span>
                     <span>{cat.name}</span>
                   </button>
                 );
@@ -4250,50 +4280,50 @@ export default function App() {
               {propertiesVillasList.map((villa, idx) => {
                 const isLiked = mockWishlistedTitles.includes(villa.title);
                 return (
-                  <div key={idx} className="villa-card">
-                    <div className="villa-card-img-wrap">
+                  <div key={idx} className="recommend-property-card">
+                    <div className="recommend-card-img-wrap">
                       <img src={villa.img} alt={villa.title} />
-                      <button className="wishlist-btn-circle" onClick={() => toggleMockWishlist(villa.title)}>
-                        <Heart size={16} fill={isLiked ? '#EF4444' : 'none'} color={isLiked ? '#EF4444' : '#111827'} />
+                      <button className={`recommend-heart-circle ${isLiked ? 'liked' : ''}`} onClick={() => toggleMockWishlist(villa.title)}>
+                        <Heart size={16} fill={isLiked ? "#EF4444" : "none"} color={isLiked ? "#EF4444" : "#FFFFFF"} />
                       </button>
                     </div>
                     
-                    <div className="villa-card-content">
-                      <h3 className="villa-card-title">{villa.title}</h3>
+                    <div className="recommend-card-info-col">
+                      <h3 className="recommend-card-name-text">{villa.title}</h3>
                       
-                      <div className="villa-card-location">
+                      <div className="recommend-card-location-row">
                         <MapPin size={13} color="#9CA3AF" />
                         <span>{villa.location}</span>
                       </div>
 
                       {/* 2x2 Custom Structural Grid */}
-                      <div className="property-specs-grid-2x2">
-                        <div className="prop-spec-item">
+                      <div className="recommend-specs-2x2-grid">
+                        <div className="recommend-spec-pill">
                           <Maximize size={12} color="#8A99AD" />
                           <span>Area Size: {villa.area}</span>
                         </div>
-                        <div className="prop-spec-item">
+                        <div className="recommend-spec-pill">
                           <Bed size={12} color="#8A99AD" />
                           <span>Beds: {villa.beds}</span>
                         </div>
-                        <div className="prop-spec-item">
+                        <div className="recommend-spec-pill">
                           <DoorClosed size={12} color="#8A99AD" />
                           <span>Rooms: {villa.rooms}</span>
                         </div>
-                        <div className="prop-spec-item">
+                        <div className="recommend-spec-pill">
                           <Users size={12} color="#8A99AD" />
                           <span>Guests: {villa.guests}</span>
                         </div>
                       </div>
 
-                      <div className="villa-card-price-row" style={{ marginTop: '4px' }}>
+                      <div className="recommend-price-tag-row" style={{ marginTop: '4px' }}>
                         <span className="price-label">Starting from</span>
-                        <span className="price-value-highlight">{villa.price}/night</span>
+                        <span className="price-green-bold">{villa.price}/night</span>
                       </div>
 
-                      <div className="villa-card-actions">
-                        <button className="btn-villa-action outline-blue" onClick={() => { setSelectedProperty(villa); setActiveMenu('Detail'); }}>View Details</button>
-                        <button className="btn-villa-action outline-green" onClick={() => { setSelectedProperty(villa); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
+                      <div className="recommend-actions-row">
+                        <button className="recommend-details-btn-blue" onClick={() => { setSelectedProperty(villa); setActiveMenu('Detail'); }}>View Details</button>
+                        <button className="recommend-contact-btn-green" onClick={() => { setSelectedProperty(villa); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
                       </div>
                     </div>
                   </div>
@@ -4322,50 +4352,50 @@ export default function App() {
               {propertiesHomestaysList.map((homestay, idx) => {
                 const isLiked = mockWishlistedTitles.includes(homestay.title);
                 return (
-                  <div key={idx} className="villa-card">
-                    <div className="villa-card-img-wrap">
+                  <div key={idx} className="recommend-property-card">
+                    <div className="recommend-card-img-wrap">
                       <img src={homestay.img} alt={homestay.title} />
-                      <button className="wishlist-btn-circle" onClick={() => toggleMockWishlist(homestay.title)}>
-                        <Heart size={16} fill={isLiked ? '#EF4444' : 'none'} color={isLiked ? '#EF4444' : '#111827'} />
+                      <button className={`recommend-heart-circle ${isLiked ? 'liked' : ''}`} onClick={() => toggleMockWishlist(homestay.title)}>
+                        <Heart size={16} fill={isLiked ? "#EF4444" : "none"} color={isLiked ? "#EF4444" : "#FFFFFF"} />
                       </button>
                     </div>
                     
-                    <div className="villa-card-content">
-                      <h3 className="villa-card-title">{homestay.title}</h3>
+                    <div className="recommend-card-info-col">
+                      <h3 className="recommend-card-name-text">{homestay.title}</h3>
                       
-                      <div className="villa-card-location">
+                      <div className="recommend-card-location-row">
                         <MapPin size={13} color="#9CA3AF" />
                         <span>{homestay.location}</span>
                       </div>
 
                       {/* 2x2 Custom Structural Grid */}
-                      <div className="property-specs-grid-2x2">
-                        <div className="prop-spec-item">
+                      <div className="recommend-specs-2x2-grid">
+                        <div className="recommend-spec-pill">
                           <Maximize size={12} color="#8A99AD" />
                           <span>Area Size: {homestay.area}</span>
                         </div>
-                        <div className="prop-spec-item">
+                        <div className="recommend-spec-pill">
                           <Bed size={12} color="#8A99AD" />
                           <span>Beds: {homestay.beds}</span>
                         </div>
-                        <div className="prop-spec-item">
+                        <div className="recommend-spec-pill">
                           <DoorClosed size={12} color="#8A99AD" />
                           <span>Rooms: {homestay.rooms}</span>
                         </div>
-                        <div className="prop-spec-item">
+                        <div className="recommend-spec-pill">
                           <Users size={12} color="#8A99AD" />
                           <span>Guests: {homestay.guests}</span>
                         </div>
                       </div>
 
-                      <div className="villa-card-price-row" style={{ marginTop: '4px' }}>
+                      <div className="recommend-price-tag-row" style={{ marginTop: '4px' }}>
                         <span className="price-label">Starting from</span>
-                        <span className="price-value-highlight">{homestay.price}/night</span>
+                        <span className="price-green-bold">{homestay.price}/night</span>
                       </div>
 
-                      <div className="villa-card-actions">
-                        <button className="btn-villa-action outline-blue" onClick={() => { setSelectedProperty(homestay); setActiveMenu('Detail'); }}>View Details</button>
-                        <button className="btn-villa-action outline-green" onClick={() => { setSelectedProperty(homestay); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
+                      <div className="recommend-actions-row">
+                        <button className="recommend-details-btn-blue" onClick={() => { setSelectedProperty(homestay); setActiveMenu('Detail'); }}>View Details</button>
+                        <button className="recommend-contact-btn-green" onClick={() => { setSelectedProperty(homestay); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
                       </div>
                     </div>
                   </div>
@@ -4463,11 +4493,11 @@ export default function App() {
               {currentBestVillas.map((villa, idx) => {
                 const isWishlisted = user && user.wishlist && user.wishlist.some(w => w._id === villa._id || w === villa._id);
                 return (
-                  <div key={idx} className="villa-card">
-                    <div className="villa-card-img-wrap">
+                  <div key={idx} className="recommend-property-card">
+                    <div className="recommend-card-img-wrap">
                       <img src={villa.img} alt={villa.title} />
                       <button 
-                        className={`wishlist-btn-circle ${isWishlisted ? 'active' : ''}`}
+                        className={`recommend-heart-circle ${isWishlisted ? 'liked' : ''}`}
                         onClick={async (e) => {
                           e.stopPropagation();
                           if (!token) {
@@ -4491,36 +4521,45 @@ export default function App() {
                           }
                         }}
                       >
-                        <Heart size={16} fill={isWishlisted ? '#EF4444' : 'none'} color={isWishlisted ? '#EF4444' : '#111827'} />
+                        <Heart size={16} fill={isWishlisted ? '#EF4444' : 'none'} color={isWishlisted ? '#EF4444' : '#FFFFFF'} />
                       </button>
                     </div>
                     
-                    <div className="villa-card-content">
-                      <h3 className="villa-card-title">{villa.title}</h3>
+                    <div className="recommend-card-info-col">
+                      <h3 className="recommend-card-name-text">{villa.title}</h3>
                       
-                      <div className="villa-card-location">
+                      <div className="recommend-card-location-row">
                         <MapPin size={13} color="#9CA3AF" />
                         <span>{villa.location}</span>
                       </div>
 
-                      <div className="villa-card-rating-row">
-                        <div className="rating-pill">
-                          <span>{villa.rating}</span>
+                      <div className="recommend-specs-2x2-grid">
+                        <div className="recommend-spec-pill">
+                          <Maximize size={12} color="#8A99AD" />
+                          <span>Area Size: {(villa.bedRooms || 2) * 150} sq. ft.</span>
                         </div>
-                        <div className="rating-text-stack">
-                          <span className="rating-desc-excellent">Excellent</span>
-                          <span className="rating-reviews-count">{villa.reviews}</span>
+                        <div className="recommend-spec-pill">
+                          <Bed size={12} color="#8A99AD" />
+                          <span>Beds: {villa.bedRooms || 2} Beds</span>
+                        </div>
+                        <div className="recommend-spec-pill">
+                          <DoorClosed size={12} color="#8A99AD" />
+                          <span>Rooms: {villa.bedRooms || 1} Room</span>
+                        </div>
+                        <div className="recommend-spec-pill">
+                          <Users size={12} color="#8A99AD" />
+                          <span>Guests: {villa.capacity || 3} Person</span>
                         </div>
                       </div>
 
-                      <div className="villa-card-price-row">
+                      <div className="recommend-price-tag-row">
                         <span className="price-label">Starting from</span>
-                        <span className="price-value-highlight">{villa.price}/night</span>
+                        <span className="price-green-bold">{villa.price}/night</span>
                       </div>
 
-                      <div className="villa-card-actions">
-                        <button className="btn-villa-action outline-blue" onClick={() => { setSelectedProperty(villa); setActiveMenu('Detail'); }}>View Details</button>
-                        <button className="btn-villa-action outline-green" onClick={() => { setSelectedProperty(villa); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
+                      <div className="recommend-actions-row">
+                        <button className="recommend-details-btn-blue" onClick={() => { setSelectedProperty(villa); setActiveMenu('Detail'); }}>View Details</button>
+                        <button className="recommend-contact-btn-green" onClick={() => { setSelectedProperty(villa); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
                       </div>
                     </div>
                   </div>
@@ -4562,7 +4601,7 @@ export default function App() {
                   <div key={idx} className="curated-horizontal-card">
                     <div className="curated-card-img-wrap">
                       <img src={item.img} alt={item.title} />
-                      <button className="wishlist-btn-circle">
+                      <button className="recommend-heart-circle">
                         <Heart size={16} fill="none" color="#111827" />
                       </button>
                     </div>
@@ -4587,11 +4626,11 @@ export default function App() {
 
                       <div className="curated-card-price-row">
                         <span className="price-label">Starting from</span>
-                        <span className="price-value-highlight">{item.price}/night</span>
+                        <span className="price-green-bold">{item.price}/night</span>
                       </div>
 
                       <div className="curated-card-actions">
-                        <button className="btn-villa-action outline-blue" onClick={() => setActiveMenu('Detail')}>View Details</button>
+                        <button className="recommend-details-btn-blue" onClick={() => setActiveMenu('Detail')}>View Details</button>
                       </div>
                     </div>
                   </div>
@@ -4657,7 +4696,7 @@ export default function App() {
 
                       <div className="offer-card-actions">
                         <button 
-                          className="btn-villa-action outline-blue" 
+                          className="recommend-details-btn-blue" 
                           onClick={() => {
                             if (isDynamic && offer.property_id) {
                               setSelectedProperty(offer.property_id);

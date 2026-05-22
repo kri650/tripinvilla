@@ -3,11 +3,13 @@
 .hero-wrapper {
   position: relative;
   width: 100%;
-  height: 712px; /* Fixed Figma height */
+  height: 712px;
+  /* Fixed Figma height */
   margin: 0;
-  border-radius: 0px; /* Sharp bottom corners as requested */
+  border-radius: 0px;
+  /* Sharp bottom corners as requested */
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 .hero-background {
@@ -42,9 +44,11 @@
   justify-content: space-between;
   align-items: center;
   width: 1278px;
-  max-width: calc(100% - 164px); /* Safety responsive fallback */
+  max-width: calc(100% - 164px);
+  /* Safety responsive fallback */
   height: 72px;
-  margin: 39px auto 0 auto; /* Top offset 39px and centered horizontally */
+  margin: 39px auto 0 auto;
+  /* Top offset 39px and centered horizontally */
   padding: 0;
   box-sizing: border-box;
 }
@@ -96,7 +100,8 @@
   cursor: pointer;
   transition: all 0.2s ease;
   padding: 6px 10px;
-  white-space: nowrap; /* Keep text strictly in a single line */
+  white-space: nowrap;
+  /* Keep text strictly in a single line */
 }
 
 .nav-pill-item:hover {
@@ -132,8 +137,10 @@
 .nav-divider {
   width: 1px;
   height: 22px;
-  background: rgba(255, 255, 255, 0.35); /* Increased opacity for clear visibility */
-  flex-shrink: 0; /* Prevent the vertical line from shrinking to 0px */
+  background: rgba(255, 255, 255, 0.35);
+  /* Increased opacity for clear visibility */
+  flex-shrink: 0;
+  /* Prevent the vertical line from shrinking to 0px */
 }
 
 /* Log In / Sign Up button */
@@ -164,7 +171,8 @@
 /* Exact Figma Specs for the Hero Headline: Top 203px, Blue Box Width 439px, Height 105px */
 .hero-headline-container {
   position: absolute;
-  top: 203px; /* Fixed Figma top offset */
+  top: 150px;
+  /* Reduced from 203px to decrease space below header */
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -175,10 +183,13 @@
 
 .hero-headline {
   font-family: 'Lato', sans-serif;
-  font-size: 74px; /* Fixed Figma font size */
-  font-weight: 500; /* Medium for "Find Your" */
+  font-size: 74px;
+  /* Fixed Figma font size */
+  font-weight: 500;
+  /* Medium for "Find Your" */
   color: #FFFFFF;
-  line-height: 100%; /* Fixed Figma line height */
+  line-height: 100%;
+  /* Fixed Figma line height */
   letter-spacing: 0%;
   text-align: center;
   display: flex;
@@ -190,15 +201,21 @@
 
 .hero-headline-span {
   font-family: 'Lato', sans-serif;
-  font-size: 74px; /* Fixed Figma font size */
-  font-weight: 700; /* Bold for "Perfect Stay" */
+  font-size: 74px;
+  /* Fixed Figma font size */
+  font-weight: 700;
+  /* Bold for "Perfect Stay" */
   color: #FFFFFF;
   background: var(--primary-blue);
-  width: 439px; /* Exact Figma Width */
-  height: 105px; /* Exact Figma Height */
-  border-radius: 0px; /* Sharp edges as requested */
+  width: 439px;
+  /* Exact Figma Width */
+  height: 105px;
+  /* Exact Figma Height */
+  border-radius: 0px;
+  /* Sharp edges as requested */
   box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
-  display: inline-flex; /* Use inline-flex to center text horizontally and vertically inside the box */
+  display: inline-flex;
+  /* Use inline-flex to center text horizontally and vertically inside the box */
   align-items: center;
   justify-content: center;
   line-height: 100%;
@@ -207,12 +224,16 @@
 /* Floating Search box design: Width 1281px, Height 284px, Top 372px, Left 79px (Centered) */
 .search-card-wrapper {
   position: absolute;
-  top: 335px; /* Reduced gap between headline and search card */
+  top: 290px;
+  /* Reduced gap to match the desired layout image closely */
   left: 50%;
   transform: translateX(-50%);
-  width: 1281px; /* Fixed Figma Width */
-  max-width: calc(100% - 158px); /* Responsive safety fallback */
-  height: auto; /* Shrink to fit content and remove empty white space at bottom */
+  width: 1281px;
+  /* Fixed Figma Width */
+  max-width: calc(100% - 158px);
+  /* Responsive safety fallback */
+  height: auto;
+  /* Shrink to fit content and remove empty white space at bottom */
   background: #FFFFFF;
   border-radius: 24px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
@@ -232,7 +253,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 20px; /* Exact Figma gap */
+  gap: 20px;
+  /* Exact Figma gap */
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -243,12 +265,16 @@
   padding: 0 16px;
   border-radius: 100px;
   font-family: 'Lato', sans-serif;
-  font-size: 15px; /* Exact Figma Font Size */
-  font-weight: 400; /* Exact Figma Regular weight */
+  font-size: 15px;
+  /* Exact Figma Font Size */
+  font-weight: 400;
+  /* Exact Figma Regular weight */
   border: none;
   background: transparent;
-  color: #000000; /* Crisp black text as requested */
-  line-height: 100%; /* Exact Figma Line Height */
+  color: #000000;
+  /* Crisp black text as requested */
+  line-height: 100%;
+  /* Exact Figma Line Height */
   letter-spacing: 0%;
   cursor: pointer;
   display: flex;
@@ -270,7 +296,8 @@
 }
 
 .search-fields-grid {
-  margin-top: 60px; /* Offset to clear absolutely positioned tabs cleanly */
+  margin-top: 60px;
+  /* Offset to clear absolutely positioned tabs cleanly */
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 16px;
@@ -287,7 +314,8 @@
   font-family: 'Lato', sans-serif;
   font-size: 12px;
   font-weight: 500;
-  color: #9CA3AF; /* Made light gray */
+  color: #9CA3AF;
+  /* Made light gray */
 }
 
 .field-control-wrap {
@@ -296,7 +324,8 @@
   align-items: center;
 }
 
-.field-input, .field-select {
+.field-input,
+.field-select {
   width: 100%;
   height: 48px;
   background: #FFFFFF;
@@ -305,7 +334,8 @@
   padding: 0 16px;
   font-family: 'Lato', sans-serif;
   font-size: 13.5px;
-  color: #9CA3AF; /* Made value text light gray */
+  color: #9CA3AF;
+  /* Made value text light gray */
   outline: none;
   cursor: pointer;
 }
@@ -451,14 +481,16 @@
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
   border-radius: 15px;
-  margin: 80px auto 40px auto; /* Increased spacing to allow both components to breathe comfortably */
+  margin: 80px auto 40px auto;
+  /* Increased spacing to allow both components to breathe comfortably */
   box-sizing: border-box;
   opacity: 1;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .carousel-header {
-  display: none; /* No longer needed as pill is absolutely positioned */
+  display: none;
+  /* No longer needed as pill is absolutely positioned */
 }
 
 .carousel-nav-pill {
@@ -484,7 +516,8 @@
   font-family: 'Lato', sans-serif;
   font-size: 14px;
   font-weight: 500;
-  border-radius: 11px; /* Fits elegantly inside the 15px rounded switcher */
+  border-radius: 11px;
+  /* Fits elegantly inside the 15px rounded switcher */
   border: none;
   background: transparent;
   color: #8A99AD;
@@ -518,17 +551,21 @@
   width: 100%;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scrollbar-width: none; /* Hide default scrollbar in Firefox */
+  scrollbar-width: none;
+  /* Hide default scrollbar in Firefox */
   padding: 10px 0;
 }
 
 .carousel-track::-webkit-scrollbar {
-  display: none; /* Hide default scrollbar in Chrome/Safari */
+  display: none;
+  /* Hide default scrollbar in Chrome/Safari */
 }
 
 .carousel-card-item {
-  flex: 0 0 calc((100% - 100px) / 6); /* Perfectly fits 6 items on wide desktops */
-  min-width: 180px; /* Ensures items preserve size and scroll on smaller screen widths */
+  flex: 0 0 calc((100% - 100px) / 6);
+  /* Perfectly fits 6 items on wide desktops */
+  min-width: 180px;
+  /* Ensures items preserve size and scroll on smaller screen widths */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -593,7 +630,7 @@
   justify-content: center;
   cursor: pointer;
   z-index: 5;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: all 0.2s ease;
 }
 
@@ -620,7 +657,8 @@
 
 .section-main-headline {
   font-family: 'Lato', sans-serif;
-  font-size: 40px; /* Refined smaller headline size */
+  font-size: 40px;
+  /* Refined smaller headline size */
   font-weight: 400;
   line-height: 56px;
   color: #111827;
@@ -634,7 +672,8 @@
   background: var(--primary-blue);
   color: #FFFFFF;
   font-weight: 700;
-  padding: 8px 20px 12px 20px; /* Generous vertical cushioning so descenders like 'p' are perfectly encapsulated */
+  padding: 8px 20px 12px 20px;
+  /* Generous vertical cushioning so descenders like 'p' are perfectly encapsulated */
   border-radius: 0px;
   display: inline-block;
   line-height: 1.1;
@@ -642,7 +681,8 @@
 
 .section-sub-headline {
   font-family: 'Lato', sans-serif;
-  font-size: 18px; /* Balanced sub headline size */
+  font-size: 18px;
+  /* Balanced sub headline size */
   font-weight: 400;
   line-height: 28px;
   color: #1C1C1C;
@@ -662,18 +702,20 @@
 
 .villas-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)); /* Always 4 columns regardless of container width */
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  /* Always 4 columns regardless of container width */
   gap: 24px;
   justify-content: start;
 }
 
 .villa-card {
   width: 100%;
-  max-width: 100%; /* Let the grid track control card width */
+  max-width: 100%;
+  /* Let the grid track control card width */
   height: 560px;
   background: #FFFFFF;
   border-radius: 25px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
   border: 1px solid #F3F4F6;
   padding: 16px;
   box-sizing: border-box;
@@ -684,14 +726,16 @@
 
 .villa-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.07);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.07);
 }
 
 .villa-card-img-wrap {
   position: relative;
   width: 100%;
-  height: 250px; /* Increased from 210px to scale image sizes up beautifully */
-  border-radius: 18px; /* Inset rounded corners */
+  height: 250px;
+  /* Increased from 210px to scale image sizes up beautifully */
+  border-radius: 18px;
+  /* Inset rounded corners */
   overflow: hidden;
   margin-bottom: 14px;
 }
@@ -720,7 +764,7 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
 }
 
@@ -729,16 +773,18 @@
 }
 
 .villa-card-content {
-  padding: 0; 
+  padding: 0;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
-  justify-content: space-between; /* Spreads content to fill card height gracefully */
+  justify-content: space-between;
+  /* Spreads content to fill card height gracefully */
 }
 
 .villa-card-title {
   font-family: 'Lato', sans-serif;
-  font-size: 20px; /* Scaled down title size */
+  font-size: 20px;
+  /* Scaled down title size */
   font-weight: 700;
   color: #111827;
   margin: 0 0 2px 0;
@@ -749,7 +795,8 @@
   align-items: center;
   gap: 6px;
   font-family: 'Lato', sans-serif;
-  font-size: 14px; /* Scaled down location size */
+  font-size: 14px;
+  /* Scaled down location size */
   color: #8A99AD;
   margin-bottom: 8px;
 }
@@ -782,8 +829,10 @@
 .rating-desc-excellent {
   font-family: 'Lato', sans-serif;
   font-size: 14px;
-  font-weight: 400; /* Regular weight from Figma */
-  color: #8A99AD; /* Gray color to match design */
+  font-weight: 400;
+  /* Regular weight from Figma */
+  color: #8A99AD;
+  /* Gray color to match design */
   line-height: 1;
 }
 
@@ -816,36 +865,49 @@
 .villa-card-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px; /* Scaled down gap */
+  gap: 10px;
+  /* Scaled down gap */
   margin-top: 10px;
 }
 
 .villa-card-actions .btn-villa-action {
-  height: 40px; /* Compact height */
-  font-size: 14px; /* Compact font size */
-  border-radius: 20px; /* Compact pill shape */
+  height: 40px;
+  /* Compact height */
+  font-size: 14px;
+  /* Compact font size */
+  border-radius: 20px;
+  /* Compact pill shape */
 }
 
 .price-label {
   font-family: 'Lato', sans-serif;
-  font-size: 16px; /* Exact Figma size */
-  font-weight: 500; /* Exact Figma weight */
-  line-height: 32px; /* Exact Figma line height */
+  font-size: 16px;
+  /* Exact Figma size */
+  font-weight: 500;
+  /* Exact Figma weight */
+  line-height: 32px;
+  /* Exact Figma line height */
   color: #8A99AD;
 }
 
 .price-value-highlight {
   font-family: 'Lato', sans-serif;
-  font-size: 23px; /* Exact Figma size */
-  font-weight: 500; /* Exact Figma weight */
-  line-height: 32px; /* Exact Figma line height */
-  color: #58A429; /* Cohesive Brand Green */
+  font-size: 23px;
+  /* Exact Figma size */
+  font-weight: 500;
+  /* Exact Figma weight */
+  line-height: 32px;
+  /* Exact Figma line height */
+  color: #58A429;
+  /* Cohesive Brand Green */
 }
 
 .btn-villa-action {
   width: 100%;
-  height: 48px; /* Taller, more prominent buttons */
-  border-radius: 24px; /* Fully rounded pill shape */
+  height: 48px;
+  /* Taller, more prominent buttons */
+  border-radius: 24px;
+  /* Fully rounded pill shape */
   font-family: 'Lato', sans-serif;
   font-size: 16px;
   font-weight: 600;
@@ -868,12 +930,13 @@
   right: 6px;
   top: 50%;
   transform: translateY(-50%);
-  background: #333333; /* Dark pill background */
+  background: #333333;
+  /* Dark pill background */
   border-radius: 20px;
   display: flex;
   align-items: center;
   padding: 4px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
 .toggle-circle {
@@ -895,8 +958,10 @@
 }
 
 .toggle-i {
-  background: #E84C22; /* Red-orange from screenshot */
-  margin-left: -4px; /* Overlapping circles effect */
+  background: #E84C22;
+  /* Red-orange from screenshot */
+  margin-left: -4px;
+  /* Overlapping circles effect */
   z-index: 2;
 }
 
@@ -942,7 +1007,7 @@
   justify-content: center;
   cursor: pointer;
   z-index: 10;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
   transition: all 0.2s ease;
   color: #111827;
 }
@@ -950,55 +1015,68 @@
 .curated-arrow:hover {
   background: #F9FAFB;
   transform: translateY(-50%) scale(1.05);
-  box-shadow: 0 6px 14px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
 .curated-arrow.left {
-  left: -22px; /* Hangs off the left edge beautifully */
+  left: -22px;
+  /* Hangs off the left edge beautifully */
 }
 
 .curated-arrow.right {
-  right: -22px; /* Hangs off the right edge beautifully */
+  right: -22px;
+  /* Hangs off the right edge beautifully */
 }
 
 .curated-horizontal-grid {
-  display: flex; /* Flex layout to support horizontal scrolling row */
+  display: flex;
+  /* Flex layout to support horizontal scrolling row */
   gap: 30px;
   overflow-x: auto;
   scroll-behavior: smooth;
-  scrollbar-width: none; /* Hide scrollbar for Firefox */
-  padding: 12px 0; /* Vertical breathing room for card shadows */
+  scrollbar-width: none;
+  /* Hide scrollbar for Firefox */
+  padding: 12px 0;
+  /* Vertical breathing room for card shadows */
   box-sizing: border-box;
 }
 
 .curated-horizontal-grid::-webkit-scrollbar {
-  display: none; /* Hide scrollbar for Chrome/Safari/Edge */
+  display: none;
+  /* Hide scrollbar for Chrome/Safari/Edge */
 }
 
 .curated-horizontal-card {
   background: #FFFFFF;
-  border-radius: 25px; /* Dimensions provided by user */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  border-radius: 25px;
+  /* Dimensions provided by user */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
   border: 1px solid #F3F4F6;
   display: flex;
-  padding: 16px; /* Slightly reduced padding for smaller card bounds */
+  padding: 16px;
+  /* Slightly reduced padding for smaller card bounds */
   box-sizing: border-box;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: 600px; /* Scaled down width for standard desktop viewports */
-  height: 300px; /* Scaled down height */
-  flex-shrink: 0; /* Prevent horizontal compression inside scrolling layout */
+  width: 600px;
+  /* Scaled down width for standard desktop viewports */
+  height: 300px;
+  /* Scaled down height */
+  flex-shrink: 0;
+  /* Prevent horizontal compression inside scrolling layout */
 }
 
 .curated-horizontal-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
 }
 
 .curated-card-img-wrap {
   position: relative;
-  width: 42%; /* Optimized width for image wrap */
+  width: 42%;
+  /* Optimized width for image wrap */
   height: 100%;
-  border-radius: 18px; /* Inset rounded corners */
+  border-radius: 18px;
+  /* Inset rounded corners */
   overflow: hidden;
 }
 
@@ -1009,8 +1087,10 @@
 }
 
 .curated-card-content {
-  width: 58%; /* Expanded content width to preserve breathing room */
-  padding: 0 0 0 16px; /* Spacing from image wrap */
+  width: 58%;
+  /* Expanded content width to preserve breathing room */
+  padding: 0 0 0 16px;
+  /* Spacing from image wrap */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1018,7 +1098,8 @@
 
 .curated-card-title {
   font-family: 'Lato', sans-serif;
-  font-size: 20px; /* Scaled down title size */
+  font-size: 20px;
+  /* Scaled down title size */
   font-weight: 700;
   color: #111827;
   margin: 0 0 2px 0;
@@ -1029,7 +1110,8 @@
   align-items: center;
   gap: 6px;
   font-family: 'Lato', sans-serif;
-  font-size: 14px; /* Scaled down location size */
+  font-size: 14px;
+  /* Scaled down location size */
   color: #8A99AD;
   margin-bottom: 8px;
 }
@@ -1063,7 +1145,8 @@
 }
 
 .curated-card-actions .btn-villa-action {
-  height: 40px; /* More compact CTA button */
+  height: 40px;
+  /* More compact CTA button */
   font-size: 14px;
   border-radius: 20px;
 }
@@ -1072,7 +1155,8 @@
    SECTION 4: POPULAR OFFERS OF PROPERTY (2x2 Horizontal Layout)
    ========================================================================== */
 .popular-offers-section {
-  width: 1440px; /* Standardizes container width with other page sections */
+  width: 1440px;
+  /* Standardizes container width with other page sections */
   max-width: calc(100% - 158px);
   margin: 60px auto 120px auto;
   box-sizing: border-box;
@@ -1080,34 +1164,43 @@
 
 .popular-offers-grid {
   display: grid;
-  grid-template-columns: repeat(2, 580px); /* Sized beautifully to 580px */
-  grid-gap: 24px 54px; /* Reduced vertical row gap, preserved elegant column spacing */
-  justify-content: start; /* Perfectly left-aligned with other sections */
+  grid-template-columns: repeat(2, 580px);
+  /* Sized beautifully to 580px */
+  grid-gap: 24px 54px;
+  /* Reduced vertical row gap, preserved elegant column spacing */
+  justify-content: start;
+  /* Perfectly left-aligned with other sections */
 }
 
 .offer-horizontal-card {
   background: #FFFFFF;
-  border-radius: 20px; /* Refined rounded corner */
-  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  border-radius: 20px;
+  /* Refined rounded corner */
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
   border: 1px solid #F3F4F6;
   display: flex;
-  padding: 16px; /* Elegant, spacious padding */
+  padding: 16px;
+  /* Elegant, spacious padding */
   box-sizing: border-box;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  width: 580px; /* Restored beautiful larger width */
-  height: 250px; /* Restored beautiful larger height */
+  width: 580px;
+  /* Restored beautiful larger width */
+  height: 250px;
+  /* Restored beautiful larger height */
 }
 
 .offer-horizontal-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
 }
 
 .offer-card-img-wrap {
   position: relative;
-  width: 42%; /* Premium layout ratio */
+  width: 42%;
+  /* Premium layout ratio */
   height: 100%;
-  border-radius: 16px; /* Inset rounded corners */
+  border-radius: 16px;
+  /* Inset rounded corners */
   overflow: hidden;
 }
 
@@ -1119,16 +1212,20 @@
 
 .exclusive-offer-badge {
   position: absolute;
-  top: 0; /* Attached exactly to image top edge */
-  left: 0; /* Attached exactly to image left edge */
-  width: 110px; /* Sleek, small badge size */
+  top: 0;
+  /* Attached exactly to image top edge */
+  left: 0;
+  /* Attached exactly to image left edge */
+  width: 110px;
+  /* Sleek, small badge size */
   height: 28px;
   background: var(--primary-blue);
   color: #FFFFFF;
   font-family: 'Lato', sans-serif;
   font-size: 10.5px;
   font-weight: 700;
-  border-top-left-radius: 16px; /* Matches parent image wrapper corner precisely */
+  border-top-left-radius: 16px;
+  /* Matches parent image wrapper corner precisely */
   border-bottom-right-radius: 10px;
   border-top-right-radius: 0px;
   border-bottom-left-radius: 0px;
@@ -1141,7 +1238,8 @@
 
 .offer-card-content {
   width: 58%;
-  padding: 0 0 0 16px; /* Spacious separation gap */
+  padding: 0 0 0 16px;
+  /* Spacious separation gap */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -1149,17 +1247,21 @@
 
 .offer-card-title {
   font-family: 'Lato', sans-serif;
-  font-size: 21px; /* Balanced title size */
+  font-size: 24px;
+  /* Increased from 21px */
   font-weight: 700;
   color: #111827;
-  margin: 0 0 2px 0;
+  margin: 0 0 4px 0;
+  /* Slightly increased margin to accommodate larger text */
   line-height: 1.2;
 }
 
 .offer-card-subtitle {
   font-family: 'Lato', sans-serif;
-  font-size: 14px; /* Highly readable subtitle */
-  color: #8A99AD;
+  font-size: 16px;
+  /* Increased from 14px */
+  color: #4B5563;
+  /* Darkened from #8A99AD for better readability */
   line-height: 1.35;
   margin: 0;
 }
@@ -1173,7 +1275,8 @@
 
 .discount-label {
   font-family: 'Lato', sans-serif;
-  font-size: 18px; /* Perfectly balanced text size */
+  font-size: 18px;
+  /* Perfectly balanced text size */
   font-weight: 500;
   line-height: 26px;
   color: #8A99AD;
@@ -1181,17 +1284,20 @@
 
 .discount-value-highlight {
   font-family: 'Lato', sans-serif;
-  font-size: 26px; /* Perfectly balanced value size */
+  font-size: 26px;
+  /* Perfectly balanced value size */
   font-weight: 500;
   line-height: 26px;
   color: #58A429;
 }
 
 .offer-card-content .btn-villa-action {
-  height: 36px !important; /* Sleek, premium CTA button */
+  height: 36px !important;
+  /* Sleek, premium CTA button */
   font-size: 13px !important;
   border-radius: 18px !important;
-  width: 100% !important; /* Elegant full width */
+  width: 100% !important;
+  /* Elegant full width */
 }
 
 /* ==========================================================================
@@ -1199,8 +1305,10 @@
    ========================================================================== */
 .services-section {
   width: 100%;
-  background-color: #EBFADE; /* Beautiful soft pale green background */
-  padding: 60px 0 100px 0; /* Expanded bottom padding to connect seamlessly with footer */
+  background-color: #EBFADE;
+  /* Beautiful soft pale green background */
+  padding: 60px 0 100px 0;
+  /* Expanded bottom padding to connect seamlessly with footer */
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -1216,7 +1324,8 @@
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
   margin-top: 40px;
-  min-height: 696.27px; /* Exact Figma height */
+  min-height: 696.27px;
+  /* Exact Figma height */
   height: auto;
 }
 
@@ -1232,12 +1341,14 @@
 }
 
 .service-text-card {
-  border-radius: 23.49px; /* Exact Figma border radius */
+  border-radius: 23.49px;
+  /* Exact Figma border radius */
   padding: 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 226.6px; /* Proportionate text card height */
+  height: 226.6px;
+  /* Proportionate text card height */
   min-height: 226.6px;
   flex-shrink: 0;
   box-sizing: border-box;
@@ -1247,7 +1358,7 @@
 .service-text-card.white-bg {
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
   justify-content: flex-start;
   gap: 16px;
   height: auto;
@@ -1305,10 +1416,12 @@
 
 .service-image-card {
   position: relative;
-  height: 445.67px; /* Exact Figma image height */
+  height: 445.67px;
+  /* Exact Figma image height */
   min-height: 445.67px;
   flex-shrink: 0;
-  border-radius: 23.49px; /* Exact Figma border radius */
+  border-radius: 23.49px;
+  /* Exact Figma border radius */
   overflow: hidden;
 }
 
@@ -1325,10 +1438,12 @@
 }
 
 .service-tall-card {
-  height: 696.27px; /* Exact Figma center image height */
+  height: 696.27px;
+  /* Exact Figma center image height */
   min-height: 696.27px;
   flex-shrink: 0;
-  border-radius: 23.49px; /* Exact Figma border radius */
+  border-radius: 23.49px;
+  /* Exact Figma border radius */
   overflow: hidden;
 }
 
@@ -1336,7 +1451,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center; /* Preserves the traveler's face and hat perfectly */
+  object-position: top center;
+  /* Preserves the traveler's face and hat perfectly */
 }
 
 
@@ -1384,7 +1500,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: transparent; /* Fully transparent so custom background image is 100% visible */
+  background: transparent;
+  /* Fully transparent so custom background image is 100% visible */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -1492,7 +1609,8 @@
    ========================================================================== */
 .properties-page-layout {
   width: 100%;
-  padding-top: 40px; /* Reduced offset to bring category icons beautifully closer to the hero section */
+  padding-top: 40px;
+  /* Reduced offset to bring category icons beautifully closer to the hero section */
 }
 
 .properties-categories-scroller {
@@ -1533,7 +1651,7 @@
   color: #4B5563;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .prop-cat-outline-btn:hover {
@@ -1542,9 +1660,12 @@
 }
 
 .prop-cat-outline-btn.active {
-  background: rgba(72, 187, 120, 0.08); /* Light green tint */
-  border: 1.5px solid #58A429;          /* Active green border */
-  color: #58A429;                       /* Green text */
+  background: rgba(72, 187, 120, 0.08);
+  /* Light green tint */
+  border: 1.5px solid #58A429;
+  /* Active green border */
+  color: #58A429;
+  /* Green text */
   box-shadow: 0 4px 12px rgba(72, 187, 120, 0.15);
 }
 
@@ -1596,7 +1717,7 @@
   border-radius: 100px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .btn-view-more:hover {
@@ -1688,7 +1809,7 @@
   border-radius: 20px;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .gallery-master-img img {
@@ -1717,7 +1838,7 @@
   border-radius: 16px;
   overflow: hidden;
   position: relative;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
 }
 
 .sub-img-wrap img {
@@ -1759,7 +1880,7 @@
   border: 1px solid #E5E7EB;
   border-radius: 24px;
   padding: 24px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
   display: flex;
   flex-direction: column;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -1767,7 +1888,7 @@
 
 .detail-reservation-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 15px 40px rgba(0,0,0,0.07);
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.07);
 }
 
 .reservation-title {
@@ -1901,7 +2022,7 @@
   border-radius: 24px;
   padding: 24px;
   margin-bottom: 24px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
 }
 
 .section-subtitle-title {
@@ -1944,7 +2065,7 @@
   border: 1px solid #E2E8F0;
   border-radius: 16px;
   padding: 12px 24px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.015);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
@@ -1955,7 +2076,8 @@
 }
 
 .amenity-pill-item svg {
-  background: rgba(72, 187, 120, 0.08); /* light brand green background */
+  background: rgba(72, 187, 120, 0.08);
+  /* light brand green background */
   border-radius: 50%;
   padding: 10px;
   width: 40px !important;
@@ -2037,7 +2159,7 @@
   border-radius: 24px;
   padding: 30px;
   margin-bottom: 24px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.01);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.01);
 }
 
 /* Rooms vertical stack styling */
@@ -2178,7 +2300,7 @@
   position: absolute;
   background: #FFFFFF;
   border: 1px solid #E2E8F0;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
   padding: 8px 16px;
   border-radius: 100px;
   font-family: 'Lato', sans-serif;
@@ -2193,7 +2315,7 @@
   background: var(--primary-blue);
   color: #FFFFFF;
   border-color: var(--primary-blue);
-  box-shadow: 0 4px 14px rgba(37,99,235,0.25);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.25);
 }
 
 .landmarks-sidebar {
@@ -2378,7 +2500,7 @@
   gap: 8px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(72,187,120,0.15);
+  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.15);
 }
 
 .btn-share-experience:hover {
@@ -2482,7 +2604,7 @@
   z-index: 1;
 }
 
-.dashboard-hero-banner > * {
+.dashboard-hero-banner>* {
   position: relative;
   z-index: 2;
 }
@@ -2589,7 +2711,7 @@
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid #EBF8FF;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
 }
 
 .profile-avatar-large img {
@@ -2648,7 +2770,7 @@
   color: #374151;
   cursor: pointer;
   transition: all 0.15s ease;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .btn-edit-details:hover {
@@ -2736,12 +2858,12 @@
   overflow: hidden;
   padding: 0;
   transition: all 0.2s ease-in-out;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.005);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.005);
 }
 
 .dashboard-list-card:hover {
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(0,0,0,0.02);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.02);
 }
 
 .list-card-img-wrap {
@@ -2873,7 +2995,7 @@
   border-radius: 18px;
   padding: 20px;
   border: 1px solid #E5E7EB;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.01);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.01);
 }
 
 .green-circle-icon-wrap {
@@ -2911,16 +3033,19 @@
 
 .about-right-col {
   position: relative;
-  width: 525px; /* Exact Figma width spec */
+  width: 525px;
+  /* Exact Figma width spec */
 }
 
 .about-master-image-box {
-  width: 525px; /* Exact Figma width spec */
-  height: 672px; /* Exact Figma height spec: 672.73px scaled down */
+  width: 525px;
+  /* Exact Figma width spec */
+  height: 672px;
+  /* Exact Figma height spec: 672.73px scaled down */
   border-radius: 24px;
   overflow: hidden;
   border: 1px solid #E5E7EB;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.04);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
 }
 
 .about-master-image-box img {
@@ -2932,29 +3057,38 @@
 .about-blue-badge-card {
   position: absolute;
   bottom: 50px;
-  left: -40px; /* Overlaps elegantly to the left of the image container as seen in Figma */
-  width: 250px; /* Narrower, more premium vertical box */
-  height: 230px; /* Vertically balanced height */
+  left: -40px;
+  /* Overlaps elegantly to the left of the image container as seen in Figma */
+  width: 250px;
+  /* Narrower, more premium vertical box */
+  height: 230px;
+  /* Vertically balanced height */
   background: var(--primary-blue);
   padding: 32px;
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Vertically center badge content */
+  justify-content: center;
+  /* Vertically center badge content */
   gap: 12px;
   z-index: 5;
-  border-radius: 12px; /* Smooth card border radii */
-  box-shadow: 0 15px 35px rgba(12, 109, 196, 0.35); /* Tailored brand-blue glow */
+  border-radius: 12px;
+  /* Smooth card border radii */
+  box-shadow: 0 15px 35px rgba(12, 109, 196, 0.35);
+  /* Tailored brand-blue glow */
 }
 
 .about-badge-title {
   font-family: 'Lato', sans-serif;
   font-weight: 800;
-  font-size: 52px; /* Expanded for high visual hierarchy */
+  font-size: 52px;
+  /* Expanded for high visual hierarchy */
   line-height: 1;
   letter-spacing: -1.5px;
   margin: 0;
-}.about-badge-sub {
+}
+
+.about-badge-sub {
   font-family: 'Lato', sans-serif;
   font-weight: 600;
   font-size: 14.5px;
@@ -2967,28 +3101,32 @@
 .testimonials-horizontal-cards-row {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 24px; /* Slightly wider, premium gap */
+  grid-gap: 24px;
+  /* Slightly wider, premium gap */
   margin-top: 40px;
 }
 
 .testimonial-card-item {
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
-  border-radius: 24px; /* Fluid rounded corners */
-  padding: 32px; /* Generous, cozy padding */
+  border-radius: 24px;
+  /* Fluid rounded corners */
+  padding: 32px;
+  /* Generous, cozy padding */
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
-  height: 440px; /* Tall elegant vertical cards */
+  height: 440px;
+  /* Tall elegant vertical cards */
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.015);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.015);
   box-sizing: border-box;
 }
 
 .testimonial-card-item:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06);
 }
 
 .testimonial-card-item.image-cover-mode {
@@ -2996,7 +3134,8 @@
   position: relative;
   overflow: hidden;
   border-radius: 24px;
-  height: 440px; /* Perfect matching height */
+  height: 440px;
+  /* Perfect matching height */
 }
 
 .testimonial-card-item.image-cover-mode img {
@@ -3008,7 +3147,7 @@
 .image-cover-tint-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(rgba(0,0,0,0.15), rgba(0,0,0,0.85));
+  background: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.85));
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -3021,7 +3160,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.25);
+  background: rgba(255, 255, 255, 0.25);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
@@ -3030,16 +3169,17 @@
   margin: auto;
   cursor: pointer;
   transition: transform 0.2s ease, background 0.2s ease;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .play-btn-circle-large:hover {
   transform: scale(1.1);
-  background: rgba(255,255,255,0.4);
+  background: rgba(255, 255, 255, 0.4);
 }
 
 .cover-mode-signature-title {
-  font-family: 'Dancing Script', cursive; /* Signature cursive name */
+  font-family: 'Dancing Script', cursive;
+  /* Signature cursive name */
   font-size: 28px;
   font-weight: 700;
   color: #FFFFFF;
@@ -3051,7 +3191,7 @@
   font-family: 'Lato', sans-serif;
   font-size: 12px;
   font-weight: 500;
-  color: rgba(255,255,255,0.8);
+  color: rgba(255, 255, 255, 0.8);
   margin: 4px 0 0 0;
   line-height: 1.3;
 }
@@ -3063,7 +3203,7 @@
   overflow: hidden;
   margin-bottom: 24px;
   border: 1px solid #E5E7EB;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   flex-shrink: 0;
 }
 
@@ -3079,7 +3219,8 @@
   color: #4B5563;
   line-height: 165%;
   margin: 0 0 24px 0;
-  flex-grow: 1; /* Maximizes inner flex layout vertical flow */
+  flex-grow: 1;
+  /* Maximizes inner flex layout vertical flow */
 }
 
 .testimonial-footer-info {
@@ -3093,7 +3234,8 @@
 }
 
 .author-name-signature {
-  font-family: 'Dancing Script', cursive; /* Exquisite brand-defining handwriting */
+  font-family: 'Dancing Script', cursive;
+  /* Exquisite brand-defining handwriting */
   font-size: 25px;
   font-weight: 700;
   color: #111827;
@@ -3372,7 +3514,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(72,187,120,0.06);
+  box-shadow: 0 4px 10px rgba(72, 187, 120, 0.06);
 }
 
 .details-texts-col {
@@ -3509,7 +3651,7 @@
   font-weight: 700;
   font-size: 14px;
   color: #374151;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.01);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.01);
 }
 
 .recommend-filter-btn:hover {
@@ -3542,12 +3684,12 @@
   flex-direction: column;
   gap: 18px;
   transition: all 0.25s ease-in-out;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.005);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.005);
 }
 
 .recommend-property-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 30px rgba(0,0,0,0.035);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.035);
 }
 
 .recommend-card-img-wrap {
@@ -3572,7 +3714,7 @@
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: rgba(0,0,0,0.22);
+  background: rgba(0, 0, 0, 0.22);
   backdrop-filter: blur(4px);
   border: none;
   display: flex;
@@ -3585,12 +3727,12 @@
 
 .recommend-heart-circle:hover {
   transform: scale(1.08);
-  background: rgba(0,0,0,0.32);
+  background: rgba(0, 0, 0, 0.32);
 }
 
 .recommend-heart-circle.liked {
   background: #FFFFFF;
-  box-shadow: 0 4px 12px rgba(239,68,68,0.18);
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.18);
 }
 
 .recommend-card-info-col {
@@ -3730,7 +3872,7 @@
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
   margin-top: 24px;
-  box-shadow: 0 4px 15px rgba(72,187,120,0.3);
+  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.3);
 }
 
 .btn-hero-green:hover {
@@ -3781,13 +3923,13 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
 .list-step-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
 
 .list-step-icon-avatar {
@@ -3836,7 +3978,7 @@
 
 .faq-accordion-item.expanded {
   border-color: #58A429;
-  box-shadow: 0 4px 15px rgba(72,187,120,0.05);
+  box-shadow: 0 4px 15px rgba(72, 187, 120, 0.05);
 }
 
 .faq-header-trigger {
