@@ -1524,7 +1524,7 @@ export default function App() {
                             width: '31px',
                             height: '31px',
                             objectFit: 'contain',
-                            filter: isActive ? 'brightness(0) invert(1)' : 'none'
+                            filter: isActive ? 'none' : 'grayscale(1) opacity(0.4)'
                           }} 
                         />
                       ) : (
@@ -2073,8 +2073,8 @@ export default function App() {
                         <h3 className="recommend-card-name-text">{villa.title}</h3>
                         
                         <div className="recommend-card-location-row">
-                          <MapPin size={13} color="#9CA3AF" />
                           <span>{villa.location}</span>
+                          <MapPin size={13} color="#9CA3AF" />
                         </div>
 
                         <div className="recommend-specs-2x2-grid">
@@ -2098,7 +2098,9 @@ export default function App() {
 
                         <div className="recommend-price-tag-row">
                           <span className="price-label">Starting from</span>
-                          <span className="price-green-bold">{villa.price}/night</span>
+                          <span className="price-green-bold">
+                            {String(villa.price).startsWith('₹') ? villa.price : '₹' + villa.price}/night
+                          </span>
                         </div>
 
                         <div className="recommend-actions-row">
@@ -3010,45 +3012,42 @@ export default function App() {
                       </button>
                     </div>
 
-                    {/* Specifications detail text */}
                     <div className="recommend-card-info-col">
                       <h4 className="recommend-card-name-text">{item.name}</h4>
                       
                       <div className="recommend-card-location-row">
-                        <MapPin size={13} color="#9CA3AF" />
                         <span>{item.location}</span>
+                        <MapPin size={13} color="#9CA3AF" />
                       </div>
 
-                      {/* Asymmetric 2x2 Specifications Grid */}
                       <div className="recommend-specs-2x2-grid">
                         <div className="recommend-spec-pill">
-                          <Maximize size={12} color="#6B7280" />
-                          <span>Area Size: {item.area}</span>
+                          <Maximize size={12} color="#8A99AD" />
+                          <span>Area Size: {(item.bedRooms || 2) * 150} sq. ft.</span>
                         </div>
                         <div className="recommend-spec-pill">
-                          <Bed size={12} color="#6B7280" />
-                          <span>Beds: {item.beds}</span>
+                          <Bed size={12} color="#8A99AD" />
+                          <span>Beds: {item.bedRooms || 2} Beds</span>
                         </div>
                         <div className="recommend-spec-pill">
-                          <Home size={12} color="#6B7280" />
-                          <span>Rooms: {item.rooms}</span>
+                          <DoorClosed size={12} color="#8A99AD" />
+                          <span>Rooms: {item.bedRooms || 1} Room</span>
                         </div>
                         <div className="recommend-spec-pill">
-                          <Users size={12} color="#6B7280" />
-                          <span>Guests: {item.guests}</span>
+                          <Users size={12} color="#8A99AD" />
+                          <span>Guests: {item.capacity || 3} Person</span>
                         </div>
                       </div>
 
-                      {/* Starting Price in corporate green */}
                       <div className="recommend-price-tag-row">
-                        <span>Starting from </span>
-                        <span className="price-green-bold">₹{item.price}/night</span>
+                        <span className="price-label">Starting from </span>
+                        <span className="price-green-bold">
+                          {String(item.price).startsWith('₹') ? item.price : '₹' + item.price}/night
+                        </span>
                       </div>
 
-                      {/* Dynamic Button Action Groups */}
                       <div className="recommend-actions-row">
                         <button className="recommend-details-btn-blue" onClick={() => {
-                          // Setup detail page simulation
                           setSelectedVilla({
                             title: item.name,
                             location: item.location,
@@ -3074,11 +3073,10 @@ export default function App() {
                           View Details
                         </button>
                         
-                        <button className="recommend-owner-btn-green" onClick={() => alert(`Connecting with the owner of "${item.name}"... Our corporate desk is transferring your request.`)}>
+                        <button className="recommend-contact-btn-green" onClick={() => alert(`Connecting with the owner of "${item.name}"... Our corporate desk is transferring your request.`)}>
                           Contact Owner
                         </button>
                       </div>
-
                     </div>
 
                   </div>
@@ -4292,33 +4290,34 @@ export default function App() {
                       <h3 className="recommend-card-name-text">{villa.title}</h3>
                       
                       <div className="recommend-card-location-row">
-                        <MapPin size={13} color="#9CA3AF" />
                         <span>{villa.location}</span>
+                        <MapPin size={13} color="#9CA3AF" />
                       </div>
 
-                      {/* 2x2 Custom Structural Grid */}
                       <div className="recommend-specs-2x2-grid">
                         <div className="recommend-spec-pill">
                           <Maximize size={12} color="#8A99AD" />
-                          <span>Area Size: {villa.area}</span>
+                          <span>Area Size: {(villa.bedRooms || 2) * 150} sq. ft.</span>
                         </div>
                         <div className="recommend-spec-pill">
                           <Bed size={12} color="#8A99AD" />
-                          <span>Beds: {villa.beds}</span>
+                          <span>Beds: {villa.bedRooms || 2} Beds</span>
                         </div>
                         <div className="recommend-spec-pill">
                           <DoorClosed size={12} color="#8A99AD" />
-                          <span>Rooms: {villa.rooms}</span>
+                          <span>Rooms: {villa.bedRooms || 1} Room</span>
                         </div>
                         <div className="recommend-spec-pill">
                           <Users size={12} color="#8A99AD" />
-                          <span>Guests: {villa.guests}</span>
+                          <span>Guests: {villa.capacity || 3} Person</span>
                         </div>
                       </div>
 
-                      <div className="recommend-price-tag-row" style={{ marginTop: '4px' }}>
+                      <div className="recommend-price-tag-row">
                         <span className="price-label">Starting from</span>
-                        <span className="price-green-bold">{villa.price}/night</span>
+                        <span className="price-green-bold">
+                          {String(villa.price).startsWith('₹') ? villa.price : '₹' + villa.price}/night
+                        </span>
                       </div>
 
                       <div className="recommend-actions-row">
@@ -4364,33 +4363,34 @@ export default function App() {
                       <h3 className="recommend-card-name-text">{homestay.title}</h3>
                       
                       <div className="recommend-card-location-row">
-                        <MapPin size={13} color="#9CA3AF" />
                         <span>{homestay.location}</span>
+                        <MapPin size={13} color="#9CA3AF" />
                       </div>
 
-                      {/* 2x2 Custom Structural Grid */}
                       <div className="recommend-specs-2x2-grid">
                         <div className="recommend-spec-pill">
                           <Maximize size={12} color="#8A99AD" />
-                          <span>Area Size: {homestay.area}</span>
+                          <span>Area Size: {(homestay.bedRooms || 2) * 150} sq. ft.</span>
                         </div>
                         <div className="recommend-spec-pill">
                           <Bed size={12} color="#8A99AD" />
-                          <span>Beds: {homestay.beds}</span>
+                          <span>Beds: {homestay.bedRooms || 2} Beds</span>
                         </div>
                         <div className="recommend-spec-pill">
                           <DoorClosed size={12} color="#8A99AD" />
-                          <span>Rooms: {homestay.rooms}</span>
+                          <span>Rooms: {homestay.bedRooms || 1} Room</span>
                         </div>
                         <div className="recommend-spec-pill">
                           <Users size={12} color="#8A99AD" />
-                          <span>Guests: {homestay.guests}</span>
+                          <span>Guests: {homestay.capacity || 3} Person</span>
                         </div>
                       </div>
 
-                      <div className="recommend-price-tag-row" style={{ marginTop: '4px' }}>
+                      <div className="recommend-price-tag-row">
                         <span className="price-label">Starting from</span>
-                        <span className="price-green-bold">{homestay.price}/night</span>
+                        <span className="price-green-bold">
+                          {String(homestay.price).startsWith('₹') ? homestay.price : '₹' + homestay.price}/night
+                        </span>
                       </div>
 
                       <div className="recommend-actions-row">
@@ -4493,11 +4493,11 @@ export default function App() {
               {currentBestVillas.map((villa, idx) => {
                 const isWishlisted = user && user.wishlist && user.wishlist.some(w => w._id === villa._id || w === villa._id);
                 return (
-                  <div key={idx} className="recommend-property-card">
-                    <div className="recommend-card-img-wrap">
+                  <div key={idx} className="villa-card">
+                    <div className="villa-card-img-wrap">
                       <img src={villa.img} alt={villa.title} />
                       <button 
-                        className={`recommend-heart-circle ${isWishlisted ? 'liked' : ''}`}
+                        className={`wishlist-btn-circle ${isWishlisted ? 'active' : ''}`}
                         onClick={async (e) => {
                           e.stopPropagation();
                           if (!token) {
@@ -4521,45 +4521,36 @@ export default function App() {
                           }
                         }}
                       >
-                        <Heart size={16} fill={isWishlisted ? '#EF4444' : 'none'} color={isWishlisted ? '#EF4444' : '#FFFFFF'} />
+                        <Heart size={16} fill={isWishlisted ? '#EF4444' : 'none'} color={isWishlisted ? '#EF4444' : '#111827'} />
                       </button>
                     </div>
                     
-                    <div className="recommend-card-info-col">
-                      <h3 className="recommend-card-name-text">{villa.title}</h3>
+                    <div className="villa-card-content">
+                      <h3 className="villa-card-title">{villa.title}</h3>
                       
-                      <div className="recommend-card-location-row">
+                      <div className="villa-card-location">
                         <MapPin size={13} color="#9CA3AF" />
                         <span>{villa.location}</span>
                       </div>
 
-                      <div className="recommend-specs-2x2-grid">
-                        <div className="recommend-spec-pill">
-                          <Maximize size={12} color="#8A99AD" />
-                          <span>Area Size: {(villa.bedRooms || 2) * 150} sq. ft.</span>
+                      <div className="villa-card-rating-row">
+                        <div className="rating-pill">
+                          <span>{villa.rating}</span>
                         </div>
-                        <div className="recommend-spec-pill">
-                          <Bed size={12} color="#8A99AD" />
-                          <span>Beds: {villa.bedRooms || 2} Beds</span>
-                        </div>
-                        <div className="recommend-spec-pill">
-                          <DoorClosed size={12} color="#8A99AD" />
-                          <span>Rooms: {villa.bedRooms || 1} Room</span>
-                        </div>
-                        <div className="recommend-spec-pill">
-                          <Users size={12} color="#8A99AD" />
-                          <span>Guests: {villa.capacity || 3} Person</span>
+                        <div className="rating-text-stack">
+                          <span className="rating-desc-excellent">Excellent</span>
+                          <span className="rating-reviews-count">{villa.reviews}</span>
                         </div>
                       </div>
 
-                      <div className="recommend-price-tag-row">
+                      <div className="villa-card-price-row">
                         <span className="price-label">Starting from</span>
-                        <span className="price-green-bold">{villa.price}/night</span>
+                        <span className="price-value-highlight">{villa.price}/night</span>
                       </div>
 
-                      <div className="recommend-actions-row">
-                        <button className="recommend-details-btn-blue" onClick={() => { setSelectedProperty(villa); setActiveMenu('Detail'); }}>View Details</button>
-                        <button className="recommend-contact-btn-green" onClick={() => { setSelectedProperty(villa); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
+                      <div className="villa-card-actions">
+                        <button className="btn-villa-action outline-blue" onClick={() => { setSelectedProperty(villa); setActiveMenu('Detail'); }}>View Details</button>
+                        <button className="btn-villa-action outline-green" onClick={() => { setSelectedProperty(villa); setContactStep(1); setContactModalOpen(true); }}>Contact Owner</button>
                       </div>
                     </div>
                   </div>
@@ -4963,11 +4954,11 @@ export default function App() {
             style={authMode === 'login' ? { position: 'relative' } : { position: 'relative' }}
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Close Button */}
+            <button className="auth-close-btn" style={{ position: 'absolute', top: '24px', right: '28px', background: 'none', border: 'none', fontSize: '30px', color: '#9CA3AF', cursor: 'pointer', zIndex: 100 }} onClick={() => setAuthModalOpen(false)}>&times;</button>
             
             {authMode === 'signup' ? (
               <div className="auth-signup-content fade-in" style={{ width: '100%', boxSizing: 'border-box' }}>
-                {/* Close Button */}
-                <button className="auth-close-btn" style={{ position: 'absolute', top: '24px', right: '28px', background: 'none', border: 'none', fontSize: '30px', color: '#9CA3AF', cursor: 'pointer', zIndex: 10 }} onClick={() => setAuthModalOpen(false)}>&times;</button>
                 
                 <h2 className="auth-modal-title" style={{ textAlign: 'center', fontFamily: "'Lato', sans-serif", fontSize: '32px', fontWeight: '500', color: '#111827', lineHeight: '1.35', marginBottom: '32px' }}>
                   Sign Up To <br />Find Your <span style={{ backgroundColor: '#0066ff', color: '#FFFFFF', padding: '2px 14px', borderRadius: '0px', display: 'inline-block', fontWeight: '700' }}>Perfect Stay</span>
@@ -5066,8 +5057,6 @@ export default function App() {
 
                 {/* Right side Log In form fields */}
                 <div className="auth-login-right-content" style={{ flex: 1, padding: '30px 60px', display: 'flex', flexDirection: 'column', justifyContent: 'center', boxSizing: 'border-box', position: 'relative' }}>
-                  {/* Close Button positioned inside the right side block */}
-                  <button className="auth-close-btn" style={{ position: 'absolute', top: '20px', right: '24px', background: 'none', border: 'none', fontSize: '28px', color: '#9CA3AF', cursor: 'pointer', zIndex: 10 }} onClick={() => setAuthModalOpen(false)}>&times;</button>
                   
                   <h2 className="auth-modal-title login-title-align" style={{ fontFamily: "'Lato', sans-serif", fontSize: '24px', fontWeight: '500', color: '#111827', lineHeight: '1.4', marginBottom: '20px' }}>
                     Log In Your Account To <br />Find Your <span style={{ backgroundColor: '#0066ff', color: '#FFFFFF', padding: '2px 10px', borderRadius: '4px', marginLeft: '6px', fontWeight: '700', display: 'inline-block' }}>Perfect Stay</span>
