@@ -4,7 +4,7 @@ import {
   Search, Sparkles, Calendar, Users, DollarSign, Bed, Utensils, ChevronDown,
   ChevronLeft, ChevronRight, Star, CreditCard, Shield, Percent,
   Maximize, DoorClosed, Compass, Trees, Building, Hotel, CheckCircle, Phone,
-  Edit2, User, Filter, MessageSquare, Play, Sliders, UserRound, UploadCloud, ArrowRight, X
+  Edit2, User, Filter, MessageSquare, Play, Sliders, UserRound, UploadCloud, ArrowRight, X, Eye, EyeOff
 } from 'lucide-react';
 import logoImg from './assets/Mask group.png';
 import darkLogoImg from './assets/image 2936.png';
@@ -624,6 +624,7 @@ export default function App() {
   // Interactive Auth Modal States (Figma accurate design!)
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('signup'); // 'signup' or 'login'
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -4920,7 +4921,7 @@ export default function App() {
         <div className="auth-modal-overlay" onClick={() => setAuthModalOpen(false)}>
           <div 
             className={`auth-modal-card ${authMode === 'login' ? 'login-split-card' : ''}`} 
-            style={authMode === 'login' ? { padding: 0, overflow: 'hidden', height: '560px', width: '1000px', display: 'flex', borderRadius: '25px', backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', position: 'relative' } : { padding: '40px 60px', borderRadius: '25px', backgroundColor: '#FFFFFF', border: '1px solid #E5E7EB', position: 'relative', maxWidth: '1000px', width: '90%', margin: '0 auto' }}
+            style={authMode === 'login' ? { position: 'relative' } : { position: 'relative' }}
             onClick={(e) => e.stopPropagation()}
           >
             
@@ -4945,7 +4946,12 @@ export default function App() {
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Choose Password*</label>
-                      <input type="password" className="auth-input-field" placeholder="Minimum 8 characters" value={signupPassword} onChange={(e) => setSignupPassword(e.target.value)} required autoComplete="off" />
+                      <div style={{ position: 'relative' }}>
+                        <input type={showPassword ? "text" : "password"} className="auth-input-field" placeholder="Minimum 8 characters" value={signupPassword} onChange={(e) => setSignupPassword(e.target.value)} required autoComplete="off" />
+                        <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280' }}>
+                          {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                        </button>
+                      </div>
                     </div>
                     
                     <div className="auth-form-group">
@@ -4954,7 +4960,7 @@ export default function App() {
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Phone Number*</label>
-                      <input type="tel" className="auth-input-field" placeholder="+91 98765 43210" value={signupPhone} onChange={(e) => setSignupPhone(e.target.value)} required autoComplete="off" />
+                      <input type="tel" className="auth-input-field" placeholder="Enter your phone number" value={signupPhone} onChange={(e) => setSignupPhone(e.target.value)} required autoComplete="off" />
                     </div>
                     <div className="auth-form-group">
                       <label className="auth-input-label">Country of Residence*</label>
@@ -5052,7 +5058,12 @@ export default function App() {
                             <span>Password*</span>
                             <span style={{ color: '#0066ff', fontSize: '12px', fontWeight: '600', cursor: 'pointer' }} onClick={() => setShowPasswordStep(false)}>Back</span>
                           </label>
-                          <input type="password" className="auth-input-field" placeholder="••••••••" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required autoComplete="off" autoFocus />
+                          <div style={{ position: 'relative' }}>
+                            <input type={showPassword ? "text" : "password"} className="auth-input-field" placeholder="••••••••" value={loginPassword} onChange={(e) => setLoginPassword(e.target.value)} required autoComplete="off" autoFocus />
+                            <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280' }}>
+                              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                            </button>
+                          </div>
                         </div>
                       </>
                     )}

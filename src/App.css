@@ -653,29 +653,29 @@
    SECTION 2: BEST VILLAS AROUND YOU (3-column, Gap 54px)
    ========================================================================== */
 .villas-around-section {
-  width: 1440px; /* Expanded container width to allow larger card dimensions */
-  max-width: calc(100% - 158px);
-  margin: 40px auto 80px auto; /* Centered layout bounds */
+  width: 100%;
+  max-width: 1360px;
+  margin: 40px auto 80px auto;
+  padding: 0 16px;
   box-sizing: border-box;
 }
 
 .villas-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* Displays exactly 4 cards per row */
-  gap: 30px; /* Snug, clean gap for 4 columns */
-  justify-content: start; /* Left start alignment */
-  padding-left: 15px; /* Shift slightly to the right to line up perfectly with section headlines */
+  grid-template-columns: repeat(4, minmax(0, 1fr)); /* Always 4 columns regardless of container width */
+  gap: 24px;
+  justify-content: start;
 }
 
 .villa-card {
-  width: 100%; /* Responsive width matching grid columns track */
-  max-width: 335px; /* Increased from 300px to make cards a little larger */
-  height: 560px; /* Increased from 520px to make cards a little larger */
+  width: 100%;
+  max-width: 100%; /* Let the grid track control card width */
+  height: 560px;
   background: #FFFFFF;
-  border-radius: 25px; /* Dimensions provided by user */
+  border-radius: 25px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.03);
   border: 1px solid #F3F4F6;
-  padding: 16px; /* Elegant interior padding */
+  padding: 16px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -3925,9 +3925,9 @@
   background-color: #FFFFFF;
   border: 1px solid #E5E7EB;
   border-radius: 30px;
-  padding: 48px;
-  width: 1120px;
-  max-width: 95vw;
+  padding: 36px 40px;
+  width: min(1040px, calc(100vw - 40px));
+  max-width: calc(100vw - 40px);
   max-height: calc(100vh - 40px);
   overflow-y: auto;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
@@ -3938,8 +3938,8 @@
 .auth-modal-card.login-split-card {
   padding: 0;
   overflow: hidden;
-  height: 648px;
-  width: 1153px;
+  height: min(600px, calc(100vh - 40px));
+  width: min(1040px, calc(100vw - 40px));
   max-height: calc(100vh - 40px);
   display: flex;
   border-radius: 25px;
@@ -3995,8 +3995,8 @@
 
 .auth-form-grid-3x3 {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 20px 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-gap: 16px 20px;
   width: 100%;
 }
 
@@ -4155,9 +4155,10 @@
 }
 
 .auth-login-left-image {
-  width: 653px;
-  height: 648px;
-  flex-shrink: 0;
+  width: 480px;
+  min-width: 380px;
+  flex: 0 0 auto;
+  height: 100%;
   background-size: cover;
   background-position: center;
   position: relative;
