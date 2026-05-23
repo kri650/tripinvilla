@@ -71,18 +71,19 @@
   cursor: pointer;
 }
 
-/* Exact Figma specs: Fixed width 934px, Fixed height 60px, Radius 60px, Background #1E2A30 44%, Blur 32px */
+/* Exact Figma specs adjusted: Dynamic width, Fixed height 60px, Radius 60px, Background #1E2A30 44%, Blur 32px */
 .nav-pill-wrapper {
   display: flex;
   align-items: center;
-  width: 934px;
+  width: max-content;
+  max-width: 100%;
   height: 60px;
   background: rgba(30, 42, 48, 0.44);
   backdrop-filter: blur(32px);
   -webkit-backdrop-filter: blur(32px);
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 60px;
-  padding: 0 29px;
+  padding: 0 20px;
   justify-content: space-between;
   box-sizing: border-box;
 }
@@ -90,7 +91,7 @@
 .nav-pill-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   color: #FFFFFF;
   font-size: 13px;
   font-weight: 500;
@@ -99,7 +100,7 @@
   background: transparent;
   cursor: pointer;
   transition: all 0.2s ease;
-  padding: 6px 10px;
+  padding: 6px 8px;
   white-space: nowrap;
   /* Keep text strictly in a single line */
 }
@@ -1639,33 +1640,32 @@
 .prop-cat-outline-btn {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 22px;
-  background: #FFFFFF;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
+  gap: 12px;
+  padding: 12px 26px;
+  background: transparent;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 16px;
   font-family: 'Lato', sans-serif;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 600;
   color: #4B5563;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
 }
 
 .prop-cat-outline-btn:hover {
   border-color: #CBD5E1;
-  background: #F8FAFC;
+  background: rgba(0, 0, 0, 0.03);
 }
 
 .prop-cat-outline-btn.active {
-  background: rgba(72, 187, 120, 0.08);
+  background: rgba(88, 164, 41, 0.1);
   /* Light green tint */
-  border: 1.5px solid #58A429;
+  border: 2px solid #58A429;
   /* Active green border */
   color: #58A429;
   /* Green text */
-  box-shadow: 0 4px 12px rgba(72, 187, 120, 0.15);
+  box-shadow: 0 4px 12px rgba(88, 164, 41, 0.15);
 }
 
 .prop-cat-icon {
@@ -3924,7 +3924,7 @@
 .list-steps-container {
   width: 1280px;
   max-width: calc(100% - 160px);
-  margin: 80px auto 20px auto;
+  margin: 80px auto 50px auto;
 }
 
 .list-section-title-wrap {
@@ -3950,7 +3950,7 @@
 .list-four-steps-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  grid-gap: 24px;
+  grid-gap: 32px;
 }
 
 .list-step-card {
@@ -3992,7 +3992,7 @@
 .list-faq-container {
   width: 1242px;
   max-width: calc(100% - 160px);
-  margin: 80px auto 0 auto;
+  margin: 80px auto 40px auto;
 }
 
 .faq-accordion-stack {
@@ -4566,4 +4566,60 @@
 .auth-login-right-content {
   scrollbar-width: thin;
   scrollbar-color: rgba(156, 163, 175, 0.4) transparent;
+}
+
+/* Dual Range Slider Styles */
+.dual-slider-container {
+  position: relative;
+  width: 100%;
+  height: 36px;
+  margin-top: 24px;
+}
+
+.dual-slider-container input[type="range"] {
+  position: absolute;
+  width: 100%;
+  pointer-events: none;
+  background: none;
+  appearance: none;
+  -webkit-appearance: none;
+  height: 4px;
+  top: 16px;
+  z-index: 3;
+  margin: 0;
+  outline: none;
+}
+
+.dual-slider-container input[type="range"]::-webkit-slider-thumb {
+  pointer-events: auto;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid #111827;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: transform 0.1s ease;
+}
+
+.dual-slider-container input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.dual-slider-container input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid #111827;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  transition: transform 0.1s ease;
+}
+
+.dual-slider-container input[type="range"]::-moz-range-thumb:hover {
+  transform: scale(1.1);
 }

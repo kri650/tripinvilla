@@ -1,0 +1,92 @@
+import axios from 'axios';
+
+const API_URL = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api';
+
+const api = axios.create({
+  baseURL: API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
+api.interceptors.request.use((config) => {
+  const token = localStorage.getItem('token') || localStorage.getItem('user_token');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+export const propertyService = {
+  getMine: () => api.get('/properties/owner'),
+  add: (data) => api.post('/properties', data),
+  update: (id, data) => api.put(`/properties/${id}`, data),
+  delete: (id) => api.delete(`/properties/${id}`),
+  updateStatus: (id, status) => api.put(`/properties/${id}/status`, { status }),
+  uploadImages: (formData) => api.post('/properties/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' }
+  }),
+  getLandmarks: (propertyId) => api.get(`/properties/${propertyId}/landmarks`),
+  addLandmark: (propertyId, data) => api.post(`/properties/${propertyId}/landmarks`, data),
+  deleteLandmark: (landmarkId) => api.delete(`/properties/landmarks/${landmarkId}`)
+};
+
+export const propertyRequestService = {
+  getMine: () => api.get('/property-requests/owner'),
+  add: (data) => api.post('/property-requests', data),
+  delete: (id) => api.delete(`/property-requests/${id}`),
+};
+
+export const authService = {
+  login: (email, password) => api.post('/auth/login', { email, password }),
+};
+
+export const userService = {
+  getProfile: () => api.get('/users/profile'),
+  updateProfile: (data) => api.put('/users/profile', data),
+};
+
+export const dashboardService = {
+  getStats: () => api.get('/owner-dashboard/stats'),
+};
+
+export const bookingService = {
+  getMine: () => api.get('/owner-dashboard/bookings'),
+  getRazorpayKey: () => api.get('/bookings/razorpay-key'),
+  createPremiumOrder: () => api.post('/bookings/create-premium-order'),
+  verifyPremium: (data) => api.post('/bookings/verify-premium', data),
+};
+
+export const enquiryService = {
+  getMine: () => api.get('/enquiries/owner'),
+  getFiltered: (params) => api.get('/enquiries/owner/filter', { params }),
+  reply: (id, replyText) => api.put(`/enquiries/${id}/reply`, { reply: replyText })
+};
+
+export const offerService = {
+  getMine: () => api.get('/offers/owner'),
+  create: (data) => api.post('/offers', data),
+  remove: (id) => api.delete(`/offers/${id}`),
+};
+
+export const countryService = {
+  getAll: () => api.get('/masters/countries'),
+};
+
+export const stateService = {
+  getByCountry: (countryId) => api.get(`/masters/states?countryId=${countryId}`),
+};
+
+export const cityService = {
+  getByState: (stateId) => api.get(`/masters/cities?stateId=${stateId}`),
+};
+
+export const locationService = {
+  getByCity: (cityId) => api.get(`/masters/locations?cityId=${cityId}`),
+};
+
+export const experienceService = {
+  getActive: () => api.get('/admin/experiences/active'),
+};
+
+export default api;

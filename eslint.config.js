@@ -17,5 +17,10 @@ export default defineConfig([
       globals: globals.browser,
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
+    rules: {
+      // This rule is overly strict for this codebase: setting state inside effects is often legitimate
+      // (e.g., URL param handling, async fetch lifecycles).
+      'react-hooks/set-state-in-effect': 'off',
+    },
   },
 ])
