@@ -8,6 +8,7 @@ export default function OffersbyDate() {
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
 
   const fetchOffers = async () => {
     setLoading(true);
@@ -81,7 +82,16 @@ export default function OffersbyDate() {
             
             <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
-                <Filter size={13} style={{ color: '#6B7280' }} />
+                <Calendar size={13} style={{ color: '#6B7280' }} />
+                <input 
+                  type="date"
+                  value={dateFrom}
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
+                />
+              </div>
+
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
                 <select 
                   value={selectedCategory} 
                   onChange={e => setSelectedCategory(e.target.value)}
@@ -96,13 +106,19 @@ export default function OffersbyDate() {
                 </select>
               </div>
 
-              <div className="props-search-wrap" style={{ width: 240, margin: 0 }}>
-                <Search size={14} />
+              <button className="props-btn-filter" onClick={fetchOffers} style={{ cursor: 'pointer', border: '1px solid #58A429', background: '#fff', color: '#58A429', padding: '6px 16px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}>
+                <Filter size={13} /> Filter
+              </button>
+
+              <div className="props-search-wrap" style={{ width: 240, margin: 0, border: '1px solid #E5E7EB', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px' }}>
+                <Search size={14} style={{ color: '#9CA3AF' }} />
                 <input 
                   type="text" 
                   placeholder="Search property or location..." 
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
+                  onKeyDown={e => e.key === 'Enter' && fetchOffers()}
+                  style={{ border: 'none', outline: 'none', width: '100%', fontSize: 13 }}
                 />
               </div>
             </div>

@@ -2,6 +2,13 @@ import React, { useState, useEffect } from "react";
 import { ChevronDown, Edit2, Trash2, MoreVertical } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
+const parseNumber = (val) => {
+  if (typeof val === 'number') return val;
+  if (!val) return '';
+  const parsed = parseFloat(String(val).replace(/[^\d.-]/g, ''));
+  return isNaN(parsed) ? '' : parsed;
+};
+
 export default function PropertyMakers() {
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
@@ -40,6 +47,10 @@ export default function PropertyMakers() {
       freeCancellation: false,
       freeCancellationHours: "24",
     },
+    privatePool: false, gardenArea: false, chefAvailable: false, entirePropertyOnly: false, securityCCTV: false, numberOfFloors: "", plotSize: "",
+    restaurantOnSite: false, spaWellness: false, conferenceRoom: false, roomService: false, receptionAllDay: false, liftElevator: false, starRating: "", totalRooms: "", totalFloors: "", activities: [],
+    floorNumber: "", totalFloorsBuilding: "", furnishedStatus: "Fully Furnished", washingMachine: false, societyAmenities: [],
+    bonfireArea: false, viewType: "Mountain", outdoorSeating: false, nearestHikingTrail: "", distanceFromCity: "",
   });
   const [isEditing, setIsEditing] = useState(false);
 
@@ -246,6 +257,11 @@ export default function PropertyMakers() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleChangeCheckbox = (e) => {
+    const { name, checked } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: checked }));
+  };
+
   const handleOwnerSelect = (e) => {
     const ownerId = e.target.value;
     const selectedOwner = ownersList.find((o) => o._id === ownerId);
@@ -257,6 +273,22 @@ export default function PropertyMakers() {
         ownerContact: selectedOwner.phone || selectedOwner.email || "",
       }));
     } else {
+      const adminUserStr = localStorage.getItem("admin_user");
+      if (adminUserStr) {
+        try {
+          const adminUser = JSON.parse(adminUserStr);
+          const adminId = String(adminUser.id || adminUser._id);
+          if (adminId === String(ownerId)) {
+            setFormData((prev) => ({
+              ...prev,
+              ownerId: ownerId,
+              ownerName: adminUser.name || "Admin",
+              ownerContact: adminUser.email || adminUser.phone || "",
+            }));
+            return;
+          }
+        } catch (err) {}
+      }
       setFormData((prev) => ({
         ...prev,
         ownerId: "",
@@ -359,10 +391,14 @@ export default function PropertyMakers() {
         originalPrice: formData.originalPrice
           ? Number(formData.originalPrice)
           : undefined,
-        taxAmount: formData.taxAmount ? Number(formData.taxAmount) : undefined,
-        highlights: formData.highlights,
-        landmarks: landmarksList,
-        images: [
+      taxAmount: formData.taxAmount ? Number(formData.taxAmount) : undefined,
+      highlights: formData.highlights,
+      landmarks: landmarksList,
+      privatePool: formData.privatePool, gardenArea: formData.gardenArea, chefAvailable: formData.chefAvailable, entirePropertyOnly: formData.entirePropertyOnly, securityCCTV: formData.securityCCTV, numberOfFloors: formData.numberOfFloors, plotSize: formData.plotSize,
+      restaurantOnSite: formData.restaurantOnSite, spaWellness: formData.spaWellness, conferenceRoom: formData.conferenceRoom, roomService: formData.roomService, receptionAllDay: formData.receptionAllDay, liftElevator: formData.liftElevator, starRating: formData.starRating, totalRooms: formData.totalRooms, totalFloors: formData.totalFloors, activities: formData.activities,
+      floorNumber: formData.floorNumber, totalFloorsBuilding: formData.totalFloorsBuilding, furnishedStatus: formData.furnishedStatus, washingMachine: formData.washingMachine, societyAmenities: formData.societyAmenities,
+      bonfireArea: formData.bonfireArea, viewType: formData.viewType, outdoorSeating: formData.outdoorSeating, nearestHikingTrail: formData.nearestHikingTrail, distanceFromCity: formData.distanceFromCity,
+      images: [
           ...existingImages,
           ...selectedFiles.map((f) => URL.createObjectURL(f)),
         ], // Note: Files need real upload in a real scenario
@@ -453,11 +489,11 @@ export default function PropertyMakers() {
       amenities: Array.isArray(p.amenities) ? p.amenities : [],
       location: p.location || "",
       full_address: p.full_address || p.location || "",
-      latitude: p.latitude || "",
-      longitude: p.longitude || "",
-      propertyPrice: p.price || p.propertyPrice || "",
-      originalPrice: p.originalPrice || "",
-      taxAmount: p.taxAmount || "",
+      latitude: parseNumber(p.latitude),
+      longitude: parseNumber(p.longitude),
+      propertyPrice: parseNumber(p.price || p.propertyPrice),
+      originalPrice: parseNumber(p.originalPrice),
+      taxAmount: parseNumber(p.taxAmount),
       imagesUrl: "",
       videosUrl: "",
       aboutProperty: p.aboutProperty || p.description || "",
@@ -605,6 +641,23 @@ export default function PropertyMakers() {
                   required
                 >
                   <option value="">Select an Owner</option>
+                  {(() => {
+                    const adminUserStr = localStorage.getItem("admin_user");
+                    if (adminUserStr) {
+                      try {
+                        const adminUser = JSON.parse(adminUserStr);
+                        const adminId = adminUser.id || adminUser._id;
+                        if (adminId) {
+                          return (
+                            <option value={adminId}>
+                              {adminUser.name || "Admin"} ({adminUser.email || "admin@tripinvilla.com"}) — Admin/Self
+                            </option>
+                          );
+                        }
+                      } catch (e) {}
+                    }
+                    return null;
+                  })()}
                   {ownersList.map((o) => (
                     <option key={o._id} value={o._id}>
                       {o.ownerName || o.name} ({o.email || o.phone})
@@ -1305,6 +1358,138 @@ export default function PropertyMakers() {
                 className="form-input"
                 required
               />
+            </div>
+          </div>
+
+          <div className="form-group" style={{ gridColumn: "span 3", marginTop: "16px", marginBottom: "16px", padding: "16px", border: "1px solid #E5E7EB", borderRadius: "8px", background: "#F9FAFB" }}>
+            <label className="form-label" style={{ fontSize: "15px", color: "#111827", display: "block", marginBottom: "12px" }}>
+              Type-Specific Details ({formData.propertyType || "Select a type"})
+            </label>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+              {formData.propertyType === 'Villa' && (
+                <>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="privatePool" checked={formData.privatePool} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Private Pool</label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="gardenArea" checked={formData.gardenArea} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Garden / Outdoor Area</label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="chefAvailable" checked={formData.chefAvailable} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Chef / Caretaker Available</label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="entirePropertyOnly" checked={formData.entirePropertyOnly} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Entire Property Booking Only</label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="securityCCTV" checked={formData.securityCCTV} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Security / CCTV</label>
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>Number of Floors</label>
+                    <input className="form-input" type="number" name="numberOfFloors" value={formData.numberOfFloors} onChange={handleChange} placeholder="e.g. 2" />
+                  </div>
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>Plot Size (sq ft)</label>
+                    <input className="form-input" type="number" name="plotSize" value={formData.plotSize} onChange={handleChange} placeholder="e.g. 4000" />
+                  </div>
+                </>
+              )}
+              {(formData.propertyType === 'Resort' || formData.propertyType === 'Hotel') && (
+                <>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="restaurantOnSite" checked={formData.restaurantOnSite} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Restaurant on-site</label>
+                  {formData.propertyType === 'Resort' && (
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="spaWellness" checked={formData.spaWellness} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Spa / Wellness Center</label>
+                  )}
+                  {formData.propertyType === 'Resort' && (
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="conferenceRoom" checked={formData.conferenceRoom} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Conference Room</label>
+                  )}
+                  {formData.propertyType === 'Hotel' && (
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="receptionAllDay" checked={formData.receptionAllDay} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Reception 24/7</label>
+                  )}
+                  {formData.propertyType === 'Hotel' && (
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="roomService" checked={formData.roomService} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Room Service Available</label>
+                  )}
+                  {formData.propertyType === 'Hotel' && (
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="liftElevator" checked={formData.liftElevator} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Lift / Elevator</label>
+                  )}
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>Star Rating (1-5)</label>
+                    <input className="form-input" type="number" min="1" max="5" name="starRating" value={formData.starRating} onChange={handleChange} placeholder="e.g. 4" />
+                  </div>
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>Total Rooms</label>
+                    <input className="form-input" type="number" name="totalRooms" value={formData.totalRooms} onChange={handleChange} placeholder="e.g. 24" />
+                  </div>
+                  {formData.propertyType === 'Hotel' && (
+                    <div>
+                      <label className="form-label" style={{ fontSize: 12 }}>Total Floors</label>
+                      <input className="form-input" type="number" name="totalFloors" value={formData.totalFloors} onChange={handleChange} placeholder="e.g. 5" />
+                    </div>
+                  )}
+                  {formData.propertyType === 'Resort' && (
+                    <div style={{ gridColumn: 'span 3' }}>
+                      <label className="form-label" style={{ fontSize: 12 }}>Activities Offered</label>
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        {['Swimming', 'Trekking', 'Cycling', 'Yoga', 'Bonfire', 'Wildlife Safari'].map(act => (
+                          <button key={act} type="button" onClick={() => {
+                            const curr = formData.activities || [];
+                            setFormData(p => ({...p, activities: curr.includes(act) ? curr.filter(a => a !== act) : [...curr, act]}));
+                          }} style={{ padding: '6px 12px', borderRadius: '16px', fontSize: '12px', border: (formData.activities || []).includes(act) ? '1px solid #58A429' : '1px solid #D1D5DB', background: (formData.activities || []).includes(act) ? '#ECFDF5' : '#fff', color: (formData.activities || []).includes(act) ? '#58A429' : '#374151', cursor: 'pointer' }}>{act}</button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
+              {formData.propertyType === 'Apartment' && (
+                <>
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>Floor Number</label>
+                    <input className="form-input" type="number" name="floorNumber" value={formData.floorNumber} onChange={handleChange} placeholder="e.g. 3" />
+                  </div>
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>Total Floors in Building</label>
+                    <input className="form-input" type="number" name="totalFloorsBuilding" value={formData.totalFloorsBuilding} onChange={handleChange} placeholder="e.g. 10" />
+                  </div>
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>Furnished Status</label>
+                    <select className="form-select" name="furnishedStatus" value={formData.furnishedStatus} onChange={handleChange}>
+                      <option value="Fully Furnished">Fully Furnished</option>
+                      <option value="Semi Furnished">Semi Furnished</option>
+                      <option value="Unfurnished">Unfurnished</option>
+                    </select>
+                  </div>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="washingMachine" checked={formData.washingMachine} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Washing Machine</label>
+                  <div style={{ gridColumn: 'span 3' }}>
+                    <label className="form-label" style={{ fontSize: 12 }}>Society Amenities</label>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      {['Gym', 'Pool', 'Security', 'Clubhouse', 'Power Backup'].map(act => (
+                        <button key={act} type="button" onClick={() => {
+                          const curr = formData.societyAmenities || [];
+                          setFormData(p => ({...p, societyAmenities: curr.includes(act) ? curr.filter(a => a !== act) : [...curr, act]}));
+                        }} style={{ padding: '6px 12px', borderRadius: '16px', fontSize: '12px', border: (formData.societyAmenities || []).includes(act) ? '1px solid #58A429' : '1px solid #D1D5DB', background: (formData.societyAmenities || []).includes(act) ? '#ECFDF5' : '#fff', color: (formData.societyAmenities || []).includes(act) ? '#58A429' : '#374151', cursor: 'pointer' }}>{act}</button>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+              {formData.propertyType === 'Cottage' && (
+                <>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="bonfireArea" checked={formData.bonfireArea} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Bonfire Area</label>
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: 13 }}><input type="checkbox" name="outdoorSeating" checked={formData.outdoorSeating} onChange={handleChangeCheckbox} style={{ accentColor: '#58A429' }} /> Outdoor Seating</label>
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>View Type</label>
+                    <select className="form-select" name="viewType" value={formData.viewType} onChange={handleChange}>
+                      <option value="Mountain">Mountain</option>
+                      <option value="Forest">Forest</option>
+                      <option value="River">River</option>
+                      <option value="Valley">Valley</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>Nearest Hiking Trail</label>
+                    <input className="form-input" type="text" name="nearestHikingTrail" value={formData.nearestHikingTrail} onChange={handleChange} placeholder="e.g. Pine Ridge Trail" />
+                  </div>
+                  <div>
+                    <label className="form-label" style={{ fontSize: 12 }}>Distance from City (km)</label>
+                    <input className="form-input" type="number" name="distanceFromCity" value={formData.distanceFromCity} onChange={handleChange} placeholder="e.g. 15" />
+                  </div>
+                </>
+              )}
+              {formData.propertyType === 'Homestay' && (
+                <div style={{ gridColumn: 'span 3', color: '#6B7280', fontSize: '13px' }}>
+                  All required Homestay fields are covered in other sections.
+                </div>
+              )}
             </div>
           </div>
 

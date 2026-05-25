@@ -16,6 +16,13 @@ import {
 
 const API = `${import.meta.env.VITE_API_BASE}`;
 
+const parseNumber = (val) => {
+  if (typeof val === 'number') return val;
+  if (!val) return '';
+  const parsed = parseFloat(String(val).replace(/[^\d.-]/g, ''));
+  return isNaN(parsed) ? '' : parsed;
+};
+
 export default function AllProperties() {
   const [properties, setProperties] = useState([]);
   const [stats, setStats] = useState({
@@ -111,7 +118,7 @@ export default function AllProperties() {
       if (searchQuery) params.append("search", searchQuery);
       if (propertyType) params.append("type", propertyType);
       if (dateFrom) params.append("date", dateFrom);
-      
+
       // Fetch Active properties (default when no status is passed)
       const resActive = await fetch(`${API}/properties?${params.toString()}`);
       const dataActive = await resActive.json();
@@ -127,7 +134,7 @@ export default function AllProperties() {
 
       setProperties(combinedProperties);
       if (dataActive?.stats) setStats(dataActive.stats);
-      
+
     } catch (err) {
       console.error(err);
     } finally {
@@ -288,7 +295,7 @@ export default function AllProperties() {
     fetchExperiences();
     fetchCountries();
     fetchAmenitiesForType(p.type || p.category || "Homestay");
-    
+
     setForm({
       type: p.type || p.category || "Homestay",
       name: p.name || "",
@@ -297,9 +304,9 @@ export default function AllProperties() {
       ownerId: typeof p.owner === 'object' ? (p.owner?._id || "") : (p.owner || ""),
       location: p.location || "",
       full_address: p.full_address || p.location || "",
-      latitude: p.latitude || "",
-      longitude: p.longitude || "",
-      price: p.price_per_night || p.price || "",
+      latitude: parseNumber(p.latitude),
+      longitude: parseNumber(p.longitude),
+      price: parseNumber(p.price_per_night !== undefined ? p.price_per_night : p.price),
       status: p.status || "Active",
       description: p.description || "",
       checkIn: p.checkIn || "3:00 PM",
@@ -310,8 +317,8 @@ export default function AllProperties() {
       beds: p.beds || 2,
       capacity: p.capacity || 3,
       bathRooms: p.bathRooms || 1,
-      originalPrice: p.originalPrice || "",
-      taxAmount: p.taxAmount || "",
+      originalPrice: parseNumber(p.originalPrice),
+      taxAmount: parseNumber(p.taxAmount),
       highlights: p.highlights || {
         breakfastIncluded: false,
         parkingAvailable: false,
@@ -325,7 +332,7 @@ export default function AllProperties() {
     setSelectedAmenitiesList(p.amenities || []);
     setSelectedExperiences(p.experiences || []);
     setLandmarksList([]); // Will need separate fetch if editing landmarks
-    
+
     if (p.countryId) setSelectedCountry({ id: p.countryId, name: p.countryName || "" });
     if (p.stateId) setSelectedState({ id: p.stateId, name: p.stateName || "" });
     if (p.cityId) setSelectedCity({ id: p.cityId, name: p.cityName || "" });
@@ -394,7 +401,7 @@ export default function AllProperties() {
           const adminUser = JSON.parse(adminUserStr);
           adminId = adminUser.id || adminUser._id;
           adminContact = adminUser.phone || adminUser.email || "N/A";
-        } catch {}
+        } catch { }
       }
       if (adminId && value === adminId) {
         setForm((prev) => ({
@@ -790,18 +797,7 @@ export default function AllProperties() {
                   onKeyDown={(e) => e.key === "Enter" && fetchProperties()}
                 />
               </div>
-              <button
-                className="props-btn-add"
-                onClick={openPanel}
-                style={{
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 4,
-                }}
-              >
-                <Plus size={16} /> Add Property
-              </button>
+
             </div>
           </div>
         </div>
@@ -1158,7 +1154,7 @@ export default function AllProperties() {
                             </option>
                           );
                         }
-                      } catch (e) {}
+                      } catch (e) { }
                     }
                     return null;
                   })()}

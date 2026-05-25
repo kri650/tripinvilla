@@ -199,37 +199,24 @@ export default function PropertyRooms() {
           <div className="props-table-toolbar" style={{ margin: 0, borderBottom: 'none', padding: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
             <div className="props-table-title" style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif' }}>Property Requests</div>
             
-            <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
-              {/* Date From */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
+            <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
                 <Calendar size={13} style={{ color: '#6B7280' }} />
                 <input 
                   type="date"
                   value={filterDateFrom}
-                  onChange={e => setFilterDateFrom(e.target.value)}
-                  style={{ border: 'none', outline: 'none', color: '#374151', fontSize: '13px', fontFamily: '"Outfit", sans-serif', width: '105px', cursor: 'pointer' }}
+                  onChange={(e) => setFilterDateFrom(e.target.value)}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
                 />
               </div>
 
-              {/* Date To */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
-                <Calendar size={13} style={{ color: '#6B7280' }} />
-                <input 
-                  type="date"
-                  value={filterDateTo}
-                  onChange={e => setFilterDateTo(e.target.value)}
-                  style={{ border: 'none', outline: 'none', color: '#374151', fontSize: '13px', fontFamily: '"Outfit", sans-serif', width: '105px', cursor: 'pointer' }}
-                />
-              </div>
-
-              {/* Property Type Dropdown */}
-              <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
                 <select 
                   value={selectedCategory} 
                   onChange={e => setSelectedCategory(e.target.value)}
-                  style={{ border: 'none', outline: 'none', color: '#6B7280', fontSize: '13px', cursor: 'pointer', fontFamily: '"Outfit", sans-serif', background: 'transparent' }}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
                 >
-                  <option value="">Property Type</option>
+                  <option value="">All Categories</option>
                   <option value="Villa">Villa</option>
                   <option value="Homestay">Homestay</option>
                   <option value="Resort">Resort</option>
@@ -238,57 +225,23 @@ export default function PropertyRooms() {
                 </select>
               </div>
 
-              {/* Location Input */}
-              <div style={{ display: 'flex', alignItems: 'center', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
-                <input 
-                  type="text" 
-                  placeholder="Location" 
-                  value={filterLocation}
-                  onChange={e => setFilterLocation(e.target.value)}
-                  style={{ border: 'none', outline: 'none', color: '#374151', fontSize: '13px', fontFamily: '"Outfit", sans-serif', width: '100px' }}
-                />
-              </div>
-
-              {/* Clear Filter / Filter Button */}
               <button 
-                onClick={() => {
-                  setFilterDateFrom('');
-                  setFilterDateTo('');
-                  setSelectedCategory('');
-                  setFilterLocation('');
-                  setSearchQuery('');
-                }}
-                style={{ 
-                  display: 'flex', 
-                  alignItems: 'center', 
-                  gap: '6px', 
-                  border: '1px solid #58A429', 
-                  borderRadius: '8px', 
-                  padding: '6px 16px', 
-                  background: '#ffffff', 
-                  color: '#58A429', 
-                  fontSize: '13px', 
-                  fontWeight: 600, 
-                  cursor: 'pointer',
-                  fontFamily: '"Outfit", sans-serif',
-                  transition: 'all 0.2s ease'
-                }}
-                onMouseOver={e => { e.currentTarget.style.background = '#FAFDF2'; }}
-                onMouseOut={e => { e.currentTarget.style.background = '#ffffff'; }}
+                className="props-btn-filter" 
+                onClick={fetchRequests} 
+                style={{ cursor: 'pointer', border: '1px solid #58A429', background: '#fff', color: '#58A429', padding: '6px 16px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}
               >
-                <Filter size={13} style={{ color: '#58A429' }} />
-                <span>Filter</span>
+                <Filter size={13} /> Filter
               </button>
 
-              {/* Search input with search icon */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', width: '160px' }}>
-                <Search size={13} style={{ color: '#9CA3AF' }} />
+              <div className="props-search-wrap" style={{ width: 240, margin: 0, border: '1px solid #E5E7EB', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 8, padding: '6px 12px' }}>
+                <Search size={14} style={{ color: '#9CA3AF' }} />
                 <input 
                   type="text" 
-                  placeholder="Search" 
+                  placeholder="Search properties..." 
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
-                  style={{ border: 'none', outline: 'none', color: '#374151', fontSize: '13px', fontFamily: '"Outfit", sans-serif', width: '100%' }}
+                  onKeyDown={e => e.key === 'Enter' && fetchRequests()}
+                  style={{ border: 'none', outline: 'none', width: '100%', fontSize: 13 }}
                 />
               </div>
             </div>
@@ -362,13 +315,13 @@ export default function PropertyRooms() {
         </div>
       </div>
 
-      {/* Requested Property Details Modal (Matches Screenshot 1 exactly) */}
+      {/* Requested Property Details Modal */}
       {selectedRequest && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 24 }}>
-          <div style={{ background: '#fff', padding: 32, borderRadius: 20, width: 860, maxWidth: '100%', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative' }}>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000, padding: 24, overflowY: 'auto' }}>
+          <div style={{ background: '#fff', padding: 32, borderRadius: 20, width: 900, maxWidth: '100%', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.25)', position: 'relative', maxHeight: '90vh', overflowY: 'auto' }}>
             <button 
               onClick={() => setSelectedRequest(null)}
-              style={{ position: 'absolute', top: 20, right: 20, background: '#F3F4F6', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6B7280', cursor: 'pointer' }}
+              style={{ position: 'absolute', top: 20, right: 20, background: '#F3F4F6', border: 'none', borderRadius: '50%', width: 32, height: 32, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#6B7280', cursor: 'pointer', zIndex: 10 }}
             >
               <X size={18} />
             </button>
@@ -376,52 +329,142 @@ export default function PropertyRooms() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', borderBottom: '1px solid #E5E7EB', paddingBottom: 20, marginBottom: 24 }}>
               <div>
                 <h3 style={{ fontSize: 20, fontWeight: 700, color: '#111827', margin: 0 }}>Requested Property Details</h3>
-                <p style={{ fontSize: 13, color: '#6B7280', margin: '4px 0 0 0' }}>The property details of requested property</p>
+                <p style={{ fontSize: 13, color: '#6B7280', margin: '4px 0 0 0' }}>Room request: {selectedRequest.requestNo}</p>
               </div>
               <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
-                <button 
-                  onClick={() => handleAccept(selectedRequest._id)}
-                  style={{ background: '#58A429', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
-                >
-                  <Check size={16} /> Accept Request
-                </button>
-                <button 
-                  onClick={() => handleReject(selectedRequest._id)}
-                  style={{ background: '#fff', color: '#EF4444', border: '1px solid #EF4444', padding: '10px 24px', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
-                >
-                  <X size={16} /> Reject
-                </button>
+                {selectedRequest.status !== 'Accepted' && (
+                  <button 
+                    onClick={() => handleAccept(selectedRequest._id)}
+                    style={{ background: '#58A429', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+                  >
+                    <Check size={16} /> Accept Request
+                  </button>
+                )}
+                {selectedRequest.status !== 'Rejected' && (
+                  <button 
+                    onClick={() => handleReject(selectedRequest._id)}
+                    style={{ background: '#fff', color: '#EF4444', border: '1px solid #EF4444', padding: '10px 24px', borderRadius: 8, fontSize: 14, fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}
+                  >
+                    <X size={16} /> Reject
+                  </button>
+                )}
               </div>
             </div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.1fr', gap: 28, alignItems: 'flex-start' }}>
-              <div style={{ width: '100%', height: 260, borderRadius: 16, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
-                <img src={selectedRequest.image || "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80"} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+            {/* Property Name & Status */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+              <div>
+                <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', margin: 0 }}>{selectedRequest.propertyName || 'Property'}</h2>
+                <p style={{ fontSize: 13, color: '#58A429', margin: '4px 0 0 0', display: 'flex', alignItems: 'center', gap: 4 }}>
+                  <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#58A429' }}></span>
+                  {selectedRequest.location || 'Location N/A'}
+                </p>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-                <div>
-                  <h2 style={{ fontSize: 22, fontWeight: 700, color: '#111827', margin: 0 }}>{selectedRequest.propertyName || "Aparthotel Stare Miasto, Deluxe"}</h2>
-                  <p style={{ fontSize: 13, color: '#58A429', margin: '4px 0 0 0', display: 'flex', alignItems: 'center', gap: 4 }}>
-                    <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#58A429' }}></span>
-                    {selectedRequest.location || "Kasol, Himachal Pradesh, India"}
-                  </p>
+              <span style={{
+                padding: '4px 14px', borderRadius: 20, fontSize: 12, fontWeight: 600,
+                background: selectedRequest.status === 'Accepted' ? '#DCFCE7' : selectedRequest.status === 'Rejected' ? '#FEE2E2' : '#FEF3C7',
+                color: selectedRequest.status === 'Accepted' ? '#16A34A' : selectedRequest.status === 'Rejected' ? '#EF4444' : '#D97706'
+              }}>
+                {selectedRequest.status || 'Pending'}
+              </span>
+            </div>
+
+            {/* Main Grid: Image + Room Details */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 24, marginBottom: 24 }}>
+              {/* Room Image */}
+              <div style={{ width: '100%', borderRadius: 12, overflow: 'hidden', boxShadow: '0 4px 12px rgba(0,0,0,0.08)', aspectRatio: '4/3' }}>
+                <img 
+                  src={selectedRequest.room_image_url || selectedRequest.image || "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80"} 
+                  alt="Room" 
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
+                />
+              </div>
+
+              {/* Room Core Details */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+                {/* Room Type */}
+                <div style={{ background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 10, padding: '12px 16px' }}>
+                  <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Room Type</div>
+                  <div style={{ fontSize: 16, fontWeight: 700, color: '#111827' }}>{selectedRequest.room_type || '—'}</div>
                 </div>
 
-                <div>
-                  <h4 style={{ fontSize: 15, fontWeight: 700, color: '#111827', margin: '0 0 6px 0' }}>About Property</h4>
-                  <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.6, margin: 0 }}>
-                    {selectedRequest.about || "No description provided."}
-                  </p>
+                {/* Bed & Price */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
+                    <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Bed Type</div>
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>{selectedRequest.bed_type || '—'}</div>
+                  </div>
+                  <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
+                    <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Price / Night</div>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#58A429' }}>
+                      {selectedRequest.price_per_room ? `₹${Number(selectedRequest.price_per_room).toLocaleString()}` : `₹${selectedRequest.priceByOwner || '—'}`}
+                    </div>
+                  </div>
                 </div>
 
-                <div style={{ paddingTop: 12, borderTop: '1px solid #F3F4F6', display: 'flex', flexDirection: 'column' }}>
-                  <span style={{ fontSize: 11, color: '#6B7280', fontWeight: 500 }}>Price By Owner</span>
-                  <div style={{ fontSize: 20, fontWeight: 700, color: '#58A429', marginTop: 2 }}>
-                    {typeof selectedRequest.priceByOwner === 'number' ? `₹${selectedRequest.priceByOwner.toLocaleString()}` : `₹${selectedRequest.priceByOwner || '1,400'}`}/night
+                {/* Check-In / Check-Out */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
+                    <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Check-In</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{selectedRequest.checkin_time || '—'}</div>
+                  </div>
+                  <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
+                    <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Check-Out</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{selectedRequest.checkout_time || '—'}</div>
+                  </div>
+                </div>
+
+                {/* Owner Info */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                  <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
+                    <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Owner</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{selectedRequest.ownerName || '—'}</div>
+                  </div>
+                  <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
+                    <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Contact</div>
+                    <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{selectedRequest.ownerContact || '—'}</div>
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Amenities */}
+            {selectedRequest.amenities_types && selectedRequest.amenities_types.length > 0 && (
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 10 }}>Amenities</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {selectedRequest.amenities_types.map((a, i) => (
+                    <span key={i} style={{ padding: '4px 12px', background: '#EFF6FF', color: '#2563EB', borderRadius: 20, fontSize: 12, fontWeight: 500, border: '1px solid #BFDBFE' }}>
+                      {a}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Offers */}
+            {selectedRequest.offers && selectedRequest.offers.length > 0 && (
+              <div style={{ marginBottom: 20 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 10 }}>Offers Included</div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {selectedRequest.offers.map((o, i) => (
+                    <span key={i} style={{ padding: '4px 12px', background: '#F0FDF4', color: '#16A34A', borderRadius: 20, fontSize: 12, fontWeight: 500, border: '1px solid #BBF7D0' }}>
+                      ✓ {o}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* About / Description */}
+            {selectedRequest.about && (
+              <div style={{ marginBottom: 0 }}>
+                <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 8 }}>About Property</div>
+                <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.6, margin: 0, background: '#F9FAFB', padding: '12px 14px', borderRadius: 8 }}>
+                  {selectedRequest.about}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

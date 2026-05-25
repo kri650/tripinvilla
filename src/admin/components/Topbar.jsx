@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Bell, Calendar, ChevronDown } from 'lucide-react';
 
@@ -28,13 +29,24 @@ const PAGE_TITLES = {
   '/admin/users/logout':               'Log Out',
 };
 
-function formatMonthYear() {
-  return new Date().toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+function formatMonthYear(dateStr) {
+  const d = dateStr ? new Date(dateStr) : new Date();
+  return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
 }
 
 export default function Topbar() {
   const location = useLocation();
   const title = PAGE_TITLES[location.pathname] || 'Dashboard';
+  
+  const [selectedMonth, setSelectedMonth] = useState(() => {
+    return localStorage.getItem('dashboard_month') || '';
+  });
+
+  const handleMonthChange = (e) => {
+    const val = e.target.value;
+    setSelectedMonth(val);
+    localStorage.setItem('dashboard_month', val);
+  };
 
   return (
     <header className="topbar">
@@ -46,19 +58,27 @@ export default function Topbar() {
       {/* Right – date filter + user */}
       <div className="topbar-right">
         {/* Date picker pill */}
-        <button className="topbar-date-btn">
+        <div className="topbar-date-btn" style={{ position: 'relative', display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 14px', borderRadius: '8px', border: '1px solid #E5E7EB', background: '#fff' }}>
+          <input 
+            type="month" 
+            value={selectedMonth}
+            max={new Date().toISOString().slice(0, 7)}
+            onChange={handleMonthChange}
+            onClick={(e) => { try { e.target.showPicker(); } catch(err) {} }}
+            style={{ position: 'absolute', opacity: 0, top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer', zIndex: 10 }}
+          />
           <Calendar style={{ width: 14, height: 14, color: '#6B7280' }} />
-          <span>{formatMonthYear()}</span>
+          <span>{formatMonthYear(selectedMonth)}</span>
           <ChevronDown style={{ width: 13, height: 13, color: '#9CA3AF' }} />
-        </button>
+        </div>
 
         {/* User block */}
-        <div className="topbar-user">
+        <div className="topbar-user" style={{ position: 'relative' }}>
           {(() => {
             const adminUserStr = localStorage.getItem('admin_user');
-            let name = 'Admin User';
+            let name = 'TripInVilla Admin';
             let email = 'admin@tripinvilla.com';
-            let initial = 'A';
+            let initial = 'T';
             if (adminUserStr) {
               try {
                 const u = JSON.parse(adminUserStr);
@@ -84,6 +104,21 @@ export default function Topbar() {
             );
           })()}
           <ChevronDown style={{ width: 13, height: 13, color: '#9CA3AF', marginLeft: 4 }} />
+          <select 
+            onChange={(e) => {
+              if (e.target.value === 'logout') {
+                window.location.href = '/admin/users/logout';
+              } else if (e.target.value === 'profile') {
+                window.location.href = '/admin/content/account';
+              }
+            }}
+            value=""
+            style={{ position: 'absolute', opacity: 0, top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer', zIndex: 10 }}
+          >
+            <option value="" disabled>Select Action</option>
+            <option value="profile">Profile</option>
+            <option value="logout">Log Out</option>
+          </select>
         </div>
       </div>
     </header>

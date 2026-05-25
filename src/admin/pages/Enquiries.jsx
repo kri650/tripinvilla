@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Filter, Search, ChevronDown, MessageSquare, X, Clock, CheckCircle } from 'lucide-react';
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = import.meta.env.VITE_API_BASE || 'http://localhost:8000/api';
 
 export default function Enquiries() {
   const [enquiries, setEnquiries] = useState([]);
@@ -20,7 +20,7 @@ export default function Enquiries() {
     setLoading(true);
     try {
       const token = getToken();
-      const res = await fetch(`${API_BASE}/enquiries/owner`, {
+      const res = await fetch(`${API_BASE}/enquiries`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();

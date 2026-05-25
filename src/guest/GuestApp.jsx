@@ -404,6 +404,17 @@ export default function GuestApp() {
     }
   }, [activeMenu, token, openLoginModal]);
 
+  React.useEffect(() => {
+    if (activeMenu === 'Detail' && activeDetailProp?.title) {
+      document.title = `Tripinstays | ${activeDetailProp.title}`;
+    } else if (activeMenu === 'Home') {
+      document.title = 'Tripinstays | Find Your Perfect Stay';
+    } else {
+      document.title = `Tripinstays | ${activeMenu}`;
+    }
+    window.scrollTo(0, 0);
+  }, [activeMenu, activeDetailProp]);
+
   const toggleMockWishlist = (title) => {
     if (!token) {
       setAuthMode('login');

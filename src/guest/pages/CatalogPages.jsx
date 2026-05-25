@@ -313,11 +313,21 @@ export default function CatalogPages(props) {
           {activeDetailProp && activeDetailProp.experiences && activeDetailProp.experiences.length > 0 && (
             <div className="about-property-section">
               <h3 className="section-subtitle-title">Unique Experiences</h3>
-              <div style={{ display: 'flex', gap: '12px', overflowX: 'auto', paddingBottom: '8px' }}>
+              <p style={{ fontSize: '13px', color: '#6B7280', marginBottom: '16px', marginTop: '-4px' }}>
+                This property offers the following unique experiences for guests
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {activeDetailProp.experiences.map((exp, idx) => (
-                  <div key={idx} style={{ background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '12px', padding: '12px 20px', display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
-                    <span style={{ fontSize: '24px' }}>{exp.representingIcon || '✨'}</span>
-                    <span style={{ fontSize: '14px', fontWeight: 600, color: '#065F46', fontFamily: '"Outfit", sans-serif' }}>{exp.experienceName}</span>
+                  <div key={idx} style={{ background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '12px', padding: '14px 20px', display: 'flex', gap: '14px', alignItems: 'center' }}>
+                    <span style={{ fontSize: '28px', flexShrink: 0 }}>{exp.representingIcon || exp.icon || '✨'}</span>
+                    <div>
+                      <div style={{ fontSize: '14px', fontWeight: 700, color: '#065F46', fontFamily: '"Outfit", sans-serif' }}>
+                        {exp.experienceName || exp.name}
+                      </div>
+                      <div style={{ fontSize: '12px', color: '#047857', marginTop: '2px' }}>
+                        This property with <strong>{exp.experienceName || exp.name}</strong> experience is available here
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>

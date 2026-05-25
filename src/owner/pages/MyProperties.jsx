@@ -3,6 +3,13 @@ import { Search, Filter, Calendar, ChevronDown, CheckCircle2, XCircle, MoreVerti
 import { useNavigate } from 'react-router-dom';
 import { propertyService, dashboardService } from '../services/api';
 
+const parseNumber = (val) => {
+  if (typeof val === 'number') return val;
+  if (!val) return '';
+  const parsed = parseFloat(String(val).replace(/[^\d.-]/g, ''));
+  return isNaN(parsed) ? '' : parsed;
+};
+
 const API_BASE = import.meta.env.VITE_API_BASE || `${import.meta.env.VITE_API_BASE}`;
 
 export default function MyProperties() {
@@ -373,11 +380,11 @@ export default function MyProperties() {
       locationId: p.locationId || '',
       locationName: p.locationName || '',
       full_address: p.full_address || p.location || '',
-      latitude: p.latitude || '',
-      longitude: p.longitude || '',
-      originalPrice: p.originalPrice || '',
-      price: p.price_per_night !== undefined ? p.price_per_night : (p.price || ''),
-      taxAmount: p.taxAmount || '',
+      latitude: parseNumber(p.latitude),
+      longitude: parseNumber(p.longitude),
+      originalPrice: parseNumber(p.originalPrice),
+      price: parseNumber(p.price_per_night !== undefined ? p.price_per_night : p.price),
+      taxAmount: parseNumber(p.taxAmount),
       area: p.area || '31 sq. ft.',
       bedRooms: p.bedRooms !== undefined ? p.bedRooms : 1,
       beds: p.beds !== undefined ? p.beds : 2,

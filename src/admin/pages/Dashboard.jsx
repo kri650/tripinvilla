@@ -72,10 +72,7 @@ export default function Dashboard() {
 
   useEffect(() => { fetchData(); }, [selectedYear]);
 
-  const handleFilterClick = () => {
-    const y = prompt('Enter Year (e.g. 2026):', selectedYear);
-    if (y) setSelectedYear(y);
-  };
+
 
   const StatCard = ({ icon: Icon, label, value, badge, sub, iconBg }) => (
     <div className="stat-card">
@@ -136,9 +133,20 @@ export default function Dashboard() {
           <div className="chart-card">
             <div className="chart-card-header">
               <div className="chart-card-title">Enquiries Over Time</div>
-              <button className="chart-filter" onClick={handleFilterClick} style={{ cursor: 'pointer' }}>
-                <Calendar size={12} /> {selectedYear} <ChevronDown size={11} />
-              </button>
+              <div style={{ position: 'relative' }}>
+                <button className="chart-filter" style={{ cursor: 'pointer' }}>
+                  <Calendar size={12} /> {selectedYear} <ChevronDown size={11} />
+                </button>
+                <select 
+                  value={selectedYear} 
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  style={{ position: 'absolute', opacity: 0, top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer', zIndex: 10 }}
+                >
+                  {[2026, 2025, 2024, 2023, 2022].map(y => (
+                    <option key={y} value={String(y)}>{y}</option>
+                  ))}
+                </select>
+              </div>
             </div>
             <ResponsiveContainer width="100%" height={340}>
               <BarChart data={enquiriesChartData} barSize={36} margin={{ top: 12, right: 4, left: -24, bottom: 0 }}>

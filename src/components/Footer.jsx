@@ -35,7 +35,7 @@ export default function Footer({ token, onNavigate, onRequireAuth }) {
         <div className="footer-line-divider" />
 
         <p className="footer-copyright-text">
-          © Tripinvilla.com all rights reserved
+          © {new Date().getFullYear()} Tripinvilla.com all rights reserved
         </p>
       </div>
     </footer>
