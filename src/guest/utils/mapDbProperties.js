@@ -56,7 +56,17 @@ export function mapDbProperties(dbProps, defaultList, where) {
       category: category,
       type: category,
       experiences: p.experiences || [],
-      highlights: p.highlights || [],
+      highlights: (() => {
+        if (Array.isArray(p.highlights)) return p.highlights;
+        if (p.highlights && typeof p.highlights === 'object') {
+          const hList = [];
+          if (p.highlights.breakfastIncluded) hList.push('Breakfast Included');
+          if (p.highlights.parkingAvailable) hList.push('Parking Available');
+          if (p.highlights.freeCancellation) hList.push(`Free cancellation till ${p.highlights.freeCancellationHours || 24} hrs before check-in`);
+          return hList;
+        }
+        return [];
+      })(),
       taxAmount: p.taxAmount || 0,
       mapLocation: p.mapLocation || null,
       latitude: p.latitude || null,

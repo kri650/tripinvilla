@@ -453,10 +453,23 @@ export default function PropertyMakers() {
         rooms: roomsList,
       };
 
+      const submitData = new FormData();
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value === undefined || value === null) return;
+        if (Array.isArray(value) || typeof value === 'object') {
+          submitData.append(key, JSON.stringify(value));
+        } else {
+          submitData.append(key, value);
+        }
+      });
+      selectedFiles.forEach((file) => {
+        submitData.append("images", file);
+      });
+
       if (isEditing) {
         const res = await fetch(
           `${import.meta.env.VITE_API_BASE}/master/properties/${formData.id}`,
-          { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) },
+          { method: "PUT", body: submitData },
         );
         if (res.ok) {
           alert('Property updated successfully!');
@@ -469,8 +482,7 @@ export default function PropertyMakers() {
       } else {
         const res = await fetch(`${import.meta.env.VITE_API_BASE}/master/properties`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
+          body: submitData,
         });
         if (res.ok) {
           alert('Property added successfully! It is now visible on the guest website.');
