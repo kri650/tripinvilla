@@ -70,7 +70,7 @@ export default function useGuestAuth({ API_BASE, API_ORIGIN, setActiveMenu }) {
   const openLoginModal = () => openAuthModal('login');
 
   const fetchProfileAndEnquiries = async (activeToken) => {
-    if (!activeToken) return;
+    if (!activeToken || activeToken === 'fake_token_for_user') return;
     try {
       const profileRes = await fetch(`${API_BASE}/users/profile`, {
         headers: { Authorization: `Bearer ${activeToken}` },
@@ -242,23 +242,6 @@ export default function useGuestAuth({ API_BASE, API_ORIGIN, setActiveMenu }) {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
     setAuthLoading(true);
-    // FAKE LOGIN for frontend-only testing
-    if (loginEmail === 'user@tripinvilla.com' && loginPassword === 'user123') {
-      const fakeUser = {
-        _id: 'fake_user_123',
-        name: 'Test Guest',
-        email: 'user@tripinvilla.com',
-        role: 'user',
-      };
-      localStorage.setItem('user_token', 'fake_token_for_user');
-      localStorage.setItem('user_data', JSON.stringify(fakeUser));
-      setToken('fake_token_for_user');
-      setUser(fakeUser);
-      setAuthModalOpen(false);
-      alert(`Welcome back, ${fakeUser.name}! (Offline Mode)`);
-      setAuthLoading(false);
-      return;
-    }
 
     try {
       const res = await fetch(`${API_BASE}/auth/login`, {

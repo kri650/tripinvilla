@@ -103,20 +103,6 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    // FAKE LOGIN for frontend-only testing
-    if (email === 'owner@tripinvilla.com' && password === 'owner123') {
-      const fakeOwner = {
-        _id: 'fake_owner_123',
-        name: 'Test Owner',
-        email: 'owner@tripinvilla.com',
-        role: 'owner',
-      };
-      localStorage.setItem('token', 'fake_token_for_owner');
-      localStorage.setItem('owner_user', JSON.stringify(fakeOwner));
-      navigate('/owner/dashboard', { replace: true });
-      setLoading(false);
-      return;
-    }
 
     try {
       const res = await authService.login(email, password);
