@@ -8,7 +8,7 @@ export default function usePropertyDetailData({ API_BASE, selectedProperty }) {
   const [fullPropertyDetail, setFullPropertyDetail] = useState(null);
 
   useEffect(() => {
-    if (selectedProperty && selectedProperty._id) {
+    if (selectedProperty && selectedProperty._id && /^[0-9a-fA-F]{24}$/.test(selectedProperty._id)) {
       // Fetch property rooms
       fetch(`${API_BASE}/property-requests/property/${selectedProperty._id}`)
         .then((res) => res.json())

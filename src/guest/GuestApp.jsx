@@ -322,7 +322,7 @@ export default function GuestApp() {
     const rRating = reviewRating;
 
     // Simulate submission for mock properties that don't have database IDs
-    if (!propToUse._id) {
+    if (!propToUse._id || !/^[0-9a-fA-F]{24}$/.test(propToUse._id)) {
       const mockPropKey = String(propToUse.title || propToUse.propertyName || 'prop')
         .trim()
         .toLowerCase()
