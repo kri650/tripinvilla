@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { ChevronDown, Edit2, Trash2, MoreVertical } from "lucide-react";
+import { ChevronDown, Edit2, Trash2, MoreVertical, BedDouble } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import PropertyRoomManager from "../properties/PropertyRoomManager";
 
 const parseNumber = (val) => {
   if (typeof val === 'number') return val;
@@ -53,6 +54,7 @@ export default function PropertyMakers() {
     bonfireArea: false, viewType: "Mountain", outdoorSeating: false, nearestHikingTrail: "", distanceFromCity: "",
   });
   const [isEditing, setIsEditing] = useState(false);
+  const [managingRoomsProperty, setManagingRoomsProperty] = useState(null);
 
   // Owners Data
   const [ownersList, setOwnersList] = useState([]);
@@ -1954,13 +1956,33 @@ export default function PropertyMakers() {
                         </span>
                       </td>
                       <td style={{ textAlign: "right", paddingRight: 24 }}>
-                        <div
+                      <div
                           style={{
                             display: "flex",
                             justifyContent: "flex-end",
                             gap: 8,
                           }}
                         >
+                          <button
+                            onClick={() => setManagingRoomsProperty(p)}
+                            title="Manage Rooms"
+                            style={{
+                              color: "#2563EB",
+                              background: "#DBEAFE",
+                              border: "none",
+                              borderRadius: 6,
+                              cursor: "pointer",
+                              padding: "5px 7px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 4,
+                              fontSize: 11,
+                              fontWeight: 600,
+                            }}
+                          >
+                            <BedDouble size={13} strokeWidth={2} />
+                            Rooms
+                          </button>
                           <button
                             onClick={() => handleEdit(p)}
                             style={{
@@ -1996,5 +2018,12 @@ export default function PropertyMakers() {
         </div>
       </div>
     </div>
+
+    {managingRoomsProperty && (
+      <PropertyRoomManager
+        property={managingRoomsProperty}
+        onClose={() => setManagingRoomsProperty(null)}
+      />
+    )}
   );
 }
