@@ -204,10 +204,10 @@ export default function AdminList() {
 
       {showAddModal && (
         <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 1000 }}>
-          <div className="admin-table-card" style={{ width: '800px', margin: 0, border: 'none', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
+          <div style={{ width: '800px', maxHeight: '90vh', overflowY: 'auto', background: '#FFFFFF', borderRadius: '16px', padding: '32px', boxShadow: '0 20px 25px -5px rgba(0,0,0,0.1)' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
                <h3 style={{ margin: 0, fontSize: 18, fontWeight: 700, color: '#111827' }}>User Details</h3>
-               <button className="admin-toolbar-btn add" onClick={() => setShowAddModal(false)}>Close</button>
+               <button className="admin-toolbar-btn add" onClick={() => setShowAddModal(false)} style={{ background: '#F3F4F6', color: '#374151', border: 'none' }}>Close</button>
             </div>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', marginBottom: '32px' }}>
