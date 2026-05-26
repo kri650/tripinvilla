@@ -1,0 +1,40 @@
+/* ==========================================================================
+   REVIEW MODAL — Share Your Experience / Star Rating
+   Used by: modals/ReviewModal.jsx
+   ========================================================================== */
+
+.review-modal-card-size {
+  width: 560px !important;
+  max-width: 95vw;
+  padding: 40px !important;
+}
+
+.review-modal-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.review-submit-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.review-star-selector-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 24px;
+}
+
+.review-star-select-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.1s ease-in-out;
+  padding: 4px;
+}
+.review-star-select-btn:hover { transform: scale(1.15); }

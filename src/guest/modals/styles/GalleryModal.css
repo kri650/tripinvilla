@@ -1,0 +1,17 @@
+/* ==========================================================================
+   GALLERY MODAL — Full Screen Photo Viewer
+   Used by: modals/GalleryModal.jsx
+   ========================================================================== */
+
+/* Gallery modal uses only inline styles + lucide icons.
+   Add any GalleryModal-specific class overrides below: */
+
+.gallery-modal-overlay-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

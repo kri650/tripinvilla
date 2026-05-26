@@ -1,4 +1,7 @@
-/* Aggregated guest styles (split per page/section). */
+/* Aggregated guest styles (split per page/section).
+   Each section/page maps 1:1 to its CSS file.            */
+
+/* ── Core Pages ─────────────────────────────────────── */
 @import "./guest/styles/00-hero-navbar-search.css";
 @import "./guest/styles/01-home-destinations-carousel.css";
 @import "./guest/styles/02-home-section-titles.css";
@@ -16,4 +19,13 @@
 @import "./guest/styles/14-terms.css";
 @import "./guest/styles/15-recommend.css";
 @import "./guest/styles/16-list-your-place.css";
-@import "./guest/styles/17-modals-and-widgets.css";
+
+/* ── Modals (one CSS per modal component) ────────────── */
+@import "./guest/modals/styles/AuthModal.css";
+@import "./guest/modals/styles/ContactHostModal.css";
+@import "./guest/modals/styles/ReviewModal.css";
+@import "./guest/modals/styles/GalleryModal.css";
+@import "./guest/modals/styles/EditProfileModal.css";
+
+/* ── Shared Widgets ──────────────────────────────────── */
+@import "./guest/styles/17-shared-widgets.css";
