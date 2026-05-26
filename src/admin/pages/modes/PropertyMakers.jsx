@@ -62,6 +62,8 @@ export default function PropertyMakers() {
   // Upload/images state
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const [roomsList, setRoomsList] = useState([]);
+  const [roomForm, setRoomForm] = useState({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
   const fileInputRef = React.useRef(null);
 
   // Amenities list
@@ -404,6 +406,7 @@ export default function PropertyMakers() {
           ...existingImages,
           ...selectedFiles.map((f) => URL.createObjectURL(f)),
         ], // Note: Files need real upload in a real scenario
+      rooms: roomsList,
       };
 
       if (isEditing) {
@@ -472,6 +475,8 @@ export default function PropertyMakers() {
       setSelectedCity({ id: "", name: "" });
       setSelectedArea({ id: "", name: "" });
       setExistingImages([]);
+      setRoomsList([]);
+      setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
       setSelectedFiles([]);
       setLandmarksList([]);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -517,6 +522,7 @@ export default function PropertyMakers() {
         freeCancellationHours: "24",
       },
     });
+    setRoomsList(Array.isArray(p.rooms) ? p.rooms : []);
     setSelectedAmenitiesList(Array.isArray(p.amenities) ? p.amenities : []);
     setSelectedExperiences(
       Array.isArray(p.experiences) ? p.experiences.map((e) => e._id || e) : [],
@@ -1495,6 +1501,72 @@ export default function PropertyMakers() {
               )}
             </div>
           </div>
+
+          {/* Rooms (for Hotel / Resort) */}
+          {(formData.propertyType === 'Hotel' || formData.propertyType === 'Resort') && (
+            <div className="form-group" style={{ borderTop: "1px solid #E5E7EB", paddingTop: 16, paddingBottom: 16 }}>
+              <label className="form-label" style={{ fontFamily: '"Outfit", sans-serif', marginBottom: 8, fontSize: 15, color: '#111827' }}>
+                Room Types (Hotel / Resort)
+              </label>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 12, marginBottom: 12, alignItems: 'flex-end' }}>
+                <div>
+                  <label style={{ fontSize: 12, color: '#4B5563', marginBottom: 4, display: 'block' }}>Room Type</label>
+                  <select className="form-input" value={roomForm.roomType} onChange={e => setRoomForm(p => ({ ...p, roomType: e.target.value }))}>
+                    {['Standard', 'Deluxe', 'Suite', 'Executive', 'Premium', 'Presidential', 'Family Room', 'Double', 'Single', 'Twin'].map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={{ fontSize: 12, color: '#4B5563', marginBottom: 4, display: 'block' }}>Room Name</label>
+                  <input type="text" className="form-input" value={roomForm.roomName} onChange={e => setRoomForm(p => ({ ...p, roomName: e.target.value }))} placeholder="e.g. Sea View Suite" />
+                </div>
+                <div>
+                  <label style={{ fontSize: 12, color: '#4B5563', marginBottom: 4, display: 'block' }}>Price/Night (₹)</label>
+                  <input type="number" className="form-input" value={roomForm.pricePerNight} onChange={e => setRoomForm(p => ({ ...p, pricePerNight: e.target.value }))} placeholder="e.g. 3500" />
+                </div>
+                <div>
+                  <label style={{ fontSize: 12, color: '#4B5563', marginBottom: 4, display: 'block' }}>Bed Type</label>
+                  <select className="form-input" value={roomForm.bedType} onChange={e => setRoomForm(p => ({ ...p, bedType: e.target.value }))}>
+                    {['Single', 'Double', 'Queen', 'King', 'Twin', 'Bunk'].map(t => <option key={t} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                  <div>
+                    <label style={{ fontSize: 12, color: '#4B5563', marginBottom: 4, display: 'block' }}>Guests</label>
+                    <input type="number" className="form-input" min={1} value={roomForm.maxGuests} onChange={e => setRoomForm(p => ({ ...p, maxGuests: e.target.value }))} />
+                  </div>
+                  <div>
+                    <label style={{ fontSize: 12, color: '#4B5563', marginBottom: 4, display: 'block' }}>Count</label>
+                    <input type="number" className="form-input" min={1} value={roomForm.count} onChange={e => setRoomForm(p => ({ ...p, count: e.target.value }))} />
+                  </div>
+                </div>
+              </div>
+              <button type="button"
+                onClick={() => {
+                  if (!roomForm.roomName.trim() || !roomForm.pricePerNight) { alert('Please fill Room Name and Price.'); return; }
+                  setRoomsList(prev => [...prev, { ...roomForm, pricePerNight: Number(roomForm.pricePerNight), maxGuests: Number(roomForm.maxGuests), count: Number(roomForm.count) }]);
+                  setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
+                }}
+                style={{ padding: '8px 20px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: 600, marginBottom: 12 }}>
+                + Add Room Type
+              </button>
+              {roomsList.length > 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {roomsList.map((room, idx) => (
+                    <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 8, padding: '10px 14px' }}>
+                      <div style={{ flex: 1 }}>
+                        <span style={{ fontWeight: 700, color: '#111827', fontSize: 13 }}>{room.roomName || room.roomType}</span>
+                        <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed · {room.maxGuests} guests · {room.count} rooms</span>
+                        <span style={{ color: '#58A429', fontWeight: 600, fontSize: 13, marginLeft: 8 }}>₹{room.pricePerNight}/night</span>
+                      </div>
+                      <button type="button" onClick={() => setRoomsList(prev => prev.filter((_, i) => i !== idx))}
+                        style={{ background: 'none', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {roomsList.length === 0 && <p style={{ fontSize: 12, color: '#9CA3AF' }}>No room types added yet.</p>}
+            </div>
+          )}
 
           <div className="form-grid-3">
             <div className="form-group" style={{ gridColumn: "span 2" }}>
