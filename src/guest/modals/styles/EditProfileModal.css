@@ -3,5 +3,161 @@
    Used by: modals/EditProfileModal.jsx
    ========================================================================== */
 
-/* EditProfileModal uses only inline styles.
-   Add any EditProfileModal-specific class overrides below: */
+.edit-profile-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-profile-card {
+  background: #ffffff;
+  max-width: 600px;
+  width: 90%;
+  padding: 32px;
+  border-radius: 16px;
+  position: relative;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-sizing: border-box;
+}
+
+.edit-profile-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #9CA3AF;
+  cursor: pointer;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.edit-profile-close-btn:hover {
+  color: #4B5563;
+}
+
+.edit-profile-title {
+  font-size: 22px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 20px 0;
+  font-family: "Outfit", sans-serif;
+}
+
+.edit-profile-error {
+  color: #EF4444;
+  background-color: #FEE2E2;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.edit-profile-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.edit-profile-grid-2col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  width: 100%;
+}
+
+.edit-profile-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.edit-profile-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #4B5563;
+  font-family: "Outfit", sans-serif;
+}
+
+.edit-profile-input {
+  padding: 10px 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 13.5px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: inherit;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.edit-profile-input:focus {
+  border-color: #58A429;
+  box-shadow: 0 0 0 2px rgba(88, 164, 41, 0.15);
+}
+
+.edit-profile-divider {
+  border-top: 1px solid #E5E7EB;
+  margin: 8px 0;
+}
+
+.edit-profile-sub-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 10px 0;
+  font-family: "Outfit", sans-serif;
+}
+
+.edit-profile-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.edit-profile-btn-cancel {
+  padding: 10px 20px;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #374151;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.15s ease;
+}
+
+.edit-profile-btn-cancel:hover {
+  background: #F9FAFB;
+  border-color: #9CA3AF;
+}
+
+.edit-profile-btn-submit {
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  background: #58A429;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.edit-profile-btn-submit:hover {
+  background: #489320;
+}
+
+.edit-profile-btn-submit:active {
+  transform: scale(0.98);
+}
