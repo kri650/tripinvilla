@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function useGuestEnquiry({
   API_BASE,
@@ -13,6 +13,18 @@ export default function useGuestEnquiry({
   const [guestEnquiryEmail, setGuestEnquiryEmail] = useState('');
   const [guestEnquiryMessage, setGuestEnquiryMessage] = useState('');
   const [guestEnquirySubmitting, setGuestEnquirySubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setGuestEnquiryName(user.name || '');
+      setGuestEnquiryEmail(user.email || '');
+      setGuestEnquiryPhone(user.phone || '');
+    } else {
+      setGuestEnquiryName('');
+      setGuestEnquiryEmail('');
+      setGuestEnquiryPhone('');
+    }
+  }, [user]);
 
   const handleEnquirySubmit = async (e) => {
     e.preventDefault();

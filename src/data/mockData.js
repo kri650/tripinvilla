@@ -530,3 +530,12 @@ export const savedUserReviewsFeed = [
     img: 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=300&q=80'
   }
 ];
+
+export const carouselExperiences = [
+  { name: 'Beachside Bliss', img: 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=400&q=80', count: '0 properties' },
+  { name: 'Mountain Retreats', img: 'https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=400&q=80', count: '0 properties' },
+  { name: 'Forest Stays', img: 'https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=400&q=80', count: '0 properties' },
+  { name: 'Heritage Haveli', img: 'https://images.unsplash.com/photo-1590050752117-238cb0fb12b1?auto=format&fit=crop&w=400&q=80', count: '0 properties' },
+  { name: 'Pet Friendly Getaways', img: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=400&q=80', count: '0 properties' },
+  { name: 'Private Pool Villas', img: 'https://images.unsplash.com/photo-1576013551627-0cc20b96c2a7?auto=format&fit=crop&w=400&q=80', count: '0 properties' },
+];

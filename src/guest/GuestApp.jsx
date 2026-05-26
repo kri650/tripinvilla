@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import {
   bestVillasList,
   carouselDestinations,
+  carouselExperiences,
   curatedList,
   propertiesVillasList,
 } from '../data/mockData';
@@ -313,15 +314,16 @@ export default function GuestApp() {
 
   const handleReviewFormSubmit = async (e) => {
     e.preventDefault();
-    if (!selectedProperty) return;
+    const propToUse = selectedProperty || activeDetailProp;
+    if (!propToUse) return;
 
     const rName = reviewName || user?.name || 'Guest';
     const rText = reviewText;
     const rRating = reviewRating;
 
     // Simulate submission for mock properties that don't have database IDs
-    if (!selectedProperty._id) {
-      const mockPropKey = String(selectedProperty.title || selectedProperty.propertyName || 'prop')
+    if (!propToUse._id) {
+      const mockPropKey = String(propToUse.title || propToUse.propertyName || 'prop')
         .trim()
         .toLowerCase()
         .replace(/\s+/g, '-')
@@ -352,7 +354,7 @@ export default function GuestApp() {
     }
 
     try {
-      const res = await fetch(`${API_BASE}/reviews/${selectedProperty._id}`, {
+      const res = await fetch(`${API_BASE}/reviews/${propToUse._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -443,15 +445,15 @@ export default function GuestApp() {
   }
 
   const displayDestinations = liveDestinations.length > 0 ? liveDestinations.map(d => ({
-    img: d.coverImageUrl || 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80',
+    img: d.coverImageUrl ? (d.coverImageUrl.startsWith('http') ? d.coverImageUrl : `${import.meta.env.VITE_API_BASE.replace('/api', '')}${d.coverImageUrl}`) : 'https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=400&q=80',
     name: d.destinationName || d.name,
     count: `${d.propertiesCount || 0} Homestays - Villas & Appartments`
   })) : carouselDestinations;
   const displayExperiences = liveExperiences.length > 0 ? liveExperiences.map(e => ({
-    img: e.themeCoverImageUrl || e.cover_image_url,
+    img: e.themeCoverImageUrl ? (e.themeCoverImageUrl.startsWith('http') ? e.themeCoverImageUrl : `${import.meta.env.VITE_API_BASE.replace('/api', '')}${e.themeCoverImageUrl}`) : 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=300&q=80',
     name: e.experienceName || e.name,
     count: `${e.propertiesCount || 0} properties`
-  })) : carouselDestinations;
+  })) : carouselExperiences;
 
   const getFilteredProperties = () => {
     let displayList = [...currentPropertiesVillas];

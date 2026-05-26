@@ -14,7 +14,11 @@ export default function PropertiesGridPage(props) {
     setContactStep, setContactModalOpen,
     mockWishlistedTitles, toggleMockWishlist,
     homepageContent, renderTitle,
+    mapDbProperties,
   } = props;
+
+  const mappedVillas = mapDbProperties ? mapDbProperties([], propertiesVillasList) : propertiesVillasList;
+  const mappedHomestays = mapDbProperties ? mapDbProperties([], propertiesHomestaysList) : propertiesHomestaysList;
 
   return (
     <div className="properties-page-layout fade-in">
@@ -61,7 +65,7 @@ export default function PropertiesGridPage(props) {
         </div>
 
         <div className="villas-grid">
-          {propertiesVillasList.map((villa, idx) => {
+          {mappedVillas.map((villa, idx) => {
             const isLiked = mockWishlistedTitles.includes(villa.title);
             return (
               <div key={idx} className="recommend-property-card">
@@ -108,7 +112,7 @@ export default function PropertiesGridPage(props) {
         </div>
 
         <div className="villas-grid">
-          {propertiesHomestaysList.map((homestay, idx) => {
+          {mappedHomestays.map((homestay, idx) => {
             const isLiked = mockWishlistedTitles.includes(homestay.title);
             return (
               <div key={idx} className="recommend-property-card">

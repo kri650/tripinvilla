@@ -488,7 +488,7 @@ export default function PropertyDetailPage(props) {
                 </div>
 
                 {token && user ? (
-                  <button className="btn-share-experience" onClick={() => { setReviewRating(5); setReviewText(''); setReviewName(user?.name || ''); setReviewPage('detail'); setReviewModalOpen(true); }}>
+                  <button className="btn-share-experience" onClick={() => { setReviewRating(5); setReviewText(''); setReviewName(user?.name || ''); setReviewPage(1); setReviewModalOpen(true); }}>
                     <Star size={15} fill="#FFFFFF" />
                     <span>Share Your Experience</span>
                   </button>

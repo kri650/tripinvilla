@@ -46,6 +46,15 @@ export default function UniqueExperienceMaster() {
     fetchExperiences();
   }, []);
 
+  const getFullImageUrl = (url) => {
+    if (!url) return '';
+    if (url.startsWith('http://') || url.startsWith('https://') || url.startsWith('blob:')) {
+      return url;
+    }
+    const backendHost = import.meta.env.VITE_API_BASE.replace('/api', '');
+    return `${backendHost}${url}`;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
@@ -263,7 +272,7 @@ export default function UniqueExperienceMaster() {
               </div>
               {filePreviewUrl && (
                 <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <img src={filePreviewUrl} alt="preview" style={{ width: 44, height: 32, objectFit: 'cover', borderRadius: 4, border: '1px solid #E5E7EB' }} />
+                  <img src={getFullImageUrl(filePreviewUrl)} alt="preview" style={{ width: 44, height: 32, objectFit: 'cover', borderRadius: 4, border: '1px solid #E5E7EB' }} />
                   <span style={{ fontSize: 11, color: '#6B7280' }}>Image Preview</span>
                 </div>
               )}
@@ -346,7 +355,7 @@ export default function UniqueExperienceMaster() {
                     <td style={{ fontSize: '11.5px', color: '#6B7280', whiteSpace: 'normal', maxW: '240px', lineHeight: 1.4 }}>{exp.description}</td>
                     <td>
                       <div style={{ width: 44, height: 32, borderRadius: 4, overflow: 'hidden', border: '1px solid #E5E7EB' }}>
-                        <img src={exp.themeCoverImageUrl} alt="cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                        <img src={getFullImageUrl(exp.themeCoverImageUrl)} alt="cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       </div>
                     </td>
                     <td style={{ textAlign: 'center', fontWeight: 700, color: 'var(--primary)' }}>{exp.propertiesCount ?? 0}</td>
