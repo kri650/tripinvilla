@@ -5,6 +5,27 @@ export default function AdminList() {
   const [admins, setAdmins] = useState([]);
   const [loading, setLoading] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  // Form State
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    password: '',
+    accessType: 'Full',
+    role: 'admin'
+  });
+  
+  // Permissions State (Checkboxes)
+  const [permissions, setPermissions] = useState({
+    'Property Management': { view: true, add: true, edit: true, delete: true },
+    'Masters': { view: true, add: true, edit: true, delete: true },
+    'Bookings': { view: true, add: true, edit: true, delete: true },
+    'Content Management': { view: true, add: true, edit: true, delete: true },
+    'User Access': { view: false, add: false, edit: false, delete: false },
+  });
 
   const fetchAdmins = async () => {
     setLoading(true);
@@ -22,6 +43,70 @@ export default function AdminList() {
   useEffect(() => {
     fetchAdmins();
   }, []);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handlePermissionChange = (module, action, checked) => {
+    setPermissions(prev => ({
+      ...prev,
+      [module]: { ...prev[module], [action]: checked }
+    }));
+  };
+
+  const handleSubmit = async () => {
+    if (!formData.name || !formData.email || !formData.password) {
+      alert("Name, Email, and Password are required.");
+      return;
+    }
+    
+    // Flatten permissions object into array of strings like "Property Management:add"
+    const permsArray = [];
+    Object.entries(permissions).forEach(([mod, actions]) => {
+      if (actions.view) permsArray.push(`${mod}:view`);
+      if (actions.add) permsArray.push(`${mod}:add`);
+      if (actions.edit) permsArray.push(`${mod}:edit`);
+      if (actions.delete) permsArray.push(`${mod}:delete`);
+    });
+
+    setSubmitting(true);
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/auth/admins`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...formData,
+          permissions: permsArray
+        })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert("Admin added successfully!");
+        setShowAddModal(false);
+        setFormData({ name: '', phone: '', email: '', password: '', accessType: 'Full', role: 'admin' });
+        fetchAdmins();
+      } else {
+        alert(data.message || "Failed to add admin");
+      }
+    } catch (err) {
+      console.error("Error adding admin:", err);
+      alert("An error occurred");
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this admin?")) return;
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/auth/admins/${id}`, { method: 'DELETE' });
+      if (res.ok) fetchAdmins();
+    } catch (err) {
+      console.error("Error deleting admin:", err);
+    }
+  };
 
   return (
     <div className="fade-in">
@@ -46,7 +131,12 @@ export default function AdminList() {
             </button>
             <div className="admin-toolbar-search">
               <Search size={14} />
-              <input type="text" placeholder="Search" />
+              <input 
+                type="text" 
+                placeholder="Search name, email..." 
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+              />
             </div>
             <button className="admin-toolbar-btn add" onClick={() => setShowAddModal(true)}>
               Add
@@ -76,8 +166,10 @@ export default function AdminList() {
                 <tr>
                   <td colSpan="7" style={{ textAlign: 'center', padding: '32px', color: '#6B7280' }}>No admins found</td>
                 </tr>
-              ) : (
-                admins.map((a, i) => (
+              ) : admins.filter(a => {
+                  const s = searchTerm.toLowerCase();
+                  return !s || (a.name || '').toLowerCase().includes(s) || (a.email || '').toLowerCase().includes(s) || (a.role || '').toLowerCase().includes(s);
+                }).map((a, i) => (
                   <tr key={a._id || a.id || i}>
                     <td style={{ color: '#58A429', fontWeight: 500 }}>
                       {a.createdAt ? new Date(a.createdAt).toLocaleDateString('en-GB', {day: 'numeric', month: 'short'}) + ' - 12 PM' : '20 May - 12 PM'}
@@ -98,13 +190,13 @@ export default function AdminList() {
                       )}
                     </td>
                     <td>
-                      <button className="admin-action-dots">
-                        <MoreVertical size={16} />
+                      <button className="admin-action-dots" onClick={() => handleDelete(a._id || a.id)}>
+                        <span style={{color: '#EF4444', fontSize: '13px', fontWeight: 500, cursor: 'pointer'}}>Delete</span>
                       </button>
                     </td>
                   </tr>
                 ))
-              )}
+              }
             </tbody>
           </table>
         </div>
@@ -121,32 +213,33 @@ export default function AdminList() {
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', marginBottom: '32px' }}>
                <div>
                   <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px' }}>User Name*</label>
-                  <input type="text" placeholder="Namrata Joshi" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px' }} />
+                  <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Namrata Joshi" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', boxSizing: 'border-box' }} />
                </div>
                <div>
                   <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px' }}>Phone Number*</label>
-                  <input type="text" placeholder="+91 98765 43210" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px' }} />
+                  <input type="text" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="+91 98765 43210" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', boxSizing: 'border-box' }} />
                </div>
                <div>
                   <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px' }}>Email*</label>
-                  <select style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', color: '#6B7280' }}>
-                    <option>namrata@gmail.com</option>
-                  </select>
+                  <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="namrata@gmail.com" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', boxSizing: 'border-box' }} />
                </div>
                <div>
                   <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px' }}>Password*</label>
-                  <input type="password" placeholder="••••••••••" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px' }} />
+                  <input type="password" name="password" value={formData.password} onChange={handleInputChange} placeholder="••••••••••" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', boxSizing: 'border-box' }} />
                </div>
                <div>
                   <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px' }}>Access Type*</label>
-                  <select style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', color: '#6B7280' }}>
-                    <option>Full</option>
+                  <select name="accessType" value={formData.accessType} onChange={handleInputChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', color: '#111827', boxSizing: 'border-box' }}>
+                    <option value="Full">Full</option>
+                    <option value="Limited">Limited</option>
                   </select>
                </div>
                <div>
                   <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px' }}>Role*</label>
-                  <select style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', color: '#111827' }}>
-                    <option>Admin</option>
+                  <select name="role" value={formData.role} onChange={handleInputChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', color: '#111827', boxSizing: 'border-box' }}>
+                    <option value="admin">Admin</option>
+                    <option value="moderator">Moderator</option>
+                    <option value="super_admin">Super Admin</option>
                   </select>
                </div>
             </div>
@@ -154,13 +247,6 @@ export default function AdminList() {
             <div style={{ background: '#F8FAF9', borderRadius: '12px', padding: '24px' }}>
                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                   <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 600 }}>Access List</h4>
-                  <div style={{ display: 'flex', gap: '12px' }}>
-                     <div className="admin-toolbar-search">
-                        <Search size={14} />
-                        <input type="text" placeholder="Search" style={{ width: '140px', background: '#fff' }} />
-                     </div>
-                     <button className="admin-toolbar-btn filter"><Filter size={14} /> Filters</button>
-                  </div>
                </div>
                <table className="admin-table" style={{ background: 'transparent' }}>
                  <thead>
@@ -170,22 +256,37 @@ export default function AdminList() {
                      <th style={{ background: 'transparent' }}>Add</th>
                      <th style={{ background: 'transparent' }}>Edit</th>
                      <th style={{ background: 'transparent' }}>Delete</th>
-                     <th style={{ background: 'transparent' }}></th>
                    </tr>
                  </thead>
                  <tbody>
-                   {['Property Management', 'Masters', 'Bookings', 'Content Management', 'User Access'].map((acc, idx) => (
+                   {Object.keys(permissions).map((moduleName, idx) => (
                      <tr key={idx}>
-                       <td style={{ color: '#6B7280', fontSize: '13px', borderBottom: '1px solid #E5E7EB' }}>{acc}</td>
-                       <td style={{ borderBottom: '1px solid #E5E7EB' }}><input type="checkbox" defaultChecked={idx < 4} style={{ accentColor: '#0C6DC4' }} /></td>
-                       <td style={{ borderBottom: '1px solid #E5E7EB' }}><input type="checkbox" defaultChecked={idx < 4} style={{ accentColor: '#0C6DC4' }} /></td>
-                       <td style={{ borderBottom: '1px solid #E5E7EB' }}><input type="checkbox" defaultChecked={idx < 4} style={{ accentColor: '#0C6DC4' }} /></td>
-                       <td style={{ borderBottom: '1px solid #E5E7EB' }}><input type="checkbox" defaultChecked={idx < 4} style={{ accentColor: '#0C6DC4' }} /></td>
-                       <td style={{ borderBottom: '1px solid #E5E7EB' }}><button className="admin-action-dots"><MoreVertical size={16}/></button></td>
+                       <td style={{ color: '#6B7280', fontSize: '13px', borderBottom: '1px solid #E5E7EB' }}>{moduleName}</td>
+                       {['view', 'add', 'edit', 'delete'].map(action => (
+                         <td key={action} style={{ borderBottom: '1px solid #E5E7EB' }}>
+                           <input 
+                             type="checkbox" 
+                             checked={permissions[moduleName][action]}
+                             onChange={(e) => handlePermissionChange(moduleName, action, e.target.checked)}
+                             style={{ accentColor: '#0C6DC4', cursor: 'pointer' }} 
+                           />
+                         </td>
+                       ))}
                      </tr>
                    ))}
                  </tbody>
                </table>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '24px' }}>
+               <button 
+                 onClick={handleSubmit}
+                 disabled={submitting}
+                 className="btn-solid-green" 
+                 style={{ cursor: submitting ? 'not-allowed' : 'pointer', opacity: submitting ? 0.7 : 1 }}
+               >
+                 {submitting ? 'Saving...' : 'Save User Access'}
+               </button>
             </div>
 
           </div>
