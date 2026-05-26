@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { termsHeroImg, privacyHeroImg } from '../../../assets';
 import './TermsPage.css';
 
@@ -5,6 +6,32 @@ export default function TermsPage({ activeMenu }) {
   const isPrivacy = activeMenu === 'Privacy';
   const heroImg = isPrivacy ? privacyHeroImg : termsHeroImg;
   const title = isPrivacy ? 'Privacy Policy' : 'Terms & Conditions';
+
+  const [privacyContent, setPrivacyContent] = useState({
+    overview: 'This Privacy Policy describes how TripinVilla collects, uses, discloses, and protects your personal information. By using our website and services, you agree to the collection and use of information in accordance with this policy.',
+    collect: 'When you visit our website, we may automatically collect certain information about your device, including information about your web browser, IP address, time zone, and some cookies installed on your device.',
+    use: 'TripinVilla uses the collected information for various purposes, including processing transactions, providing customer support, improving our website, and communicating with you about orders, updates, or promotional offers.',
+    sharing: 'TripinVilla does not sell, rent, or trade your personal information to third parties. However, we may share your information with trusted third-party service providers who assist us in operating our website.',
+    security: 'TripinVilla takes reasonable precautions and follows industry best practices to protect your personal information from loss, misuse, unauthorized access, disclosure, alteration, or destruction.',
+    cookies: 'TripinVilla uses cookies and similar tracking technologies to improve your browsing experience, analyze website traffic, and understand user behavior.',
+    rights: 'You have the right to access, update, or delete your personal information. You may contact us if you wish to review or correct any personal information we hold about you.'
+  });
+
+  useEffect(() => {
+    if (isPrivacy) {
+      fetch(`${import.meta.env.VITE_API_BASE}/content/privacyPolicy`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.data) {
+            setPrivacyContent(prev => ({
+              ...prev,
+              ...data.data
+            }));
+          }
+        })
+        .catch(err => console.error("Error loading Privacy Policy content", err));
+    }
+  }, [isPrivacy]);
 
   return (
     <div className="terms-page-wrapper fade-in">
@@ -18,19 +45,19 @@ export default function TermsPage({ activeMenu }) {
           {isPrivacy ? (
             <>
               <h3 className="terms-section-header">OVERVIEW</h3>
-              <p className="terms-text-p">This Privacy Policy describes how TripinVilla collects, uses, discloses, and protects your personal information. By using our website and services, you agree to the collection and use of information in accordance with this policy.</p>
+              <p className="terms-text-p">{privacyContent.overview}</p>
               <h3 className="terms-section-header">1 – INFORMATION WE COLLECT</h3>
-              <p className="terms-text-p">When you visit our website, we may automatically collect certain information about your device, including information about your web browser, IP address, time zone, and some cookies installed on your device.</p>
+              <p className="terms-text-p">{privacyContent.collect}</p>
               <h3 className="terms-section-header">2 – HOW WE USE YOUR INFORMATION</h3>
-              <p className="terms-text-p">TripinVilla uses the collected information for various purposes, including processing transactions, providing customer support, improving our website, and communicating with you about orders, updates, or promotional offers.</p>
+              <p className="terms-text-p">{privacyContent.use}</p>
               <h3 className="terms-section-header">3 – SHARING YOUR PERSONAL INFORMATION</h3>
-              <p className="terms-text-p">TripinVilla does not sell, rent, or trade your personal information to third parties. However, we may share your information with trusted third-party service providers who assist us in operating our website.</p>
+              <p className="terms-text-p">{privacyContent.sharing}</p>
               <h3 className="terms-section-header">4 – DATA SECURITY</h3>
-              <p className="terms-text-p">TripinVilla takes reasonable precautions and follows industry best practices to protect your personal information from loss, misuse, unauthorized access, disclosure, alteration, or destruction.</p>
+              <p className="terms-text-p">{privacyContent.security}</p>
               <h3 className="terms-section-header">5 – COOKIES AND TRACKING TECHNOLOGIES</h3>
-              <p className="terms-text-p">TripinVilla uses cookies and similar tracking technologies to improve your browsing experience, analyze website traffic, and understand user behavior.</p>
+              <p className="terms-text-p">{privacyContent.cookies}</p>
               <h3 className="terms-section-header">6 – YOUR RIGHTS</h3>
-              <p className="terms-text-p">You have the right to access, update, or delete your personal information. You may contact us if you wish to review or correct any personal information we hold about you.</p>
+              <p className="terms-text-p">{privacyContent.rights}</p>
             </>
           ) : (
             <>

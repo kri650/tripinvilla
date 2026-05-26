@@ -1,39 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   ChevronDown, Bold, Underline, Highlighter, Type, 
   List, ListOrdered, AlignLeft, AlignRight, Link, 
   Image, Table, Eraser, Code, CheckCircle
 } from 'lucide-react';
 
-const initialOverview = `This Privacy Policy describes how Tripinvilla collects, uses, discloses, and protects your personal information when you visit or make a purchase from our website. By using our website and services, you agree to the collection and use of information in accordance with this policy.
-
-Tripinvilla is committed to protecting your privacy and ensuring that your personal information is handled in a safe and responsible manner. We comply with applicable data protection laws and take reasonable measures to protect your data from unauthorized access, misuse, or disclosure.`;
-
-const initialCollect = `When you visit our website, we may automatically collect certain information about your device, including information about your web browser, IP address, time zone, and some cookies installed on your device.
-
-Additionally, when you make a purchase or attempt to make a purchase through the website, we collect certain personal information from you, including your name, billing address, shipping address, payment information, email address, and phone number. We may also collect additional information if you contact customer support or interact with our services.`;
-
-const initialUse = `Tripinvilla uses the collected information for various purposes, including processing transactions, providing customer support, improving our website, and communicating with you about orders, updates, or promotional offers.
-
-We may also use your information to screen orders for potential risk or fraud and to improve and optimize our website experience. Your information helps us better understand customer preferences and improve our service quality.`;
-
-const initialSharing = `Tripinvilla does not sell, rent, or trade your personal information to third parties. However, we may share your information with trusted third-party service providers who assist us in operating our website, conducting business, or servicing you.
-
-We may also disclose your information when required by law, legal process, or governmental request, or to protect our legal rights and prevent fraud or security issues.`;
-
-const initialSecurity = `Prices for our services and products are subject to change without notice. Tripinvilla reserves the right at any time to modify or discontinue the Service (or any part or content thereof) without notice at any time.
-
-Tripinvilla shall not be liable to you or to any third party for any modification, price change, suspension, or discontinuance of the Service. We continuously strive to improve our services and may introduce, remove, or modify features based on operational, technical, or business requirements.`;
-
-const initialCookies = `Tripinvilla uses cookies and similar tracking technologies to improve your browsing experience, analyze website traffic, and understand user behavior.
-
-You can choose to disable cookies through your browser settings. However, disabling cookies may affect certain features and functionality of our website.`;
-
-const initialThirdParty = `Our website may contain links to third-party websites or services. Tripinvilla is not responsible for the privacy practices or content of third-party websites. We encourage users to review the privacy policies of any third-party websites they visit.`;
-
-const initialRights = `Tripinvilla uses cookies and similar tracking technologies to improve your browsing experience, analyze website traffic, and understand user behavior.
-
-You can choose to disable cookies through your browser settings. However, disabling cookies may affect certain features and functionality of our website.`;
+const defaultOverview = `This Privacy Policy describes how TripinVilla collects, uses, discloses, and protects your personal information. By using our website and services, you agree to the collection and use of information in accordance with this policy.`;
+const defaultCollect = `When you visit our website, we may automatically collect certain information about your device, including information about your web browser, IP address, time zone, and some cookies installed on your device.`;
+const defaultUse = `TripinVilla uses the collected information for various purposes, including processing transactions, providing customer support, improving our website, and communicating with you about orders, updates, or promotional offers.`;
+const defaultSharing = `TripinVilla does not sell, rent, or trade your personal information to third parties. However, we may share your information with trusted third-party service providers who assist us in operating our website.`;
+const defaultSecurity = `TripinVilla takes reasonable precautions and follows industry best practices to protect your personal information from loss, misuse, unauthorized access, disclosure, alteration, or destruction.`;
+const defaultCookies = `TripinVilla uses cookies and similar tracking technologies to improve your browsing experience, analyze website traffic, and understand user behavior.`;
+const defaultRights = `You have the right to access, update, or delete your personal information. You may contact us if you wish to review or correct any personal information we hold about you.`;
 
 // Rich Text Editor Simulation Component
 function RichTextEditor({ label, value, onChange }) {
@@ -251,22 +229,62 @@ function RichTextEditor({ label, value, onChange }) {
 }
 
 export default function PrivacyPolicy() {
-  const [overview, setOverview] = useState(initialOverview);
-  const [collect, setCollect] = useState(initialCollect);
-  const [use, setUse] = useState(initialUse);
-  const [sharing, setSharing] = useState(initialSharing);
-  const [security, setSecurity] = useState(initialSecurity);
-  const [cookies, setCookies] = useState(initialCookies);
-  const [thirdParty, setThirdParty] = useState(initialThirdParty);
-  const [rights, setRights] = useState(initialRights);
+  const [overview, setOverview] = useState(defaultOverview);
+  const [collect, setCollect] = useState(defaultCollect);
+  const [use, setUse] = useState(defaultUse);
+  const [sharing, setSharing] = useState(defaultSharing);
+  const [security, setSecurity] = useState(defaultSecurity);
+  const [cookies, setCookies] = useState(defaultCookies);
+  const [rights, setRights] = useState(defaultRights);
 
   const [toastVisible, setToastVisible] = useState(false);
 
-  const handleUpdate = () => {
-    setToastVisible(true);
-    setTimeout(() => {
-      setToastVisible(false);
-    }, 3000);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_BASE}/content/privacyPolicy`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.data) {
+          if (data.data.overview) setOverview(data.data.overview);
+          if (data.data.collect) setCollect(data.data.collect);
+          if (data.data.use) setUse(data.data.use);
+          if (data.data.sharing) setSharing(data.data.sharing);
+          if (data.data.security) setSecurity(data.data.security);
+          if (data.data.cookies) setCookies(data.data.cookies);
+          if (data.data.rights) setRights(data.data.rights);
+        }
+      })
+      .catch(err => console.error("Error loading Privacy Policy content", err));
+  }, []);
+
+  const handleUpdate = async () => {
+    const payload = {
+      overview,
+      collect,
+      use,
+      sharing,
+      security,
+      cookies,
+      rights
+    };
+
+    const formData = new FormData();
+    formData.append("contentData", JSON.stringify(payload));
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/content/privacyPolicy`, {
+        method: "PUT",
+        body: formData,
+      });
+      if (res.ok) {
+        setToastVisible(true);
+        setTimeout(() => setToastVisible(false), 3000);
+      } else {
+        alert("Failed to update privacy policy");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error saving privacy policy");
+    }
   };
 
   return (
@@ -351,12 +369,6 @@ export default function PrivacyPolicy() {
             label="Cookies and tracking technologies*" 
             value={cookies} 
             onChange={setCookies} 
-          />
-
-          <RichTextEditor 
-            label="Third-party services*" 
-            value={thirdParty} 
-            onChange={setThirdParty} 
           />
 
           <RichTextEditor 
