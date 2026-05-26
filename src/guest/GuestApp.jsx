@@ -270,21 +270,7 @@ export default function GuestApp() {
     fetchProfileAndEnquiries,
   });
 
-  const activeDetailProp = fullPropertyDetail ? mapDbProperties([fullPropertyDetail], [])[0] : (selectedProperty || {
-    title: 'Azure Bay Hotel, Premium Suite',
-    location: 'Kasol, Himachal Pradesh, India',
-    price: '₹1,400',
-    img: 'https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80',
-    images: [],
-    ownerContact: '',
-    amenities: [],
-    area: '31 sq. ft.',
-    rooms: '1 Room',
-    beds: '2 Beds',
-    guests: '3 Person',
-    experiences: [],
-    description: 'Experience a comfortable and refined stay at Azure Bay Hotel, located in the heart of the city and designed for both leisure and business travelers. The hotel offers thoughtfully designed rooms, modern amenities, and warm hospitality to ensure a relaxing and memorable stay.'
-  });
+  const activeDetailProp = fullPropertyDetail ? mapDbProperties([fullPropertyDetail], [])[0] : (selectedProperty || null);
 
   const {
     guestEnquiryName,
