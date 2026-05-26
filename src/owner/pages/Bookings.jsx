@@ -6,6 +6,9 @@ export default function Bookings() {
   const [searchTerm, setSearchTerm] = useState('');
   const [bookingsList, setBookingsList] = useState([]);
   const [loading, setLoading] = useState(true);
+  
+  const [propertyFilter, setPropertyFilter] = useState('All Properties');
+  const [statusFilter, setStatusFilter] = useState('All Status');
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -103,16 +106,17 @@ export default function Bookings() {
           </div>
           
           <div style={{ display: 'flex', gap: 10 }}>
-            <select style={{ padding: '8px 12px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 13, background: '#fff', color: '#4b5563' }}>
-              <option>All Properties</option>
-              <option>Bodhi Homestay</option>
-              <option>Whispering Palms Villa</option>
-              <option>Serenity Hills Estate</option>
+            <select value={propertyFilter} onChange={e => setPropertyFilter(e.target.value)} style={{ padding: '8px 12px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 13, background: '#fff', color: '#4b5563' }}>
+              <option value="All Properties">All Properties</option>
+              {Array.from(new Set(bookingsList.map(b => b.property?.propertyName || b.property?.name).filter(Boolean))).map(p => (
+                <option key={p} value={p}>{p}</option>
+              ))}
             </select>
-            <select style={{ padding: '8px 12px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 13, background: '#fff', color: '#4b5563' }}>
-              <option>Confirmed</option>
-              <option>Pending</option>
-              <option>Cancelled</option>
+            <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} style={{ padding: '8px 12px', border: '1px solid #e5e7eb', borderRadius: 8, fontSize: 13, background: '#fff', color: '#4b5563' }}>
+              <option value="All Status">All Status</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Pending">Pending</option>
+              <option value="Cancelled">Cancelled</option>
             </select>
           </div>
         </div>
@@ -139,7 +143,12 @@ export default function Bookings() {
               ) : bookingsList.length === 0 ? (
                 <tr><td colSpan="9" style={{ textAlign: 'center', padding: '20px' }}>No bookings found.</td></tr>
               ) : bookingsList
-                .filter(b => (b.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || b._id.toLowerCase().includes(searchTerm.toLowerCase()))
+                .filter(b => {
+                  const matchSearch = (b.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || String(b.razorpayOrderId || b._id).toLowerCase().includes(searchTerm.toLowerCase());
+                  const matchProp = propertyFilter === 'All Properties' ? true : (b.property?.propertyName === propertyFilter || b.property?.name === propertyFilter);
+                  const matchStatus = statusFilter === 'All Status' ? true : b.status === statusFilter;
+                  return matchSearch && matchProp && matchStatus;
+                })
                 .map((booking, index) => (
                   <tr key={index}>
                     <td style={{ fontWeight: 600, color: '#1d9e75' }}>{booking.razorpayOrderId || booking._id.substring(0, 8)}</td>

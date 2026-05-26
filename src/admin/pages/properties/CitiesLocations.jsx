@@ -47,7 +47,18 @@ export default function CitiesLocations() {
   const filteredCities = cities.filter(c => {
     const matchQuery = (c.cityName || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
                        (c.stateName || '').toLowerCase().includes(searchQuery.toLowerCase());
-    return matchQuery;
+    
+    let matchType = true;
+    if (propertyType) {
+      if (propertyType === 'Others') {
+        matchType = c.others > 0;
+      } else {
+        const typeKey = propertyType.toLowerCase() + 's';
+        matchType = c[typeKey] > 0;
+      }
+    }
+    
+    return matchQuery && matchType;
   });
 
   const uniqueStates = Array.from(new Set(cities.map(c => c.stateName).filter(Boolean)));

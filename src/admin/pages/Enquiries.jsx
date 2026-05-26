@@ -8,6 +8,10 @@ export default function Enquiries() {
   const [loading, setLoading] = useState(false);
   const [searchText, setSearchText] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const [propertyType, setPropertyType] = useState('All Categories');
+  const [location, setLocation] = useState('');
 
   // Reply modal state
   const [replyModal, setReplyModal] = useState(null); // holds the enquiry object
@@ -71,7 +75,25 @@ export default function Enquiries() {
       (e.email || '').toLowerCase().includes(search) ||
       (e.query || e.message || '').toLowerCase().includes(search) ||
       (e.propertyName || '').toLowerCase().includes(search);
-    return matchesStatus && matchesSearch;
+      
+    const matchType = propertyType === 'All Categories' ? true : e.propertyType === propertyType || (e.propertyName && e.propertyName.includes(propertyType)); // Simplified propertyType matching
+    const matchLocation = !location || (e.location || '').toLowerCase().includes(location.toLowerCase());
+    
+    let matchDate = true;
+    if (e.createdAt) {
+      const eDate = new Date(e.createdAt);
+      eDate.setHours(0,0,0,0);
+      if (dateFrom) {
+        const dFrom = new Date(dateFrom); dFrom.setHours(0,0,0,0);
+        if (eDate < dFrom) matchDate = false;
+      }
+      if (dateTo) {
+        const dTo = new Date(dateTo); dTo.setHours(0,0,0,0);
+        if (eDate > dTo) matchDate = false;
+      }
+    }
+    
+    return matchesStatus && matchesSearch && matchType && matchLocation && matchDate;
   });
 
   const statusBadge = (status) => {
@@ -102,7 +124,28 @@ export default function Enquiries() {
       <div className="admin-table-card">
         <div className="admin-table-header">
           <h2 className="admin-table-title">Enquiries</h2>
-          <div className="admin-table-toolbar">
+          <div className="admin-table-toolbar" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 8px', border: '1px solid #E5E7EB', borderRadius: '6px' }}>
+              <span style={{ fontSize: '11px', color: '#6B7280' }}>From:</span>
+              <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={{ border: 'none', outline: 'none', fontSize: '11px', color: '#374151' }} />
+            </div>
+            
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 8px', border: '1px solid #E5E7EB', borderRadius: '6px' }}>
+              <span style={{ fontSize: '11px', color: '#6B7280' }}>To:</span>
+              <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={{ border: 'none', outline: 'none', fontSize: '11px', color: '#374151' }} />
+            </div>
+
+            <select value={propertyType} onChange={e => setPropertyType(e.target.value)} className="admin-toolbar-btn" style={{ padding: '6px 8px', cursor: 'pointer' }}>
+              <option value="All Categories">All Categories</option>
+              <option value="Homestay">Homestay</option>
+              <option value="Hotel">Hotel</option>
+              <option value="Villa">Villa</option>
+              <option value="Apartment">Apartment</option>
+              <option value="Cottage">Cottage</option>
+            </select>
+
+            <input type="text" placeholder="Location" value={location} onChange={e => setLocation(e.target.value)} style={{ padding: '6px 8px', fontSize: '12px', border: '1px solid #E5E7EB', borderRadius: '6px', width: '90px', outline: 'none' }} />
+
             {/* Status filter */}
             <select
               value={statusFilter}

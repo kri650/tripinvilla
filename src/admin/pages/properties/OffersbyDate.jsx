@@ -44,7 +44,17 @@ export default function OffersbyDate() {
                        (o.location || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
                        (o.offerId || '').toLowerCase().includes(searchQuery.toLowerCase());
     const matchCat = selectedCategory ? o.category === selectedCategory : true;
-    return matchQuery && matchCat;
+    
+    let matchDate = true;
+    if (dateFrom) {
+      const od = new Date(o.offer_date || o.createdAt || o.dateFrom || o.datesAndTime);
+      const fd = new Date(dateFrom);
+      fd.setHours(0,0,0,0);
+      od.setHours(0,0,0,0);
+      if (od < fd) matchDate = false;
+    }
+
+    return matchQuery && matchCat && matchDate;
   });
 
   return (
