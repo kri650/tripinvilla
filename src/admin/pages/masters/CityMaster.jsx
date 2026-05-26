@@ -74,31 +74,37 @@ export default function CityMaster() {
     }
 
     try {
+      let res;
       if (isEditing) {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE}/admin/cities/${formData.id}`, {
+        res = await fetch(`${import.meta.env.VITE_API_BASE}/admin/cities/${formData.id}`, {
           method: 'PUT',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
-        if (res.ok) fetchCities();
-        setIsEditing(false);
       } else {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE}/admin/cities`, {
+        res = await fetch(`${import.meta.env.VITE_API_BASE}/admin/cities`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(formData)
         });
-        if (res.ok) fetchCities();
       }
 
-      setFormData({
-        id: '',
-        cityName: '',
-        stateId: states.length > 0 ? states[0]._id : '',
-        status: 'Active'
-      });
+      if (res.ok) {
+        fetchCities();
+        setIsEditing(false);
+        setFormData({
+          id: '',
+          cityName: '',
+          stateId: states.length > 0 ? states[0]._id : '',
+          status: 'Active'
+        });
+      } else {
+        const errorData = await res.json();
+        alert(errorData.message || 'Failed to save city. Please try again.');
+      }
     } catch (err) {
       console.error('Error submitting city:', err);
+      alert('Network error. Failed to save city.');
     }
   };
 
