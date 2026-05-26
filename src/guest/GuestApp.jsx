@@ -286,6 +286,7 @@ export default function GuestApp() {
   } = useGuestEnquiry({
     API_BASE,
     token,
+    user,
     selectedProperty,
     activeDetailProp,
     fetchProfileAndEnquiries,
@@ -370,6 +371,7 @@ export default function GuestApp() {
         setReviewName('');
         setReviewText('');
         setReviewRating(5);
+        if (token) fetchProfileAndEnquiries(token);
         alert('Review submitted successfully!');
       } else {
         const errData = await res.json().catch(() => ({}));

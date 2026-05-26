@@ -3,6 +3,7 @@ import { useState } from 'react';
 export default function useGuestEnquiry({
   API_BASE,
   token,
+  user,
   selectedProperty,
   activeDetailProp,
   fetchProfileAndEnquiries,
@@ -32,6 +33,7 @@ export default function useGuestEnquiry({
         body: JSON.stringify({
           propertyId: propToUse._id,
           propertyName: propToUse.title || propToUse.propertyName,
+          user_id: user?._id || null,
           name: guestEnquiryName,
           phone: guestEnquiryPhone,
           email: guestEnquiryEmail,
