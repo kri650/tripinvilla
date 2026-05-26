@@ -82,10 +82,14 @@ export default function PropertyMakers() {
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
   const [areas, setAreas] = useState([]);
-  const [selectedCountry, setSelectedCountry] = useState({ id: "", name: "" });
-  const [selectedState, setSelectedState] = useState({ id: "", name: "" });
-  const [selectedCity, setSelectedCity] = useState({ id: "", name: "" });
-  const [selectedArea, setSelectedArea] = useState({ id: "", name: "" });
+  const [allLocations, setAllLocations] = useState([]); // All LocationMaster entries as fallback
+  const [selectedCountry, setSelectedCountry] = useState({ id: '', name: '' });
+  const [selectedState, setSelectedState] = useState({ id: '', name: '' });
+  const [selectedCity, setSelectedCity] = useState({ id: '', name: '' });
+  const [selectedArea, setSelectedArea] = useState({ id: '', name: '' });
+  // Manual input mode for each location level
+  const [manualLocation, setManualLocation] = useState({ country: false, state: false, city: false, area: false });
+  const [manualValues, setManualValues] = useState({ country: '', state: '', city: '', area: '' });
 
   // Landmarks state
   const [landmarksList, setLandmarksList] = useState([]);
@@ -241,12 +245,29 @@ export default function PropertyMakers() {
         `${import.meta.env.VITE_API_BASE}/masters/locations/active?${params.toString()}`,
       );
       const data = await res.json();
-      setAreas(data);
+      // If no matching areas found, fallback to ALL locations from LocationMaster
+      if (Array.isArray(data) && data.length === 0) {
+        setAreas(allLocations);
+      } else {
+        setAreas(Array.isArray(data) ? data : []);
+      }
       setSelectedArea({ id: '', name: '' });
     } catch (err) {
       console.error(err);
+      setAreas(allLocations); // Always show all on error
     }
   };
+
+  const fetchAllLocations = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/masters/locations/active`);
+      const data = await res.json();
+      if (Array.isArray(data)) setAllLocations(data);
+    } catch (err) {
+      console.error('Error fetching all locations:', err);
+    }
+  };
+
 
   useEffect(() => {
     fetchProperties();
@@ -254,7 +275,9 @@ export default function PropertyMakers() {
     fetchCountries();
     fetchExperiences();
     fetchAmenitiesForType("Homestay");
+    fetchAllLocations();
   }, []);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -381,6 +404,8 @@ export default function PropertyMakers() {
     setCountries([]); setStates([]); setCities([]); setAreas([]);
     setSelectedCountry({ id: "", name: "" }); setSelectedState({ id: "", name: "" });
     setSelectedCity({ id: "", name: "" }); setSelectedArea({ id: "", name: "" });
+    setManualLocation({ country: false, state: false, city: false, area: false });
+    setManualValues({ country: '', state: '', city: '', area: '' });
     setExistingImages([]); setRoomsList([]);
     setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], checkIn: '3:00 PM', checkOut: '12:00 PM', offer: '', rules: '• Primary Guest should be atleast 18 years of age.' });
     setSelectedFiles([]); setLandmarksList([]);
@@ -860,6 +885,17 @@ export default function PropertyMakers() {
             >
               Location Details
             </label>
+
+            {/* Toggle: Use Dropdowns vs Type Manually */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+              <span style={{ fontSize: 12, color: '#6B7280' }}>Location not in list?</span>
+              <button type="button"
+                onClick={() => setManualLocation(p => ({ country: !p.country, state: !p.state, city: !p.city, area: !p.area }))}
+                style={{ fontSize: 12, color: '#58A429', background: 'none', border: '1px solid #58A429', borderRadius: 6, padding: '3px 10px', cursor: 'pointer', fontWeight: 600 }}>
+                {manualLocation.country ? '← Use Dropdowns' : 'Type Manually →'}
+              </button>
+            </div>
+
             <div
               style={{
                 display: "grid",
@@ -868,123 +904,99 @@ export default function PropertyMakers() {
                 marginBottom: "16px",
               }}
             >
+              {/* Country */}
               <div>
-                <label
-                  className="form-label"
-                  style={{ fontSize: "12px", color: "#4B5563" }}
-                >
-                  Country*
-                </label>
-                <select
-                  className="form-select"
-                  required
-                  value={selectedCountry.id}
-                  onChange={(e) => {
-                    const c = countries.find((x) => x._id === e.target.value);
-                    setSelectedCountry(
-                      c
-                        ? { id: c._id, name: c.countryName }
-                        : { id: "", name: "" },
-                    );
-                    if (c) fetchStates(c._id);
-                  }}
-                >
-                  <option value="">Select Country</option>
-                  {countries.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.countryName}
-                    </option>
-                  ))}
-                </select>
+                <label className="form-label" style={{ fontSize: "12px", color: "#4B5563" }}>Country*</label>
+                {manualLocation.country ? (
+                  <input type="text" className="form-input" placeholder="e.g. India"
+                    value={manualValues.country}
+                    onChange={e => { setManualValues(p => ({ ...p, country: e.target.value })); setSelectedCountry({ id: '', name: e.target.value }); }} />
+                ) : (
+                  <select className="form-select" value={selectedCountry.id}
+                    onChange={(e) => {
+                      const c = countries.find((x) => x._id === e.target.value);
+                      setSelectedCountry(c ? { id: c._id, name: c.countryName } : { id: '', name: '' });
+                      if (c) fetchStates(c._id);
+                    }}>
+                    <option value="">Select Country</option>
+                    {countries.map((c) => <option key={c._id} value={c._id}>{c.countryName}</option>)}
+                  </select>
+                )}
               </div>
+
+              {/* State */}
               <div>
-                <label
-                  className="form-label"
-                  style={{ fontSize: "12px", color: "#4B5563" }}
-                >
-                  State*
-                </label>
-                <select
-                  className="form-select"
-                  required
-                  value={selectedState.id}
-                  onChange={(e) => {
-                    const s = states.find((x) => x._id === e.target.value);
-                    setSelectedState(
-                      s
-                        ? { id: s._id, name: s.stateName }
-                        : { id: "", name: "" },
-                    );
-                    if (s) fetchCities(s._id);
-                  }}
-                  disabled={!selectedCountry.id}
-                >
-                  <option value="">Select State</option>
-                  {states.map((s) => (
-                    <option key={s._id} value={s._id}>
-                      {s.stateName}
-                    </option>
-                  ))}
-                </select>
+                <label className="form-label" style={{ fontSize: "12px", color: "#4B5563" }}>State*</label>
+                {manualLocation.state ? (
+                  <input type="text" className="form-input" placeholder="e.g. Himachal Pradesh"
+                    value={manualValues.state}
+                    onChange={e => { setManualValues(p => ({ ...p, state: e.target.value })); setSelectedState({ id: '', name: e.target.value }); }} />
+                ) : (
+                  <select className="form-select" value={selectedState.id}
+                    onChange={(e) => {
+                      const s = states.find((x) => x._id === e.target.value);
+                      setSelectedState(s ? { id: s._id, name: s.stateName } : { id: '', name: '' });
+                      if (s) fetchCities(s._id);
+                    }}
+                    disabled={!manualLocation.state && !selectedCountry.id}>
+                    <option value="">Select State</option>
+                    {states.map((s) => <option key={s._id} value={s._id}>{s.stateName}</option>)}
+                  </select>
+                )}
               </div>
+
+              {/* City */}
               <div>
-                <label
-                  className="form-label"
-                  style={{ fontSize: "12px", color: "#4B5563" }}
-                >
-                  City*
-                </label>
-                <select
-                  className="form-select"
-                  required
-                  value={selectedCity.id}
-                  onChange={(e) => {
-                    const c = cities.find((x) => x._id === e.target.value);
-                    setSelectedCity(
-                      c
-                        ? { id: c._id, name: c.cityName }
-                        : { id: "", name: "" },
-                    );
-                    if (c) fetchAreas(c._id, c.cityName);
-                  }}
-                  disabled={!selectedState.id}
-                >
-                  <option value="">Select City</option>
-                  {cities.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.cityName}
-                    </option>
-                  ))}
-                </select>
+                <label className="form-label" style={{ fontSize: "12px", color: "#4B5563" }}>City*</label>
+                {manualLocation.city ? (
+                  <input type="text" className="form-input" placeholder="e.g. Kasol"
+                    value={manualValues.city}
+                    onChange={e => { setManualValues(p => ({ ...p, city: e.target.value })); setSelectedCity({ id: '', name: e.target.value }); }} />
+                ) : (
+                  <select className="form-select" value={selectedCity.id}
+                    onChange={(e) => {
+                      const c = cities.find((x) => x._id === e.target.value);
+                      setSelectedCity(c ? { id: c._id, name: c.cityName } : { id: '', name: '' });
+                      if (c) fetchAreas(c._id, c.cityName);
+                    }}
+                    disabled={!manualLocation.city && !selectedState.id}>
+                    <option value="">Select City</option>
+                    {cities.map((c) => <option key={c._id} value={c._id}>{c.cityName}</option>)}
+                  </select>
+                )}
               </div>
+
+              {/* Area / Location */}
               <div>
-                <label
-                  className="form-label"
-                  style={{ fontSize: "12px", color: "#4B5563" }}
-                >
+                <label className="form-label" style={{ fontSize: "12px", color: "#4B5563" }}>
                   Area/Location*
+                  {!manualLocation.area && areas.length === 0 && allLocations.length > 0 && (
+                    <span style={{ color: '#F59E0B', fontSize: 11, marginLeft: 6 }}>Showing all locations</span>
+                  )}
                 </label>
-                <select
-                  className="form-select"
-                  required
-                  value={selectedArea.id}
-                  onChange={(e) => {
-                    const a = areas.find((x) => x._id === e.target.value);
-                    setSelectedArea(
-                      a
-                        ? { id: a._id, name: a.locationName }
-                        : { id: "", name: "" },
-                    );
-                  }}
-                  disabled={!selectedCity.id}
-                >
-                  <option value="">Select Area</option>
-                  {areas.map((a) => (
-                    <option key={a._id} value={a._id}>
-                      {a.locationName}
-                    </option>
-                  ))}
-                </select>
+                {manualLocation.area ? (
+                  <input type="text" className="form-input" placeholder="e.g. Kheerganga, Parvati Valley"
+                    value={manualValues.area}
+                    onChange={e => { setManualValues(p => ({ ...p, area: e.target.value })); setSelectedArea({ id: '', name: e.target.value }); }} />
+                ) : (
+                  <select className="form-select" value={selectedArea.id}
+                    onChange={(e) => {
+                      const displayList = areas.length > 0 ? areas : allLocations;
+                      const a = displayList.find((x) => x._id === e.target.value);
+                      setSelectedArea(a ? { id: a._id, name: a.locationName } : { id: '', name: '' });
+                    }}>
+                    <option value="">Select Area</option>
+                    {(areas.length > 0 ? areas : allLocations).map((a) => (
+                      <option key={a._id} value={a._id}>{a.locationName}</option>
+                    ))}
+                  </select>
+                )}
+                {!manualLocation.area && (
+                  <button type="button" onClick={() => setManualLocation(p => ({ ...p, area: true }))}
+                    style={{ fontSize: 11, color: '#6B7280', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', textDecoration: 'underline' }}>
+                    Not in list? Type manually
+                  </button>
+                )}
               </div>
             </div>
             <div
