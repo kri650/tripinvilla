@@ -100,6 +100,12 @@ export default function PropertyMakers() {
   const [landmarkImageUploading, setLandmarkImageUploading] = useState(false);
   const landmarkImageRef = React.useRef(null);
 
+  // Room Image state
+  const [roomImageFile, setRoomImageFile] = useState(null);
+  const [roomImagePreview, setRoomImagePreview] = useState("");
+  const [roomImageUploading, setRoomImageUploading] = useState(false);
+  const roomImageRef = React.useRef(null);
+
   const fetchProperties = async () => {
     setLoading(true);
     try {
@@ -1513,25 +1519,64 @@ export default function PropertyMakers() {
             </div>
 
             {/* Row 1 */}
-            <div className="form-grid-3" style={{ marginBottom: 12 }}>
-              <div className="form-group">
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 16, marginBottom: 12 }}>
+              <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Room Type*</label>
                 <select className="form-select" value={roomForm.roomType} onChange={e => setRoomForm(p => ({ ...p, roomType: e.target.value }))}>
                   {['Standard', 'Deluxe', 'Suite', 'Executive', 'Premium', 'Presidential', 'Family Room', 'Double', 'Single', 'Twin'].map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
               </div>
-              <div className="form-group">
+              <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Room Name*</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                  <input type="text" className="form-input" value={roomForm.roomName} onChange={e => setRoomForm(p => ({ ...p, roomName: e.target.value }))} placeholder="e.g. Sea View Deluxe" />
-                  <input type="text" className="form-input" value={roomForm.imageUrl || ''} onChange={e => setRoomForm(p => ({ ...p, imageUrl: e.target.value }))} placeholder="Image URL (Optional)" />
-                </div>
+                <input type="text" className="form-input" value={roomForm.roomName} onChange={e => setRoomForm(p => ({ ...p, roomName: e.target.value }))} placeholder="e.g. Sea View Deluxe" />
               </div>
-              <div className="form-group">
+              <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Bed Type*</label>
                 <select className="form-select" value={roomForm.bedType} onChange={e => setRoomForm(p => ({ ...p, bedType: e.target.value }))}>
                   {['Single Bed', 'Double Bed', 'Queen Size', 'King Size', 'King Size 1', 'Twin Beds', 'Bunk Beds'].map(t => <option key={t} value={t}>{t}</option>)}
                 </select>
+              </div>
+              <div className="form-group" style={{ marginBottom: 0 }}>
+                <label className="form-label">Room Image*</label>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                  <input
+                    ref={roomImageRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: 'none' }}
+                    onChange={(e) => {
+                      const file = e.target.files[0];
+                      if (file) {
+                        setRoomImageFile(file);
+                        setRoomImagePreview(URL.createObjectURL(file));
+                      }
+                    }}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => roomImageRef.current.click()}
+                    style={{
+                      padding: '8px 16px',
+                      background: '#F3F4F6',
+                      border: '1px solid #D1D5DB',
+                      borderRadius: '6px',
+                      cursor: 'pointer',
+                      fontSize: '13px',
+                      fontWeight: 500,
+                      height: '38px',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {roomImagePreview ? 'Change Image' : 'Choose Image'}
+                  </button>
+                  {roomImagePreview && (
+                    <img
+                      src={roomImagePreview}
+                      alt="Room Preview"
+                      style={{ width: 38, height: 38, borderRadius: 6, objectFit: 'cover', border: '1px solid #E5E7EB' }}
+                    />
+                  )}
+                </div>
               </div>
             </div>
 
@@ -1581,15 +1626,55 @@ export default function PropertyMakers() {
             </div>
 
             {/* Add Room button */}
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12 }}>
+              {roomImageUploading && <span style={{ fontSize: 13, color: '#6B7280' }}>Uploading room image...</span>}
               <button type="button"
-                onClick={() => {
+                disabled={roomImageUploading}
+                onClick={async () => {
                   if (!roomForm.roomName.trim() || !roomForm.pricePerNight) { alert('Please fill Room Name and Price.'); return; }
+                  
+                  let uploadedUrl = "";
+                  if (roomImageFile) {
+                    setRoomImageUploading(true);
+                    try {
+                      const uploadData = new FormData();
+                      uploadData.append("images", roomImageFile);
+                      const token = localStorage.getItem("admin_token");
+                      const uploadRes = await fetch(
+                        `${import.meta.env.VITE_API_BASE}/properties/upload`,
+                        {
+                          method: "POST",
+                          headers: { Authorization: `Bearer ${token}` },
+                          body: uploadData,
+                        },
+                      );
+                      const uploadDataJson = await uploadRes.json();
+                      if (uploadDataJson && uploadDataJson.urls && uploadDataJson.urls.length > 0) {
+                        uploadedUrl = uploadDataJson.urls[0];
+                      }
+                    } catch (err) {
+                      console.error("Room image upload failed", err);
+                    } finally {
+                      setRoomImageUploading(false);
+                    }
+                  }
+
                   const amenArr = (roomForm.amenitiesText || '').split(',').map(a => a.trim()).filter(Boolean);
-                  setRoomsList(prev => [...prev, { ...roomForm, amenities: amenArr, pricePerNight: Number(roomForm.pricePerNight), maxGuests: Number(roomForm.maxGuests), count: Number(roomForm.count) }]);
+                  setRoomsList(prev => [...prev, {
+                    ...roomForm,
+                    imageUrl: uploadedUrl || roomForm.imageUrl,
+                    room_image_url: uploadedUrl || roomForm.imageUrl,
+                    amenities: amenArr,
+                    pricePerNight: Number(roomForm.pricePerNight),
+                    maxGuests: Number(roomForm.maxGuests),
+                    count: Number(roomForm.count)
+                  }]);
                   setRoomForm({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], amenitiesText: '', checkIn: '3:00 PM', checkOut: '12:00 PM', offer: '', rules: '• Primary Guest should be atleast 18 years of age.' });
+                  setRoomImageFile(null);
+                  setRoomImagePreview("");
+                  if (roomImageRef.current) roomImageRef.current.value = "";
                 }}
-                style={{ padding: '10px 32px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: 600 }}>
+                style={{ padding: '10px 32px', background: roomImageUploading ? '#9CA3AF' : '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: roomImageUploading ? 'not-allowed' : 'pointer', fontWeight: 600 }}>
                 + Add Room
               </button>
             </div>

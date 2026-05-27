@@ -382,29 +382,40 @@ export default function PropertyDetailPage(props) {
             <div className="landmarks-sidebar">
               <h3 className="section-subtitle-title" style={{ fontSize: '20px', marginBottom: '20px' }}>Key Landmarks</h3>
               <div className="landmarks-stack">
-                {(dynamicLandmarks.length > 0 ? dynamicLandmarks : (activeDetailProp._id?.toString().startsWith('mock-') ? landmarks : landmarks.slice(0, 4))).map((mark, idx) => (
-                  <div key={idx} className="landmark-row-item">
-                    <div className="landmark-row-left-content">
-                      <div className="landmark-avatar-square">
-                        <img 
-                          src={mark.landmark_image_url || mark.img || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=150&q=80'} 
-                          alt={mark.landmark_name || mark.name} 
-                          className="landmark-thumb-img" 
-                        />
+                {(() => {
+                  const landmarksToRender = dynamicLandmarks.length > 0 ? dynamicLandmarks : (activeDetailProp._id?.toString().startsWith('mock-') ? landmarks : []);
+                  if (landmarksToRender.length === 0) {
+                    return (
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', minHeight: '150px', color: '#6B7280', textAlign: 'center', padding: '16px' }}>
+                        <span style={{ fontSize: '14px', fontWeight: 500 }}>No nearby landmarks specified.</span>
+                        <span style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '4px' }}>The owner has not listed any landmarks for this property.</span>
                       </div>
-                      <div className="landmark-texts">
-                        <span className="landmark-title-name">{mark.landmark_name || mark.name}</span>
-                        <span className="landmark-badge-desc">{mark.landmark_type || mark.label || mark.distance}</span>
+                    );
+                  }
+                  return landmarksToRender.map((mark, idx) => (
+                    <div key={idx} className="landmark-row-item">
+                      <div className="landmark-row-left-content">
+                        <div className="landmark-avatar-square">
+                          <img 
+                            src={mark.landmark_image_url || mark.img || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=150&q=80'} 
+                            alt={mark.landmark_name || mark.name} 
+                            className="landmark-thumb-img" 
+                          />
+                        </div>
+                        <div className="landmark-texts">
+                          <span className="landmark-title-name">{mark.landmark_name || mark.name}</span>
+                          <span className="landmark-badge-desc">{mark.landmark_type || mark.label || mark.distance}</span>
+                        </div>
                       </div>
+                      <button className="landmark-nav-btn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <line x1="22" y1="2" x2="11" y2="13" />
+                          <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                      </button>
                     </div>
-                    <button className="landmark-nav-btn">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <line x1="22" y1="2" x2="11" y2="13" />
-                        <polygon points="22 2 15 22 11 13 2 9 22 2" />
-                      </svg>
-                    </button>
-                  </div>
-                ))}
+                  ));
+                })()}
               </div>
             </div>
           </div>
