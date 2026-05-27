@@ -356,7 +356,7 @@ export default function HomePage(props) {
                   {/* White card top */}
                   <div className="service-text-card white-bg">
                     <p className="service-card-desc">
-                      {homepageContent?.section5?.row1?.subText || 'Every property is carefully verified to ensure quality, safety, and comfort you can rely on.'}
+                      {homepageContent?.section5?.row1Desc || 'Every property is carefully verified to ensure quality, safety, and comfort you can rely on.'}
                     </p>
                     <div className="service-card-bottom-group">
                       <h3 className="service-card-accent-title">{homepageContent?.section5?.row1?.title || 'Verified & Trusted Stays'}</h3>
@@ -414,7 +414,7 @@ export default function HomePage(props) {
                       <p className="service-card-bold-sub">{homepageContent?.section5?.row2?.subText || 'All type of support'}</p>
                     </div>
                     <p className="service-card-desc-light">
-                      From booking to checkout, our support team is available anytime to help you.
+                      {homepageContent?.section5?.row2Desc || 'From booking to checkout, our support team is available anytime to help you.'}
                     </p>
                   </div>
 

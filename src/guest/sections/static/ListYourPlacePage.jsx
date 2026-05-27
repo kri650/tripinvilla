@@ -47,7 +47,7 @@ export default function ListYourPlacePage({ token, user, setAuthMode, setAuthMod
           <div className="services-grid-asym">
             <div className="services-col">
               <div className="service-text-card white-bg">
-                <p className="service-card-desc">{homepageContent?.section5?.row1?.subText || 'Every property is carefully verified.'}</p>
+                <p className="service-card-desc">{homepageContent?.section5?.row1Desc || 'Every property is carefully verified.'}</p>
                 <h3 className="service-card-accent-title">{homepageContent?.section5?.row1?.title || 'Verified & Trusted Stays'}</h3>
                 <p className="service-card-subtext">{homepageContent?.section5?.row1?.subText || 'Get genuine and good stays'}</p>
               </div>
@@ -67,7 +67,7 @@ export default function ListYourPlacePage({ token, user, setAuthMode, setAuthMod
                   <h3 className="service-card-accent-title">{homepageContent?.section5?.row2?.title || '24/7 Support, Always There'}</h3>
                   <p className="service-card-bold-sub">{homepageContent?.section5?.row2?.subText || 'All type of support'}</p>
                 </div>
-                <p className="service-card-desc-light">From booking to checkout, our support team is available anytime to help you.</p>
+                <p className="service-card-desc-light">{homepageContent?.section5?.row2Desc || 'From booking to checkout, our support team is available anytime to help you.'}</p>
               </div>
             </div>
           </div>

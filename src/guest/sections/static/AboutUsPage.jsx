@@ -75,7 +75,7 @@ export default function AboutUsPage({ homepageContent, renderTitle }) {
           <div className="services-grid-asym">
             <div className="services-col">
               <div className="service-text-card white-bg">
-                <p className="service-card-desc">{s2?.row1Desc || s2?.row1?.subText || 'Every property is carefully verified.'}</p>
+                <p className="service-card-desc">{s2?.row1Desc || 'Every property is carefully verified.'}</p>
                 <h3 className="service-card-accent-title">{s2?.row1?.title || 'Verified & Trusted Stays'}</h3>
                 <p className="service-card-subtext">{s2?.row1?.subText || 'Get genuine and good stays'}</p>
               </div>
@@ -97,7 +97,7 @@ export default function AboutUsPage({ homepageContent, renderTitle }) {
                   <h3 className="service-card-accent-title">{s2?.row2?.title || '24/7 Support, Always There'}</h3>
                   <p className="service-card-bold-sub">{s2?.row2?.subText || 'All type of support'}</p>
                 </div>
-                <p className="service-card-desc-light">{s2?.row2Desc || s2?.row2?.subText || 'From booking to checkout, our support team is available anytime to help you.'}</p>
+                <p className="service-card-desc-light">{s2?.row2Desc || 'From booking to checkout, our support team is available anytime to help you.'}</p>
               </div>
             </div>
           </div>

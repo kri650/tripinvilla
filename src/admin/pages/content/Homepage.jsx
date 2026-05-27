@@ -30,10 +30,12 @@ export default function Homepage() {
     section3: { title: 'Top Destinations around you', subText: 'Choose the next destination for you' },
     section4: { title: 'Popular Offers of Property', subText: 'Carefully selected stays that meet our standards for comfort, quality, and location.' },
     section5: {
-        title: '',
-        subText: '',
-      row1: { title: 'Verified & Trusted Stays Get genuine and good stays', subText: 'Every property is carefully verified to ensure quality, safety, and comfort you can rely on.' },
-      row2: { title: '24/7 Support, Always There', subText: 'From booking to checkout, our support team is available anytime to help you.' },
+      title: 'Why Choose Our *Services*',
+      subText: 'Choose the next destination for you',
+      row1: { title: 'Verified & Trusted Stays', subText: 'Get genuine and good stays' },
+      row1Desc: 'Every property is carefully verified to ensure quality, safety, and comfort you can rely on.',
+      row2: { title: '24/7 Support, Always There', subText: 'All type of support' },
+      row2Desc: 'From booking to checkout, our support team is available anytime to help you.',
       features: [
         { title: 'Secure Payments', image: '', icon: '' },
         { title: 'Best Price Guarantee', image: '', icon: '' },
@@ -230,7 +232,7 @@ export default function Homepage() {
               <input type="text" className="form-input" value={formData.section5.subText || ''} onChange={e => handleChange(e, 'section5.subText')} />
             </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginBottom: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginBottom: 24 }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Row 1 Title*</label>
               <input type="text" className="form-input" value={formData.section5.row1.title} onChange={e => handleChange(e, 'section5.row1.title')} />
@@ -239,8 +241,12 @@ export default function Homepage() {
               <label className="form-label">Row 1 Sub-Text*</label>
               <input type="text" className="form-input" value={formData.section5.row1.subText} onChange={e => handleChange(e, 'section5.row1.subText')} />
             </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Row 1 Description*</label>
+              <input type="text" className="form-input" value={formData.section5.row1Desc || ''} onChange={e => handleChange(e, 'section5.row1Desc')} />
+            </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 24, marginBottom: 24 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24, marginBottom: 24 }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Row 2 Title*</label>
               <input type="text" className="form-input" value={formData.section5.row2.title} onChange={e => handleChange(e, 'section5.row2.title')} />
@@ -248,6 +254,10 @@ export default function Homepage() {
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Row 2 Sub-Text*</label>
               <input type="text" className="form-input" value={formData.section5.row2.subText} onChange={e => handleChange(e, 'section5.row2.subText')} />
+            </div>
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <label className="form-label">Row 2 Description*</label>
+              <input type="text" className="form-input" value={formData.section5.row2Desc || ''} onChange={e => handleChange(e, 'section5.row2Desc')} />
             </div>
           </div>
 
