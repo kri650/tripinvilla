@@ -13,7 +13,7 @@ export default function useOtpVerification({
   const [contactModalOpen, setContactModalOpen] = useState(false);
   const [contactStep, setContactStep] = useState(1); // 1 = View Contact, 2 = Request OTP
   const [contactOTP, setContactOTP] = useState(['', '', '', '', '', '']);
-  const [hostContactRevealed, setHostContactRevealed] = useState(false);
+  const [hostContactRevealed, setHostContactRevealed] = useState({});
   const [otpLoading, setOtpLoading] = useState(false);
   const [otpError, setOtpError] = useState('');
   const [otpChannel, setOtpChannel] = useState('sms');
@@ -84,7 +84,10 @@ export default function useOtpVerification({
       });
       const data = await res.json();
       if (res.ok && data.success) {
-        setHostContactRevealed(true);
+        setHostContactRevealed((prev) => ({
+          ...prev,
+          [selectedProperty?._id]: true,
+        }));
         setContactModalOpen(false);
         if (token) fetchProfileAndEnquiries(token);
         alert('✅ Phone verified! The host contact number is now visible on the property page.');

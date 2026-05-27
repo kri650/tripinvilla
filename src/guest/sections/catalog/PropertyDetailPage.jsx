@@ -1,4 +1,4 @@
-import { Calendar, CheckCircle, MapPin, Phone, Search, Sparkles, Star } from 'lucide-react';
+import { Calendar, CheckCircle, MapPin, Phone, Mail, Search, Sparkles, Star } from 'lucide-react';
 import { areaIcon, bedIcon, guestIcon, roomIcon } from '../../../assets';
 import { detailSubTabs, landmarks, roomOptions } from '../../../data/mockData';
 import './PropertyDetailPage.css';
@@ -172,7 +172,7 @@ export default function PropertyDetailPage(props) {
               </div>
             </div>
 
-            {hostContactRevealed ? (
+            {hostContactRevealed[activeDetailProp._id] ? (
               <button className="btn-view-contact-green revealed-active" style={{ background: '#38A169', boxShadow: '0 4px 12px rgba(56, 161, 105, 0.3)' }}>
                 <Phone size={16} fill="#FFFFFF" />
                 <span style={{ fontWeight: '700' }}>{activeDetailProp.ownerContact || '+91 98765 43210'}</span>
@@ -339,7 +339,7 @@ export default function PropertyDetailPage(props) {
                         <span className="room-green-val">₹{Number(roomPrice).toLocaleString('en-IN')}/night</span>
                       </div>
                       
-                      {hostContactRevealed ? (
+                      {hostContactRevealed[activeDetailProp._id] ? (
                         <button className="btn-view-contact-green revealed-active" style={{ width: '100%', marginTop: '10px', background: '#38A169', boxShadow: '0 4px 12px rgba(56, 161, 105, 0.3)' }}>
                           <Phone size={14} fill="#FFFFFF" />
                           <span style={{ fontWeight: '700' }}>{activeDetailProp.ownerContact || '+91 98765 43210'}</span>

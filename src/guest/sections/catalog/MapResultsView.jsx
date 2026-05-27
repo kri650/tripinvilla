@@ -19,18 +19,18 @@ const createPriceIcon = (price) => {
     html: `<div style="background-color: white; border: 1px solid #E5E7EB; border-radius: 20px; padding: 4px 8px; font-weight: bold; font-size: 13px; font-family: 'Outfit', sans-serif; box-shadow: 0 2px 4px rgba(0,0,0,0.1); white-space: nowrap; transition: all 0.2s;">
              ₹${price.toLocaleString('en-IN')}
            </div>`,
-    iconSize: [null, null],
+    iconSize: null,
     iconAnchor: [30, 15],
   });
 };
 
-const ChangeMapView = ({ center }) => {
+const ChangeMapView = ({ center, zoom }) => {
   const map = useMap();
   useEffect(() => {
     if (center && center[0] && center[1]) {
-      map.setView(center, map.getZoom());
+      map.setView(center, zoom || map.getZoom());
     }
-  }, [center, map]);
+  }, [center, zoom, map]);
   return null;
 };
 
@@ -54,7 +54,7 @@ export default function MapResultsView({ properties, onPropertyClick }) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        <ChangeMapView center={mapCenter} />
+        <ChangeMapView center={mapCenter} zoom={zoom} />
 
         {properties.map((property) => {
           if (!property.latitude || !property.longitude) return null;
@@ -64,7 +64,7 @@ export default function MapResultsView({ properties, onPropertyClick }) {
           return (
             <Marker 
               key={property._id} 
-              position={[property.latitude, property.longitude]}
+              position={[Number(property.latitude), Number(property.longitude)]}
               icon={createPriceIcon(priceNum)}
             >
               <Popup className="custom-map-popup">

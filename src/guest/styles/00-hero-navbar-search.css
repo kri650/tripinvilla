@@ -35,11 +35,11 @@
 
 /* Header/Navbar specs: Width 1278px, Height 72px, Top 39px, Left 82px (Centered) */
 .navbar-container {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1000;
+  z-index: 9999;
   display: flex;
   justify-content: space-between;
   align-items: center;

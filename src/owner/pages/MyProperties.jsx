@@ -330,7 +330,7 @@ export default function MyProperties() {
 
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
-    const totalAllowed = 10 - existingImages.length;
+    const totalAllowed = 30 - existingImages.length;
     const combined = [...selectedFiles, ...newFiles].slice(0, totalAllowed);
     setSelectedFiles(combined);
     if (fileInputRef.current) fileInputRef.current.value = '';
@@ -889,7 +889,7 @@ export default function MyProperties() {
                   <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden accept="image/*" />
                 </div>
               ) : (
-                <p style={{ color: '#EF4444', fontSize: '12px' }}>Maximum 10 images reached.</p>
+                <p style={{ color: '#EF4444', fontSize: '12px' }}>Maximum 30 images reached.</p>
               )}
             </>)}
 

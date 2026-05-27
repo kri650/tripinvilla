@@ -17,6 +17,8 @@ export default function LogOut() {
           <button className="btn btn-primary" style={{ background: '#EF4444' }} onClick={() => {
             localStorage.removeItem('admin_token');
             localStorage.removeItem('admin_user');
+            localStorage.removeItem('user_token');
+            localStorage.removeItem('user_data');
             navigate('/admin/login', { replace: true });
           }}>Yes, Log Out</button>
         </div>

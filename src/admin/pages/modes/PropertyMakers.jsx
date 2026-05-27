@@ -337,7 +337,7 @@ export default function PropertyMakers() {
 
   const handleFileChange = (e) => {
     const newFiles = Array.from(e.target.files);
-    const totalAllowed = 10 - existingImages.length;
+    const totalAllowed = 30 - existingImages.length;
     const combined = [...selectedFiles, ...newFiles].slice(0, totalAllowed);
     setSelectedFiles(combined);
     if (fileInputRef.current) fileInputRef.current.value = "";
@@ -1002,6 +1002,17 @@ export default function PropertyMakers() {
                       const displayList = areas.length > 0 ? areas : allLocations;
                       const a = displayList.find((x) => x._id === e.target.value);
                       setSelectedArea(a ? { id: a._id, name: a.locationName } : { id: '', name: '' });
+                      if (a && a.landmarks && a.landmarks.length > 0) {
+                        const mappedLandmarks = a.landmarks.map(l => ({
+                          landmark_name: l.landmarkName || l.name,
+                          landmark_type: l.landmarkPopularity || l.popularity || 'Tourist Popular',
+                          landmark_image_url: l.landmarkImageUrl || (l.images && l.images[0]) || ''
+                        }));
+                        // Auto-populate the landmarks from the selected location
+                        setLandmarksList(mappedLandmarks);
+                      } else if (a) {
+                        setLandmarksList([]); // Clear if the location has no landmarks
+                      }
                     }}>
                     <option value="">Select Area</option>
                     {(areas.length > 0 ? areas : allLocations).map((a) => (

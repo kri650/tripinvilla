@@ -22,9 +22,7 @@ export default function LocationMaster() {
     status: 'Active'
   });
 
-  const [landmarks, setLandmarks] = useState([
-    { landmarkName: 'Anjuna Flea Market', landmarkPopularity: 'Tourist Popular', landmarkImageUrl: 'https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=100&q=80' }
-  ]);
+  const [landmarks, setLandmarks] = useState([]);
 
   const [currentLandmarkName, setCurrentLandmarkName] = useState('');
   const [currentLandmarkPop, setCurrentLandmarkPop] = useState('Tourist Popular');
@@ -142,6 +140,17 @@ export default function LocationMaster() {
     }
 
     try {
+      // If the user typed a landmark but forgot to click "Add Landmark", add it now
+      let finalLandmarks = [...landmarks];
+      if (currentLandmarkName && currentLandmarkName.trim() !== '') {
+        finalLandmarks.push({
+          landmarkName: currentLandmarkName,
+          landmarkPopularity: currentLandmarkPop,
+          landmarkImageUrl: currentLandmarkPreview,
+          _file: currentLandmarkFile
+        });
+      }
+
       const dataToSend = new FormData();
       dataToSend.append('locationName', formData.locationName);
       dataToSend.append('locationType', formData.locationType);
@@ -150,17 +159,24 @@ export default function LocationMaster() {
       dataToSend.append('status', formData.status);
 
       // Serialize landmarks (without _file refs)
-      const landmarksMeta = landmarks.map(l => ({
+      const landmarksMeta = finalLandmarks.map(l => ({
         landmarkName: l.landmarkName,
         landmarkPopularity: l.landmarkPopularity,
         landmarkImageUrl: (l.landmarkImageUrl && !l.landmarkImageUrl.startsWith('blob:')) ? l.landmarkImageUrl : ''
       }));
       dataToSend.append('landmarks', JSON.stringify(landmarksMeta));
 
-      // Append actual image files for each landmark that has one
-      landmarks.forEach(l => {
-        if (l._file) dataToSend.append('landmarkImages', l._file);
+      // Append actual image files for each landmark that has one, and build hasFile array
+      const hasFileArr = [];
+      finalLandmarks.forEach(l => {
+        if (l._file) {
+          dataToSend.append('landmarkImages', l._file);
+          hasFileArr.push(true);
+        } else {
+          hasFileArr.push(false);
+        }
       });
+      dataToSend.append('landmarkHasFile', JSON.stringify(hasFileArr));
 
       let res;
       if (isEditing) {
@@ -180,6 +196,11 @@ export default function LocationMaster() {
         fetchLocations();
         setFormData({ id: '', locationName: '', locationType: 'City', parentLocationHierarchy: '', aboutLocation: '', status: 'Active' });
         setLandmarks([]);
+        setCurrentLandmarkName('');
+        setCurrentLandmarkPop('Tourist Popular');
+        setCurrentLandmarkFile(null);
+        setCurrentLandmarkPreview('');
+        if (landmarkFileRef.current) landmarkFileRef.current.value = '';
       } else {
         const err = await res.json();
         alert('Error saving location: ' + (err.message || 'Unknown error'));

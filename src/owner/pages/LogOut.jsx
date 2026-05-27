@@ -8,6 +8,8 @@ export default function LogOut() {
   useEffect(() => {
     localStorage.removeItem('token');
     localStorage.removeItem('owner_user');
+    localStorage.removeItem('user_token');
+    localStorage.removeItem('user_data');
   }, []);
 
   return (
