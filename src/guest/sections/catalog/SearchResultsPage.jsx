@@ -1,5 +1,7 @@
-import { ArrowRight, CheckCircle, Heart, MapPin, Phone, Search, Sparkles, Star } from 'lucide-react';
+import React, { useState } from 'react';
+import { ArrowRight, CheckCircle, Heart, MapPin, Phone, Search, Sparkles, Star, Map as MapIcon, List } from 'lucide-react';
 import './SearchResultsPage.css';
+import MapResultsView from './MapResultsView';
 
 export default function SearchResultsPage(props) {
   const {
@@ -29,6 +31,8 @@ export default function SearchResultsPage(props) {
     fetchProperties,
   } = props;
 
+  const [showMap, setShowMap] = useState(false);
+
   return (
     <div className="search-results-page fade-in">
       <div className="search-results-layout">
@@ -40,7 +44,7 @@ export default function SearchResultsPage(props) {
             {/* Map Preview */}
             <div className="map-preview-box" style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', height: '180px', marginBottom: '20px' }}>
               <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&w=400&q=80" alt="Map Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <button className="btn-explore-map" style={{ zIndex: 10 }} onClick={() => window.open(`https://www.google.com/maps/search/Hotels+in+${where || 'India'}`, '_blank')}>Explore on Map</button>
+              <button className="btn-explore-map" style={{ zIndex: 10 }} onClick={() => setShowMap(true)}>Explore on Map</button>
             </div>
 
             {/* Sidebar search */}
@@ -192,9 +196,25 @@ export default function SearchResultsPage(props) {
             </div>
           )}
 
-          <h2 className="search-results-count">
-            {`${getFilteredProperties().length} Properties In ${where || 'India'}`}
-          </h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+            <h2 className="search-results-count" style={{ margin: 0 }}>
+              {`${getFilteredProperties().length} Properties In ${where || 'India'}`}
+            </h2>
+            <div style={{ display: 'flex', background: '#F3F4F6', borderRadius: '8px', padding: '4px' }}>
+              <button 
+                onClick={() => setShowMap(false)}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: !showMap ? '#ffffff' : 'transparent', border: 'none', borderRadius: '6px', boxShadow: !showMap ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: !showMap ? '#111827' : '#6B7280', fontSize: '13px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}
+              >
+                <List size={14} /> List
+              </button>
+              <button 
+                onClick={() => setShowMap(true)}
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: showMap ? '#ffffff' : 'transparent', border: 'none', borderRadius: '6px', boxShadow: showMap ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: showMap ? '#111827' : '#6B7280', fontSize: '13px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}
+              >
+                <MapIcon size={14} /> Map
+              </button>
+            </div>
+          </div>
 
           {/* Sort tabs */}
           <div className="search-sort-tabs">
@@ -203,9 +223,15 @@ export default function SearchResultsPage(props) {
             ))}
           </div>
 
-          {/* Results list */}
-          <div className="search-horizontal-list">
-            {(() => {
+          {/* Results list or Map */}
+          {showMap ? (
+            <MapResultsView 
+              properties={getFilteredProperties()} 
+              onPropertyClick={(prop) => { setSelectedProperty(prop); setActiveMenu('Detail'); }} 
+            />
+          ) : (
+            <div className="search-horizontal-list">
+              {(() => {
               let displayList = getFilteredProperties();
               if (searchSortBy === 'price_low') displayList.sort((a, b) => Number(String(a.price || a.bestRoomRate || 0).replace(/[^\d]/g, '')) - Number(String(b.price || b.bestRoomRate || 0).replace(/[^\d]/g, '')));
               else if (searchSortBy === 'price_high') displayList.sort((a, b) => Number(String(b.price || b.bestRoomRate || 0).replace(/[^\d]/g, '')) - Number(String(a.price || a.bestRoomRate || 0).replace(/[^\d]/g, '')));
@@ -290,7 +316,8 @@ export default function SearchResultsPage(props) {
                 </>
               );
             })()}
-          </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
