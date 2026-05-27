@@ -90,6 +90,10 @@ export default function MyProperties() {
   const [locations, setLocations] = useState([]);
   const [locLoading, setLocLoading] = useState(false);
 
+  // ─── Manual Location Input ────────────────────────────────
+  const [manualLocation, setManualLocation] = useState({ country: false, state: false, city: false, area: false });
+  const [manualValues, setManualValues] = useState({ country: '', state: '', city: '', area: '' });
+
   // ─── Landmarks ────────────────────────────────────────────
   const [landmarksList, setLandmarksList] = useState([]);
   const [landmarkName, setLandmarkName] = useState('');
@@ -406,6 +410,8 @@ export default function MyProperties() {
       floorNumber: p.floorNumber || '', totalFloorsBuilding: p.totalFloorsBuilding || '', furnishedStatus: p.furnishedStatus || 'Fully Furnished', washingMachine: p.washingMachine || false, societyAmenities: p.societyAmenities || [],
       bonfireArea: p.bonfireArea || false, viewType: p.viewType || 'Mountain', outdoorSeating: p.outdoorSeating || false, nearestHikingTrail: p.nearestHikingTrail || '', distanceFromCity: p.distanceFromCity || '',
     });
+    setManualLocation({ country: false, state: false, city: false, area: false });
+    setManualValues({ country: '', state: '', city: '', area: '' });
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -583,6 +589,8 @@ export default function MyProperties() {
     setRoomsList([]);
     setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
     setStates([]); setCities([]); setLocations([]);
+    setManualLocation({ country: false, state: false, city: false, area: false });
+    setManualValues({ country: '', state: '', city: '', area: '' });
   };
 
   const filteredProps = myProps.filter(p => {
@@ -721,38 +729,72 @@ export default function MyProperties() {
             {sectionWrap(<>
               {sectionHeader('2. Property Location', 'Select country → state → city → area for accurate listing')}
               
+              {/* Toggle: Use Dropdowns vs Type Manually */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+                <span style={{ fontSize: 12, color: '#6B7280', fontFamily: '"Outfit", sans-serif' }}>Location not in list?</span>
+                <button type="button"
+                  onClick={() => setManualLocation(p => ({ country: !p.country, state: !p.state, city: !p.city, area: !p.area }))}
+                  style={{ fontSize: 12, color: '#58A429', background: 'none', border: '1px solid #58A429', borderRadius: 6, padding: '3px 10px', cursor: 'pointer', fontWeight: 600, fontFamily: '"Outfit", sans-serif' }}>
+                  {manualLocation.country ? '← Use Dropdowns' : 'Type Manually →'}
+                </button>
+              </div>
+
               {/* Cascading dropdowns */}
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
                 <div>
                   <label style={labelStyle}>Country *</label>
-                  <select style={selectStyle} value={formData.countryId} onChange={handleCountryChange} required>
-                    <option value="">Select Country</option>
-                    {countries.map(c => <option key={c._id} value={c._id}>{c.countryName}</option>)}
-                  </select>
+                  {manualLocation.country ? (
+                    <input type="text" style={inputStyle} placeholder="e.g. India"
+                      value={manualValues.country}
+                      onChange={e => { setManualValues(p => ({ ...p, country: e.target.value })); setFormData(p => ({ ...p, countryId: '', countryName: e.target.value })); }} />
+                  ) : (
+                    <select style={selectStyle} value={formData.countryId} onChange={handleCountryChange} required>
+                      <option value="">Select Country</option>
+                      {countries.map(c => <option key={c._id} value={c._id}>{c.countryName}</option>)}
+                    </select>
+                  )}
                 </div>
                 <div>
                   <label style={labelStyle}>State *</label>
-                  <select style={{ ...selectStyle, background: !formData.countryId ? '#F9FAFB' : '#fff', cursor: !formData.countryId ? 'not-allowed' : 'pointer' }}
-                    value={formData.stateId} onChange={handleStateChange} required disabled={!formData.countryId}>
-                    <option value="">Select State</option>
-                    {states.map(s => <option key={s._id} value={s._id}>{s.stateName}</option>)}
-                  </select>
+                  {manualLocation.state ? (
+                    <input type="text" style={inputStyle} placeholder="e.g. Himachal Pradesh"
+                      value={manualValues.state}
+                      onChange={e => { setManualValues(p => ({ ...p, state: e.target.value })); setFormData(p => ({ ...p, stateId: '', stateName: e.target.value })); }} />
+                  ) : (
+                    <select style={{ ...selectStyle, background: !formData.countryId ? '#F9FAFB' : '#fff', cursor: !formData.countryId ? 'not-allowed' : 'pointer' }}
+                      value={formData.stateId} onChange={handleStateChange} required disabled={!formData.countryId}>
+                      <option value="">Select State</option>
+                      {states.map(s => <option key={s._id} value={s._id}>{s.stateName}</option>)}
+                    </select>
+                  )}
                 </div>
                 <div>
                   <label style={labelStyle}>City *</label>
-                  <select style={{ ...selectStyle, background: !formData.stateId ? '#F9FAFB' : '#fff', cursor: !formData.stateId ? 'not-allowed' : 'pointer' }}
-                    value={formData.cityId} onChange={handleCityChange} required disabled={!formData.stateId}>
-                    <option value="">Select City</option>
-                    {cities.map(c => <option key={c._id} value={c._id}>{c.cityName}</option>)}
-                  </select>
+                  {manualLocation.city ? (
+                    <input type="text" style={inputStyle} placeholder="e.g. Kasol"
+                      value={manualValues.city}
+                      onChange={e => { setManualValues(p => ({ ...p, city: e.target.value })); setFormData(p => ({ ...p, cityId: '', cityName: e.target.value })); }} />
+                  ) : (
+                    <select style={{ ...selectStyle, background: !formData.stateId ? '#F9FAFB' : '#fff', cursor: !formData.stateId ? 'not-allowed' : 'pointer' }}
+                      value={formData.cityId} onChange={handleCityChange} required disabled={!formData.stateId}>
+                      <option value="">Select City</option>
+                      {cities.map(c => <option key={c._id} value={c._id}>{c.cityName}</option>)}
+                    </select>
+                  )}
                 </div>
                 <div>
                   <label style={labelStyle}>Area / Location</label>
-                  <select style={{ ...selectStyle, background: !formData.cityId ? '#F9FAFB' : '#fff', cursor: !formData.cityId ? 'not-allowed' : 'pointer' }}
-                    value={formData.locationId} onChange={handleLocationChange} disabled={!formData.cityId}>
-                    <option value="">Select Area</option>
-                    {locations.map(l => <option key={l._id} value={l._id}>{l.locationName}</option>)}
-                  </select>
+                  {manualLocation.area ? (
+                    <input type="text" style={inputStyle} placeholder="e.g. Parvati Valley"
+                      value={manualValues.area}
+                      onChange={e => { setManualValues(p => ({ ...p, area: e.target.value })); setFormData(p => ({ ...p, locationId: '', locationName: e.target.value })); }} />
+                  ) : (
+                    <select style={{ ...selectStyle, background: !formData.cityId ? '#F9FAFB' : '#fff', cursor: !formData.cityId ? 'not-allowed' : 'pointer' }}
+                      value={formData.locationId} onChange={handleLocationChange} disabled={!formData.cityId}>
+                      <option value="">Select Area</option>
+                      {locations.map(l => <option key={l._id} value={l._id}>{l.locationName}</option>)}
+                    </select>
+                  )}
                 </div>
               </div>
 
