@@ -13,11 +13,21 @@ export default function Account() {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    fetch(`${import.meta.env.VITE_API_BASE}/content/account`)
+    const token = localStorage.getItem('admin_token');
+    fetch(`${import.meta.env.VITE_API_BASE}/users/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
       .then(res => res.json())
       .then(data => {
-        if (data && data.data && Object.keys(data.data).length > 0) {
-          setFormData(prev => ({ ...prev, ...data.data }));
+        if (data && data._id) {
+          setFormData({
+            firstName: data.name ? data.name.split(' ')[0] : '',
+            lastName: data.name ? data.name.split(' ').slice(1).join(' ') : '',
+            contactNumber: data.phone || '',
+            email: data.email || '',
+            location: data.city || '',
+            image: data.avatar || ''
+          });
         }
       })
       .catch(console.error);
@@ -30,13 +40,21 @@ export default function Account() {
   const handleUpdate = async () => {
     setLoading(true);
     try {
-      const fd = new FormData();
-      fd.append('contentData', JSON.stringify(formData));
-      if (file) fd.append('image', file);
+      const token = localStorage.getItem('admin_token');
+      const payload = {
+        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        phone: formData.contactNumber,
+        email: formData.email,
+        city: formData.location
+      };
       
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/content/account`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/users/profile`, {
         method: 'PUT',
-        body: fd
+        headers: { 
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}` 
+        },
+        body: JSON.stringify(payload)
       });
       if (res.ok) alert('Profile updated successfully!');
       else alert('Failed to update profile.');
