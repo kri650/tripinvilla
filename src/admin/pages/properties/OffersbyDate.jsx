@@ -9,6 +9,8 @@ export default function OffersbyDate() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
   const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
+  const [filterLocation, setFilterLocation] = useState('');
 
   const fetchOffers = async () => {
     setLoading(true);
@@ -46,21 +48,30 @@ export default function OffersbyDate() {
   };
 
   const filteredOffers = offers.filter(o => {
-    const matchQuery = (o.propertyName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                       (o.location || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-                       (o.offerId || '').toLowerCase().includes(searchQuery.toLowerCase());
+    const matchQuery = !searchQuery ? true : (
+      (o.propertyName || '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (o.offerId || '').toLowerCase().includes(searchQuery.toLowerCase())
+    );
     const matchCat = selectedCategory ? o.category === selectedCategory : true;
+    const matchLoc = filterLocation ? (o.location || '').toLowerCase().includes(filterLocation.toLowerCase()) : true;
     
     let matchDate = true;
-    if (dateFrom) {
+    if (dateFrom || dateTo) {
       const od = new Date(o.offer_date || o.createdAt || o.dateFrom || o.datesAndTime);
-      const fd = new Date(dateFrom);
-      fd.setHours(0,0,0,0);
       od.setHours(0,0,0,0);
-      if (od < fd) matchDate = false;
+      if (dateFrom) {
+        const fd = new Date(dateFrom);
+        fd.setHours(0,0,0,0);
+        if (od < fd) matchDate = false;
+      }
+      if (dateTo) {
+        const td = new Date(dateTo);
+        td.setHours(0,0,0,0);
+        if (od > td) matchDate = false;
+      }
     }
 
-    return matchQuery && matchCat && matchDate;
+    return matchQuery && matchCat && matchLoc && matchDate;
   });
 
   return (
@@ -96,7 +107,7 @@ export default function OffersbyDate() {
           <div className="props-table-toolbar" style={{ margin: 0, borderBottom: 'none', padding: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
             <div className="props-table-title" style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif' }}>Offers by Date</div>
             
-            <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
                 <Calendar size={13} style={{ color: '#6B7280' }} />
                 <input 
@@ -108,18 +119,38 @@ export default function OffersbyDate() {
               </div>
 
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
+                <Calendar size={13} style={{ color: '#6B7280' }} />
+                <input 
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
+                />
+              </div>
+
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
                 <select 
                   value={selectedCategory} 
                   onChange={e => setSelectedCategory(e.target.value)}
                   style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
                 >
-                  <option value="">All Categories</option>
+                  <option value="">Property Type</option>
                   <option value="Villa">Villa</option>
                   <option value="Homestay">Homestay</option>
                   <option value="Resort">Resort</option>
                   <option value="Apartment">Apartment</option>
                   <option value="Hotel">Hotel</option>
                 </select>
+              </div>
+
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', width: 140 }}>
+                <input 
+                  type="text"
+                  placeholder="Location"
+                  value={filterLocation}
+                  onChange={(e) => setFilterLocation(e.target.value)}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, fontFamily: '"Outfit", sans-serif', width: '100%' }}
+                />
               </div>
 
               <button className="props-btn-filter" onClick={fetchOffers} style={{ cursor: 'pointer', border: '1px solid #58A429', background: '#fff', color: '#58A429', padding: '6px 16px', borderRadius: 8, display: 'flex', alignItems: 'center', gap: 6, fontWeight: 600 }}>
@@ -130,7 +161,7 @@ export default function OffersbyDate() {
                 <Search size={14} style={{ color: '#9CA3AF' }} />
                 <input 
                   type="text" 
-                  placeholder="Search property or location..." 
+                  placeholder="Search properties..." 
                   value={searchQuery}
                   onChange={e => setSearchQuery(e.target.value)}
                   onKeyDown={e => e.key === 'Enter' && fetchOffers()}
