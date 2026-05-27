@@ -211,18 +211,38 @@ export default function PropertyRooms() {
               </div>
 
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
+                <Calendar size={13} style={{ color: '#6B7280' }} />
+                <input 
+                  type="date"
+                  value={filterDateTo}
+                  onChange={(e) => setFilterDateTo(e.target.value)}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
+                />
+              </div>
+
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
                 <select 
                   value={selectedCategory} 
                   onChange={e => setSelectedCategory(e.target.value)}
                   style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
                 >
-                  <option value="">All Categories</option>
+                  <option value="">Property Type</option>
                   <option value="Villa">Villa</option>
                   <option value="Homestay">Homestay</option>
                   <option value="Resort">Resort</option>
                   <option value="Apartment">Apartment</option>
                   <option value="Hotel">Hotel</option>
                 </select>
+              </div>
+
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', width: 140 }}>
+                <input 
+                  type="text"
+                  placeholder="Location"
+                  value={filterLocation}
+                  onChange={(e) => setFilterLocation(e.target.value)}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, fontFamily: '"Outfit", sans-serif', width: '100%' }}
+                />
               </div>
 
               <button 
