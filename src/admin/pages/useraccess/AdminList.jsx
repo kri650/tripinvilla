@@ -7,6 +7,8 @@ export default function AdminList() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
 
   // Form State
   const [formData, setFormData] = useState({
@@ -120,12 +122,24 @@ export default function AdminList() {
         <div className="admin-table-header">
           <h2 className="admin-table-title">Admin List</h2>
           <div className="admin-table-toolbar">
-            <button className="admin-toolbar-btn">
-              <Calendar size={14} /> Date From <ChevronDown size={14} />
-            </button>
-            <button className="admin-toolbar-btn">
-              <Calendar size={14} /> Date To <ChevronDown size={14} />
-            </button>
+            <div className="admin-toolbar-btn" style={{ padding: '4px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Calendar size={14} /> 
+              <input 
+                type="date" 
+                value={dateFrom}
+                onChange={e => setDateFrom(e.target.value)}
+                style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}
+              />
+            </div>
+            <div className="admin-toolbar-btn" style={{ padding: '4px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <Calendar size={14} /> 
+              <input 
+                type="date" 
+                value={dateTo}
+                onChange={e => setDateTo(e.target.value)}
+                style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}
+              />
+            </div>
             <button className="admin-toolbar-btn filter">
               <Filter size={14} /> Filter
             </button>
@@ -168,7 +182,25 @@ export default function AdminList() {
                 </tr>
               ) : admins.filter(a => {
                   const s = searchTerm.toLowerCase();
-                  return !s || (a.name || '').toLowerCase().includes(s) || (a.email || '').toLowerCase().includes(s) || (a.role || '').toLowerCase().includes(s);
+                  const matchSearch = !s || (a.name || '').toLowerCase().includes(s) || (a.email || '').toLowerCase().includes(s) || (a.role || '').toLowerCase().includes(s);
+                  
+                  let matchDate = true;
+                  if (dateFrom || dateTo) {
+                    const aDate = new Date(a.createdAt || new Date('2026-05-16')); // Fallback for mock
+                    aDate.setHours(0,0,0,0);
+                    if (dateFrom) {
+                      const fd = new Date(dateFrom);
+                      fd.setHours(0,0,0,0);
+                      if (aDate < fd) matchDate = false;
+                    }
+                    if (dateTo) {
+                      const td = new Date(dateTo);
+                      td.setHours(23,59,59,999);
+                      if (aDate > td) matchDate = false;
+                    }
+                  }
+                  
+                  return matchSearch && matchDate;
                 }).map((a, i) => (
                   <tr key={a._id || a.id || i}>
                     <td style={{ color: '#58A429', fontWeight: 500 }}>
