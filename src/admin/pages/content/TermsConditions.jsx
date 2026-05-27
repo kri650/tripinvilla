@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { 
   ChevronDown, Bold, Underline, Highlighter, Type, 
   List, ListOrdered, AlignLeft, AlignRight, Link, 
@@ -258,11 +258,41 @@ export default function TermsConditions() {
 
   const [toastVisible, setToastVisible] = useState(false);
 
-  const handleUpdate = () => {
-    setToastVisible(true);
-    setTimeout(() => {
-      setToastVisible(false);
-    }, 3000);
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_BASE}/content/termsConditions`)
+      .then(res => res.json())
+      .then(data => {
+        if (data && data.data) {
+          if (data.data.overview) setOverview(data.data.overview);
+          if (data.data.storeTerms) setStoreTerms(data.data.storeTerms);
+          if (data.data.general) setGeneral(data.data.general);
+          if (data.data.accuracy) setAccuracy(data.data.accuracy);
+          if (data.data.modification) setModification(data.data.modification);
+          if (data.data.billing) setBilling(data.data.billing);
+        }
+      })
+      .catch(err => console.error("Error loading Terms content", err));
+  }, []);
+
+  const handleUpdate = async () => {
+    const payload = { overview, storeTerms, general, accuracy, modification, billing };
+    const formData = new FormData();
+    formData.append("contentData", JSON.stringify(payload));
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/content/termsConditions`, {
+        method: "PUT",
+        body: formData,
+      });
+      if (res.ok) {
+        setToastVisible(true);
+        setTimeout(() => setToastVisible(false), 3000);
+      } else {
+        alert("Failed to update terms and conditions");
+      }
+    } catch (e) {
+      console.error(e);
+      alert("Error saving terms and conditions");
+    }
   };
 
   return (

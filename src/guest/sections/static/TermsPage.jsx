@@ -17,6 +17,15 @@ export default function TermsPage({ activeMenu }) {
     rights: 'You have the right to access, update, or delete your personal information. You may contact us if you wish to review or correct any personal information we hold about you.'
   });
 
+  const [termsContent, setTermsContent] = useState({
+    overview: 'The website is operated by TripinVilla. Throughout the site, the terms "we", "us" and "our" refer to TripinVilla. TripinVilla offers this website, including all information, tools, and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies, and notices stated here.\nBy visiting our site and/or purchasing something from us, you engage in our "Service" and agree to be bound by the following terms and conditions ("Terms of Service", "Terms"), including additional terms and conditions and policies referenced here and/or available via hyperlink.\nAny new features or tools added to the current store shall also be subject to the Terms of Service. We reserve the right to update, change, modify, or replace any part of these Terms by posting updates and/or changes on our website.',
+    storeTerms: 'By agreeing to these Terms of Service, you represent that you are at least the age of majority and in good health in your state or province of residence.\nYou may not use our products for any illegal or unauthorized purpose nor may you, in the use of the Service, violate any laws in your jurisdiction.',
+    general: 'We reserve the right to refuse service to anyone for any reason at any time.\nYou understand that your content may be transferred encrypted and involve transmissions over various networks; and changes to conform and adapt to technical requirements of connecting networks or devices.',
+    accuracy: 'TripinVilla is not responsible if information made available on this website is not accurate, complete, or current. This website may contain certain historical information which is provided for your reference only.',
+    modification: 'Prices for our services and products are subject to change without notice. TripinVilla reserves the right at any time to modify or discontinue the Service without notice at any time.',
+    billing: 'TripinVilla reserves the right to refuse any order you place with us. You agree to provide current, complete, and accurate purchase and account information for all purchases made at our store.'
+  });
+
   useEffect(() => {
     if (isPrivacy) {
       fetch(`${import.meta.env.VITE_API_BASE}/content/privacyPolicy`)
@@ -30,6 +39,18 @@ export default function TermsPage({ activeMenu }) {
           }
         })
         .catch(err => console.error("Error loading Privacy Policy content", err));
+    } else {
+      fetch(`${import.meta.env.VITE_API_BASE}/content/termsConditions`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.data) {
+            setTermsContent(prev => ({
+              ...prev,
+              ...data.data
+            }));
+          }
+        })
+        .catch(err => console.error("Error loading Terms content", err));
     }
   }, [isPrivacy]);
 
@@ -62,21 +83,17 @@ export default function TermsPage({ activeMenu }) {
           ) : (
             <>
               <h3 className="terms-section-header">OVERVIEW</h3>
-              <p className="terms-text-p">The website is operated by TripinVilla. Throughout the site, the terms "we", "us" and "our" refer to TripinVilla. TripinVilla offers this website, including all information, tools, and services available from this site to you, the user, conditioned upon your acceptance of all terms, conditions, policies, and notices stated here.</p>
-              <p className="terms-text-p">By visiting our site and/or purchasing something from us, you engage in our "Service" and agree to be bound by the following terms and conditions ("Terms of Service", "Terms"), including additional terms and conditions and policies referenced here and/or available via hyperlink.</p>
-              <p className="terms-text-p" style={{ marginBottom: '40px' }}>Any new features or tools added to the current store shall also be subject to the Terms of Service. We reserve the right to update, change, modify, or replace any part of these Terms by posting updates and/or changes on our website.</p>
+              <p className="terms-text-p">{termsContent.overview}</p>
               <h3 className="terms-section-header">1 – ONLINE STORE TERMS</h3>
-              <p className="terms-text-p">By agreeing to these Terms of Service, you represent that you are at least the age of majority and in good health in your state or province of residence.</p>
-              <p className="terms-text-p" style={{ marginBottom: '40px' }}>You may not use our products for any illegal or unauthorized purpose nor may you, in the use of the Service, violate any laws in your jurisdiction.</p>
+              <p className="terms-text-p" style={{ marginBottom: '40px' }}>{termsContent.storeTerms}</p>
               <h3 className="terms-section-header">2 – GENERAL CONDITIONS</h3>
-              <p className="terms-text-p">We reserve the right to refuse service to anyone for any reason at any time.</p>
-              <p className="terms-text-p" style={{ marginBottom: '40px' }}>You understand that your content may be transferred encrypted and involve transmissions over various networks; and changes to conform and adapt to technical requirements of connecting networks or devices.</p>
+              <p className="terms-text-p" style={{ marginBottom: '40px' }}>{termsContent.general}</p>
               <h3 className="terms-section-header">3 – ACCURACY OF INFORMATION</h3>
-              <p className="terms-text-p" style={{ marginBottom: '40px' }}>TripinVilla is not responsible if information made available on this website is not accurate, complete, or current. This website may contain certain historical information which is provided for your reference only.</p>
+              <p className="terms-text-p" style={{ marginBottom: '40px' }}>{termsContent.accuracy}</p>
               <h3 className="terms-section-header">4 – MODIFICATIONS TO SERVICE AND PRICES</h3>
-              <p className="terms-text-p">Prices for our services and products are subject to change without notice. TripinVilla reserves the right at any time to modify or discontinue the Service without notice at any time.</p>
+              <p className="terms-text-p" style={{ marginBottom: '40px' }}>{termsContent.modification}</p>
               <h3 className="terms-section-header">5 – BILLING AND ACCOUNT INFORMATION</h3>
-              <p className="terms-text-p">TripinVilla reserves the right to refuse any order you place with us. You agree to provide current, complete, and accurate purchase and account information for all purchases made at our store.</p>
+              <p className="terms-text-p" style={{ marginBottom: '40px' }}>{termsContent.billing}</p>
             </>
           )}
         </div>
