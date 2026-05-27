@@ -28,10 +28,12 @@ export default function AddOffer() {
     const fetchProperties = async () => {
       setLoadingProperties(true);
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE}/properties`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/master/properties`);
         const data = await res.json();
         if (Array.isArray(data)) {
           setProperties(data);
+        } else if (data && Array.isArray(data.properties)) {
+          setProperties(data.properties);
         }
       } catch (err) {
         console.error('Error fetching properties:', err);
@@ -50,8 +52,8 @@ export default function AddOffer() {
       setAvailableRooms(rooms);
       setFormData(prev => ({
         ...prev,
-        propertyName: prop.name || '',
-        category: prop.type || 'Homestay',
+        propertyName: prop.name || prop.propertyName || '',
+        category: prop.type || prop.propertyType || 'Homestay',
         room: rooms[0]?.roomType || 'Deluxe Room',
         amenities: Array.isArray(prop.amenities) ? prop.amenities.join(', ') : '',
         price: prop.price ? `₹${prop.price} per night` : '',
@@ -146,7 +148,7 @@ export default function AddOffer() {
                 >
                   <option value="">Select a property...</option>
                   {properties.map(p => (
-                    <option key={p._id} value={p._id}>{p.name} ({p.location})</option>
+                    <option key={p._id} value={p._id}>{p.name || p.propertyName} ({p.location || p.city})</option>
                   ))}
                 </select>
                 <ChevronDown size={16} style={{ position: 'absolute', right: 16, top: 14, color: '#6B7280', pointerEvents: 'none' }} />
