@@ -7,6 +7,7 @@ export default function AddPropertyOwner() {
   const [formData, setFormData] = useState({
     ownerName: '',
     email: '',
+    password: '',
     contactNo: '',
     properties: [''],
     status: 'Active',
@@ -32,6 +33,7 @@ export default function AddPropertyOwner() {
         body: JSON.stringify({
           ownerName: formData.ownerName,
           email: formData.email,
+          password: formData.password,
           contactNo: formData.contactNo,
           properties: formData.properties.filter(Boolean),
           status: formData.status,
@@ -64,7 +66,7 @@ export default function AddPropertyOwner() {
           </div>
 
           {/* Row 1 */}
-          <div className="form-grid-3">
+          <div className="form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 24 }}>
             <div className="form-group">
               <label className="form-label">Owner Name*</label>
               <input 
@@ -87,6 +89,9 @@ export default function AddPropertyOwner() {
                 onChange={e => setFormData({...formData, email: e.target.value})}
               />
             </div>
+          </div>
+
+          <div className="form-grid-2" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, marginBottom: 24 }}>
             <div className="form-group">
               <label className="form-label">Contact Number*</label>
               <input 
@@ -96,6 +101,17 @@ export default function AddPropertyOwner() {
                 placeholder="e.g. +91 9822012345"
                 value={formData.contactNo}
                 onChange={e => setFormData({...formData, contactNo: e.target.value})}
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Login Password*</label>
+              <input 
+                type="text" 
+                required 
+                className="form-input" 
+                placeholder="Assign a password for the owner"
+                value={formData.password}
+                onChange={e => setFormData({...formData, password: e.target.value})}
               />
             </div>
           </div>
