@@ -1,47 +1,110 @@
-import { useState } from 'react';
-import { ChevronDown, Calendar } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { ChevronDown } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 export default function AddOffer() {
   const navigate = useNavigate();
+  const [properties, setProperties] = useState([]);
+  const [selectedPropertyId, setSelectedPropertyId] = useState('');
+  const [availableRooms, setAvailableRooms] = useState([]);
+  const [loadingProperties, setLoadingProperties] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
   const [formData, setFormData] = useState({
     propertyName: '',
     category: 'Homestay',
     room: 'Deluxe Room',
-    foods: 'Pure - Veg',
+    foods: 'Pure Veg',
     amenities: 'Barbeque, WiFi',
     price: '₹2,500 per night',
-    date: '2026-06-15',
-    time: '12:00 PM',
-    offerPercent: 20,
+    date: new Date().toISOString().split('T')[0],
+    time: '9:00 AM',
+    offerPercent: '20% Off',
     description: 'Special early bird discount offer',
     status: 'Active'
   });
 
+  useEffect(() => {
+    const fetchProperties = async () => {
+      setLoadingProperties(true);
+      try {
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/properties`);
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setProperties(data);
+        }
+      } catch (err) {
+        console.error('Error fetching properties:', err);
+      } finally {
+        setLoadingProperties(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
+  const handlePropertyChange = (propertyId) => {
+    setSelectedPropertyId(propertyId);
+    const prop = properties.find(p => p._id === propertyId);
+    if (prop) {
+      const rooms = Array.isArray(prop.rooms) ? prop.rooms : [];
+      setAvailableRooms(rooms);
+      setFormData(prev => ({
+        ...prev,
+        propertyName: prop.name || '',
+        category: prop.type || 'Homestay',
+        room: rooms[0]?.roomType || 'Deluxe Room',
+        amenities: Array.isArray(prop.amenities) ? prop.amenities.join(', ') : '',
+        price: prop.price ? `₹${prop.price} per night` : '',
+      }));
+    } else {
+      setAvailableRooms([]);
+      setFormData(prev => ({
+        ...prev,
+        propertyName: '',
+        category: 'Homestay',
+        room: 'Deluxe Room',
+        amenities: '',
+        price: '',
+      }));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!selectedPropertyId) {
+      alert('Please select a property.');
+      return;
+    }
+    setSubmitting(true);
     try {
+      const token = localStorage.getItem('admin_token');
       const res = await fetch(`${import.meta.env.VITE_API_BASE}/offers`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
-          propertyName: formData.propertyName,
-          location: 'Goa, India',
-          category: formData.category,
-          room: formData.room,
-          foods: formData.foods,
-          amenities: formData.amenities.split(',').map(s => s.trim()),
-          offerPercent: Number(formData.offerPercent),
-          description: formData.description,
-          status: formData.status,
-          dateTo: new Date(formData.date)
+          property_id: selectedPropertyId,
+          food_type: formData.foods,
+          offer_date: formData.date,
+          offer_time: formData.time,
+          offer_percent: formData.offerPercent,
+          description: formData.description
         })
       });
       if (res.ok) {
+        alert('Promotional offer created successfully!');
         navigate('/admin/properties/offers');
+      } else {
+        const errorData = await res.json().catch(() => ({}));
+        alert(errorData.message || 'Failed to save offer');
       }
     } catch (err) {
       console.error('Error adding offer:', err);
+      alert('Network error while saving offer');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -58,7 +121,14 @@ export default function AddOffer() {
           <div className="master-form-header">
             <div className="master-form-title">Add Offer by Date</div>
             <div className="master-form-actions">
-              <button type="submit" className="btn-solid-green" style={{ cursor: 'pointer', padding: '8px 24px' }}>Save Offer</button>
+              <button 
+                type="submit" 
+                className="btn-solid-green" 
+                disabled={submitting || loadingProperties}
+                style={{ cursor: 'pointer', padding: '8px 24px', opacity: submitting ? 0.7 : 1 }}
+              >
+                {submitting ? 'Saving...' : 'Save Offer'}
+              </button>
             </div>
           </div>
 
@@ -66,43 +136,59 @@ export default function AddOffer() {
           <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">Property Name*</label>
-              <input 
-                type="text" 
-                required 
-                className="form-input" 
-                placeholder="e.g. Whispering Palms Villa"
-                value={formData.propertyName}
-                onChange={e => setFormData({...formData, propertyName: e.target.value})}
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Category*</label>
               <div style={{ position: 'relative' }}>
                 <select 
                   className="form-select" 
                   style={{ appearance: 'none' }}
-                  value={formData.category}
-                  onChange={e => setFormData({...formData, category: e.target.value})}
+                  required
+                  value={selectedPropertyId}
+                  onChange={e => handlePropertyChange(e.target.value)}
                 >
-                  <option value="Homestay">Homestay</option>
-                  <option value="Villa">Villa</option>
-                  <option value="Resort">Resort</option>
-                  <option value="Apartment">Apartment</option>
-                  <option value="Hotel">Hotel</option>
+                  <option value="">Select a property...</option>
+                  {properties.map(p => (
+                    <option key={p._id} value={p._id}>{p.name} ({p.location})</option>
+                  ))}
                 </select>
                 <ChevronDown size={16} style={{ position: 'absolute', right: 16, top: 14, color: '#6B7280', pointerEvents: 'none' }} />
               </div>
             </div>
             <div className="form-group">
-              <label className="form-label">Room Type*</label>
+              <label className="form-label">Category (Auto-filled)*</label>
               <input 
                 type="text" 
-                required 
                 className="form-input" 
-                placeholder="e.g. Deluxe Suite"
-                value={formData.room}
-                onChange={e => setFormData({...formData, room: e.target.value})}
+                value={formData.category} 
+                readOnly 
+                disabled 
+                placeholder="Select property first"
               />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Room Type*</label>
+              {availableRooms.length > 0 ? (
+                <div style={{ position: 'relative' }}>
+                  <select 
+                    className="form-select" 
+                    style={{ appearance: 'none' }}
+                    value={formData.room}
+                    onChange={e => setFormData({...formData, room: e.target.value})}
+                  >
+                    {availableRooms.map(r => (
+                      <option key={r.roomType || r._id} value={r.roomType}>{r.roomType}</option>
+                    ))}
+                  </select>
+                  <ChevronDown size={16} style={{ position: 'absolute', right: 16, top: 14, color: '#6B7280', pointerEvents: 'none' }} />
+                </div>
+              ) : (
+                <input 
+                  type="text" 
+                  className="form-input" 
+                  value={formData.room} 
+                  readOnly 
+                  disabled 
+                  placeholder="Select property first"
+                />
+              )}
             </div>
           </div>
 
@@ -117,34 +203,33 @@ export default function AddOffer() {
                   value={formData.foods}
                   onChange={e => setFormData({...formData, foods: e.target.value})}
                 >
-                  <option value="Pure - Veg">Pure - Veg</option>
-                  <option value="Non - Veg">Non - Veg</option>
-                  <option value="All Meals Included">All Meals Included</option>
-                  <option value="Breakfast Included">Breakfast Included</option>
+                  <option value="Pure Veg">Pure Veg</option>
+                  <option value="Non-Veg">Non-Veg</option>
+                  <option value="Both">Both</option>
                 </select>
                 <ChevronDown size={16} style={{ position: 'absolute', right: 16, top: 14, color: '#6B7280', pointerEvents: 'none' }} />
               </div>
             </div>
             <div className="form-group">
-              <label className="form-label">Amenities Types*</label>
+              <label className="form-label">Amenities Types (Auto-filled)*</label>
               <input 
                 type="text" 
-                required 
                 className="form-input" 
-                placeholder="e.g. Private Pool, WiFi, BBQ"
-                value={formData.amenities}
-                onChange={e => setFormData({...formData, amenities: e.target.value})}
+                value={formData.amenities} 
+                readOnly 
+                disabled 
+                placeholder="Select property first"
               />
             </div>
             <div className="form-group">
-              <label className="form-label">Price for Room*</label>
+              <label className="form-label">Price for Room (Auto-filled)*</label>
               <input 
                 type="text" 
-                required 
                 className="form-input" 
-                placeholder="e.g. ₹5,000 per night"
-                value={formData.price}
-                onChange={e => setFormData({...formData, price: e.target.value})}
+                value={formData.price} 
+                readOnly 
+                disabled 
+                placeholder="Select property first"
               />
             </div>
           </div>
@@ -153,25 +238,21 @@ export default function AddOffer() {
           <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">Valid Until Date*</label>
-              <div style={{ position: 'relative' }}>
-                <input 
-                  type="date" 
-                  required 
-                  className="form-input" 
-                  value={formData.date}
-                  onChange={e => setFormData({...formData, date: e.target.value})}
-                />
-              </div>
-            </div>
-            <div className="form-group">
-              <label className="form-label">Offer Discount (%)*</label>
               <input 
-                type="number" 
-                min="1" 
-                max="99" 
+                type="date" 
                 required 
                 className="form-input" 
-                placeholder="e.g. 20"
+                value={formData.date}
+                onChange={e => setFormData({...formData, date: e.target.value})}
+              />
+            </div>
+            <div className="form-group">
+              <label className="form-label">Offer Discount (e.g. 20% Off)*</label>
+              <input 
+                type="text" 
+                required 
+                className="form-input" 
+                placeholder="e.g. 20% Off"
                 value={formData.offerPercent}
                 onChange={e => setFormData({...formData, offerPercent: e.target.value})}
               />

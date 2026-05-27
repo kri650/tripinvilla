@@ -32,7 +32,13 @@ export default function OffersbyDate() {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure you want to delete this offer?')) return;
     try {
-      const res = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${id}`, { method: 'DELETE' });
+      const token = localStorage.getItem('admin_token');
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (res.ok) fetchOffers();
     } catch (err) {
       console.error('Error deleting offer:', err);
