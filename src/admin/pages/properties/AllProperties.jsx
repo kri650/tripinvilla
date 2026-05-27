@@ -32,6 +32,7 @@ export default function AllProperties() {
   });
   const [searchQuery, setSearchQuery] = useState("");
   const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [loading, setLoading] = useState(false); // Add Panel State
   const [showPanel, setShowPanel] = useState(false);
@@ -121,7 +122,8 @@ export default function AllProperties() {
       const params = new URLSearchParams();
       if (searchQuery) params.append("search", searchQuery);
       if (propertyType) params.append("type", propertyType);
-      if (dateFrom) params.append("date", dateFrom);
+      if (dateFrom) params.append("dateFrom", dateFrom);
+      if (dateTo) params.append("dateTo", dateTo);
 
       // Fetch Active properties (default when no status is passed)
       const resActive = await fetch(`${API}/properties?${params.toString()}`);
@@ -742,6 +744,30 @@ export default function AllProperties() {
                   type="date"
                   value={dateFrom}
                   onChange={(e) => setDateFrom(e.target.value)}
+                  style={{
+                    border: "none",
+                    background: "transparent",
+                    outline: "none",
+                    color: "#374151",
+                    fontSize: 13,
+                    cursor: "pointer",
+                  }}
+                />
+              </div>
+              <div
+                className="props-filter-select"
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "6px 12px",
+                }}
+              >
+                <Calendar size={14} style={{ color: "#6B7280" }} />
+                <input
+                  type="date"
+                  value={dateTo}
+                  onChange={(e) => setDateTo(e.target.value)}
                   style={{
                     border: "none",
                     background: "transparent",
