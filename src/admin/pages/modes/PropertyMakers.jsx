@@ -311,7 +311,7 @@ export default function PropertyMakers() {
         ...prev,
         ownerId: ownerId,
         ownerName: selectedOwner.ownerName || selectedOwner.name,
-        ownerContact: selectedOwner.phone || selectedOwner.email || "",
+        ownerContact: selectedOwner.phone || "",
       }));
     } else {
       const adminUserStr = localStorage.getItem("admin_user");
@@ -324,7 +324,7 @@ export default function PropertyMakers() {
               ...prev,
               ownerId: ownerId,
               ownerName: adminUser.name || "Admin",
-              ownerContact: adminUser.email || adminUser.phone || "",
+              ownerContact: adminUser.phone || "",
             }));
             return;
           }
@@ -438,12 +438,12 @@ export default function PropertyMakers() {
         cityName: selectedCity.name || undefined,
         locationId: selectedArea.id || undefined,
         locationName: selectedArea.name || undefined,
-        address: selectedArea.name ? `${selectedArea.name}, ${selectedCity.name}` : formData.location,
-        location: selectedArea.name ? `${selectedArea.name}, ${selectedCity.name}` : formData.location,
+        address: selectedArea.name ? [selectedArea.name, selectedCity.name, selectedState.name, selectedCountry.name].filter(Boolean).join(', ') : formData.location,
+        location: selectedArea.name ? [selectedArea.name, selectedCity.name, selectedState.name, selectedCountry.name].filter(Boolean).join(', ') : formData.location,
         city: selectedCity.name || undefined,
         state: selectedState.name || undefined,
         country: selectedCountry.name || undefined,
-        full_address: formData.full_address || formData.location,
+        full_address: formData.full_address || (selectedArea.name ? [selectedArea.name, selectedCity.name, selectedState.name, selectedCountry.name].filter(Boolean).join(', ') : formData.location),
         latitude: formData.latitude ? Number(formData.latitude) : undefined,
         longitude: formData.longitude ? Number(formData.longitude) : undefined,
         owner: formData.ownerId || undefined,
@@ -607,13 +607,6 @@ export default function PropertyMakers() {
                 {isEditing ? "Modify Property Master" : "Add New Property Master"}
               </div>
               <div className="master-form-actions">
-                <button
-                  type="button"
-                  className="btn-outline-green"
-                  onClick={() => navigate("/admin/modes/pricing-rules")}
-                >
-                  Edit Pricing &amp; Rules
-                </button>
                 <button
                   type="submit"
                   className="btn-solid-green"
@@ -1634,11 +1627,7 @@ export default function PropertyMakers() {
                 </div>
               </div>
 
-              {/* Rules */}
-              <div className="form-group" style={{ marginBottom: 12 }}>
-                <label className="form-label">Rules &amp; Regulations*</label>
-                <textarea className="form-textarea" style={{ minHeight: 90 }} value={roomForm.rules || ''} onChange={e => setRoomForm(p => ({ ...p, rules: e.target.value }))} />
-              </div>
+              {/* Rules removed as requested */}
 
               {/* Add Room button */}
               <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12 }}>

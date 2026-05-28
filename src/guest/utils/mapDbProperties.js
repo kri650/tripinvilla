@@ -35,14 +35,30 @@ export function mapDbProperties(dbProps, defaultList, where) {
       images: p.images || (p.image ? [p.image] : p.img ? [p.img] : []),
       ownerContact: p.ownerContact || '',
       roomType: p.roomType || '',
-      amenities: p.amenities || ['WiFi', 'Parking', 'Swimming Pool'],
+      amenities: (() => {
+        const base = p.amenities || ['WiFi', 'Parking', 'Swimming Pool'];
+        const extras = [];
+        if (p.restaurantOnSite) extras.push('Restaurant on-site');
+        if (p.receptionAllDay) extras.push('Reception 24/7');
+        if (p.roomService) extras.push('Room Service Available');
+        if (p.liftElevator) extras.push('Lift / Elevator');
+        if (p.starRating) extras.push(`${p.starRating}-Star Rating`);
+        if (p.privatePool) extras.push('Private Pool');
+        if (p.gardenArea) extras.push('Garden Area');
+        if (p.chefAvailable) extras.push('Chef Available');
+        if (p.securityCCTV) extras.push('CCTV Surveillance');
+        if (p.spaWellness) extras.push('Spa & Wellness');
+        if (p.conferenceRoom) extras.push('Conference Room');
+        
+        return [...base, ...extras];
+      })(),
       area: p.area || '31 sq. ft.',
       beds:
         p.beds !== undefined ? `${p.beds} Bed${p.beds > 1 ? 's' : ''}` : '2 Beds',
-      rooms:
-        p.bedRooms !== undefined
-          ? `${p.bedRooms} Room${p.bedRooms > 1 ? 's' : ''}`
-          : p.roomType || '1 Room',
+      rooms: p.rooms || [],
+      roomCountString: p.bedRooms !== undefined
+        ? `${p.bedRooms} Room${p.bedRooms > 1 ? 's' : ''}`
+        : p.roomType || '1 Room',
       guests:
         p.capacity !== undefined
           ? `${p.capacity} Person${p.capacity > 1 ? 's' : ''}`

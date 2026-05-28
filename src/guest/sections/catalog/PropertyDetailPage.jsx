@@ -217,7 +217,7 @@ export default function PropertyDetailPage(props) {
             <div className="amenity-vertical-item">
               <img src={roomIcon} alt="Rooms" className="amenity-vertical-icon" />
               <span className="amenity-vertical-lbl">Rooms</span>
-              <span className="amenity-vertical-val">{activeDetailProp.rooms || `${activeDetailProp.bedRooms || 1} Room`}</span>
+              <span className="amenity-vertical-val">{activeDetailProp.roomCountString || `${activeDetailProp.bedRooms || 1} Room`}</span>
             </div>
             <div className="amenity-vertical-item">
               <img src={bedIcon} alt="Beds" className="amenity-vertical-icon" />
@@ -435,18 +435,7 @@ export default function PropertyDetailPage(props) {
             </div>
           </div>
 
-          {propertyRooms && propertyRooms.length > 0 && Array.isArray(propertyRooms[0].rules) && propertyRooms[0].rules.length > 0 ? (
-            propertyRooms[0].rules.map((section, idx) => (
-              <div key={idx} className="must-read-rules-block" style={{ marginTop: idx > 0 ? '24px' : '0' }}>
-                <h4 className="rules-sub-hdr">{section.title}</h4>
-                <ul className="rules-ul-list">
-                  {section.points.map((point, pIdx) => (
-                    <li key={pIdx}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-            ))
-          ) : (
+
             <div className="must-read-rules-block">
               <h4 className="rules-sub-hdr">Must Read Rules</h4>
               <ul className="rules-ul-list">
@@ -462,7 +451,6 @@ export default function PropertyDetailPage(props) {
                 )}
               </ul>
             </div>
-          )}
         </div>
 
         {/* USER REVIEWS SECTION */}
