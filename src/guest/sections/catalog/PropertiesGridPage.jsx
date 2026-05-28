@@ -15,10 +15,19 @@ export default function PropertiesGridPage(props) {
     mockWishlistedTitles, toggleMockWishlist,
     homepageContent, renderTitle,
     mapDbProperties,
+    allProperties,
   } = props;
 
-  const mappedVillas = mapDbProperties ? mapDbProperties([], propertiesVillasList) : propertiesVillasList;
-  const mappedHomestays = mapDbProperties ? mapDbProperties([], propertiesHomestaysList) : propertiesHomestaysList;
+  const actualVillas = allProperties?.filter(p => p?.type === 'Villa') || [];
+  const actualHomestays = allProperties?.filter(p => p?.type === 'Homestay') || [];
+
+  const mappedVillas = actualVillas.length > 0 && mapDbProperties 
+    ? mapDbProperties(actualVillas, []) 
+    : (mapDbProperties ? mapDbProperties([], propertiesVillasList) : propertiesVillasList);
+
+  const mappedHomestays = actualHomestays.length > 0 && mapDbProperties 
+    ? mapDbProperties(actualHomestays, []) 
+    : (mapDbProperties ? mapDbProperties([], propertiesHomestaysList) : propertiesHomestaysList);
 
   return (
     <div className="properties-page-layout fade-in">
