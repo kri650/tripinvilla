@@ -290,13 +290,13 @@ export default function HomePage(props) {
 
             {/* 2x2 Grid Layout */}
             <div className="popular-offers-grid">
-              {[...(popularOffers || []), ...popularOffersList].slice(0, 4).map((offer, idx) => {
+              {(popularOffers?.length > 0 ? popularOffers : popularOffersList).slice(0, 4).map((offer, idx) => {
                 const isDynamic = offer.property_id || offer.propertyName;
                 const title = isDynamic ? `${offer.propertyName || offer.property_id?.name} - ${offer.room_type || offer.room || 'Deluxe Room'}` : offer.title;
-                const subtitle = isDynamic ? `${offer.category} | ${offer.food_type || offer.foods} | ${offer.description}` : offer.subtitle;
-                const discount = isDynamic ? `${offer.offer_percent || offer.offerPercent}` : (offer.discount ? offer.discount.replace(/Up to\s+/i, '') : '30% OFF');
+                const subtitle = isDynamic ? `${offer.category} | ${offer.food_type || offer.foods} | ${offer.description || ''}` : offer.subtitle;
+                const discount = isDynamic ? `${offer.offer_percent || offer.offerPercent}% OFF` : (offer.discount ? offer.discount.replace(/Up to\s+/i, '') : '30% OFF');
                 const img = isDynamic 
-                  ? (offer.property_id?.images?.[0] || 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=600&q=80') 
+                  ? (offer.image || offer.property_id?.images?.[0] || 'https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=600&q=80') 
                   : offer.img;
 
                 return (

@@ -150,8 +150,10 @@ export function buildStaticPagesProps({
   setActiveFaq,
   homepageContent,
   renderTitle,
+  API_BASE,
 }) {
   return {
+    API_BASE,
     activeMenu,
     token,
     user,

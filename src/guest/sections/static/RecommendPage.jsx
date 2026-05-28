@@ -1,20 +1,23 @@
+import { useState, useEffect } from 'react';
 import { Heart, MapPin } from 'lucide-react';
 import { areaIcon, bedIcon, filterIcon, guestIcon, recommendHeroImg, roomIcon } from '../../../assets';
 import './RecommendPage.css';
 
-const RECOMMENDED_ITEMS = [
-  { id: 0, name: 'Aparahotel Stare Miasto', location: 'Kasol, Himachal Pradesh, India', price: '140', img: 'https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=600&q=80' },
-  { id: 1, name: 'Elysian Alpine Retreat', location: 'Manali, Himachal Pradesh, India', price: '140', img: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600&q=80' },
-  { id: 2, name: 'Stellar Ridge Villa', location: 'Shimla, Himachal Pradesh, India', price: '140', img: 'https://images.unsplash.com/photo-1510798831971-661eb04b3739?auto=format&fit=crop&w=600&q=80' },
-  { id: 3, name: 'Grand Castle Heritage Homestay', location: 'Kasol, Himachal Pradesh, India', price: '140', img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=600&q=80' },
-  { id: 4, name: 'Infinity Blue Ocean Villa', location: 'Goa Beachsides, India', price: '140', img: 'https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=600&q=80' },
-  { id: 5, name: 'Cloud-Nine Horizon Cottage', location: 'Munnar Hills, Kerala, India', price: '140', img: 'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?auto=format&fit=crop&w=600&q=80' },
-];
-
 export default function RecommendPage(props) {
-  const { setSelectedProperty, setActiveMenu, isRecommendFilterOpen, setIsRecommendFilterOpen, recommendSearchQuery, setRecommendSearchQuery, recWishlist, setRecWishlist } = props;
+  const { setSelectedProperty, setActiveMenu, isRecommendFilterOpen, setIsRecommendFilterOpen, recommendSearchQuery, setRecommendSearchQuery, recWishlist, setRecWishlist, API_BASE } = props;
 
-  const filtered = RECOMMENDED_ITEMS.filter(item =>
+  const [recommendedItems, setRecommendedItems] = useState([]);
+
+  useEffect(() => {
+    fetch(`${API_BASE || 'http://13.127.196.228:8000/api'}/properties/recommended`)
+      .then(res => res.json())
+      .then(data => {
+        if (Array.isArray(data)) setRecommendedItems(data);
+      })
+      .catch(err => console.error('Error fetching recommended properties:', err));
+  }, [API_BASE]);
+
+  const filtered = recommendedItems.filter(item =>
     !recommendSearchQuery ||
     item.name.toLowerCase().includes(recommendSearchQuery.toLowerCase()) ||
     item.location.toLowerCase().includes(recommendSearchQuery.toLowerCase())
