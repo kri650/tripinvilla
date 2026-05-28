@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 
 const API = `${import.meta.env.VITE_API_BASE}`;
+import PropertyViewModal from './PropertyViewModal';
 
 const parseNumber = (val) => {
   if (typeof val === 'number') return val;
@@ -39,6 +40,8 @@ export default function AllProperties() {
   const [owners, setOwners] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [editingPropertyId, setEditingPropertyId] = useState(null);
+  const [viewingProperty, setViewingProperty] = useState(null);
+  const [actionMenu, setActionMenu] = useState(null);
 
   // Form State matching owner's dashboard + owner selection
   const [form, setForm] = useState({
@@ -114,7 +117,7 @@ export default function AllProperties() {
   const landmarkImageRef = useRef(null);
 
   // Dropdown menu state
-  const [actionMenu, setActionMenu] = useState(null);
+
 
   const fetchProperties = async () => {
     setLoading(true);
@@ -1017,7 +1020,7 @@ export default function AllProperties() {
                                 : "✓ Activate"}
                             </button>
                             <button
-                              onClick={() => { setActionMenu(null); openEditPanel(p); }}
+                              onClick={() => { setActionMenu(null); setViewingProperty(p); }}
                               style={{
                                 display: "block",
                                 width: "100%",
@@ -1077,6 +1080,8 @@ export default function AllProperties() {
           </div>
         </div>
       </div>
+
+      <PropertyViewModal property={viewingProperty} onClose={() => setViewingProperty(null)} />
 
       {/* Add Property Side Panel */}
       {showPanel && (
