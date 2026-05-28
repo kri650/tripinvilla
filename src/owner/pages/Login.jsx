@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { LogIn } from 'lucide-react';
 import { authService } from '../services/api';
+import ForgotPasswordModal from '../../guest/modals/ForgotPasswordModal.jsx';
 
 export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showForgotPwd, setShowForgotPwd] = useState(false);
 
   React.useEffect(() => {
     const checkAutoLogin = async () => {
@@ -163,6 +165,18 @@ export default function Login() {
               </div>
             </div>
 
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '4px' }}>
+              <button
+                type="button"
+                onClick={() => setShowForgotPwd(true)}
+                style={{ background: 'none', border: 'none', color: '#1d9e75', fontSize: '12px', fontWeight: 600, cursor: 'pointer', padding: 0 }}
+                onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+                onMouseOut={(e) => e.target.style.textDecoration = 'none'}
+              >
+                Forgot Password?
+              </button>
+            </div>
+
             <button
               type="submit"
               className="btn-solid-green"
@@ -196,6 +210,8 @@ export default function Login() {
           </form>
         </div>
       </div>
+      
+      <ForgotPasswordModal isOpen={showForgotPwd} onClose={() => setShowForgotPwd(false)} />
     </div>
   );
 }

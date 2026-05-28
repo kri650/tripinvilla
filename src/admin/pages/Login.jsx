@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react';
+import ForgotPasswordModal from '../../guest/modals/ForgotPasswordModal.jsx';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -9,6 +10,7 @@ export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [showForgotPwd, setShowForgotPwd] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -183,24 +185,45 @@ export default function Login() {
             </div>
           </div>
 
-          {/* Remember me checkbox */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <input
-              type="checkbox"
-              id="remember-checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
+          {/* Remember me & Forgot Password */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <input
+                type="checkbox"
+                id="remember-checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                style={{
+                  width: '16px',
+                  height: '16px',
+                  borderRadius: '4px',
+                  accentColor: '#58A429',
+                  cursor: 'pointer'
+                }}
+              />
+              <label htmlFor="remember-checkbox" style={{ fontSize: '13px', fontWeight: 600, color: '#374151', cursor: 'pointer', userSelect: 'none' }}>
+                Remember Me
+              </label>
+            </div>
+            
+            <button
+              type="button"
+              onClick={() => setShowForgotPwd(true)}
               style={{
-                width: '16px',
-                height: '16px',
-                borderRadius: '4px',
-                accentColor: '#58A429',
-                cursor: 'pointer'
+                background: 'none',
+                border: 'none',
+                color: '#58A429',
+                fontSize: '13px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                padding: 0,
+                textDecoration: 'none'
               }}
-            />
-            <label htmlFor="remember-checkbox" style={{ fontSize: '13px', fontWeight: 600, color: '#374151', cursor: 'pointer', userSelect: 'none' }}>
-              Remember Me
-            </label>
+              onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+              onMouseOut={(e) => e.target.style.textDecoration = 'none'}
+            >
+              Forgot Password?
+            </button>
           </div>
 
           {/* Solid Green Login Button */}
@@ -232,6 +255,7 @@ export default function Login() {
 
       </div>
 
+      <ForgotPasswordModal isOpen={showForgotPwd} onClose={() => setShowForgotPwd(false)} />
     </div>
   );
 }

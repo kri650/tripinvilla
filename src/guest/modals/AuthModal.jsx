@@ -1,7 +1,10 @@
+import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { loginLeftImg } from '../../assets';
+import ForgotPasswordModal from './ForgotPasswordModal.jsx';
 
 export default function AuthModal(props) {
+  const [showForgotPwd, setShowForgotPwd] = useState(false);
   const {
     authModalOpen,
     setAuthModalOpen,
@@ -164,7 +167,19 @@ export default function AuthModal(props) {
                   </div>
                 </div>
 
-                <button type="submit" className="auth-submit-btn-green" style={{ width: '100%', borderRadius: '8px', fontSize: '15px', fontWeight: '600', backgroundColor: '#58A429', color: '#FFFFFF', border: 'none', cursor: 'pointer', height: '46px', transition: 'background-color 0.2s', marginTop: '12px' }}>
+                <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '2px', marginBottom: '8px' }}>
+                  <button
+                    type="button"
+                    onClick={() => setShowForgotPwd(true)}
+                    style={{ background: 'none', border: 'none', color: '#58A429', fontSize: '12px', fontWeight: 600, cursor: 'pointer', padding: 0 }}
+                    onMouseOver={(e) => e.target.style.textDecoration = 'underline'}
+                    onMouseOut={(e) => e.target.style.textDecoration = 'none'}
+                  >
+                    Forgot Password?
+                  </button>
+                </div>
+
+                <button type="submit" className="auth-submit-btn-green" style={{ width: '100%', borderRadius: '8px', fontSize: '15px', fontWeight: '600', backgroundColor: '#58A429', color: '#FFFFFF', border: 'none', cursor: 'pointer', height: '46px', transition: 'background-color 0.2s', marginTop: '4px' }}>
                   {authLoading ? 'Logging In...' : 'Continue'}
                 </button>
               </form>
@@ -208,6 +223,8 @@ export default function AuthModal(props) {
         )}
 
       </div>
+      
+      <ForgotPasswordModal isOpen={showForgotPwd} onClose={() => setShowForgotPwd(false)} />
     </div>
   );
 }
