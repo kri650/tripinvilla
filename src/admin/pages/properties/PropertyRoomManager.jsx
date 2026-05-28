@@ -92,24 +92,50 @@ export default function PropertyRoomManager({ property, onClose }) {
     setCustomAmenity('');
   };
 
+  const [newImageFiles, setNewImageFiles] = useState([]);
+  const fileInputRef = React.useRef(null);
+
+  const handleFileChange = (e) => {
+    const files = Array.from(e.target.files);
+    setNewImageFiles(prev => [...prev, ...files]);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const removeNewFile = (idx) => {
+    setNewImageFiles(prev => prev.filter((_, i) => i !== idx));
+  };
+
+  const removeExistingImage = (idx) => {
+    setForm(prev => ({ ...prev, room_images: prev.room_images.filter((_, i) => i !== idx) }));
+  };
+
   const handleSave = async () => {
     if (!form.room_type) { alert('Room Type is required'); return; }
     if (!form.price_per_room) { alert('Price per night is required'); return; }
 
-    const imgs = form.room_images.filter(u => u.trim());
-    const payload = {
-      property_id: property._id,
-      room_type: form.room_type,
-      bed_type: form.bed_type,
-      price_per_room: Number(form.price_per_room),
-      original_price: form.original_price ? Number(form.original_price) : undefined,
-      checkin_time: form.checkin_time,
-      checkout_time: form.checkout_time,
-      amenities_types: form.amenities_types,
-      offers: form.offers,
-      room_images: imgs,
-      room_image_url: imgs[0] || '',
-    };
+    const formData = new FormData();
+    formData.append('property_id', property._id);
+    formData.append('room_type', form.room_type);
+    formData.append('bed_type', form.bed_type);
+    formData.append('price_per_room', form.price_per_room);
+    if (form.original_price) formData.append('original_price', form.original_price);
+    if (form.checkin_time) formData.append('checkin_time', form.checkin_time);
+    if (form.checkout_time) formData.append('checkout_time', form.checkout_time);
+    
+    formData.append('amenities_types', JSON.stringify(form.amenities_types));
+    formData.append('offers', JSON.stringify(form.offers));
+    
+    // Existing URLs
+    const existingImgs = form.room_images.filter(u => u && u.trim());
+    formData.append('room_images', JSON.stringify(existingImgs));
+
+    // New Files
+    newImageFiles.forEach(file => {
+      formData.append('images', file);
+    });
+
+    const token = localStorage.getItem('admin_token');
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     setSaving(true);
     try {
@@ -117,19 +143,20 @@ export default function PropertyRoomManager({ property, onClose }) {
       if (editingId) {
         res = await fetch(`${API_BASE}/property-requests/admin-direct/${editingId}`, {
           method: 'PUT',
-          headers: authHeaders,
-          body: JSON.stringify(payload),
+          headers, // No Content-Type for FormData
+          body: formData,
         });
       } else {
         res = await fetch(`${API_BASE}/property-requests/admin-direct`, {
           method: 'POST',
-          headers: authHeaders,
-          body: JSON.stringify(payload),
+          headers, // No Content-Type for FormData
+          body: formData,
         });
       }
 
       if (res.ok) {
         setForm(emptyRoom);
+        setNewImageFiles([]);
         setEditingId(null);
         setOfferInput('');
         fetchRooms();
@@ -249,29 +276,32 @@ export default function PropertyRoomManager({ property, onClose }) {
 
             {/* Room Images */}
             <div style={{ marginBottom: 16 }}>
-              <label style={labelStyle}>Room Images (URLs)</label>
-              {form.room_images.map((url, idx) => (
-                <div key={idx} style={{ display: 'flex', gap: 8, marginBottom: 8, alignItems: 'center' }}>
-                  <div style={{ width: 44, height: 34, borderRadius: 6, overflow: 'hidden', background: '#E5E7EB', flexShrink: 0 }}>
-                    {url.trim() ? (
-                      <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} onError={e => { e.target.style.display = 'none'; }} />
-                    ) : (
-                      <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Image size={16} color="#9CA3AF" />
-                      </div>
-                    )}
+              <label style={labelStyle}>Room Images</label>
+              
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
+                {form.room_images.filter(u => u && u.trim()).map((url, idx) => (
+                  <div key={`exist-${idx}`} style={{ position: 'relative', width: 60, height: 60 }}>
+                    <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 6 }} />
+                    <button type="button" onClick={() => removeExistingImage(idx)} style={{ position: 'absolute', top: -6, right: -6, background: '#EF4444', color: '#fff', border: 'none', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 12, padding: 0 }}>×</button>
                   </div>
-                  <input type="text" value={url} onChange={e => handleImageChange(idx, e.target.value)} placeholder={`Image URL ${idx + 1}`} style={{ ...inputStyle, flex: 1, marginBottom: 0 }} />
-                  {form.room_images.length > 1 && (
-                    <button type="button" onClick={() => removeImageRow(idx)} style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', padding: 4 }}>
-                      <X size={16} />
-                    </button>
-                  )}
+                ))}
+
+                {newImageFiles.map((file, idx) => (
+                  <div key={`new-${idx}`} style={{ position: 'relative', width: 60, height: 60 }}>
+                    <img src={URL.createObjectURL(file)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 6 }} />
+                    <button type="button" onClick={() => removeNewFile(idx)} style={{ position: 'absolute', top: -6, right: -6, background: '#EF4444', color: '#fff', border: 'none', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 12, padding: 0 }}>×</button>
+                  </div>
+                ))}
+
+                <div 
+                  onClick={() => fileInputRef.current.click()}
+                  style={{ width: 60, height: 60, border: '1px dashed #D1D5DB', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: '#F9FAFB' }}
+                >
+                  <Plus size={20} color="#9CA3AF" />
                 </div>
-              ))}
-              <button type="button" onClick={addImageRow} style={{ fontSize: 12, color: '#58A429', background: 'none', border: '1px dashed #58A429', borderRadius: 6, padding: '5px 12px', cursor: 'pointer', marginTop: 4 }}>
-                + Add Another Image URL
-              </button>
+              </div>
+              
+              <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden accept="image/*" />
             </div>
 
             {/* Amenities */}
