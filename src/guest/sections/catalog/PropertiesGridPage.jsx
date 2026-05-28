@@ -21,13 +21,8 @@ export default function PropertiesGridPage(props) {
   const actualVillas = allProperties?.filter(p => p?.type === 'Villa') || [];
   const actualHomestays = allProperties?.filter(p => p?.type === 'Homestay') || [];
 
-  const mappedVillas = actualVillas.length > 0 && mapDbProperties 
-    ? mapDbProperties(actualVillas, []) 
-    : (mapDbProperties ? mapDbProperties([], propertiesVillasList) : propertiesVillasList);
-
-  const mappedHomestays = actualHomestays.length > 0 && mapDbProperties 
-    ? mapDbProperties(actualHomestays, []) 
-    : (mapDbProperties ? mapDbProperties([], propertiesHomestaysList) : propertiesHomestaysList);
+  const mappedVillas = mapDbProperties ? mapDbProperties(actualVillas, []) : [];
+  const mappedHomestays = mapDbProperties ? mapDbProperties(actualHomestays, []) : [];
 
   return (
     <div className="properties-page-layout fade-in">
