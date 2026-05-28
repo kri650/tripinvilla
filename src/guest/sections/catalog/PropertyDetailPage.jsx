@@ -51,7 +51,9 @@ export default function PropertyDetailPage(props) {
   const priceString = activeDetailProp.price && String(activeDetailProp.price).startsWith('₹') 
     ? activeDetailProp.price 
     : `₹${Number(rawVal).toLocaleString('en-IN')}`;
-  const oldPriceString = `₹${Math.round(rawVal * 1.2).toLocaleString('en-IN')}`;
+  const oldPriceString = activeDetailProp.originalPrice 
+    ? `₹${Number(activeDetailProp.originalPrice).toLocaleString('en-IN')}`
+    : `₹${Math.round(rawVal * 1.2).toLocaleString('en-IN')}`;
 
   return (
     <div className="detail-page-wrapper fade-in">
@@ -124,7 +126,7 @@ export default function PropertyDetailPage(props) {
             </div>
 
             <div className="reservation-checks-list">
-              {(activeDetailProp.highlights && activeDetailProp.highlights.length > 0 ? activeDetailProp.highlights : ['Breakfast Included', 'Free cancellation till 24 hrs before check', 'Parking Available']).map((highlight, idx) => (
+              {(activeDetailProp.highlights && activeDetailProp.highlights.length > 0 ? activeDetailProp.highlights : []).map((highlight, idx) => (
                 <div key={idx} className="check-bullet">
                   <CheckCircle size={15} color="var(--primary-blue)" fill="rgba(37,99,235,0.1)" />
                   <span>{highlight}</span>
@@ -332,7 +334,7 @@ export default function PropertyDetailPage(props) {
 
                     <div className="room-card-pricing-col">
                       <div className="room-pricing-text-group">
-                        <span className="room-taxes-label">+212 taxes & fees per room per night</span>
+                        <span className="room-taxes-label">+{room.taxAmount || activeDetailProp.taxAmount || 212} taxes & fees per room per night</span>
                         {roomOriginalPrice && (
                           <span className="room-old-strike">₹{Number(roomOriginalPrice).toLocaleString('en-IN')}/night</span>
                         )}

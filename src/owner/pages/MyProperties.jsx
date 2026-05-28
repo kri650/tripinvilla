@@ -331,12 +331,23 @@ export default function MyProperties() {
   };
 
   const handleLocationChange = (e) => {
-    const selected = locations.find(l => l._id === e.target.value);
+    const locList = locations.length > 0 ? locations : allLocations;
+    const selected = locList.find(l => l._id === e.target.value);
     setFormData(prev => ({
       ...prev,
       locationId: e.target.value,
       locationName: selected?.locationName || ''
     }));
+    
+    // Auto-fetch landmarks if location has them
+    if (selected && selected.landmarks && selected.landmarks.length > 0) {
+      const mapped = selected.landmarks.map(l => ({
+        landmark_name: l.landmarkName || l.name,
+        landmark_type: l.landmarkType || l.type || 'Other',
+        landmark_image_url: l.image || l.landmark_image_url || ''
+      }));
+      setLandmarksList(prev => [...prev, ...mapped]);
+    }
   };
 
   const handleFileChange = (e) => {
@@ -491,6 +502,7 @@ export default function MyProperties() {
         // Amenities & Experiences
         amenities: selectedAmenitiesList,
         experiences: selectedExperiences,
+        landmarks: landmarksList,
         // Details
         area: formData.area,
         bedRooms: Number(formData.bedRooms),

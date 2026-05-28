@@ -68,6 +68,7 @@ export function mapDbProperties(dbProps, defaultList, where) {
         return [];
       })(),
       taxAmount: p.taxAmount || 0,
+      originalPrice: p.originalPrice || null,
       mapLocation: p.mapLocation || null,
       latitude: p.latitude || null,
       longitude: p.longitude || null,
