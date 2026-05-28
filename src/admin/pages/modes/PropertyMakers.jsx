@@ -13,7 +13,11 @@ const parseNumber = (val) => {
 export default function PropertyMakers() {
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [loading, setLoading] = useState(false);
+  const totalPages = Math.ceil(properties.length / itemsPerPage);
+  const paginatedProperties = properties.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
   const [formData, setFormData] = useState({
     id: "",
     propertyType: "Homestay",
@@ -2110,8 +2114,8 @@ export default function PropertyMakers() {
                       Loading properties...
                     </td>
                   </tr>
-                ) : (
-                  properties.map((p) => (
+                ) : paginatedProperties.length > 0 ? (
+                  paginatedProperties.map((p) => (
                     <tr key={p._id}>
                       <td style={{ color: "#58A429", fontWeight: 600 }}>
                         {p.propertyNo}
@@ -2246,10 +2250,35 @@ export default function PropertyMakers() {
                       </td>
                     </tr>
                   ))
+                ) : (
+                  <tr><td colSpan="13" style={{ textAlign: "center", padding: "32px", color: "#6B7280" }}>No properties found.</td></tr>
                 )}
               </tbody>
             </table>
           </div>
+          
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px', padding: '16px' }}>
+              <button 
+                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                disabled={currentPage === 1}
+                style={{ background: '#F3F4F6', color: currentPage === 1 ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
+              >
+                Previous
+              </button>
+              <span style={{ fontSize: '13px', color: '#6B7280', fontWeight: 500 }}>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button 
+                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                disabled={currentPage === totalPages}
+                style={{ background: '#F3F4F6', color: currentPage === totalPages ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
+              >
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>
