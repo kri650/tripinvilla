@@ -33,6 +33,7 @@ export default function AuthModal(props) {
   if (!authModalOpen) return null;
 
   return (
+    <>
     <div className="auth-modal-overlay" onClick={() => setAuthModalOpen(false)}>
       <div 
         className={`auth-modal-card ${authMode === 'login' ? 'login-split-card' : ''}`} 
@@ -223,8 +224,8 @@ export default function AuthModal(props) {
         )}
 
       </div>
-      
+      </div>
       <ForgotPasswordModal isOpen={showForgotPwd} onClose={() => setShowForgotPwd(false)} />
-    </div>
+    </>
   );
 }

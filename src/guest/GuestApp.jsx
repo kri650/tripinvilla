@@ -37,6 +37,28 @@ import {
 
 export default function GuestApp() {
   const [activeMenu, setActiveMenu] = useState('Home');
+
+  // Handle browser back button
+  React.useEffect(() => {
+    const handlePopState = (event) => {
+      if (event.state && event.state.activeMenu) {
+        setActiveMenu(event.state.activeMenu);
+      } else {
+        setActiveMenu('Home');
+      }
+    };
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  // Wrap setActiveMenu to also push state
+  const handleSetActiveMenu = (newMenu) => {
+    if (newMenu !== activeMenu) {
+      window.history.pushState({ activeMenu: newMenu }, '', window.location.pathname);
+      setActiveMenu(newMenu);
+    }
+  };
+
   const popularOffers = usePopularOffers(API_BASE);
 
   const {
@@ -525,7 +547,8 @@ export default function GuestApp() {
   const viewCtx = {
     API_BASE,
     activeMenu,
-    setActiveMenu,
+    setActiveMenu: handleSetActiveMenu,
+    handleSetActiveMenu,
     homepageContent,
     renderTitle,
 
@@ -766,7 +789,7 @@ export default function GuestApp() {
       <div className="app-main-root-container">
         <Navbar
           activeMenu={activeMenu}
-          onNavigate={setActiveMenu}
+          onNavigate={handleSetActiveMenu}
           token={token}
           user={user}
           onLogout={handleLogout}
@@ -779,7 +802,7 @@ export default function GuestApp() {
         <CatalogPages {...catalogPagesProps} />
         <HomePage {...homePageProps} />
 
-        <Footer token={token} onNavigate={setActiveMenu} onRequireAuth={openLoginModal} />
+        <Footer token={token} onNavigate={handleSetActiveMenu} onRequireAuth={openLoginModal} />
       </div>
 
       <GuestModals {...guestModalsProps} />
