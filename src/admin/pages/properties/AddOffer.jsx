@@ -28,7 +28,7 @@ export default function AddOffer() {
     const fetchProperties = async () => {
       setLoadingProperties(true);
       try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE}/master/properties`);
+        const res = await fetch(`${import.meta.env.VITE_API_BASE}/properties?limit=1000`);
         const data = await res.json();
         if (Array.isArray(data)) {
           setProperties(data);
@@ -44,23 +44,9 @@ export default function AddOffer() {
     fetchProperties();
   }, []);
 
-  const handlePropertyChange = (propertyId) => {
+  const handlePropertyChange = async (propertyId) => {
     setSelectedPropertyId(propertyId);
-    const prop = properties.find(p => p._id === propertyId);
-    if (prop) {
-      const rooms = Array.isArray(prop.rooms) && prop.rooms.length > 0 ? prop.rooms : [{ roomType: 'Deluxe Room' }];
-      setAvailableRooms(rooms);
-      const amenitiesArr = Array.isArray(prop.amenities) ? prop.amenities : (Array.isArray(prop.amenityTypes) ? prop.amenityTypes : []);
-      const priceVal = prop.price || prop.propertyPrice || '';
-      setFormData(prev => ({
-        ...prev,
-        propertyName: prop.name || prop.propertyName || '',
-        category: prop.type || prop.propertyType || 'Homestay',
-        room: rooms[0]?.roomType || 'Deluxe Room',
-        amenities: amenitiesArr.join(', '),
-        price: priceVal ? `₹${priceVal} per night` : '',
-      }));
-    } else {
+    if (!propertyId) {
       setAvailableRooms([]);
       setFormData(prev => ({
         ...prev,
@@ -70,6 +56,29 @@ export default function AddOffer() {
         amenities: '',
         price: '',
       }));
+      return;
+    }
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/properties/${propertyId}`);
+      if (!res.ok) throw new Error('Failed to fetch property details');
+      const prop = await res.json();
+      
+      const rooms = Array.isArray(prop.rooms) && prop.rooms.length > 0 ? prop.rooms : [{ roomType: 'Deluxe Room' }];
+      setAvailableRooms(rooms);
+      const amenitiesArr = Array.isArray(prop.amenities) ? prop.amenities : (Array.isArray(prop.amenityTypes) ? prop.amenityTypes : []);
+      const priceVal = prop.price || prop.propertyPrice || prop.bestRoomRate || '';
+      
+      setFormData(prev => ({
+        ...prev,
+        propertyName: prop.name || prop.propertyName || '',
+        category: prop.type || prop.propertyType || 'Homestay',
+        room: rooms[0]?.roomType || 'Deluxe Room',
+        amenities: amenitiesArr.join(', '),
+        price: priceVal ? `₹${priceVal} per night` : '',
+      }));
+    } catch (err) {
+      console.error('Error fetching full property details:', err);
     }
   };
 
