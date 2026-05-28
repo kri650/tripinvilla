@@ -1146,7 +1146,7 @@ export default function PropertyMakers() {
                     fontSize: "11px",
                   }}
                 >
-                  (Min 1, Max 10)
+                  (Min 1, Max 30)
                 </span>
               </label>
               {(existingImages.length > 0 || selectedFiles.length > 0) && (
@@ -1242,7 +1242,7 @@ export default function PropertyMakers() {
                   ))}
                 </div>
               )}
-              {existingImages.length + selectedFiles.length < 10 && (
+              {existingImages.length + selectedFiles.length < 30 && (
                 <div
                   className="file-upload-wrapper"
                   onClick={() => fileInputRef.current.click()}

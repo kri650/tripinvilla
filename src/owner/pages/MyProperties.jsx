@@ -881,11 +881,11 @@ export default function MyProperties() {
                   ))}
                     </div>
                   )}
-              {(existingImages.length + selectedFiles.length) < 10 ? (
+              {(existingImages.length + selectedFiles.length) < 30 ? (
                 <div onClick={() => fileInputRef.current.click()} style={{ border: '2px dashed #D1D5DB', borderRadius: '10px', padding: '24px', textAlign: 'center', cursor: 'pointer', background: '#FAFAFA' }}>
                   <Upload size={24} style={{ color: '#9CA3AF', marginBottom: '8px' }} />
                   <p style={{ margin: 0, fontSize: '13px', color: '#6B7280', fontFamily: '"Outfit", sans-serif' }}>Click to upload images (JPG, PNG — max 5MB each)</p>
-                  <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#9CA3AF' }}>{existingImages.length + selectedFiles.length}/10 images added</p>
+                  <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#9CA3AF' }}>{existingImages.length + selectedFiles.length}/30 images added</p>
                   <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden accept="image/*" />
                 </div>
               ) : (
