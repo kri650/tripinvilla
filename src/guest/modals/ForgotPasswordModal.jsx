@@ -72,7 +72,7 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
     }
   };
 
-  return createPortal(
+  return (
     <div className="modal-overlay">
       <div className="modal-content forgot-pwd-modal">
         <button className="modal-close" onClick={onClose}>&times;</button>
@@ -138,7 +138,6 @@ export default function ForgotPasswordModal({ isOpen, onClose }) {
           </form>
         )}
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }
