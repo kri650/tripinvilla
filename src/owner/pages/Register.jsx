@@ -22,7 +22,7 @@ export default function Register() {
     const checkAuthAndRedirect = async () => {
       const params = new URLSearchParams(window.location.search);
       const urlToken = params.get('token');
-      
+
       if (urlToken) {
         setLoading(true);
         try {
@@ -31,7 +31,7 @@ export default function Register() {
           });
           if (!profileRes.ok) throw new Error('Token verification failed');
           let user = await profileRes.json();
-          
+
           if (!['owner', 'admin', 'super_admin'].includes(user.role)) {
             const updateRes = await fetch(`${import.meta.env.VITE_API_BASE}/users/profile`, {
               method: 'PUT',
@@ -45,7 +45,7 @@ export default function Register() {
               user = await updateRes.json();
             }
           }
-          
+
           localStorage.setItem('token', urlToken);
           localStorage.setItem('owner_user', JSON.stringify(user));
           navigate('/owner/dashboard', { replace: true });
@@ -102,7 +102,7 @@ export default function Register() {
         try {
           const { token, user } = event.data.payload;
           let finalUser = user;
-          
+
           if (!['owner', 'admin', 'super_admin'].includes(user.role)) {
             const updateRes = await fetch(`${import.meta.env.VITE_API_BASE}/users/profile`, {
               method: 'PUT',
@@ -116,7 +116,7 @@ export default function Register() {
               finalUser = await updateRes.json();
             }
           }
-          
+
           localStorage.setItem('token', token);
           localStorage.setItem('owner_user', JSON.stringify(finalUser));
           navigate('/owner/dashboard', { replace: true });
@@ -127,7 +127,7 @@ export default function Register() {
         }
       }
     };
-    
+
     window.addEventListener('message', handleOAuthMessage);
     return () => window.removeEventListener('message', handleOAuthMessage);
   }, [navigate]);
@@ -149,7 +149,7 @@ export default function Register() {
     setLoading(true);
     try {
       const name = `${formData.firstName} ${formData.lastName}`.trim();
-      
+
       // Step 1: Register User with Role 'owner'
       const registerRes = await fetch(`${import.meta.env.VITE_API_BASE}/auth/register`, {
         method: 'POST',
@@ -163,7 +163,7 @@ export default function Register() {
       });
       const registerData = await registerRes.json();
       if (!registerRes.ok) throw new Error(registerData.message || 'Registration failed');
-      
+
       const token = registerData.token;
       localStorage.setItem('token', token);
       localStorage.setItem('owner_user', JSON.stringify(registerData.user));
@@ -385,13 +385,13 @@ export default function Register() {
               <span style={{ fontSize: '12px', color: '#9CA3AF' }}>Or Log In with</span>
               <div style={{ flex: 1, height: '1px', background: '#E5E7EB' }}></div>
             </div>
-            
+
             <div style={{ display: 'flex', gap: '16px' }}>
               <button type="button" onClick={() => handleOAuthLogin('google')} style={{ width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #E5E7EB', background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.48 14.97 1 12 1 7.35 1 3.37 3.65 1.4 7.56l3.92 3.04C6.27 7.74 8.92 5.04 12 5.04z"/><path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.35H12v4.51h6.48c-.29 1.56-1.17 2.87-2.5 3.75v3.1h4.03c2.37-2.18 3.73-5.39 3.73-9.01z"/><path fill="#FBBC05" d="M5.32 14.6c-.23-.69-.36-1.43-.36-2.2s.13-1.51.36-2.2L1.4 7.16C.51 8.94 0 10.91 0 13s.51 4.06 1.4 5.84l3.92-3.24z"/><path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.92l-4.03-3.1c-1.12.75-2.54 1.2-3.93 1.2-3.08 0-5.73-2.7-6.68-5.56L1.4 15.84C3.37 19.75 7.35 23 12 23z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#EA4335" d="M12 5.04c1.66 0 3.2.57 4.38 1.69l3.27-3.27C17.67 1.48 14.97 1 12 1 7.35 1 3.37 3.65 1.4 7.56l3.92 3.04C6.27 7.74 8.92 5.04 12 5.04z" /><path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.35H12v4.51h6.48c-.29 1.56-1.17 2.87-2.5 3.75v3.1h4.03c2.37-2.18 3.73-5.39 3.73-9.01z" /><path fill="#FBBC05" d="M5.32 14.6c-.23-.69-.36-1.43-.36-2.2s.13-1.51.36-2.2L1.4 7.16C.51 8.94 0 10.91 0 13s.51 4.06 1.4 5.84l3.92-3.24z" /><path fill="#34A853" d="M12 23c3.24 0 5.97-1.07 7.96-2.92l-4.03-3.1c-1.12.75-2.54 1.2-3.93 1.2-3.08 0-5.73-2.7-6.68-5.56L1.4 15.84C3.37 19.75 7.35 23 12 23z" /></svg>
               </button>
               <button type="button" onClick={() => handleOAuthLogin('facebook')} style={{ width: '44px', height: '44px', borderRadius: '50%', border: '1px solid #E5E7EB', background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer' }}>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" /></svg>
               </button>
             </div>
           </div>
