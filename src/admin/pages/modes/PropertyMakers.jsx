@@ -903,6 +903,14 @@ export default function PropertyMakers() {
             </div>
           </div>
 
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 24, borderTop: '1px solid #E5E7EB', paddingTop: 16 }}>
+            <button type="button" onClick={() => { setFormStep(2); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ padding: '12px 32px', background: '#58A429', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>Next Step &rarr;</button>
+          </div>
+          </>
+          )}
+
+          {formStep === 2 && (
+            <>
           {/* Location */}
           <div
             className="form-group"
@@ -1318,15 +1326,7 @@ export default function PropertyMakers() {
             </div>
           </div>
 
-          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 24, borderTop: '1px solid #E5E7EB', paddingTop: 16 }}>
-            <button type="button" onClick={() => { setFormStep(2); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ padding: '12px 32px', background: '#58A429', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>Next Step &rarr;</button>
-          </div>
-          </>
-          )}
-
-          {formStep === 2 && (
-            <>
-              <div className="form-grid-3">
+          <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">Check-In Time*</label>
               <input
