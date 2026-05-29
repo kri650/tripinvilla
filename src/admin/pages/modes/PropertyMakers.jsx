@@ -59,6 +59,7 @@ export default function PropertyMakers() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [managingRoomsProperty, setManagingRoomsProperty] = useState(null);
+  const [formStep, setFormStep] = useState(1);
 
   // Owners Data
   const [ownersList, setOwnersList] = useState([]);
@@ -434,6 +435,7 @@ export default function PropertyMakers() {
     setRulesSections([{ title: 'Must Read Rules', text: '• Primary Guest should be atleast 18 years of age.\n• Passport, Aadhaar, Driving License and Govt. ID are accepted as ID proof(s)' }]);
     if (fileInputRef.current) fileInputRef.current.value = "";
     setIsEditing(false);
+    setFormStep(1);
   };
 
   const handleSubmit = async (e) => {
@@ -620,19 +622,24 @@ export default function PropertyMakers() {
           <div className="master-form-header">
             <div className="master-form-title">
               {isEditing ? "Modify Property Master" : "Add New Property Master"}
+              <span style={{ fontSize: 14, fontWeight: 500, color: '#6B7280', marginLeft: 16 }}>Step {formStep} of 2</span>
             </div>
             <div className="master-form-actions">
-              <button
-                type="submit"
-                className="btn-solid-green"
-                style={{ cursor: "pointer" }}
-              >
-                {isEditing ? "Update" : "Add"}
-              </button>
+              {formStep === 2 && (
+                <button
+                  type="submit"
+                  className="btn-solid-green"
+                  style={{ cursor: "pointer" }}
+                >
+                  {isEditing ? "Update Property" : "Add Property"}
+                </button>
+              )}
             </div>
           </div>
 
-          <div className="form-grid-3">
+          {formStep === 1 && (
+            <>
+              <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">Property Type*</label>
               <div style={{ position: "relative" }}>
@@ -1310,7 +1317,15 @@ export default function PropertyMakers() {
             </div>
           </div>
 
-          <div className="form-grid-3">
+          <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 24, borderTop: '1px solid #E5E7EB', paddingTop: 16 }}>
+            <button type="button" onClick={() => { setFormStep(2); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ padding: '12px 32px', background: '#58A429', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>Next Step &rarr;</button>
+          </div>
+          </>
+          )}
+
+          {formStep === 2 && (
+            <>
+              <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">Check-In Time*</label>
               <input
@@ -2088,39 +2103,25 @@ export default function PropertyMakers() {
           </div>
         </div>
 
-        {isEditing && (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginTop: 16,
-            }}
-          >
-            <button
-              type="button"
-              onClick={() => {
-                setIsEditing(false);
-                setFormData({
-                  id: "",
-                  propertyType: "Homestay",
-                  propertyName: "",
-                  ownerName: "",
-                  ownerContact: "",
-                  amenityTypes: "",
-                  location: "",
-                  propertyPrice: "",
-                  imagesUrl: "",
-                  videosUrl: "",
-                  aboutProperty: "",
-                  status: "Active",
-                });
-              }}
-              className="btn-outline-green"
-              style={{ cursor: "pointer", padding: "8px 16px", fontSize: 12 }}
-            >
-              Cancel Edit
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 24, borderTop: '1px solid #E5E7EB', paddingTop: 16 }}>
+          <button type="button" onClick={() => { setFormStep(1); window.scrollTo({ top: 0, behavior: "smooth" }); }} style={{ padding: '12px 24px', background: '#fff', color: '#374151', border: '1px solid #D1D5DB', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>&larr; Back</button>
+          <div style={{ display: 'flex', gap: 12 }}>
+            {isEditing && (
+              <button
+                type="button"
+                onClick={() => resetForm()}
+                className="btn-outline-green"
+                style={{ cursor: "pointer", padding: "12px 24px", fontSize: 14 }}
+              >
+                Cancel Edit
+              </button>
+            )}
+            <button type="submit" style={{ padding: '12px 32px', background: '#58A429', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 14 }}>
+              {isEditing ? "Update Property" : "Add Property"}
             </button>
           </div>
+        </div>
+        </>
         )}
       </form>
     </div >
