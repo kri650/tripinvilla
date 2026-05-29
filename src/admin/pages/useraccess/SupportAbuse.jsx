@@ -8,6 +8,7 @@ export default function SupportAbuse() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   
   const [title, setTitle] = useState('');
   const [email, setEmail] = useState('');
@@ -111,7 +112,7 @@ export default function SupportAbuse() {
             </button>
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
               <Search size={16} color="#9CA3AF" style={{ position: 'absolute', left: '12px' }} />
-              <input type="text" placeholder="Search" style={{ padding: '8px 12px 8px 36px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none', fontSize: '13px', width: '200px' }} />
+              <input type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ padding: '8px 12px 8px 36px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none', fontSize: '13px', width: '200px' }} />
             </div>
             <button onClick={() => setShowAddForm(!showAddForm)} className="btn-solid-green" style={{ padding: '8px 24px', cursor: 'pointer', borderRadius: '8px', border: 'none' }}>
               Add
@@ -159,9 +160,9 @@ export default function SupportAbuse() {
             <tbody>
               {loading ? (
                 <tr><td colSpan="4" style={{ textAlign: 'center', padding: '30px', color: '#6B7280' }}>Loading videos...</td></tr>
-              ) : videos.length === 0 ? (
+              ) : videos.filter(v => (v.title || '').toLowerCase().includes(searchQuery.toLowerCase()) || (v.email || '').toLowerCase().includes(searchQuery.toLowerCase())).length === 0 ? (
                 <tr><td colSpan="4" style={{ textAlign: 'center', padding: '30px', color: '#6B7280' }}>No support videos found</td></tr>
-              ) : videos.map((vid, i) => (
+              ) : videos.filter(v => (v.title || '').toLowerCase().includes(searchQuery.toLowerCase()) || (v.email || '').toLowerCase().includes(searchQuery.toLowerCase())).map((vid, i) => (
                 <tr key={vid._id || i}>
                   <td style={{ color: '#58A429', fontWeight: 500 }}>{vid.title}</td>
                   <td>
