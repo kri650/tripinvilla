@@ -209,9 +209,6 @@ export default function PropertyOwned() {
                         </button>
                         {actionMenu === o._id && (
                           <div style={{ position: 'absolute', right: 8, top: i >= paginated.length - 2 ? "auto" : 32, bottom: i >= paginated.length - 2 ? 32 : "auto", background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 160 }}>
-                            <button onClick={() => { setActionMenu(null); navigate(`/admin/properties/owned/edit/${o._id}`); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#374151', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
-                              Edit
-                            </button>
                             <button onClick={() => { setActionMenu(null); setViewPropertiesOwner(o); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#374151', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
                               View Details
                             </button>
