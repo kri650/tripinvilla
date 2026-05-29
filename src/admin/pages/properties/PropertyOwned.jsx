@@ -159,8 +159,8 @@ export default function PropertyOwned() {
         </div>
 
         {/* Table */}
-        <div className="chart-card" style={{ padding: 0, overflow: 'visible', borderRadius: 12 }}>
-          <div style={{ overflowX: 'visible' }}>
+        <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12 }}>
+          <div style={{ overflowX: 'auto' }}>
             <table className="data-table" style={{ whiteSpace: 'nowrap' }}>
               <thead>
                 <tr>
