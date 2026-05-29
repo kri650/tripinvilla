@@ -2,6 +2,7 @@ import ReadMore from '../../components/ReadMore';
 import { useState, useEffect } from 'react';
 import { Sparkles, Edit2, Trash2, Search, AlertTriangle, Home, TreePine, Anchor, Palmtree, Mountain, Dog, Castle } from 'lucide-react';
 
+import Pagination from '../../components/Pagination';
 const availableIcons = [
   { name: 'TreePine', icon: TreePine },
   { name: 'Palmtree', icon: Palmtree },
@@ -15,6 +16,8 @@ const availableIcons = [
 export default function UniqueExperienceMaster() {
   const [experiences, setExperiences] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [formData, setFormData] = useState({
     id: '',
     experienceName: '',
@@ -165,10 +168,17 @@ export default function UniqueExperienceMaster() {
     return <Comp size={16} className="text-emerald-700" style={{ color: 'var(--primary)' }} />;
   };
 
+    useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   const filteredExperiences = experiences.filter(exp => 
     ((exp.experienceName || exp.name) || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (exp.description || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+    const totalItems = filteredExperiences.length;
+  const paginated = filteredExperiences.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="fade-in">
@@ -362,7 +372,7 @@ export default function UniqueExperienceMaster() {
               {loading ? (
                 <tr><td colSpan="7" style={{ textAlign: 'center', padding: '24px', color: '#6B7280' }}>Loading experiences...</td></tr>
               ) : filteredExperiences.length > 0 ? (
-                filteredExperiences.map((exp) => (
+                paginated.map((exp) => (
                   <tr key={exp._id}>
                     <td style={{ textAlign: 'center' }}>
                       <div style={{ width: 34, height: 34, borderRadius: '50%', background: 'var(--primary-light)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: 'auto' }}>
@@ -412,6 +422,12 @@ export default function UniqueExperienceMaster() {
             </tbody>
           </table>
         </div>
+        <Pagination 
+          currentPage={currentPage} 
+          totalItems={totalItems} 
+          itemsPerPage={itemsPerPage} 
+          onPageChange={setCurrentPage} 
+        />
       </div>
 
       {/* Delete Confirmation Modal */}

@@ -2,11 +2,14 @@ import ReadMore from '../../components/ReadMore';
 import { useState, useEffect } from 'react';
 import { Compass, Edit2, Trash2, Search, AlertTriangle } from 'lucide-react';
 
+import Pagination from '../../components/Pagination';
 export default function DestinationMaster() {
   const [destinations, setDestinations] = useState([]);
   const [states, setStates] = useState([]);
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   
   const [formData, setFormData] = useState({
     id: '',
@@ -195,10 +198,17 @@ export default function DestinationMaster() {
   const getStateName = (sObj) => sObj?.stateName || states.find(s => s._id === sObj)?.stateName || 'Maharashtra';
   const getCountryName = (cObj) => cObj?.countryName || countries.find(c => c._id === cObj)?.countryName || 'India';
 
+    useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   const filteredDestinations = destinations.filter(d => 
     (d.destinationName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (d.description || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+    const totalItems = filteredDestinations.length;
+  const paginated = filteredDestinations.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="fade-in">
@@ -433,7 +443,7 @@ export default function DestinationMaster() {
           ) : filteredDestinations.length === 0 ? (
             <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: 40, color: '#6B7280' }}>No destinations found</div>
           ) : (
-            filteredDestinations.map(dest => (
+            paginated.map(dest => (
               <div key={dest._id} style={{ background: '#fff', borderRadius: '16px', overflow: 'hidden', border: '1px solid #EAEAEA', boxShadow: '0 2px 8px rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', height: 320 }}>
                 <div style={{ height: 160, position: 'relative', background: '#FAFAFA' }}>
                   <img src={dest.coverImageUrl} alt={dest.destinationName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
@@ -476,8 +486,9 @@ export default function DestinationMaster() {
         </div>
       ) : (
         /* List Table Mode */
-        <div className="table-section">
-          <table className="data-table">
+        <>
+          <div className="table-section">
+            <table className="data-table">
             <thead>
               <tr>
                 <th style={{ width: '80px' }}>Image</th>
@@ -493,7 +504,7 @@ export default function DestinationMaster() {
             <tbody>
               {loading ? (
                 <tr><td colSpan="8" style={{ textAlign: 'center', padding: '24px', color: '#6B7280' }}>Loading destinations...</td></tr>
-              ) : filteredDestinations.map(dest => (
+              ) : paginated.map(dest => (
                 <tr key={dest._id}>
                   <td>
                     <div style={{ width: 44, height: 32, borderRadius: 4, overflow: 'hidden', border: '1px solid #E5E7EB' }}>
@@ -531,6 +542,13 @@ export default function DestinationMaster() {
             </tbody>
           </table>
         </div>
+        <Pagination 
+          currentPage={currentPage} 
+          totalItems={totalItems} 
+          itemsPerPage={itemsPerPage} 
+          onPageChange={setCurrentPage} 
+        />
+        </>
       )}
 
       {/* Delete Confirmation Modal */}

@@ -51,6 +51,8 @@ const API = `${import.meta.env.VITE_API_BASE}/admin/amenities`;
 export default function AmenitiesMaster() {
   const [amenities, setAmenities] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [formData, setFormData] = useState({ ...BLANK_FORM });
   const [isEditing, setIsEditing] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
@@ -161,6 +163,10 @@ export default function AmenitiesMaster() {
   };
 
   /* ─── filtered list ───────────────────────────────── */
+    useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   const filteredAmenities = amenities.filter(am => {
     const matchCat = activeCategoryFilter === 'All' || am.amenitiesCategory === activeCategoryFilter;
     const matchSearch = (am.amenitiesName || '').toLowerCase().includes(searchTerm.toLowerCase());
@@ -168,6 +174,9 @@ export default function AmenitiesMaster() {
   });
 
   const scopeStyle = (scope) => SCOPE_COLORS[scope] || SCOPE_COLORS.All;
+
+    const totalItems = filteredAmenities.length;
+  const paginated = filteredAmenities.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="fade-in">
@@ -318,7 +327,7 @@ export default function AmenitiesMaster() {
                   Loading amenities...
                 </td></tr>
               ) : filteredAmenities.length > 0 ? (
-                filteredAmenities.map(am => (
+                paginated.map(am => (
                   <tr key={am._id}>
                     <td style={{ textAlign: 'center' }}>
                       <div style={{
@@ -372,6 +381,12 @@ export default function AmenitiesMaster() {
             </tbody>
           </table>
         </div>
+        <Pagination 
+          currentPage={currentPage} 
+          totalItems={totalItems} 
+          itemsPerPage={itemsPerPage} 
+          onPageChange={setCurrentPage} 
+        />
       </div>
 
       {/* ─── Delete Modal ──────────────────────────── */}

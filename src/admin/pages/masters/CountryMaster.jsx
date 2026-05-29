@@ -1,9 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Globe, Edit2, Trash2, Search, AlertTriangle } from 'lucide-react';
 
+import ReadMore from '../../components/ReadMore';
+import Pagination from '../../components/Pagination';
 export default function CountryMaster() {
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [formData, setFormData] = useState({
     id: '',
     countryName: '',
@@ -121,11 +125,18 @@ export default function CountryMaster() {
     }
   };
 
+    useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   const filteredCountries = countries.filter(c => 
     (c.countryName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (c.dialCode || '').includes(searchTerm) ||
     (c.currencyCode || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+    const totalItems = filteredCountries.length;
+  const paginated = filteredCountries.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="fade-in">
@@ -282,7 +293,7 @@ export default function CountryMaster() {
               {loading ? (
                 <tr><td colSpan="7" style={{ textAlign: 'center', padding: '24px', color: '#6B7280' }}>Loading countries...</td></tr>
               ) : filteredCountries.length > 0 ? (
-                filteredCountries.map((country) => (
+                paginated.map((country) => (
                   <tr key={country._id}>
                     <td>
                       <div style={{ width: 44, height: 30, borderRadius: 4, overflow: 'hidden', border: '1px solid #E5E7EB', background: '#FAFAFA' }}>
@@ -328,6 +339,12 @@ export default function CountryMaster() {
             </tbody>
           </table>
         </div>
+        <Pagination 
+          currentPage={currentPage} 
+          totalItems={totalItems} 
+          itemsPerPage={itemsPerPage} 
+          onPageChange={setCurrentPage} 
+        />
       </div>
 
       {/* Delete Confirmation Modal */}

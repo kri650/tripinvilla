@@ -2,11 +2,15 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Map, Edit2, Trash2, Search, AlertTriangle } from 'lucide-react';
 
+import ReadMore from '../../components/ReadMore';
+import Pagination from '../../components/Pagination';
 export default function StateMaster() {
   const navigate = useNavigate();
   const [states, setStates] = useState([]);
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [formData, setFormData] = useState({
     id: '',
     stateName: '',
@@ -137,11 +141,18 @@ export default function StateMaster() {
     }
   };
 
+    useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   const filteredStates = states.filter(s => {
     const matchesSearch = (s.stateName || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
                           (s.countryName || '').toLowerCase().includes(searchTerm.toLowerCase());
     return matchesSearch;
   });
+
+    const totalItems = filteredStates.length;
+  const paginated = filteredStates.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="fade-in">
@@ -279,7 +290,7 @@ export default function StateMaster() {
               {loading ? (
                 <tr><td colSpan="6" style={{ textAlign: 'center', padding: '24px', color: '#6B7280' }}>Loading states...</td></tr>
               ) : filteredStates.length > 0 ? (
-                filteredStates.map((stateObj) => (
+                paginated.map((stateObj) => (
                   <tr key={stateObj._id}>
                     <td style={{ fontWeight: 600, color: '#111827' }}>{stateObj.stateName}</td>
                     <td style={{ fontWeight: 500 }}>{stateObj.countryName || stateObj.countryId?.countryName || 'N/A'}</td>
@@ -328,6 +339,12 @@ export default function StateMaster() {
             </tbody>
           </table>
         </div>
+        <Pagination 
+          currentPage={currentPage} 
+          totalItems={totalItems} 
+          itemsPerPage={itemsPerPage} 
+          onPageChange={setCurrentPage} 
+        />
       </div>
 
       {/* Delete Confirmation Modal */}

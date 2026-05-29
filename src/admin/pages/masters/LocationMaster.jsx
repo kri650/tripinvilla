@@ -1,6 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { MapPin, Edit2, Trash2, Search, Plus, X, AlertTriangle, ChevronDown } from 'lucide-react';
 
+import ReadMore from '../../components/ReadMore';
+import Pagination from '../../components/Pagination';
 const API = import.meta.env.VITE_API_BASE;
 const UPLOADS_BASE = API.replace('/api', '');
 
@@ -13,6 +15,8 @@ const getImgUrl = (url) => {
 export default function LocationMaster() {
   const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [formData, setFormData] = useState({
     id: '',
     locationName: '',
@@ -243,11 +247,18 @@ export default function LocationMaster() {
     }
   };
 
+    useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   const filteredLocations = locations.filter(l => 
     (l.locationName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (l.locationType || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
     (l.parentLocationHierarchy || '').toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+    const totalItems = filteredLocations.length;
+  const paginated = filteredLocations.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="fade-in">
@@ -482,7 +493,7 @@ export default function LocationMaster() {
               {loading ? (
                 <tr><td colSpan="9" style={{ textAlign: 'center', padding: '24px', color: '#6B7280' }}>Loading locations...</td></tr>
               ) : filteredLocations.length > 0 ? (
-                filteredLocations.map((loc) => (
+                paginated.map((loc) => (
                   <tr key={loc._id}>
                     <td style={{ fontWeight: 700, color: 'var(--primary)' }}>{loc.locationName}</td>
                     <td style={{ fontWeight: 500 }}>{loc.locationType}</td>
@@ -521,7 +532,9 @@ export default function LocationMaster() {
                       </div>
                     </td>
 
-                    <td style={{ color: '#9CA3AF', fontSize: '11px', whiteSpace: 'normal', maxW: '180px' }}>{loc.aboutLocation || 'N/A'}</td>
+                    <td style={{ color: '#9CA3AF', fontSize: '11px', whiteSpace: 'normal', maxW: '180px' }}>
+                      <ReadMore maxWords={2}>{loc.aboutLocation || 'N/A'}</ReadMore>
+                    </td>
                     <td>
                       <span className={`status-pill ${loc.status ? loc.status.toLowerCase() : 'active'}`}>
                         {loc.status || 'Active'}
@@ -557,6 +570,12 @@ export default function LocationMaster() {
             </tbody>
           </table>
         </div>
+        <Pagination 
+          currentPage={currentPage} 
+          totalItems={totalItems} 
+          itemsPerPage={itemsPerPage} 
+          onPageChange={setCurrentPage} 
+        />
       </div>
 
       {/* Delete Confirmation Modal */}

@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Compass, Edit2, Trash2, Search, AlertTriangle } from 'lucide-react';
 
+import ReadMore from '../../components/ReadMore';
+import Pagination from '../../components/Pagination';
 export default function CityMaster() {
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
   const [formData, setFormData] = useState({
     id: '',
     cityName: '',
@@ -142,6 +146,10 @@ export default function CityMaster() {
     }
   };
 
+    useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm]);
+
   const filteredCities = cities.filter(c => {
     const matchesSearch = (c.cityName || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
                           (c.stateName || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
@@ -150,6 +158,9 @@ export default function CityMaster() {
   });
 
   const selectedStateObj = states.find(s => s._id === formData.stateId);
+
+    const totalItems = filteredCities.length;
+  const paginated = filteredCities.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="fade-in">
@@ -291,7 +302,7 @@ export default function CityMaster() {
               {loading ? (
                 <tr><td colSpan="6" style={{ textAlign: 'center', padding: '24px', color: '#6B7280' }}>Loading cities...</td></tr>
               ) : filteredCities.length > 0 ? (
-                filteredCities.map((city) => (
+                paginated.map((city) => (
                   <tr key={city._id}>
                     <td style={{ fontWeight: 600, color: '#111827' }}>{city.cityName}</td>
                     <td style={{ fontWeight: 500 }}>{city.stateName}</td>
@@ -332,6 +343,12 @@ export default function CityMaster() {
             </tbody>
           </table>
         </div>
+        <Pagination 
+          currentPage={currentPage} 
+          totalItems={totalItems} 
+          itemsPerPage={itemsPerPage} 
+          onPageChange={setCurrentPage} 
+        />
       </div>
 
       {/* Delete Confirmation Modal */}
