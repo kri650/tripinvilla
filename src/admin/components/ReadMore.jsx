@@ -16,7 +16,7 @@ export default function ReadMore({ children, maxWords = 4 }) {
   }
 
   return (
-    <span>
+    <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', display: 'inline-block', maxWidth: '250px' }}>
       {expanded ? text : words.slice(0, maxWords).join(' ') + '... '}
       <span 
         onClick={(e) => { 
