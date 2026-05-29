@@ -23,7 +23,7 @@ export default function ReadMore({ children, maxWords = 4 }) {
           e.stopPropagation(); 
           setExpanded(!expanded); 
         }} 
-        style={{ color: '#2563EB', cursor: 'pointer', fontWeight: 500, fontSize: '0.9em', marginLeft: '4px' }}
+        style={{ color: '#2563EB', cursor: 'pointer', fontWeight: 500, fontSize: '0.9em', marginLeft: '4px', whiteSpace: 'nowrap' }}
       >
         {expanded ? 'read less' : 'read more'}
       </span>
