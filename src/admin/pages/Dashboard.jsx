@@ -52,6 +52,10 @@ export default function Dashboard() {
     const d = new Date();
     return `${d.toLocaleString('default', { month: 'short' })} ${d.getFullYear()}`;
   });
+  const [selectedEnquiryRaw, setSelectedEnquiryRaw] = useState(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  });
   const [actionMenu, setActionMenu] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
@@ -63,7 +67,7 @@ export default function Dashboard() {
         fetch(`${import.meta.env.VITE_API_BASE}/dashboard/enquiries-chart?year=${selectedYear}`).then(r => r.json()),
         fetch(`${import.meta.env.VITE_API_BASE}/dashboard/property-categories`).then(r => r.json()),
         fetch(`${import.meta.env.VITE_API_BASE}/dashboard/top-properties`).then(r => r.json()),
-        fetch(`${import.meta.env.VITE_API_BASE}/dashboard/recent-enquiries`).then(r => r.json())
+        fetch(`${import.meta.env.VITE_API_BASE}/dashboard/recent-enquiries?year=${selectedEnquiryRaw.split('-')[0]}&month=${selectedEnquiryRaw.split('-')[1]}`).then(r => r.json())
       ]);
 
       if (statsRes && statsRes.activeProperties !== undefined) setStats(statsRes);
@@ -78,7 +82,7 @@ export default function Dashboard() {
     }
   };
 
-  useEffect(() => { fetchData(); }, [selectedYear]);
+  useEffect(() => { fetchData(); }, [selectedYear, selectedEnquiryRaw]);
 
 
 
@@ -298,6 +302,7 @@ export default function Dashboard() {
                       const [year, month] = e.target.value.split('-');
                       const d = new Date(year, month - 1);
                       setSelectedEnquiryMonth(`${d.toLocaleString('default', { month: 'short' })} ${d.getFullYear()}`);
+                      setSelectedEnquiryRaw(e.target.value);
                     }
                   }}
                 />
