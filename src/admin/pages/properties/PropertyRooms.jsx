@@ -1,3 +1,4 @@
+import ReadMore from '../../components/ReadMore';
 import { useState, useEffect } from 'react';
 import { Calendar, ChevronDown, ClipboardList, Clock, CheckCircle2, Search, Filter, Edit2, Trash2, MoreVertical, Check, X, Eye } from 'lucide-react';
 
@@ -290,8 +291,8 @@ export default function PropertyRooms() {
                           <img src={p.image || "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=100&q=80"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
                         </div>
                       </td>
-                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px', cursor: 'pointer' }} onClick={() => setSelectedRequest(p)}>{p.propertyName}</td>
-                      <td style={{ color: '#6B7280', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4 }}>{p.location}</td>
+                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px', cursor: 'pointer' }} onClick={() => setSelectedRequest(p)}><ReadMore maxWords={2}>{p.propertyName}</ReadMore></td>
+                      <td style={{ color: '#6B7280', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4 }}><ReadMore maxWords={2}>{p.location}</ReadMore></td>
                       <td style={{ padding: '14px' }}><span className="category-pill">{p.category}</span></td>
                       <td style={{ color: '#6B7280', padding: '14px' }}>{p.ownerName}</td>
                       <td style={{ color: '#6B7280', padding: '14px' }}>{p.ownerContact}</td>

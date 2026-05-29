@@ -1,3 +1,4 @@
+import ReadMore from '../../components/ReadMore';
 import { useState, useEffect } from 'react';
 import { Sparkles, Edit2, Trash2, Search, AlertTriangle, Home, TreePine, Anchor, Palmtree, Mountain, Dog, Castle } from 'lucide-react';
 
@@ -369,7 +370,7 @@ export default function UniqueExperienceMaster() {
                       </div>
                     </td>
                     <td style={{ fontWeight: 700, color: '#111827' }}>{exp.experienceName || exp.name}</td>
-                    <td style={{ fontSize: '11.5px', color: '#6B7280', whiteSpace: 'normal', maxW: '240px', lineHeight: 1.4 }}>{exp.description}</td>
+                    <td style={{ fontSize: '11.5px', color: '#6B7280', whiteSpace: 'normal', maxW: '240px', lineHeight: 1.4 }}><ReadMore maxWords={2}>{exp.description}</ReadMore></td>
                     <td>
                       <div style={{ width: 44, height: 32, borderRadius: 4, overflow: 'hidden', border: '1px solid #E5E7EB' }}>
                         <img src={getFullImageUrl(exp.themeCoverImageUrl)} alt="cover" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />

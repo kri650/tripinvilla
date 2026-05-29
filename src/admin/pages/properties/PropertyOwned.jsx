@@ -189,10 +189,10 @@ export default function PropertyOwned() {
                           <img src={o.image || "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80"} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                       </td>
-                      <td style={{ color: '#111827', fontWeight: 500 }}><ReadMore maxWords={4}>{o.ownerName}</ReadMore></td>
-                      <td style={{ color: '#9CA3AF' }}><ReadMore maxWords={4}>{o.email}</ReadMore></td>
+                      <td style={{ color: '#111827', fontWeight: 500 }}><ReadMore maxWords={2}>{o.ownerName}</ReadMore></td>
+                      <td style={{ color: '#9CA3AF' }}><ReadMore maxWords={2}>{o.email}</ReadMore></td>
                       <td style={{ color: '#3B82F6', fontWeight: 500 }}>{o.contactNo}</td>
-                      <td style={{ color: '#6B7280' }}><ReadMore maxWords={4}>{(o.properties && o.properties.length > 0) ? o.properties.join(', ') : 'None'}</ReadMore></td>
+                      <td style={{ color: '#6B7280' }}><ReadMore maxWords={2}>{(o.properties && o.properties.length > 0) ? o.properties.join(', ') : 'None'}</ReadMore></td>
                       <td style={{ color: '#6B7280' }}>{o.numberOfProperties || (o.properties ? o.properties.length : 0)}</td>
                       <td>
                         <button 

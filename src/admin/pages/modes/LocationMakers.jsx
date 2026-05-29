@@ -1,3 +1,4 @@
+import ReadMore from '../../components/ReadMore';
 import { ChevronDown, Edit2, Trash2, MoreVertical } from 'lucide-react';
 
 const locationsList = Array(3).fill(null).map(() => ({
@@ -135,7 +136,7 @@ export default function LocationMakers() {
                         <img src="https://images.unsplash.com/photo-1512343879784-a960bf40e7f2?auto=format&fit=crop&w=100&q=80" style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="landmark" />
                       </div>
                     </td>
-                    <td style={{ color: '#9CA3AF', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}>{loc.about}</td>
+                    <td style={{ color: '#9CA3AF', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}><ReadMore maxWords={2}>{loc.about}</ReadMore></td>
                     <td>
                       <span className="status-pill active">{loc.status}</span>
                     </td>

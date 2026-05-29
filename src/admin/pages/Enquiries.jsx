@@ -230,12 +230,12 @@ export default function Enquiries() {
                     <td style={{ whiteSpace: 'nowrap', fontSize: '12px' }}>
                       {e.createdAt ? new Date(e.createdAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '—'}
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 500 }}><ReadMore maxWords={4}>{e.user_name || e.name || '—'}</ReadMore></td>
+                    <td style={{ color: '#111827', fontWeight: 500 }}><ReadMore maxWords={2}>{e.user_name || e.name || '—'}</ReadMore></td>
                     <td>{e.phone || '—'}</td>
-                    <td><ReadMore maxWords={4}>{e.email || '—'}</ReadMore></td>
-                    <td style={{ maxWidth: '120px', fontSize: '12px', color: '#4B5563' }}><ReadMore maxWords={4}>{e.propertyName || '—'}</ReadMore></td>
+                    <td><ReadMore maxWords={2}>{e.email || '—'}</ReadMore></td>
+                    <td style={{ maxWidth: '120px', fontSize: '12px', color: '#4B5563' }}><ReadMore maxWords={2}>{e.propertyName || '—'}</ReadMore></td>
                     <td style={{ maxWidth: '200px', whiteSpace: 'normal', lineHeight: '1.4', fontSize: '13px' }}>
-                      <ReadMore maxWords={4}>{e.query || e.message || '—'}</ReadMore>
+                      <ReadMore maxWords={2}>{e.query || e.message || '—'}</ReadMore>
                       {e.reply && (
                         <div style={{ marginTop: '6px', padding: '6px 10px', background: '#F0FDF4', borderLeft: '3px solid #22c55e', borderRadius: '4px', fontSize: '12px', color: '#166534' }}>
                           <strong>Your reply:</strong> {e.reply}

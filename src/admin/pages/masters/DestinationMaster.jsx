@@ -1,3 +1,4 @@
+import ReadMore from '../../components/ReadMore';
 import { useState, useEffect } from 'react';
 import { Compass, Edit2, Trash2, Search, AlertTriangle } from 'lucide-react';
 
@@ -508,7 +509,7 @@ export default function DestinationMaster() {
                       ))}
                     </div>
                   </td>
-                  <td style={{ fontSize: '11.5px', color: '#6B7280', maxW: '180px', whiteSpace: 'normal' }}>{dest.description}</td>
+                  <td style={{ fontSize: '11.5px', color: '#6B7280', maxW: '180px', whiteSpace: 'normal' }}><ReadMore maxWords={2}>{dest.description}</ReadMore></td>
                   <td style={{ textAlign: 'center', fontWeight: 700, color: 'var(--primary)' }}>{dest.propertiesCount ?? 0}</td>
                   <td>
                     <span className={`status-pill ${dest.status ? dest.status.toLowerCase() : 'active'}`}>

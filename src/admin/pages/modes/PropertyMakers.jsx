@@ -1,3 +1,4 @@
+import ReadMore from '../../components/ReadMore';
 import React, { useState, useEffect } from "react";
 import { ChevronDown, Edit2, Trash2, MoreVertical, BedDouble } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -2198,7 +2199,7 @@ export default function PropertyMakers() {
                   </div>
                 </td>
                 <td style={{ color: "#111827", fontWeight: 600 }}>
-                  {p.propertyName}
+                  <ReadMore maxWords={2}>{p.propertyName}</ReadMore>
                 </td>
                 <td style={{ color: "#6B7280" }}>{p.ownerName}</td>
                 <td style={{ color: "#6B7280" }}>{p.ownerContact}</td>
@@ -2217,7 +2218,7 @@ export default function PropertyMakers() {
                     (p.experiences.length > 2 ? "..." : "")
                     : ""}
                 </td>
-                <td style={{ color: "#6B7280" }}>{p.location}</td>
+                <td style={{ color: "#6B7280" }}><ReadMore maxWords={2}>{p.location}</ReadMore></td>
                 <td
                   style={{
                     color: "#6B7280",

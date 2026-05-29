@@ -1,3 +1,4 @@
+import ReadMore from '../components/ReadMore';
 import { useState, useEffect } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip,
@@ -246,7 +247,7 @@ export default function Dashboard() {
                       </div>
                     </td>
                     <td style={{ fontWeight: 500, color: '#111827' }}>{p.name}</td>
-                    <td><div className="location-text">{p.location}</div></td>
+                    <td><div className="location-text"><ReadMore maxWords={2}>{p.location}</ReadMore></div></td>
                     <td><span className="category-pill">{p.category}</span></td>
                     <td style={{ fontWeight: 600, color: '#111827' }}>{typeof p.bestRoomRate === 'number' ? `₹${p.bestRoomRate.toLocaleString()}` : p.bestRoomRate}</td>
                     <td>{p.rooms}</td>
@@ -326,7 +327,7 @@ export default function Dashboard() {
                     <td style={{ fontWeight: 500, color: '#111827' }}>{e.userName}</td>
                     <td>{e.phoneNo}</td>
                     <td style={{ color: '#2563EB' }}>{e.email}</td>
-                    <td style={{ fontSize: 12, color: '#4B5563' }}>{e.propertyName}</td>
+                    <td style={{ fontSize: 12, color: '#4B5563' }}><ReadMore maxWords={2}>{e.propertyName}</ReadMore></td>
                     <td style={{ maxWidth: 200, whiteSpace: 'normal', fontSize: 11, color: '#6B7280', lineHeight: 1.4 }}>{e.query}</td>
                     <td style={{ position: 'relative' }}>
                       <button className="action-dots" onClick={() => setActionMenu(actionMenu === `enq_${e.id || e.enquiryNo}` ? null : `enq_${e.id || e.enquiryNo}`)} style={{ cursor: 'pointer' }}><MoreVertical size={14} /></button>
