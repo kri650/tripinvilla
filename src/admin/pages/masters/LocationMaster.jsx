@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { MapPin, Edit2, Trash2, Search, Plus, X, AlertTriangle } from 'lucide-react';
+import { MapPin, Edit2, Trash2, Search, Plus, X, AlertTriangle, ChevronDown } from 'lucide-react';
 
 const API = import.meta.env.VITE_API_BASE;
 const UPLOADS_BASE = API.replace('/api', '');
@@ -467,43 +467,60 @@ export default function LocationMaster() {
           <table className="data-table">
             <thead>
               <tr>
-                <th>Location Name</th>
-                <th>Type</th>
-                <th>Parent Location Hierarchy</th>
-                <th>Landmarks</th>
-                <th>About Brief</th>
-                <th>Status</th>
+                <th style={{ whiteSpace: 'nowrap' }}>Location Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap' }}>Location Type <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap' }}>Parent Location <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap' }}>Key Landmarks <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap' }}>Landmark Popularity <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap' }}>Landmark Image <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap' }}>About <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap' }}>Status <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
                 <th style={{ textAlign: 'right', paddingRight: '24px' }}>Actions</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan="7" style={{ textAlign: 'center', padding: '24px', color: '#6B7280' }}>Loading locations...</td></tr>
+                <tr><td colSpan="9" style={{ textAlign: 'center', padding: '24px', color: '#6B7280' }}>Loading locations...</td></tr>
               ) : filteredLocations.length > 0 ? (
                 filteredLocations.map((loc) => (
                   <tr key={loc._id}>
                     <td style={{ fontWeight: 700, color: 'var(--primary)' }}>{loc.locationName}</td>
                     <td style={{ fontWeight: 500 }}>{loc.locationType}</td>
                     <td style={{ fontSize: '11px', color: '#6B7280', whiteSpace: 'normal', maxW: '160px', lineHeight: 1.4 }}>{loc.parentLocationHierarchy}</td>
+                    
+                    {/* Key Landmarks */}
+                    <td style={{ fontSize: '12px', color: '#374151' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {loc.landmarks && loc.landmarks.length > 0 ? loc.landmarks.map((l, i) => (
+                          <div key={i} style={{ minHeight: '24px', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>{l.landmarkName}</div>
+                        )) : '-'}
+                      </div>
+                    </td>
+                    
+                    {/* Landmark Popularity */}
+                    <td style={{ fontSize: '12px', color: '#6B7280' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {loc.landmarks && loc.landmarks.length > 0 ? loc.landmarks.map((l, i) => (
+                          <div key={i} style={{ minHeight: '24px', display: 'flex', alignItems: 'center', whiteSpace: 'nowrap' }}>{l.landmarkPopularity}</div>
+                        )) : '-'}
+                      </div>
+                    </td>
+                    
+                    {/* Landmark Image */}
                     <td>
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                        {loc.landmarks && loc.landmarks.map((l, i) => (
-                          <div 
-                            key={i} 
-                            style={{ width: 24, height: 24, borderRadius: '50%', overflow: 'hidden', border: '2px solid #fff', boxShadow: '0 1px 3px rgba(0,0,0,0.1)', marginLeft: i > 0 ? -8 : 0 }}
-                            title={`${l.landmarkName} (${l.landmarkPopularity})`}
-                          >
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                        {loc.landmarks && loc.landmarks.length > 0 ? loc.landmarks.map((l, i) => (
+                          <div key={i} style={{ width: 24, height: 24, borderRadius: '4px', overflow: 'hidden', border: '1px solid #E5E7EB' }}>
                             {l.landmarkImageUrl ? (
                               <img src={getImgUrl(l.landmarkImageUrl)} alt={l.landmarkName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                             ) : (
-                              <div style={{ width: '100%', height: '100%', background: '#E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }}>📍</div>
+                              <div style={{ width: '100%', height: '100%', background: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 10 }}>📍</div>
                             )}
                           </div>
-                        ))}
-
-                        <span style={{ fontSize: '11px', color: '#9CA3AF', fontWeight: 'bold', marginLeft: 6 }}>({loc.landmarks?.length || 0})</span>
+                        )) : '-'}
                       </div>
                     </td>
+
                     <td style={{ color: '#9CA3AF', fontSize: '11px', whiteSpace: 'normal', maxW: '180px' }}>{loc.aboutLocation || 'N/A'}</td>
                     <td>
                       <span className={`status-pill ${loc.status ? loc.status.toLowerCase() : 'active'}`}>
@@ -532,7 +549,7 @@ export default function LocationMaster() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', padding: '24px', color: '#9CA3AF' }}>
+                  <td colSpan="9" style={{ textAlign: 'center', padding: '24px', color: '#9CA3AF' }}>
                     No location masters found matching search.
                   </td>
                 </tr>

@@ -324,7 +324,8 @@ export default function HomePage(props) {
                             if (isDynamic && offer.property_id) {
                               setSelectedProperty(offer.property_id);
                               setActiveMenu('Detail');
-                            } else {
+                            } else if (currentBestVillas && currentBestVillas.length > 0) {
+                              setSelectedProperty(currentBestVillas[0]);
                               setActiveMenu('Detail');
                             }
                           }}

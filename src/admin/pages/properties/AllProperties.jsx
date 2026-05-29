@@ -13,6 +13,8 @@ import {
   X,
   Upload,
 } from "lucide-react";
+import Pagination from '../components/Pagination';
+import ReadMore from '../components/ReadMore';
 
 const API = `${import.meta.env.VITE_API_BASE}`;
 import PropertyViewModal from './PropertyViewModal';
@@ -42,6 +44,8 @@ export default function AllProperties() {
   const [editingPropertyId, setEditingPropertyId] = useState(null);
   const [viewingProperty, setViewingProperty] = useState(null);
   const [actionMenu, setActionMenu] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Form State matching owner's dashboard + owner selection
   const [form, setForm] = useState({
@@ -142,6 +146,7 @@ export default function AllProperties() {
       if (dataInactive?.properties) combinedProperties = [...combinedProperties, ...dataInactive.properties];
 
       setProperties(combinedProperties);
+      setCurrentPage(1); // Reset page on new fetch
       if (dataActive?.stats) setStats(dataActive.stats);
 
     } catch (err) {
@@ -658,6 +663,10 @@ export default function AllProperties() {
     }
     setActionMenu(null);
   };
+
+  const totalItems = properties.length;
+  const paginated = properties.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   return (
     <div className="fade-in" onClick={() => setActionMenu(null)}>
       {/* Breadcrumb */}
@@ -841,9 +850,9 @@ export default function AllProperties() {
 
         <div
           className="chart-card"
-          style={{ padding: 0, overflow: "hidden", borderRadius: 12 }}
+          style={{ padding: 0, overflow: "visible", borderRadius: 12 }}
         >
-          <div style={{ overflowX: "auto" }}>
+          <div style={{ overflowX: "visible" }}>
             <table className="data-table" style={{ whiteSpace: "nowrap" }}>
               <thead>
                 <tr>
@@ -900,7 +909,7 @@ export default function AllProperties() {
                     </td>
                   </tr>
                 ) : (
-                  properties.map((p, i) => (
+                  paginated.map((p, i) => (
                     <tr key={p._id || i}>
                       <td style={{ color: "#58A429", fontWeight: 600 }}>
                         {p.propertyNo || `PR-${1000 + i}`}
@@ -931,11 +940,13 @@ export default function AllProperties() {
                         </div>
                       </td>
                       <td style={{ color: "#111827", fontWeight: 500 }}>
-                        {p.propertyName || p.name}
+                        <ReadMore maxWords={4}>{p.propertyName || p.name}</ReadMore>
                       </td>
                       <td style={{ color: "#6B7280" }}>
-                        {p.city}
-                        {p.state ? `, ${p.state}` : ""}
+                        <ReadMore maxWords={4}>
+                          {p.city}
+                          {p.state ? `, ${p.state}` : ""}
+                        </ReadMore>
                       </td>
                       <td>
                         <span className="category-pill">
@@ -1077,6 +1088,12 @@ export default function AllProperties() {
                 )}
               </tbody>
             </table>
+            <Pagination 
+              currentPage={currentPage} 
+              totalItems={totalItems} 
+              itemsPerPage={itemsPerPage} 
+              onPageChange={setCurrentPage} 
+            />
           </div>
         </div>
       </div>

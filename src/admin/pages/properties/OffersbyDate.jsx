@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown, Edit2, Trash2, MoreVertical, Calendar, Search, Filter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Pagination from '../../components/Pagination';
+import ReadMore from '../../components/ReadMore';
 
 export default function OffersbyDate() {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ export default function OffersbyDate() {
   const [dateTo, setDateTo] = useState('');
   const [filterLocation, setFilterLocation] = useState('');
   const [actionMenu, setActionMenu] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const fetchOffers = async () => {
     setLoading(true);
@@ -74,6 +78,13 @@ export default function OffersbyDate() {
 
     return matchQuery && matchCat && matchLoc && matchDate;
   });
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, selectedCategory, dateFrom, dateTo, filterLocation]);
+
+  const totalItems = filteredOffers.length;
+  const paginated = filteredOffers.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="fade-in">
@@ -172,7 +183,7 @@ export default function OffersbyDate() {
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto', width: '100%' }}>
+          <div style={{ overflowX: 'visible', width: '100%' }}>
             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
@@ -196,16 +207,16 @@ export default function OffersbyDate() {
                 ) : filteredOffers.length === 0 ? (
                   <tr><td colSpan="12" style={{ textAlign: 'center', padding: '40px 0', color: '#6B7280' }}>No offers found</td></tr>
                 ) : (
-                  filteredOffers.map((o, i) => (
+                  paginated.map((o, i) => (
                     <tr key={o._id || i} style={{ borderBottom: '1px solid #F3F4F6' }}>
                       <td style={{ color: '#58A429', fontWeight: 600, padding: '14px' }}>{o.offerId || `OFF-700${1+i}`}</td>
                       <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}>{o.datesAndTime}</td>
-                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px' }}>{o.propertyName}</td>
-                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}>{o.location}</td>
+                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px' }}><ReadMore maxWords={4}>{o.propertyName}</ReadMore></td>
+                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}><ReadMore maxWords={4}>{o.location}</ReadMore></td>
                       <td style={{ padding: '14px' }}><span className="category-pill">{o.category}</span></td>
                       <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}>{o.room}</td>
-                      <td style={{ color: '#6B7280', padding: '14px' }}>{o.foods}</td>
-                      <td style={{ color: '#6B7280', padding: '14px' }}>{Array.isArray(o.amenities) ? o.amenities.join(', ') : o.amenities}</td>
+                      <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore maxWords={4}>{o.foods}</ReadMore></td>
+                      <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore maxWords={4}>{Array.isArray(o.amenities) ? o.amenities.join(', ') : o.amenities}</ReadMore></td>
                       <td style={{ color: '#111827', fontWeight: 600, padding: '14px' }}>
                         {(() => {
                           const val = o.offerPercent || o.offer || '20% Off';
@@ -215,12 +226,12 @@ export default function OffersbyDate() {
                           return `${str}% Off`;
                         })()}
                       </td>
-                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}>{o.description}</td>
+                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}><ReadMore maxWords={4}>{o.description}</ReadMore></td>
                       <td style={{ padding: '14px' }}>
-                        {o.status === 'Active' ? (
-                          <span className="status-pill active">{o.status}</span>
+                        {o.status && o.status.toLowerCase() === 'active' ? (
+                          <span className="status-pill active">Active</span>
                         ) : (
-                          <span className="status-pill inactive">{o.status}</span>
+                          <span className="status-pill inactive">{o.status ? o.status.charAt(0).toUpperCase() + o.status.slice(1) : 'Expired'}</span>
                         )}
                       </td>
                       <td style={{ padding: '14px', position: 'relative' }} onClick={(e) => e.stopPropagation()}>
@@ -230,10 +241,10 @@ export default function OffersbyDate() {
                         </div>
                         {actionMenu === o._id && (
                           <div style={{ position: 'absolute', right: 8, top: 32, background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 160 }}>
-                            <button onClick={() => { setActionMenu(null); navigate(`/admin/properties/offers/edit/${o._id}`); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#374151', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
+                            <button onClick={() => { setActionMenu(null); navigate(`/admin/properties/offers/edit/${o.id || o._id}`); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#374151', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
                               👁 View Details
                             </button>
-                            <button onClick={() => { setActionMenu(null); navigate(`/admin/properties/offers/edit/${o._id}`); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#2563EB', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
+                            <button onClick={() => { setActionMenu(null); navigate(`/admin/properties/offers/edit/${o.id || o._id}`); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#2563EB', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
                               ✎ Edit Offer
                             </button>
                           </div>
@@ -244,6 +255,12 @@ export default function OffersbyDate() {
                 )}
               </tbody>
             </table>
+            <Pagination 
+              currentPage={currentPage} 
+              totalItems={totalItems} 
+              itemsPerPage={itemsPerPage} 
+              onPageChange={setCurrentPage} 
+            />
           </div>
         </div>
       </div>

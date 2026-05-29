@@ -106,6 +106,7 @@ export default function MyProperties() {
 
   // ─── UI State ─────────────────────────────────────────────
   const [editId, setEditId] = useState(null);
+  const [formStep, setFormStep] = useState(1);
   const [showForm, setShowForm] = useState(false);
   const [myProps, setMyProps] = useState([]);
   const [statsData, setStatsData] = useState(null);
@@ -585,6 +586,7 @@ export default function MyProperties() {
   };
 
   const resetForm = () => {
+    setFormStep(1);
     setEditId(null);
     setShowForm(false);
     setSelectedAmenitiesList([]);
@@ -704,20 +706,34 @@ export default function MyProperties() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '28px' }}>
               <div>
                 <h3 style={{ fontSize: '20px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif' }}>
-                  {editId ? '✏️ Edit Property' : '🏡 Add New Property'}
+                  {editId ? '✏️ Edit Property' : '🏡 Add New Property'} <span style={{ fontSize: '14px', color: '#58A429', marginLeft: '8px' }}>(Step {formStep} of 2)</span>
                 </h3>
                 <p style={{ fontSize: '12px', color: '#9CA3AF', margin: '4px 0 0', fontFamily: '"Outfit", sans-serif' }}>
                   Fill all details carefully — this is what customers will see
                 </p>
               </div>
               <div style={{ display: 'flex', gap: '12px' }}>
-                <button type="button" onClick={handleSubmit} disabled={loading}
-                  style={{ background: '#58A429', color: '#ffffff', border: 'none', borderRadius: '24px', padding: '8px 32px', fontWeight: 600, fontSize: '13px', cursor: 'pointer', fontFamily: '"Outfit", sans-serif', boxShadow: '0 2px 8px rgba(88,164,41,0.2)' }}>
-                  {loading ? 'Saving...' : (editId ? 'Update Property' : 'Add Property')}
-                </button>
+                {formStep === 2 && (
+                  <button type="button" onClick={() => setFormStep(1)}
+                    style={{ background: '#fff', color: '#6B7280', border: '1px solid #D1D5DB', borderRadius: '24px', padding: '8px 24px', fontWeight: 600, fontSize: '13px', cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}>
+                    Back to Step 1
+                  </button>
+                )}
+                {formStep === 1 ? (
+                  <button type="button" onClick={() => { setFormStep(2); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                    style={{ background: '#58A429', color: '#ffffff', border: 'none', borderRadius: '24px', padding: '8px 32px', fontWeight: 600, fontSize: '13px', cursor: 'pointer', fontFamily: '"Outfit", sans-serif', boxShadow: '0 2px 8px rgba(88,164,41,0.2)' }}>
+                    Next Step →
+                  </button>
+                ) : (
+                  <button type="button" onClick={handleSubmit} disabled={loading}
+                    style={{ background: '#58A429', color: '#ffffff', border: 'none', borderRadius: '24px', padding: '8px 32px', fontWeight: 600, fontSize: '13px', cursor: 'pointer', fontFamily: '"Outfit", sans-serif', boxShadow: '0 2px 8px rgba(88,164,41,0.2)' }}>
+                    {loading ? 'Saving...' : (editId ? 'Update Property' : 'Add Property')}
+                  </button>
+                )}
               </div>
             </div>
 
+            <div style={{ display: formStep === 1 ? 'block' : 'none' }}>
             {/* ── SECTION 1: Basic Details ──────────────────── */}
             {sectionWrap(<>
               {sectionHeader('1. Basic Property Details', 'Core information about your property')}
@@ -923,7 +939,9 @@ export default function MyProperties() {
                 <p style={{ color: '#EF4444', fontSize: '12px' }}>Maximum 30 images reached.</p>
               )}
             </>)}
+            </div>
 
+            <div style={{ display: formStep === 2 ? 'block' : 'none' }}>
             {/* ── SECTION 5: Property Details ───────────────── */}
             {sectionWrap(<>
               {sectionHeader('5. Property Details', 'Size, capacity and timing information')}
@@ -1293,14 +1311,28 @@ export default function MyProperties() {
 
             {/* Submit Button Bottom */}
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '8px' }}>
+              {formStep === 2 && (
+                <button type="button" onClick={() => setFormStep(1)}
+                  style={{ padding: '10px 28px', background: '#fff', color: '#6B7280', border: '1px solid #D1D5DB', borderRadius: '24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}>
+                  Back
+                </button>
+              )}
               <button type="button" onClick={resetForm}
                 style={{ padding: '10px 28px', background: '#fff', color: '#6B7280', border: '1px solid #D1D5DB', borderRadius: '24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}>
                 Cancel
               </button>
-              <button type="button" onClick={handleSubmit} disabled={loading}
-                style={{ padding: '10px 36px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: '"Outfit", sans-serif', boxShadow: '0 2px 8px rgba(88,164,41,0.2)' }}>
-                {loading ? 'Saving...' : (editId ? '✅ Update Property' : '✅ Add Property')}
-              </button>
+              {formStep === 1 ? (
+                <button type="button" onClick={() => { setFormStep(2); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
+                  style={{ padding: '10px 36px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: '"Outfit", sans-serif', boxShadow: '0 2px 8px rgba(88,164,41,0.2)' }}>
+                  Next Step →
+                </button>
+              ) : (
+                <button type="button" onClick={handleSubmit} disabled={loading}
+                  style={{ padding: '10px 36px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '24px', fontSize: '13px', fontWeight: 600, cursor: 'pointer', fontFamily: '"Outfit", sans-serif', boxShadow: '0 2px 8px rgba(88,164,41,0.2)' }}>
+                  {loading ? 'Saving...' : (editId ? '✅ Update Property' : '✅ Add Property')}
+                </button>
+              )}
+            </div>
             </div>
                     </div>
                   )}

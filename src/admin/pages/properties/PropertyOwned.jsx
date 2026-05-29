@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { ClipboardList, Clock, CheckCircle2, Calendar, ChevronDown, Filter, Search, Edit2, Trash2, MoreVertical, Plus } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import Pagination from '../../components/Pagination';
+import ReadMore from '../../components/ReadMore';
 
 export default function PropertyOwned() {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ export default function PropertyOwned() {
   const [propertyType, setPropertyType] = useState('');
   const [actionMenu, setActionMenu] = useState(null);
   const [viewPropertiesOwner, setViewPropertiesOwner] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   const fetchOwners = async () => {
     setLoading(true);
@@ -38,8 +42,7 @@ export default function PropertyOwned() {
     fetchOwners();
   }, []);
 
-  const toggleStatus = async (id, currentStatus) => {
-    const nextStatus = currentStatus === 'Active' ? 'Inactive' : 'Active';
+  const updateStatus = async (id, nextStatus) => {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_BASE}/owners/${id}/status`, {
         method: 'PUT',
@@ -63,6 +66,13 @@ export default function PropertyOwned() {
   };
 
   const filteredOwners = owners;
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, dateFrom, propertyType]);
+
+  const totalItems = filteredOwners.length;
+  const paginated = filteredOwners.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
   return (
     <div className="fade-in" onClick={() => setActionMenu(null)}>
@@ -149,8 +159,8 @@ export default function PropertyOwned() {
         </div>
 
         {/* Table */}
-        <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12 }}>
-          <div style={{ overflowX: 'auto' }}>
+        <div className="chart-card" style={{ padding: 0, overflow: 'visible', borderRadius: 12 }}>
+          <div style={{ overflowX: 'visible' }}>
             <table className="data-table" style={{ whiteSpace: 'nowrap' }}>
               <thead>
                 <tr>
@@ -171,7 +181,7 @@ export default function PropertyOwned() {
                 ) : filteredOwners.length === 0 ? (
                   <tr><td colSpan="9" style={{ textAlign: 'center', padding: '30px 0', color: '#6B7280' }}>No property owners found</td></tr>
                 ) : (
-                  filteredOwners.map((o, i) => (
+                  paginated.map((o, i) => (
                     <tr key={o._id || i}>
                       <td style={{ color: '#58A429', fontWeight: 600 }}>{o.ownerNo || `OWN-500${1 + i}`}</td>
                       <td>
@@ -179,14 +189,14 @@ export default function PropertyOwned() {
                           <img src={o.image || "https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&w=100&q=80"} alt="avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                         </div>
                       </td>
-                      <td style={{ color: '#111827', fontWeight: 500 }}>{o.ownerName}</td>
-                      <td style={{ color: '#9CA3AF' }}>{o.email}</td>
+                      <td style={{ color: '#111827', fontWeight: 500 }}><ReadMore maxWords={4}>{o.ownerName}</ReadMore></td>
+                      <td style={{ color: '#9CA3AF' }}><ReadMore maxWords={4}>{o.email}</ReadMore></td>
                       <td style={{ color: '#3B82F6', fontWeight: 500 }}>{o.contactNo}</td>
-                      <td style={{ color: '#6B7280' }}>{(o.properties && o.properties.length > 0) ? o.properties.join(', ') : 'None'}</td>
+                      <td style={{ color: '#6B7280' }}><ReadMore maxWords={4}>{(o.properties && o.properties.length > 0) ? o.properties.join(', ') : 'None'}</ReadMore></td>
                       <td style={{ color: '#6B7280' }}>{o.numberOfProperties || (o.properties ? o.properties.length : 0)}</td>
                       <td>
                         <button 
-                          onClick={() => toggleStatus(o._id, o.status)} 
+                          onClick={() => updateStatus(o._id, o.status === 'Active' ? 'Inactive' : 'Active')} 
                           style={{ border: 'none', background: 'transparent', padding: 0, cursor: 'pointer' }}
                           title="Click to toggle status"
                         >
@@ -199,17 +209,20 @@ export default function PropertyOwned() {
                         </button>
                         {actionMenu === o._id && (
                           <div style={{ position: 'absolute', right: 8, top: 32, background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 160 }}>
+                            <button onClick={() => { setActionMenu(null); navigate(`/admin/properties/owned/edit/${o._id}`); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#374151', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
+                              Edit
+                            </button>
                             <button onClick={() => { setActionMenu(null); setViewPropertiesOwner(o); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#374151', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
-                              👁 View All Properties
+                              View Details
                             </button>
-                            <button onClick={() => { setActionMenu(null); toggleStatus(o._id, o.status); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: o.status === 'Active' ? '#EF4444' : '#58A429', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
-                              {o.status === 'Active' ? '⊘ Deactivate' : '✓ Activate'}
+                            <button onClick={() => { setActionMenu(null); updateStatus(o._id, 'Active'); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#58A429', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
+                              Active
                             </button>
-                            <button onClick={() => { setActionMenu(null); handleDelete(o._id); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
-                              ⊘ Delete Owner
+                            <button onClick={() => { setActionMenu(null); updateStatus(o._id, 'Inactive'); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
+                              Inactive
                             </button>
-                            <button onClick={() => setActionMenu(null)} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#374151', background: 'none', border: 'none', cursor: 'pointer' }}>
-                              ✕ Close
+                            <button onClick={() => { setActionMenu(null); handleDelete(o._id); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}>
+                              Delete
                             </button>
                           </div>
                         )}
@@ -219,6 +232,12 @@ export default function PropertyOwned() {
                 )}
               </tbody>
             </table>
+            <Pagination 
+              currentPage={currentPage} 
+              totalItems={totalItems} 
+              itemsPerPage={itemsPerPage} 
+              onPageChange={setCurrentPage} 
+            />
           </div>
         </div>
 

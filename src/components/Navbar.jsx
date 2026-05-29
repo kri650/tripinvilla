@@ -61,7 +61,7 @@ export default function Navbar({
   return (
     <div className="navbar-container">
       <div className="nav-logo" onClick={() => onNavigate('Home')}>
-        <img src={(activeMenu === 'Detail') ? darkLogoImg : logoImg} alt="Tripinstays Logo" />
+        <img src="/tripinvilla_logo.png" alt="Tripinstays Logo" />
       </div>
 
       <div className="nav-pill-wrapper">

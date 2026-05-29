@@ -47,6 +47,11 @@ export default function Dashboard() {
   const [topProperties, setTopProperties] = useState([]);
   const [enquiries, setEnquiries] = useState([]);
   const [selectedYear, setSelectedYear] = useState(String(new Date().getFullYear()));
+  const [selectedEnquiryMonth, setSelectedEnquiryMonth] = useState(() => {
+    const d = new Date();
+    return `${d.toLocaleString('default', { month: 'short' })} ${d.getFullYear()}`;
+  });
+  const [actionMenu, setActionMenu] = useState(null);
 
   const fetchData = async () => {
     try {
@@ -205,14 +210,14 @@ export default function Dashboard() {
 
       {/* ══ Section 3: Top Properties by Enquiries ══════ */}
       <div className="dash-section">
-        <div className="chart-card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div className="chart-card" style={{ padding: 0, overflow: 'visible' }}>
           <div className="table-header" style={{ padding: '14px 20px' }}>
             <span className="table-title">Top 10 Most Enquired Properties</span>
             <div className="table-header-right">
               <button className="table-view-all" onClick={() => navigate('/admin/properties/all')} style={{ cursor: 'pointer' }}>View All</button>
             </div>
           </div>
-          <div style={{ overflowX: 'auto' }}>
+          <div style={{ overflowX: 'visible' }}>
             <table className="data-table">
               <thead>
                 <tr>
@@ -252,8 +257,15 @@ export default function Dashboard() {
                         {p.status}
                       </span>
                     </td>
-                    <td>
-                      <button className="action-dots" onClick={() => navigate('/admin/properties/all')} style={{ cursor: 'pointer' }}><MoreVertical size={14} /></button>
+                    <td style={{ position: 'relative' }}>
+                      <button className="action-dots" onClick={() => setActionMenu(actionMenu === `prop_${p.id || p.propertyNo}` ? null : `prop_${p.id || p.propertyNo}`)} style={{ cursor: 'pointer' }}><MoreVertical size={14} /></button>
+                      {actionMenu === `prop_${p.id || p.propertyNo}` && (
+                        <div style={{ position: 'absolute', right: 8, top: 32, background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 160 }}>
+                          <button onClick={() => { setActionMenu(null); navigate('/admin/properties/all'); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#374151', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
+                            👁 View Details
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}
@@ -265,14 +277,32 @@ export default function Dashboard() {
 
       {/* ══ Section 4: Recent Enquiries ══════════ */}
       <div className="dash-section" style={{ marginBottom: 24 }}>
-        <div className="chart-card" style={{ padding: 0, overflow: 'hidden' }}>
+        <div className="chart-card" style={{ padding: 0, overflow: 'visible' }}>
           <div className="table-header" style={{ padding: '14px 20px' }}>
             <span className="table-title">Recent Enquiries</span>
-            <div className="table-header-right">
+            <div className="table-header-right" style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
               <button className="table-view-all" onClick={() => navigate('/admin/enquiries')} style={{ cursor: 'pointer' }}>View All</button>
+              
+              <div style={{ position: 'relative' }}>
+                <button className="chart-filter" style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <Calendar size={14} /> {selectedEnquiryMonth} <ChevronDown size={14} />
+                </button>
+                <input 
+                  type="month"
+                  style={{ position: 'absolute', opacity: 0, top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer', zIndex: 10 }}
+                  onChange={(e) => {
+                    if (e.target.value) {
+                      const [year, month] = e.target.value.split('-');
+                      const d = new Date(year, month - 1);
+                      setSelectedEnquiryMonth(`${d.toLocaleString('default', { month: 'short' })} ${d.getFullYear()}`);
+                    }
+                  }}
+                />
+              </div>
+
             </div>
           </div>
-          <div style={{ overflowX: 'auto' }}>
+          <div style={{ overflowX: 'visible' }}>
             <table className="data-table">
               <thead>
                 <tr>
@@ -298,8 +328,15 @@ export default function Dashboard() {
                     <td style={{ color: '#2563EB' }}>{e.email}</td>
                     <td style={{ fontSize: 12, color: '#4B5563' }}>{e.propertyName}</td>
                     <td style={{ maxWidth: 200, whiteSpace: 'normal', fontSize: 11, color: '#6B7280', lineHeight: 1.4 }}>{e.query}</td>
-                    <td>
-                      <button className="action-dots" onClick={() => navigate('/admin/enquiries')} style={{ cursor: 'pointer' }}><MoreVertical size={14} /></button>
+                    <td style={{ position: 'relative' }}>
+                      <button className="action-dots" onClick={() => setActionMenu(actionMenu === `enq_${e.id || e.enquiryNo}` ? null : `enq_${e.id || e.enquiryNo}`)} style={{ cursor: 'pointer' }}><MoreVertical size={14} /></button>
+                      {actionMenu === `enq_${e.id || e.enquiryNo}` && (
+                        <div style={{ position: 'absolute', right: 8, top: 32, background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 160 }}>
+                          <button onClick={() => { setActionMenu(null); navigate('/admin/enquiries'); }} style={{ display: 'block', width: '100%', textAlign: 'left', padding: '9px 16px', fontSize: 13, color: '#374151', background: 'none', border: 'none', cursor: 'pointer', borderBottom: '1px solid #F3F4F6' }}>
+                            👁 View Details
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}

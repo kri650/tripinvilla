@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, Filter, Search, ChevronDown, MessageSquare, X, Clock, CheckCircle } from 'lucide-react';
+import Pagination from '../components/Pagination';
+import ReadMore from '../components/ReadMore';
 
 const API_BASE = import.meta.env.VITE_API_BASE || 'http://13.127.196.228:8000/api';
 
@@ -12,6 +14,8 @@ export default function Enquiries() {
   const [dateTo, setDateTo] = useState('');
   const [propertyType, setPropertyType] = useState('All Categories');
   const [location, setLocation] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
 
   // Reply modal state
   const [replyModal, setReplyModal] = useState(null); // holds the enquiry object
@@ -96,6 +100,13 @@ export default function Enquiries() {
     return matchesStatus && matchesSearch && matchType && matchLocation && matchDate;
   });
 
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchText, statusFilter, dateFrom, dateTo, propertyType, location]);
+
+  const totalItems = filtered.length;
+  const paginated = filtered.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
   const statusBadge = (status) => {
     const styles = {
       Open: { background: '#FEF3C7', color: '#92400E' },
@@ -122,54 +133,63 @@ export default function Enquiries() {
       </div>
 
       <div className="admin-table-card">
-        <div className="admin-table-header">
-          <h2 className="admin-table-title">Enquiries</h2>
-          <div className="admin-table-toolbar" style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 8px', border: '1px solid #E5E7EB', borderRadius: '6px' }}>
-              <span style={{ fontSize: '11px', color: '#6B7280' }}>From:</span>
-              <input type="date" value={dateFrom} onChange={e => setDateFrom(e.target.value)} style={{ border: 'none', outline: 'none', fontSize: '11px', color: '#374151' }} />
+        <div className="admin-table-header" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <h2 className="admin-table-title" style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>Enquiries</h2>
+          <div style={{ display: 'flex', gap: '12px', alignItems: 'center', flexWrap: 'wrap' }}>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '8px 12px', background: '#FFFFFF', cursor: 'pointer' }}>
+              <Calendar size={14} color="#6B7280" style={{ marginRight: '8px' }} />
+              <input 
+                type="text" 
+                placeholder="Date From" 
+                onFocus={(e) => (e.target.type = "date")} 
+                onBlur={(e) => (!e.target.value ? e.target.type = "text" : null)}
+                value={dateFrom}
+                onChange={e => setDateFrom(e.target.value)}
+                style={{ border: 'none', outline: 'none', fontSize: '13px', color: '#374151', background: 'transparent', width: '90px' }}
+              />
+              <ChevronDown size={14} color="#6B7280" style={{ marginLeft: '4px' }} />
             </div>
             
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '4px 8px', border: '1px solid #E5E7EB', borderRadius: '6px' }}>
-              <span style={{ fontSize: '11px', color: '#6B7280' }}>To:</span>
-              <input type="date" value={dateTo} onChange={e => setDateTo(e.target.value)} style={{ border: 'none', outline: 'none', fontSize: '11px', color: '#374151' }} />
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '8px 12px', background: '#FFFFFF', cursor: 'pointer' }}>
+              <Calendar size={14} color="#6B7280" style={{ marginRight: '8px' }} />
+              <input 
+                type="text" 
+                placeholder="Date To" 
+                onFocus={(e) => (e.target.type = "date")} 
+                onBlur={(e) => (!e.target.value ? e.target.type = "text" : null)}
+                value={dateTo}
+                onChange={e => setDateTo(e.target.value)}
+                style={{ border: 'none', outline: 'none', fontSize: '13px', color: '#374151', background: 'transparent', width: '90px' }}
+              />
+              <ChevronDown size={14} color="#6B7280" style={{ marginLeft: '4px' }} />
             </div>
 
-            <select value={propertyType} onChange={e => setPropertyType(e.target.value)} className="admin-toolbar-btn" style={{ padding: '6px 8px', cursor: 'pointer' }}>
-              <option value="All Categories">All Categories</option>
-              <option value="Homestay">Homestay</option>
-              <option value="Hotel">Hotel</option>
-              <option value="Villa">Villa</option>
-              <option value="Apartment">Apartment</option>
-              <option value="Cottage">Cottage</option>
-            </select>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <select value={propertyType} onChange={e => setPropertyType(e.target.value)} style={{ appearance: 'none', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '8px 32px 8px 12px', fontSize: '13px', color: '#9CA3AF', background: '#FFFFFF', outline: 'none', cursor: 'pointer' }}>
+                <option value="All Categories">Property Type</option>
+                <option value="Homestay">Homestay</option>
+                <option value="Hotel">Hotel</option>
+                <option value="Villa">Villa</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Cottage">Cottage</option>
+              </select>
+              <ChevronDown size={14} color="#9CA3AF" style={{ position: 'absolute', right: '12px', pointerEvents: 'none' }} />
+            </div>
 
-            <input type="text" placeholder="Location" value={location} onChange={e => setLocation(e.target.value)} style={{ padding: '6px 8px', fontSize: '12px', border: '1px solid #E5E7EB', borderRadius: '6px', width: '90px', outline: 'none' }} />
+            <input type="text" placeholder="Location" value={location} onChange={e => setLocation(e.target.value)} style={{ padding: '8px 12px', fontSize: '13px', border: '1px solid #E5E7EB', borderRadius: '8px', width: '100px', outline: 'none', color: '#9CA3AF' }} />
 
-            {/* Status filter */}
-            <select
-              value={statusFilter}
-              onChange={e => setStatusFilter(e.target.value)}
-              className="admin-toolbar-btn"
-              style={{ paddingRight: '12px', cursor: 'pointer' }}
-            >
-              <option value="All">All Status</option>
-              <option value="Open">Open</option>
-              <option value="Replied">Replied</option>
-              <option value="Closed">Closed</option>
-            </select>
-
-            <button className="admin-toolbar-btn filter" onClick={fetchEnquiries}>
-              <Filter size={14} /> Refresh
+            <button onClick={fetchEnquiries} style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', border: '1px solid #58A429', borderRadius: '8px', color: '#58A429', background: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 500 }}>
+              <Filter size={14} /> Filter
             </button>
 
-            <div className="admin-toolbar-search">
-              <Search size={14} />
-              <input
-                type="text"
-                placeholder="Search by name, email, query..."
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+              <Search size={14} color="#9CA3AF" style={{ position: 'absolute', left: '12px' }} />
+              <input 
+                type="text" 
+                placeholder="Search" 
                 value={searchText}
                 onChange={e => setSearchText(e.target.value)}
+                style={{ padding: '8px 12px 8px 32px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none', fontSize: '13px', width: '160px', color: '#9CA3AF' }} 
               />
             </div>
           </div>
@@ -204,18 +224,18 @@ export default function Enquiries() {
                   </td>
                 </tr>
               ) : (
-                filtered.map((e, idx) => (
+                paginated.map((e, idx) => (
                   <tr key={e._id || idx}>
                     <td><span className="admin-id-link">{e.enquiryNo || `ENQ-${4000 + idx}`}</span></td>
                     <td style={{ whiteSpace: 'nowrap', fontSize: '12px' }}>
                       {e.createdAt ? new Date(e.createdAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '—'}
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 500 }}>{e.user_name || e.name || '—'}</td>
+                    <td style={{ color: '#111827', fontWeight: 500 }}><ReadMore maxWords={4}>{e.user_name || e.name || '—'}</ReadMore></td>
                     <td>{e.phone || '—'}</td>
-                    <td>{e.email || '—'}</td>
-                    <td style={{ maxWidth: '120px', fontSize: '12px', color: '#4B5563' }}>{e.propertyName || '—'}</td>
+                    <td><ReadMore maxWords={4}>{e.email || '—'}</ReadMore></td>
+                    <td style={{ maxWidth: '120px', fontSize: '12px', color: '#4B5563' }}><ReadMore maxWords={4}>{e.propertyName || '—'}</ReadMore></td>
                     <td style={{ maxWidth: '200px', whiteSpace: 'normal', lineHeight: '1.4', fontSize: '13px' }}>
-                      {e.query || e.message || '—'}
+                      <ReadMore maxWords={4}>{e.query || e.message || '—'}</ReadMore>
                       {e.reply && (
                         <div style={{ marginTop: '6px', padding: '6px 10px', background: '#F0FDF4', borderLeft: '3px solid #22c55e', borderRadius: '4px', fontSize: '12px', color: '#166534' }}>
                           <strong>Your reply:</strong> {e.reply}
@@ -243,6 +263,12 @@ export default function Enquiries() {
               )}
             </tbody>
           </table>
+          <Pagination 
+            currentPage={currentPage} 
+            totalItems={totalItems} 
+            itemsPerPage={itemsPerPage} 
+            onPageChange={setCurrentPage} 
+          />
         </div>
       </div>
 
