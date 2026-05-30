@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import Pagination from '../../components/Pagination';
 import ReadMore from '../../components/ReadMore';
+import DateRangeDropdown from '../../../components/DateRangeDropdown';
 
 const API = `${import.meta.env.VITE_API_BASE}`;
 import PropertyViewModal from './PropertyViewModal';
@@ -742,54 +743,14 @@ export default function AllProperties() {
           >
             <div className="props-table-title">All Properties</div>
             <div className="props-table-actions">
-              <div
-                className="props-filter-select"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "6px 12px",
+              <DateRangeDropdown 
+                startDate={dateFrom}
+                endDate={dateTo}
+                onChange={(start, end) => {
+                  setDateFrom(start);
+                  setDateTo(end);
                 }}
-              >
-                <Calendar size={14} style={{ color: "#6B7280" }} />
-                <input
-                  type="date"
-                  value={dateFrom}
-                  onChange={(e) => setDateFrom(e.target.value)}
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    outline: "none",
-                    color: "#374151",
-                    fontSize: 13,
-                    cursor: "pointer",
-                  }}
-                />
-              </div>
-              <div
-                className="props-filter-select"
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "6px 12px",
-                }}
-              >
-                <Calendar size={14} style={{ color: "#6B7280" }} />
-                <input
-                  type="date"
-                  value={dateTo}
-                  onChange={(e) => setDateTo(e.target.value)}
-                  style={{
-                    border: "none",
-                    background: "transparent",
-                    outline: "none",
-                    color: "#374151",
-                    fontSize: 13,
-                    cursor: "pointer",
-                  }}
-                />
-              </div>
+              />
               <div
                 className="props-filter-select"
                 style={{

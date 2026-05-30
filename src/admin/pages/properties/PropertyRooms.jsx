@@ -1,4 +1,5 @@
 import ReadMore from '../../components/ReadMore';
+import DateRangeDropdown from '../../../components/DateRangeDropdown';
 import { useState, useEffect } from 'react';
 import { Calendar, ChevronDown, ClipboardList, Clock, CheckCircle2, Search, Filter, Edit2, Trash2, MoreVertical, Check, X, Eye } from 'lucide-react';
 
@@ -201,25 +202,14 @@ export default function PropertyRooms() {
             <div className="props-table-title" style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif' }}>Property Requests</div>
             
             <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
-                <Calendar size={13} style={{ color: '#6B7280' }} />
-                <input 
-                  type="date"
-                  value={filterDateFrom}
-                  onChange={(e) => setFilterDateFrom(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
-                />
-              </div>
-
-              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
-                <Calendar size={13} style={{ color: '#6B7280' }} />
-                <input 
-                  type="date"
-                  value={filterDateTo}
-                  onChange={(e) => setFilterDateTo(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
-                />
-              </div>
+              <DateRangeDropdown 
+                startDate={filterDateFrom}
+                endDate={filterDateTo}
+                onChange={(start, end) => {
+                  setFilterDateFrom(start);
+                  setFilterDateTo(end);
+                }}
+              />
 
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
                 <select 

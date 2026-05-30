@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import DateRangeDropdown from '../../../components/DateRangeDropdown';
 import { ChevronDown, Edit2, Trash2, MoreVertical, Calendar, Search, Filter } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import Pagination from '../../components/Pagination';
@@ -120,25 +121,14 @@ export default function OffersbyDate() {
             <div className="props-table-title" style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif' }}>Offers by Date</div>
             
             <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
-              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
-                <Calendar size={13} style={{ color: '#6B7280' }} />
-                <input 
-                  type="date"
-                  value={dateFrom}
-                  onChange={(e) => setDateFrom(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
-                />
-              </div>
-
-              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
-                <Calendar size={13} style={{ color: '#6B7280' }} />
-                <input 
-                  type="date"
-                  value={dateTo}
-                  onChange={(e) => setDateTo(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif' }}
-                />
-              </div>
+              <DateRangeDropdown 
+                startDate={dateFrom}
+                endDate={dateTo}
+                onChange={(start, end) => {
+                  setDateFrom(start);
+                  setDateTo(end);
+                }}
+              />
 
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff' }}>
                 <select 

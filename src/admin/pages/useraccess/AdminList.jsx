@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import DateRangeDropdown from '../../../components/DateRangeDropdown';
 import { Calendar, Filter, Search, MoreVertical, ChevronDown } from 'lucide-react';
 import Pagination from '../../components/Pagination';
 import ReadMore from '../../components/ReadMore';
@@ -159,24 +160,14 @@ export default function AdminList() {
           <div className="admin-table-header">
             <h2 className="admin-table-title">Admin List</h2>
             <div className="admin-table-toolbar">
-              <div className="admin-toolbar-btn" style={{ padding: '4px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Calendar size={14} /> 
-                <input 
-                  type="date" 
-                  value={dateFrom}
-                  onChange={e => setDateFrom(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}
-                />
-              </div>
-              <div className="admin-toolbar-btn" style={{ padding: '4px 12px', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Calendar size={14} /> 
-                <input 
-                  type="date" 
-                  value={dateTo}
-                  onChange={e => setDateTo(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: 'inherit' }}
-                />
-              </div>
+              <DateRangeDropdown 
+                startDate={dateFrom}
+                endDate={dateTo}
+                onChange={(start, end) => {
+                  setDateFrom(start);
+                  setDateTo(end);
+                }}
+              />
               <button className="admin-toolbar-btn filter">
                 <Filter size={14} /> Filter
               </button>
