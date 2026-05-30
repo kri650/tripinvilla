@@ -2211,7 +2211,13 @@ export default function PropertyMakers() {
                 <td style={{ color: "#6B7280" }}>
                   {Array.isArray(p.experiences)
                     ? p.experiences
-                      .map((e) => e.experienceName || e.name || e)
+                      .map((e) => {
+                        if (typeof e === 'string') {
+                          const matchedExp = availableExperiences.find(x => x._id === e || x.id === e);
+                          return matchedExp ? (matchedExp.experienceName || matchedExp.name) : e;
+                        }
+                        return e.experienceName || e.name || e;
+                      })
                       .slice(0, 2)
                       .join(", ") +
                     (p.experiences.length > 2 ? "..." : "")
