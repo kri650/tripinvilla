@@ -315,8 +315,8 @@
   font-family: 'Lato', sans-serif;
   font-size: 12px;
   font-weight: 500;
-  color: #9CA3AF;
-  /* Made light gray */
+  color: #111827;
+  /* Made dark black for readability */
 }
 
 .field-control-wrap {
@@ -335,8 +335,8 @@
   padding: 0 16px;
   font-family: 'Lato', sans-serif;
   font-size: 13.5px;
-  color: #9CA3AF;
-  /* Made value text light gray */
+  color: #111827;
+  /* Made value text dark black */
   outline: none;
   cursor: pointer;
 }
