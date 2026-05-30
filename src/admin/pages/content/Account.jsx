@@ -1,13 +1,21 @@
 import { useState, useEffect } from 'react';
 
 export default function Account() {
-  const [formData, setFormData] = useState({
-    firstName: 'Rahul',
-    lastName: 'Rahul',
-    contactNumber: '999888333777',
-    email: 'rahul@gmail.com',
-    location: 'Mumbai',
-    image: ''
+  const [formData, setFormData] = useState(() => {
+    let initialUser = { name: '', phone: '', email: '', city: '', avatar: '' };
+    try {
+      const u = localStorage.getItem('admin_user');
+      if (u) initialUser = JSON.parse(u);
+    } catch(e) {}
+    
+    return {
+      firstName: initialUser.name ? initialUser.name.split(' ')[0] : '',
+      lastName: initialUser.name ? initialUser.name.split(' ').slice(1).join(' ') : '',
+      contactNumber: initialUser.phone || '',
+      email: initialUser.email || '',
+      location: initialUser.city || '',
+      image: initialUser.avatar || ''
+    };
   });
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -56,8 +64,21 @@ export default function Account() {
         },
         body: JSON.stringify(payload)
       });
-      if (res.ok) alert('Profile updated successfully!');
-      else alert('Failed to update profile.');
+      if (res.ok) {
+        const updatedUser = await res.json();
+        // Update local storage so Topbar updates instantly
+        try {
+          const prevStr = localStorage.getItem('admin_user');
+          if (prevStr) {
+            const prev = JSON.parse(prevStr);
+            const newUser = { ...prev, name: updatedUser.name, email: updatedUser.email, phone: updatedUser.phone, city: updatedUser.city };
+            localStorage.setItem('admin_user', JSON.stringify(newUser));
+          }
+        } catch(e) {}
+        alert('Profile updated successfully!');
+      } else {
+        alert('Failed to update profile.');
+      }
     } catch (err) {
       console.error(err);
       alert('Error updating profile.');

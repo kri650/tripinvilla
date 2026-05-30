@@ -14,6 +14,7 @@ export default function AdminList() {
   const [dateTo, setDateTo] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [activeDropdown, setActiveDropdown] = useState(null);
+  const [editingId, setEditingId] = useState(null);
   const itemsPerPage = 10;
 
   // Form State

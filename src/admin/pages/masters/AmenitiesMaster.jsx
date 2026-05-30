@@ -5,6 +5,7 @@ import {
   ShieldCheck, Flame, ChefHat, Coffee, Dumbbell,
   Bath, Music, Zap, Package, Info
 } from 'lucide-react';
+import Pagination from '../../components/Pagination';
 
 const ICON_MAP = {
   Wifi, Tv, Wind, Car, Utensils, Waves, Trees,
@@ -173,7 +174,6 @@ export default function AmenitiesMaster() {
     return matchCat && matchSearch;
   });
 
-  const scopeStyle = (scope) => SCOPE_COLORS[scope] || SCOPE_COLORS.All;
 
     const totalItems = filteredAmenities.length;
   const paginated = filteredAmenities.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
