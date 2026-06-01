@@ -293,7 +293,8 @@ input:focus, select:focus {
   border: 1px solid #E5E7EB;
   box-shadow: 0 4px 15px rgba(0,0,0,0.03);
   transition: all 0.2s ease;
-  height: 280px;
+  min-height: 280px;
+  height: auto;
 }
 
 .horizontal-property-card:hover {
