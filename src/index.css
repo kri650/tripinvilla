@@ -104,7 +104,20 @@ input:focus, select:focus {
   gap: 24px;
   position: sticky;
   top: 100px;
-  height: max-content;
+  height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+/* Custom scrollbar for sidebar */
+.search-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+.search-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.search-sidebar::-webkit-scrollbar-thumb {
+  background-color: #D1D5DB;
+  border-radius: 10px;
 }
 
 .map-preview-box {
