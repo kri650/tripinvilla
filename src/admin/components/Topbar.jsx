@@ -11,7 +11,7 @@ const PAGE_TITLES = {
   '/admin/properties/offers':          'Offers by Date',
   '/admin/modes/property-makers':      'Property Masters',
   '/admin/modes/location-makers':      'Location Master',
-  '/admin/modes/assembly-makers':      'Amenities Master',
+  '/admin/masters/amenities':          'Amenities Master',
   '/admin/masters/country':            'Country Master',
   '/admin/masters/state':              'State Master',
   '/admin/masters/city':               'City Master',

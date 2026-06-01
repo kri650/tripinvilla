@@ -19,6 +19,7 @@ import LocationMaster from './pages/masters/LocationMaster';
 import DestinationMaster from './pages/masters/DestinationMaster';
 import UniqueExperienceMaster from './pages/masters/UniqueExperienceMaster';
 import AmenitiesMaster from './pages/masters/AmenitiesMaster';
+import PropertyTypeMaster from './pages/masters/PropertyTypeMaster';
 import Homepage from './pages/content/Homepage';
 import AboutUs from './pages/content/AboutUs';
 import Account from './pages/content/Account';
@@ -62,6 +63,7 @@ export default function AdminApp() {
         <Route path="masters/destination" element={<DestinationMaster />} />
         <Route path="masters/unique-experience" element={<UniqueExperienceMaster />} />
         <Route path="masters/amenities" element={<AmenitiesMaster />} />
+        <Route path="masters/property-types" element={<PropertyTypeMaster />} />
         {/* Content Management */}
         <Route path="content/homepage" element={<Homepage />} />
         <Route path="content/about-us" element={<AboutUs />} />

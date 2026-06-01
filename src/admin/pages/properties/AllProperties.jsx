@@ -89,6 +89,7 @@ export default function AllProperties() {
   // ─── Rooms (for Hotel / Resort) ──────────────────────
   const [roomsList, setRoomsList] = useState([]);
   const [roomForm, setRoomForm] = useState({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
+  const [customRoomType, setCustomRoomType] = useState('');
 
   // Amenities list matching MyProperties.jsx
   const [selectedAmenitiesList, setSelectedAmenitiesList] = useState([]);
@@ -1456,7 +1457,11 @@ export default function AllProperties() {
                       <label style={{ fontSize: 12, color: '#4B5563', marginBottom: 4, display: 'block' }}>Room Type</label>
                       <select className="form-control" value={roomForm.roomType} onChange={e => setRoomForm(p => ({ ...p, roomType: e.target.value }))}>
                         {['Standard', 'Deluxe', 'Suite', 'Executive', 'Premium', 'Presidential', 'Family Room', 'Double', 'Single', 'Twin'].map(t => <option key={t} value={t}>{t}</option>)}
+                        <option value="Other">Other (Add Manually)</option>
                       </select>
+                      {roomForm.roomType === 'Other' && (
+                        <input style={{ marginTop: '8px' }} type="text" className="form-control" value={customRoomType} onChange={e => setCustomRoomType(e.target.value)} placeholder="e.g. Penthouse" required />
+                      )}
                     </div>
                     <div>
                       <label style={{ fontSize: 12, color: '#4B5563', marginBottom: 4, display: 'block' }}>Room Name</label>
@@ -1486,8 +1491,11 @@ export default function AllProperties() {
                   <button type="button"
                     onClick={() => {
                       if (!roomForm.roomName.trim() || !roomForm.pricePerNight) { alert('Please fill Room Name and Price.'); return; }
-                      setRoomsList(prev => [...prev, { ...roomForm, pricePerNight: Number(roomForm.pricePerNight), maxGuests: Number(roomForm.maxGuests), count: Number(roomForm.count) }]);
+                      const finalRoomType = roomForm.roomType === 'Other' ? customRoomType : roomForm.roomType;
+                      if (roomForm.roomType === 'Other' && !finalRoomType.trim()) { alert('Please enter custom room type.'); return; }
+                      setRoomsList(prev => [...prev, { ...roomForm, roomType: finalRoomType, pricePerNight: Number(roomForm.pricePerNight), maxGuests: Number(roomForm.maxGuests), count: Number(roomForm.count) }]);
                       setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
+                      setCustomRoomType('');
                     }}
                     style={{ padding: '8px 20px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: 600, marginBottom: 12 }}>
                     + Add Room Type

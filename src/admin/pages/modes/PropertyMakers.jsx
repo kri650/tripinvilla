@@ -64,12 +64,15 @@ export default function PropertyMakers() {
 
   // Owners Data
   const [ownersList, setOwnersList] = useState([]);
+  const [propertyTypes, setPropertyTypes] = useState([]);
+  const [customPropertyType, setCustomPropertyType] = useState('');
 
   // Upload/images state
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
   const [roomsList, setRoomsList] = useState([]);
   const [roomForm, setRoomForm] = useState({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], checkIn: '3:00 PM', checkOut: '12:00 PM', offer: '', rules: '• Primary Guest should be atleast 18 years of age.' });
+  const [customRoomType, setCustomRoomType] = useState('');
   const fileInputRef = React.useRef(null);
 
   // Amenities list
@@ -145,6 +148,16 @@ export default function PropertyMakers() {
       else if (Array.isArray(data)) setOwnersList(data);
     } catch (err) {
       console.error("Error fetching owners:", err);
+    }
+  };
+
+  const fetchPropertyTypes = async () => {
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE}/master/property-types`);
+      const data = await res.json();
+      if (Array.isArray(data)) setPropertyTypes(data);
+    } catch (err) {
+      console.error("Error fetching property types:", err);
     }
   };
 
@@ -298,8 +311,9 @@ export default function PropertyMakers() {
     fetchOwners();
     fetchCountries();
     fetchExperiences();
-    fetchAmenitiesForType("Homestay");
+    fetchAmenitiesForType();
     fetchAllLocations();
+    fetchPropertyTypes();
   }, []);
 
 
@@ -446,6 +460,8 @@ export default function PropertyMakers() {
     try {
       const payload = {
         ...formData,
+        type: formData.propertyType === 'Other' ? customPropertyType : formData.propertyType,
+        propertyType: formData.propertyType === 'Other' ? customPropertyType : formData.propertyType,
         countryId: selectedCountry.id || undefined,
         countryName: selectedCountry.name || undefined,
         stateId: selectedState.id || undefined,
@@ -649,23 +665,35 @@ export default function PropertyMakers() {
                   value={formData.propertyType}
                   onChange={handleChange}
                   className="form-select"
-                  style={{ appearance: "none" }}
+                  required
                 >
-                  <option value="Homestay">Homestay</option>
-                  <option value="Villa">Villa</option>
-                  <option value="Hotel">Hotel</option>
-                  <option value="Resort">Resort</option>
+                  <option value="">Select Property Type</option>
+                  {propertyTypes.map(pt => (
+                    <option key={pt._id} value={pt.name}>{pt.name}</option>
+                  ))}
+                  {propertyTypes.length === 0 && (
+                    <>
+                      <option value="Homestay">Homestay</option>
+                      <option value="Villa">Villa</option>
+                      <option value="Apartment">Apartment</option>
+                      <option value="Resort">Resort</option>
+                      <option value="Cottage">Cottage</option>
+                      <option value="Hotel">Hotel</option>
+                    </>
+                  )}
+                  <option value="Other">Other (Add Manually)</option>
                 </select>
-                <ChevronDown
-                  size={16}
-                  style={{
-                    position: "absolute",
-                    right: 16,
-                    top: 14,
-                    color: "#6B7280",
-                    pointerEvents: "none",
-                  }}
-                />
+                {formData.propertyType === 'Other' && (
+                  <input 
+                    style={{ marginTop: '8px' }} 
+                    type="text" 
+                    className="form-input"
+                    placeholder="Enter custom property type"
+                    value={customPropertyType}
+                    onChange={(e) => setCustomPropertyType(e.target.value)}
+                    required
+                  />
+                )}
               </div>
             </div>
             <div className="form-group">
@@ -1574,7 +1602,11 @@ export default function PropertyMakers() {
                 <label className="form-label">Room Type*</label>
                 <select className="form-select" value={roomForm.roomType} onChange={e => setRoomForm(p => ({ ...p, roomType: e.target.value }))}>
                   {['Standard', 'Deluxe', 'Suite', 'Executive', 'Premium', 'Presidential', 'Family Room', 'Double', 'Single', 'Twin'].map(t => <option key={t} value={t}>{t}</option>)}
+                  <option value="Other">Other (Add Manually)</option>
                 </select>
+                {roomForm.roomType === 'Other' && (
+                  <input style={{ marginTop: '8px' }} type="text" className="form-input" value={customRoomType} onChange={e => setCustomRoomType(e.target.value)} placeholder="e.g. Penthouse" required />
+                )}
               </div>
               <div className="form-group" style={{ marginBottom: 0 }}>
                 <label className="form-label">Room Name*</label>
@@ -1678,6 +1710,8 @@ export default function PropertyMakers() {
                 disabled={roomImageUploading}
                 onClick={async () => {
                   if (!roomForm.roomName.trim() || !roomForm.pricePerNight) { alert('Please fill Room Name and Price.'); return; }
+                  const finalRoomType = roomForm.roomType === 'Other' ? customRoomType : roomForm.roomType;
+                  if (roomForm.roomType === 'Other' && !finalRoomType.trim()) { alert('Please enter custom room type.'); return; }
 
                   let uploadedUrl = "";
                   if (roomImageFile) {
@@ -1708,6 +1742,7 @@ export default function PropertyMakers() {
                   const amenArr = (roomForm.amenitiesText || '').split(',').map(a => a.trim()).filter(Boolean);
                   setRoomsList(prev => [...prev, {
                     ...roomForm,
+                    roomType: finalRoomType,
                     imageUrl: uploadedUrl || roomForm.imageUrl,
                     room_image_url: uploadedUrl || roomForm.imageUrl,
                     amenities: amenArr,
@@ -1719,6 +1754,7 @@ export default function PropertyMakers() {
                   setRoomImageFile(null);
                   setRoomImagePreview("");
                   if (roomImageRef.current) roomImageRef.current.value = "";
+                  setCustomRoomType("");
                 }}
                 style={{ padding: '10px 32px', background: roomImageUploading ? '#9CA3AF' : '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: roomImageUploading ? 'not-allowed' : 'pointer', fontWeight: 600 }}>
                 + Add Room
