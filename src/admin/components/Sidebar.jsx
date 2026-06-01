@@ -21,6 +21,7 @@ import {
   LogOut,
   Compass,
   Sparkles,
+  BedDouble,
 } from 'lucide-react';
 
 /* ─── Navigation Config (matches Figma exactly) ─────────────── */
