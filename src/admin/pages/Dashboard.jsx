@@ -48,14 +48,8 @@ export default function Dashboard() {
   const [topProperties, setTopProperties] = useState([]);
   const [enquiries, setEnquiries] = useState([]);
   const [selectedYear, setSelectedYear] = useState(String(new Date().getFullYear()));
-  const [selectedEnquiryMonth, setSelectedEnquiryMonth] = useState(() => {
-    const d = new Date();
-    return `${d.toLocaleString('default', { month: 'short' })} ${d.getFullYear()}`;
-  });
-  const [selectedEnquiryRaw, setSelectedEnquiryRaw] = useState(() => {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
-  });
+  const [selectedEnquiryMonth, setSelectedEnquiryMonth] = useState('All Time');
+  const [selectedEnquiryRaw, setSelectedEnquiryRaw] = useState('');
   const [actionMenu, setActionMenu] = useState(null);
   const [selectedProperty, setSelectedProperty] = useState(null);
   const [selectedEnquiry, setSelectedEnquiry] = useState(null);
@@ -67,7 +61,7 @@ export default function Dashboard() {
         fetch(`${import.meta.env.VITE_API_BASE}/dashboard/enquiries-chart?year=${selectedYear}`).then(r => r.json()),
         fetch(`${import.meta.env.VITE_API_BASE}/dashboard/property-categories`).then(r => r.json()),
         fetch(`${import.meta.env.VITE_API_BASE}/dashboard/top-properties`).then(r => r.json()),
-        fetch(`${import.meta.env.VITE_API_BASE}/dashboard/recent-enquiries?year=${selectedEnquiryRaw.split('-')[0]}&month=${selectedEnquiryRaw.split('-')[1]}`).then(r => r.json())
+        fetch(`${import.meta.env.VITE_API_BASE}/dashboard/recent-enquiries?year=${selectedEnquiryRaw ? selectedEnquiryRaw.split('-')[0] : ''}&month=${selectedEnquiryRaw ? selectedEnquiryRaw.split('-')[1] : ''}`).then(r => r.json())
       ]);
 
       if (statsRes && statsRes.activeProperties !== undefined) setStats(statsRes);
@@ -296,6 +290,7 @@ export default function Dashboard() {
                 </button>
                 <input 
                   type="month"
+                  value={selectedEnquiryRaw}
                   style={{ position: 'absolute', opacity: 0, top: 0, left: 0, width: '100%', height: '100%', cursor: 'pointer', zIndex: 10 }}
                   onChange={(e) => {
                     if (e.target.value) {
@@ -303,6 +298,9 @@ export default function Dashboard() {
                       const d = new Date(year, month - 1);
                       setSelectedEnquiryMonth(`${d.toLocaleString('default', { month: 'short' })} ${d.getFullYear()}`);
                       setSelectedEnquiryRaw(e.target.value);
+                    } else {
+                      setSelectedEnquiryMonth('All Time');
+                      setSelectedEnquiryRaw('');
                     }
                   }}
                 />
