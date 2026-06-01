@@ -1,5 +1,4 @@
-import { Calendar, CheckCircle, MapPin, Phone, Mail, Search, Sparkles, Star } from 'lucide-react';
-import { areaIcon, bedIcon, guestIcon, roomIcon } from '../../../assets';
+import { Calendar, CheckCircle, MapPin, Phone, Mail, Search, Sparkles, Star, Maximize, Home, BedDouble, Users } from 'lucide-react';
 import { detailSubTabs, landmarks, roomOptions } from '../../../data/mockData';
 import './PropertyDetailPage.css';
 
@@ -210,32 +209,40 @@ export default function PropertyDetailPage(props) {
           <h3 className="section-subtitle-title">Amenities</h3>
           <div className="amenities-horizontal-layout" style={{ flexWrap: 'wrap' }}>
             <div className="amenity-vertical-item">
-              <img src={areaIcon} alt="Area Size" className="amenity-vertical-icon" />
+              <div className="amenity-vertical-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Maximize size={30} color="#58A429" strokeWidth={1.5} />
+              </div>
               <span className="amenity-vertical-lbl">Area Size</span>
-              <span className="amenity-vertical-val">{activeDetailProp.area || `${(activeDetailProp.bedRooms || 2) * 150} sq. ft.`}</span>
+              <span className="amenity-vertical-val" style={{ color: '#58A429', fontWeight: 600 }}>{activeDetailProp.area || `${(activeDetailProp.bedRooms || 2) * 150} sq. ft.`}</span>
             </div>
             <div className="amenity-vertical-item">
-              <img src={roomIcon} alt="Rooms" className="amenity-vertical-icon" />
+              <div className="amenity-vertical-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Home size={30} color="#58A429" strokeWidth={1.5} />
+              </div>
               <span className="amenity-vertical-lbl">Rooms</span>
-              <span className="amenity-vertical-val">{activeDetailProp.roomCountString || `${activeDetailProp.bedRooms || 1} Room`}</span>
+              <span className="amenity-vertical-val" style={{ color: '#58A429', fontWeight: 600 }}>{activeDetailProp.roomCountString || `${activeDetailProp.bedRooms || 1} Rooms`}</span>
             </div>
             <div className="amenity-vertical-item">
-              <img src={bedIcon} alt="Beds" className="amenity-vertical-icon" />
+              <div className="amenity-vertical-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <BedDouble size={30} color="#58A429" strokeWidth={1.5} />
+              </div>
               <span className="amenity-vertical-lbl">Beds</span>
-              <span className="amenity-vertical-val">{activeDetailProp.beds || `${activeDetailProp.bedRooms || 2} Beds`}</span>
+              <span className="amenity-vertical-val" style={{ color: '#58A429', fontWeight: 600 }}>{activeDetailProp.beds || `${activeDetailProp.bedRooms || 2} Beds`}</span>
             </div>
             <div className="amenity-vertical-item">
-              <img src={guestIcon} alt="Guests" className="amenity-vertical-icon" />
+              <div className="amenity-vertical-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Users size={30} color="#58A429" strokeWidth={1.5} />
+              </div>
               <span className="amenity-vertical-lbl">Guests</span>
-              <span className="amenity-vertical-val">{activeDetailProp.guests || `${activeDetailProp.capacity || 3} Person`}</span>
+              <span className="amenity-vertical-val" style={{ color: '#58A429', fontWeight: 600 }}>{activeDetailProp.guests || `${activeDetailProp.capacity || 3} Persons`}</span>
             </div>
             {(activeDetailProp.amenities || []).map((amenity, idx) => (
               <div key={idx} className="amenity-vertical-item">
                 <div className="amenity-vertical-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                  <CheckCircle size={30} color="#58A429" />
+                  <CheckCircle size={30} color="#58A429" strokeWidth={1.5} />
                 </div>
                 <span className="amenity-vertical-lbl">{typeof amenity === 'object' ? amenity.name || amenity.amenitiesName : amenity}</span>
-                <span className="amenity-vertical-val">Available</span>
+                <span className="amenity-vertical-val" style={{ color: '#58A429', fontWeight: 600 }}>Available</span>
               </div>
             ))}
           </div>
@@ -315,19 +322,19 @@ export default function PropertyDetailPage(props) {
 
                       <div className="room-card-traits-grid">
                         <div className="trait-lbl-item">
-                          <img src={bedIcon} alt="Beds" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
+                          <BedDouble size={16} color="#58A429" />
                           <span className="trait-name">Beds:</span>
-                          <span className="trait-value">{room.bed_type || room.beds || '2 Beds'}</span>
+                          <span className="trait-value" style={{ color: '#58A429', fontWeight: 600 }}>{room.bed_type || room.beds || '2 Beds'}</span>
                         </div>
                         <div className="trait-lbl-item">
-                          <img src={roomIcon} alt="Rooms" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
+                          <Home size={16} color="#58A429" />
                           <span className="trait-name">Rooms:</span>
-                          <span className="trait-value">{room.rooms || '1 Room'}</span>
+                          <span className="trait-value" style={{ color: '#58A429', fontWeight: 600 }}>{room.rooms || '1 Room'}</span>
                         </div>
                         <div className="trait-lbl-item">
-                          <img src={guestIcon} alt="Guests" style={{ width: '16px', height: '16px', objectFit: 'contain' }} />
+                          <Users size={16} color="#58A429" />
                           <span className="trait-name">Guests:</span>
-                          <span className="trait-value">{room.guests || '3 Person'}</span>
+                          <span className="trait-value" style={{ color: '#58A429', fontWeight: 600 }}>{room.guests || '3 Person'}</span>
                         </div>
                       </div>
                     </div>
