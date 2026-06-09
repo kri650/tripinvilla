@@ -880,14 +880,66 @@
   .detail-sub-nav-btn { padding: 10px 16px; font-size: 14px; }
 }
 
+@media (max-width: 768px) {
+  .detail-page-wrapper { max-width: calc(100% - 24px); padding-top: 80px; }
+  
+  .detail-image-gallery { height: 280px; max-height: 280px; }
+  
+  .detail-reservation-card { padding: 20px; }
+  .reservation-title { font-size: 22px; }
+  .highlight-green-detail { font-size: 28px; }
+  
+  .about-property-section { padding: 20px; }
+  .section-subtitle-title { font-size: 18px; }
+  
+  .amenities-horizontal-layout { gap: 10px; }
+  .amenity-vertical-item { padding: 10px 8px; }
+  
+  .border-box-style { padding: 20px; }
+  
+  .room-card-info-wrap { padding: 16px; }
+  .room-card-title { font-size: 16px; }
+  
+  .rules-timings-grid { gap: 10px; }
+  .time-badge { padding: 8px 12px; font-size: 12px; }
+}
+
 @media (max-width: 640px) {
-  .detail-page-wrapper { max-width: 100%; padding: 80px 16px 0; }
+  .detail-page-wrapper { max-width: 100%; padding: 70px 16px 0; }
   .detail-image-gallery { height: 240px; max-height: 240px; }
   .reservation-title { font-size: 20px; }
   .highlight-green-detail { font-size: 24px; }
-  .reservation-timing-row { flex-direction: column; }
-  .rules-timings-grid { flex-direction: column; }
-  .amenities-horizontal-pills { gap: 8px; }
+  .reservation-timing-row { flex-direction: column; gap: 8px; }
+  .rules-timings-grid { flex-direction: column; gap: 8px; }
+  .amenities-horizontal-layout { gap: 8px; }
   .amenity-pill-item { padding: 10px 16px; }
   .breadcrumb-row { font-size: 12px; flex-wrap: wrap; }
+  
+  /* Enhanced mobile optimizations */
+  .detail-primary-grid { grid-gap: 16px; margin-bottom: 24px; }
+  .about-property-section { margin-bottom: 16px; }
+  .border-box-style { padding: 16px; margin-bottom: 16px; }
+  .detail-sub-navigation-tabs { margin: 24px 0 16px 0; }
+}
+
+@media (max-width: 480px) {
+  .detail-page-wrapper { padding: 60px 12px 0; }
+  .detail-image-gallery { height: 200px; max-height: 200px; }
+  .detail-reservation-card { padding: 16px; }
+  .reservation-title { font-size: 18px; }
+  .highlight-green-detail { font-size: 20px; }
+  .about-property-section { padding: 14px; }
+  .section-subtitle-title { font-size: 16px; }
+  .border-box-style { padding: 14px; }
+}
+
+@media (max-width: 360px) {
+  .detail-page-wrapper { padding: 50px 8px 0; }
+  .detail-image-gallery { height: 180px; max-height: 180px; }
+  .detail-reservation-card { padding: 12px; }
+  .reservation-title { font-size: 16px; }
+  .highlight-green-detail { font-size: 18px; }
+  .about-property-section { padding: 12px; }
+  .section-subtitle-title { font-size: 15px; }
+  .border-box-style { padding: 12px; }
 }
