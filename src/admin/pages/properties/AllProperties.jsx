@@ -735,6 +735,7 @@ export default function AllProperties() {
         }
         closePanel();
         fetchProperties();
+        toast.success(editingPropertyId ? 'Property updated successfully!' : 'Property added successfully!');
       } else {
         const d = await res.json();
         alert(d.message || (editingPropertyId ? "Failed to update property" : "Failed to add property"));
