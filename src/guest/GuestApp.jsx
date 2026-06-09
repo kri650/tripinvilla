@@ -73,6 +73,7 @@ export default function GuestApp() {
     liveEnquiries,
     userReviews,
     fetchProfileAndEnquiries,
+    authenticatedFetch,
 
     authModalOpen,
     setAuthModalOpen,
