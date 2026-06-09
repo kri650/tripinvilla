@@ -17,6 +17,26 @@ const getFullRoomImageUrl = (url) => {
 
 const defaultRules = [];
 
+const formatCurrency = (value) => {
+  if (value === null || value === undefined || value === '') return '—';
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return '—';
+  return `₹${amount.toLocaleString('en-IN')}`;
+};
+
+const firstPresent = (...values) => values.find((value) => value !== null && value !== undefined && value !== '');
+
+const getDiscountText = (originalValue, priceValue, offers = []) => {
+  const offerText = Array.isArray(offers) && offers.length > 0 ? offers.join(', ') : '';
+  const original = Number(originalValue);
+  const price = Number(priceValue);
+  if (Number.isFinite(original) && Number.isFinite(price) && original > price) {
+    const discountAmount = original - price;
+    return offerText ? `${offerText} · Save ${formatCurrency(discountAmount)}` : `Save ${formatCurrency(discountAmount)}`;
+  }
+  return offerText || '—';
+};
+
 const emptyRoom = () => ({
   room_type: '',
   bed_type: 'King Size',
@@ -666,8 +686,8 @@ export default function PropertyRequests() {
                             </td>
                             <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}>
                               {getRequestRooms(r).length > 1
-                                ? `From ₹${Math.min(...getRequestRooms(r).map((room) => Number(room.price_per_room || 0)).filter(Boolean))}`
-                                : `₹${r.price_per_room}`}
+                                ? `From ${formatCurrency(Math.min(...getRequestRooms(r).map((room) => Number(room.price_per_room || 0)).filter(Boolean)))}`
+                                : formatCurrency(firstPresent(r.price_per_room, getRequestRooms(r)[0]?.price_per_room, r.priceByOwner))}
                             </td>
                             <td style={{ color: '#6B7280', padding: '14px 16px' }}>
                               <div>In: {r.checkin_time || '02:00 PM'}</div>
@@ -726,8 +746,8 @@ export default function PropertyRequests() {
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                                               <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: '#111827' }}>{room.room_type || r.room_type}</h3>
                                               <div style={{ textAlign: 'right' }}>
-                                                <div style={{ fontSize: '16px', fontWeight: 700, color: '#58A429' }}>₹{room.price_per_room || r.price_per_room}/night</div>
-                                                <div style={{ fontSize: '11px', color: '#9CA3AF' }}>Price per Room</div>
+                                                <div style={{ fontSize: '16px', fontWeight: 700, color: '#58A429' }}>{formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}/night</div>
+                                                <div style={{ fontSize: '11px', color: '#9CA3AF' }}>Discounted Price</div>
                                               </div>
                                             </div>
                                             <div style={{ fontSize: '13px', color: '#4B5563' }}>Bed Type: <strong>{room.bed_type || r.bed_type}</strong></div>
@@ -735,14 +755,14 @@ export default function PropertyRequests() {
                                             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginTop: '4px' }}>
                                               <div style={{ background: '#F9FAFB', padding: '8px 12px', borderRadius: '8px', border: '1px solid #F3F4F6' }}>
                                                 <div style={{ fontSize: '10px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 600 }}>Original</div>
-                                                <div style={{ fontSize: '13px', fontWeight: 600, color: '#111827', textDecoration: (room.original_price || r.original_price) ? 'line-through' : 'none' }}>
-                                                  {room.original_price || r.original_price ? `₹${Number(room.original_price || r.original_price).toLocaleString()}` : '—'}
+                                                <div style={{ fontSize: '13px', fontWeight: 600, color: '#111827', textDecoration: firstPresent(room.original_price, r.original_price) ? 'line-through' : 'none' }}>
+                                                  {formatCurrency(firstPresent(room.original_price, r.original_price))}
                                                 </div>
                                               </div>
                                               <div style={{ background: '#F9FAFB', padding: '8px 12px', borderRadius: '8px', border: '1px solid #F3F4F6' }}>
                                                 <div style={{ fontSize: '10px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 600 }}>Tax</div>
                                                 <div style={{ fontSize: '13px', fontWeight: 600, color: '#111827' }}>
-                                                  {room.tax_amount || r.tax_amount ? `₹${Number(room.tax_amount || r.tax_amount).toLocaleString()}` : '—'}
+                                                  {formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}
                                                 </div>
                                               </div>
                                               <div style={{ background: '#F9FAFB', padding: '8px 12px', borderRadius: '8px', border: '1px solid #F3F4F6' }}>
@@ -776,7 +796,11 @@ export default function PropertyRequests() {
                                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                                               {(room.offers || r.offers)?.length > 0 ? (room.offers || r.offers).map((o, j) => (
                                                 <span key={j} style={{ padding: '4px 10px', background: '#EFF6FF', color: '#2563EB', borderRadius: '20px', fontSize: '11px', fontWeight: 500, border: '1px solid #BFDBFE' }}>{o}</span>
-                                              )) : <span style={{ fontSize: '12px', color: '#9CA3AF', fontStyle: 'italic' }}>No offers added</span>}
+                                              )) : (
+                                                <span style={{ fontSize: '12px', color: '#9CA3AF', fontStyle: 'italic' }}>
+                                                  {getDiscountText(firstPresent(room.original_price, r.original_price), firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner), [])}
+                                                </span>
+                                              )}
                                             </div>
                                           </div>
                                         </div>

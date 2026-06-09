@@ -420,7 +420,7 @@ export default function PropertyRoomManager({ property, onClose }) {
             </div>
           ) : (
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 16 }}>
-              {rooms.map(room => (
+              {rooms.map((room, i) => (
                 <div key={room._id} style={{ border: '1px solid #E5E7EB', borderRadius: 14, overflow: 'hidden', background: '#fff', boxShadow: '0 2px 8px rgba(0,0,0,0.05)', transition: 'box-shadow 0.2s' }}>
                   {/* Room image */}
                   <div style={{ width: '100%', height: 150, background: '#E5E7EB', position: 'relative', overflow: 'hidden' }}>

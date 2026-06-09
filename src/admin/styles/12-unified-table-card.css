@@ -120,3 +120,27 @@
   border: none;
   padding: 4px;
 }
+
+.admin-enquiries-table {
+  table-layout: fixed;
+}
+
+.admin-enquiries-table th,
+.admin-enquiries-table td {
+  vertical-align: top;
+}
+
+.admin-enquiries-table .enquiry-wrap-cell {
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  min-width: 0;
+}
+
+.admin-enquiries-table .enquiry-property-cell {
+  max-width: 140px;
+}
+
+.admin-enquiries-table .enquiry-query-cell {
+  max-width: 220px;
+}

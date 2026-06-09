@@ -12,11 +12,11 @@ export default function ReadMore({ children, maxWords = 6 }) {
   const words = text.split(/\s+/);
 
   if (words.length <= maxWords) {
-    return <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', display: 'inline-block', width: '250px' }}>{text}</span>;
+    return <span className="read-more-text" style={{ whiteSpace: 'normal', overflowWrap: 'anywhere', wordBreak: 'break-word', display: 'inline-block', width: 'min(250px, 100%)', maxWidth: '100%' }}>{text}</span>;
   }
 
   return (
-    <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', display: 'inline-block', width: '250px' }}>
+    <span className="read-more-text" style={{ whiteSpace: 'normal', overflowWrap: 'anywhere', wordBreak: 'break-word', display: 'inline-block', width: 'min(250px, 100%)', maxWidth: '100%' }}>
       {expanded ? text : words.slice(0, maxWords).join(' ') + '... '}
       <span 
         onClick={(e) => { 

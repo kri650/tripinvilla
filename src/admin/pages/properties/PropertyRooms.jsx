@@ -4,6 +4,26 @@ import DateRangeDropdown from '../../../components/DateRangeDropdown';
 import { useState, useEffect } from 'react';
 import { Calendar, ChevronDown, ClipboardList, Clock, CheckCircle2, Search, Filter, Edit2, Trash2, MoreVertical, Check, X, Eye, XCircle } from 'lucide-react';
 
+const formatCurrency = (value) => {
+  if (value === null || value === undefined || value === '') return '—';
+  const amount = Number(value);
+  if (!Number.isFinite(amount)) return '—';
+  return `₹${amount.toLocaleString('en-IN')}`;
+};
+
+const firstPresent = (...values) => values.find((value) => value !== null && value !== undefined && value !== '');
+
+const getDiscountText = (originalValue, priceValue, offers = []) => {
+  const offerText = Array.isArray(offers) && offers.length > 0 ? offers.join(', ') : '';
+  const original = Number(originalValue);
+  const price = Number(priceValue);
+  if (Number.isFinite(original) && Number.isFinite(price) && original > price) {
+    const discountAmount = original - price;
+    return offerText ? `${offerText} · Save ${formatCurrency(discountAmount)}` : `Save ${formatCurrency(discountAmount)}`;
+  }
+  return offerText || '—';
+};
+
 export default function PropertyRooms() {
   const [requests, setRequests] = useState([]);
   const [stats, setStats] = useState({ totalProperties: 1540, pendingRequests: 224, rejectedRequests: 100 });
@@ -329,7 +349,7 @@ export default function PropertyRooms() {
                       </td>
                       <td style={{ color: '#6B7280', padding: '14px' }}>{p.ownerName}</td>
                       <td style={{ color: '#6B7280', padding: '14px' }}>{p.ownerContact}</td>
-                      <td style={{ color: '#111827', fontWeight: 600, padding: '14px' }}>{typeof p.priceByOwner === 'number' ? `₹${p.priceByOwner.toLocaleString()}` : `₹${p.priceByOwner}`}</td>
+                      <td style={{ color: '#111827', fontWeight: 600, padding: '14px' }}>{formatCurrency(p.priceByOwner)}</td>
                       <td style={{ padding: '14px' }}>
                         <span style={{ 
                           display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 12px', 
@@ -521,9 +541,7 @@ export default function PropertyRooms() {
                         <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
                           <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Price / Night (Selling)</div>
                           <div style={{ fontSize: 14, fontWeight: 700, color: '#58A429' }}>
-                            {(room.price_per_room || selectedRequest.price_per_room)
-                              ? `₹${Number(room.price_per_room || selectedRequest.price_per_room).toLocaleString()}`
-                              : `₹${selectedRequest.priceByOwner || '—'}`}
+                            {formatCurrency(firstPresent(room.price_per_room, selectedRequest.price_per_room, selectedRequest.priceByOwner))}
                           </div>
                         </div>
                       </div>
@@ -532,13 +550,13 @@ export default function PropertyRooms() {
                         <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
                           <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Original Price</div>
                           <div style={{ fontSize: 14, fontWeight: 600, color: '#9CA3AF', textDecoration: (room.original_price != null || selectedRequest.original_price != null) ? 'line-through' : 'none' }}>
-                            {(room.original_price != null || selectedRequest.original_price != null) ? `₹${Number(room.original_price ?? selectedRequest.original_price).toLocaleString()}` : '—'}
+                            {formatCurrency(firstPresent(room.original_price, selectedRequest.original_price))}
                           </div>
                         </div>
                         <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
                           <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Tax Amount</div>
                           <div style={{ fontSize: 14, fontWeight: 600, color: '#111827' }}>
-                            {(room.tax_amount != null || selectedRequest.tax_amount != null) ? `₹${Number(room.tax_amount ?? selectedRequest.tax_amount).toLocaleString()}` : '—'}
+                            {formatCurrency(firstPresent(room.tax_amount, selectedRequest.tax_amount))}
                           </div>
                         </div>
                       </div>
@@ -547,9 +565,11 @@ export default function PropertyRooms() {
                         <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
                           <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Discount / Offer</div>
                           <div style={{ fontSize: 14, fontWeight: 600, color: '#D97706' }}>
-                            {(room.offers && room.offers.length > 0) || (selectedRequest.offers && selectedRequest.offers.length > 0)
-                              ? (room.offers || selectedRequest.offers).join(', ')
-                              : '—'}
+                            {getDiscountText(
+                              firstPresent(room.original_price, selectedRequest.original_price),
+                              firstPresent(room.price_per_room, selectedRequest.price_per_room, selectedRequest.priceByOwner),
+                              room.offers || selectedRequest.offers || []
+                            )}
                           </div>
                         </div>
                       </div>

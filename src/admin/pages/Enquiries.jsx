@@ -199,7 +199,7 @@ export default function Enquiries() {
 
         {/* Desktop Table View */}
         <div className="hidden-mobile desktop-table-wrapper" style={{ overflowX: 'auto' }}>
-          <table className="admin-table">
+          <table className="admin-table admin-enquiries-table">
             <thead>
               <tr>
                 <th>Enquiry No</th>
@@ -225,11 +225,11 @@ export default function Enquiries() {
                     <td style={{ whiteSpace: 'nowrap', fontSize: '12px' }}>
                       {e.createdAt ? new Date(e.createdAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '—'}
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 500 }}><ReadMore maxWords={6}>{e.user_name || e.name || '—'}</ReadMore></td>
-                    <td>{e.phone || '—'}</td>
-                    <td><ReadMore maxWords={6}>{e.email || '—'}</ReadMore></td>
-                    <td style={{ maxWidth: '120px', fontSize: '12px', color: '#4B5563' }}><ReadMore maxWords={6}>{e.propertyName || '—'}</ReadMore></td>
-                    <td style={{ maxWidth: '200px', whiteSpace: 'normal', lineHeight: '1.4', fontSize: '13px' }}>
+                    <td className="enquiry-wrap-cell" style={{ color: '#111827', fontWeight: 500 }}><ReadMore maxWords={6}>{e.user_name || e.name || '—'}</ReadMore></td>
+                    <td className="enquiry-wrap-cell">{e.phone || '—'}</td>
+                    <td className="enquiry-wrap-cell"><ReadMore maxWords={6}>{e.email || '—'}</ReadMore></td>
+                    <td className="enquiry-wrap-cell enquiry-property-cell" style={{ fontSize: '12px', color: '#4B5563' }}><ReadMore maxWords={6}>{e.propertyName || '—'}</ReadMore></td>
+                    <td className="enquiry-wrap-cell enquiry-query-cell" style={{ lineHeight: '1.4', fontSize: '13px' }}>
                       <ReadMore maxWords={6}>{e.query || e.message || '—'}</ReadMore>
                       {e.reply && (
                         <div style={{ marginTop: '6px', padding: '6px 10px', background: '#F0FDF4', borderLeft: '3px solid #22c55e', borderRadius: '4px', fontSize: '12px', color: '#166534', wordBreak: 'break-word' }}>

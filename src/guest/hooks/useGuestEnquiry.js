@@ -7,6 +7,7 @@ export default function useGuestEnquiry({
   selectedProperty,
   activeDetailProp,
   fetchProfileAndEnquiries,
+  authenticatedFetch,
 }) {
   const [guestEnquiryName, setGuestEnquiryName] = useState('');
   const [guestEnquiryPhone, setGuestEnquiryPhone] = useState('');
@@ -36,11 +37,10 @@ export default function useGuestEnquiry({
 
     try {
       setGuestEnquirySubmitting(true);
-      const res = await fetch(`${API_BASE}/enquiries`, {
+      const res = await authenticatedFetch(`${API_BASE}/enquiries`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           propertyId: propToUse._id,

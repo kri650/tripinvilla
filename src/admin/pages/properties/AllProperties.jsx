@@ -28,6 +28,20 @@ const parseNumber = (val) => {
   return isNaN(parsed) ? '' : parsed;
 };
 
+const getEntityId = (value) => {
+  if (!value) return "";
+  if (typeof value === "object") return String(value._id || value.id || "");
+  return String(value);
+};
+
+const getLocationName = (value, keys = []) => {
+  if (!value || typeof value !== "object") return "";
+  for (const key of keys) {
+    if (value[key]) return value[key];
+  }
+  return value.name || "";
+};
+
 export default function AllProperties() {
   const [properties, setProperties] = useState([]);
   const [stats, setStats] = useState({
@@ -36,8 +50,8 @@ export default function AllProperties() {
     inactiveAdmin: 0,
   });
   const [searchQuery, setSearchQuery] = useState("");
-  const [dateFrom, setDateFrom] = useState("");
-  const [dateTo, setDateTo] = useState("");
+  const [dateFrom, setDateFrom] = useState(() => localStorage.getItem('dashboard_date_from') || "");
+  const [dateTo, setDateTo] = useState(() => localStorage.getItem('dashboard_date_to') || "");
   const [propertyType, setPropertyType] = useState("");
   const [loading, setLoading] = useState(false); // Add Panel State
   const [showPanel, setShowPanel] = useState(false);
@@ -389,6 +403,15 @@ export default function AllProperties() {
   };
 
   const openEditPanel = (p) => {
+    const countryId = getEntityId(p.countryId);
+    const stateId = getEntityId(p.stateId);
+    const cityId = getEntityId(p.cityId);
+    const locationId = getEntityId(p.locationId);
+    const countryName = p.countryName || getLocationName(p.countryId, ["countryName"]) || p.country || "";
+    const stateName = p.stateName || getLocationName(p.stateId, ["stateName"]) || p.state || "";
+    const cityName = p.cityName || getLocationName(p.cityId, ["cityName"]) || p.city || "";
+    const locationName = p.locationName || getLocationName(p.locationId, ["locationName"]) || "";
+
     setEditingPropertyId(p._id);
     window.scrollTo({ top: 0, behavior: 'smooth' });
     toast.success('Editing mode enabled');
@@ -438,19 +461,19 @@ export default function AllProperties() {
     setSelectedExperiences(p.experiences || []);
     setLandmarksList([]); // Will need separate fetch if editing landmarks
 
-    if (p.countryId) {
-      setSelectedCountry({ id: p.countryId, name: p.countryName || "" });
-      fetchStatesListOnly(p.countryId);
+    if (countryId) {
+      setSelectedCountry({ id: countryId, name: countryName });
+      fetchStatesListOnly(countryId);
     }
-    if (p.stateId) {
-      setSelectedState({ id: p.stateId, name: p.stateName || "" });
-      fetchCitiesListOnly(p.stateId);
+    if (stateId) {
+      setSelectedState({ id: stateId, name: stateName });
+      fetchCitiesListOnly(stateId);
     }
-    if (p.cityId) {
-      setSelectedCity({ id: p.cityId, name: p.cityName || "" });
-      fetchAreasListOnly(p.cityId);
+    if (cityId) {
+      setSelectedCity({ id: cityId, name: cityName });
+      fetchAreasListOnly(cityId);
     }
-    if (p.locationId) setSelectedArea({ id: p.locationId, name: p.locationName || "" });
+    if (locationId) setSelectedArea({ id: locationId, name: locationName });
 
     setShowPanel(true);
   };
@@ -1732,6 +1755,9 @@ export default function AllProperties() {
                       }}
                     >
                       <option value="">Select Country</option>
+                      {selectedCountry.id && selectedCountry.name && !countries.some((c) => String(c._id) === String(selectedCountry.id)) && (
+                        <option value={selectedCountry.id}>{selectedCountry.name}</option>
+                      )}
                       {countries.map((c) => (
                         <option key={c._id} value={c._id}>
                           {c.countryName}
@@ -1762,6 +1788,9 @@ export default function AllProperties() {
                       disabled={!selectedCountry.id}
                     >
                       <option value="">Select State</option>
+                      {selectedState.id && selectedState.name && !states.some((s) => String(s._id) === String(selectedState.id)) && (
+                        <option value={selectedState.id}>{selectedState.name}</option>
+                      )}
                       {states.map((s) => (
                         <option key={s._id} value={s._id}>
                           {s.stateName}
@@ -1792,6 +1821,9 @@ export default function AllProperties() {
                       disabled={!selectedState.id}
                     >
                       <option value="">Select City</option>
+                      {selectedCity.id && selectedCity.name && !cities.some((c) => String(c._id) === String(selectedCity.id)) && (
+                        <option value={selectedCity.id}>{selectedCity.name}</option>
+                      )}
                       {cities.map((c) => (
                         <option key={c._id} value={c._id}>
                           {c.cityName}
@@ -1821,6 +1853,9 @@ export default function AllProperties() {
                       disabled={!selectedCity.id}
                     >
                       <option value="">Select Area</option>
+                      {selectedArea.id && selectedArea.name && !areas.some((a) => String(a._id) === String(selectedArea.id)) && (
+                        <option value={selectedArea.id}>{selectedArea.name}</option>
+                      )}
                       {areas.map((a) => (
                         <option key={a._id} value={a._id}>
                           {a.locationName}

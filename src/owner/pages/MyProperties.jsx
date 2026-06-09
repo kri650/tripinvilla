@@ -12,6 +12,20 @@ const parseNumber = (val) => {
   return isNaN(parsed) ? '' : parsed;
 };
 
+const getEntityId = (value) => {
+  if (!value) return '';
+  if (typeof value === 'object') return String(value._id || value.id || '');
+  return String(value);
+};
+
+const getLocationName = (value, keys = []) => {
+  if (!value || typeof value !== 'object') return '';
+  for (const key of keys) {
+    if (value[key]) return value[key];
+  }
+  return value.name || '';
+};
+
 const sanitizeCoordinateInput = (val, isLat) => {
   if (val === null || val === undefined || val === '') return undefined;
   let num = Number(val);
@@ -148,8 +162,8 @@ export default function MyProperties({ autoOpenForm = false }) {
   // ─── Filters ──────────────────────────────────────────────
   const [filterType, setFilterType] = useState('');
   const [filterSearch, setFilterSearch] = useState('');
-  const [filterDateFrom, setFilterDateFrom] = useState('');
-  const [filterDateTo, setFilterDateTo] = useState('');
+  const [filterDateFrom, setFilterDateFrom] = useState(() => localStorage.getItem('dashboard_date_from') || '');
+  const [filterDateTo, setFilterDateTo] = useState(() => localStorage.getItem('dashboard_date_to') || '');
 
   useEffect(() => {
     const handleDateChange = (e) => {
@@ -165,7 +179,10 @@ export default function MyProperties({ autoOpenForm = false }) {
   // ─── Fetch helpers ────────────────────────────────────────
   const fetchMyProperties = async () => {
     try {
-      const res = await propertyService.getMine();
+      const params = {};
+      if (filterDateFrom) params.dateFrom = filterDateFrom;
+      if (filterDateTo) params.dateTo = filterDateTo;
+      const res = await propertyService.getMine(params);
       setMyProps(res.data);
     } catch (err) {
       console.error('Error fetching properties:', err);
@@ -174,7 +191,10 @@ export default function MyProperties({ autoOpenForm = false }) {
 
   const fetchStats = async () => {
     try {
-      const res = await dashboardService.getStats();
+      const params = {};
+      if (filterDateFrom) params.dateFrom = filterDateFrom;
+      if (filterDateTo) params.dateTo = filterDateTo;
+      const res = await dashboardService.getStats(params);
       setStatsData(res.data);
     } catch (err) {
       console.error('Error fetching stats:', err);
@@ -203,7 +223,11 @@ export default function MyProperties({ autoOpenForm = false }) {
 
   const fetchEnquiries = async () => {
     try {
-      const res = await fetch(`${API_BASE}/owner-dashboard/enquiries`, {
+      const params = new URLSearchParams();
+      if (filterDateFrom) params.append('dateFrom', filterDateFrom);
+      if (filterDateTo) params.append('dateTo', filterDateTo);
+      const queryString = params.toString();
+      const res = await fetch(`${API_BASE}/owner-dashboard/enquiries${queryString ? `?${queryString}` : ''}`, {
         headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
       });
       const data = await res.json();
@@ -347,6 +371,12 @@ export default function MyProperties({ autoOpenForm = false }) {
     fetchAllLocs();
   }, []);
 
+  useEffect(() => {
+    fetchMyProperties();
+    fetchStats();
+    fetchEnquiries();
+  }, [filterDateFrom, filterDateTo]);
+
   // ─── Handlers ─────────────────────────────────────────────
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -461,10 +491,14 @@ export default function MyProperties({ autoOpenForm = false }) {
     setRoomsList(Array.isArray(fullP.rooms) && typeof fullP.rooms[0] === 'object' ? fullP.rooms : []);
 
     // Load cascading location
-    const countryId = fullP.countryId?._id || fullP.countryId;
-    const stateId = fullP.stateId?._id || fullP.stateId;
-    const cityId = fullP.cityId?._id || fullP.cityId;
-    const locationId = fullP.locationId?._id || fullP.locationId;
+    const countryId = getEntityId(fullP.countryId);
+    const stateId = getEntityId(fullP.stateId);
+    const cityId = getEntityId(fullP.cityId);
+    const locationId = getEntityId(fullP.locationId);
+    const countryName = fullP.countryName || getLocationName(fullP.countryId, ['countryName']) || fullP.country || '';
+    const stateName = fullP.stateName || getLocationName(fullP.stateId, ['stateName']) || fullP.state || '';
+    const cityName = fullP.cityName || getLocationName(fullP.cityId, ['cityName']) || fullP.city || '';
+    const locationName = fullP.locationName || getLocationName(fullP.locationId, ['locationName']) || '';
 
     var manualLoc = { country: false, state: false, city: false, area: false };
     var manualVals = { country: '', state: '', city: '', area: '' };
@@ -476,25 +510,25 @@ export default function MyProperties({ autoOpenForm = false }) {
         if (cityId) await fetchLocations(cityId);
       }
     } else {
-      if (fullP.countryName || fullP.country) {
+      if (countryName) {
         manualLoc.country = true;
-        manualVals.country = fullP.countryName || fullP.country;
+        manualVals.country = countryName;
       }
     }
 
-    if (!stateId && (fullP.stateName || fullP.state)) {
+    if (!stateId && stateName) {
       manualLoc.state = true;
-      manualVals.state = fullP.stateName || fullP.state;
+      manualVals.state = stateName;
     }
 
-    if (!cityId && (fullP.cityName || fullP.city)) {
+    if (!cityId && cityName) {
       manualLoc.city = true;
-      manualVals.city = fullP.cityName || fullP.city;
+      manualVals.city = cityName;
     }
 
-    if (!locationId && (fullP.locationName || fullP.location)) {
+    if (!locationId && (locationName || fullP.location)) {
       manualLoc.area = true;
-      manualVals.area = fullP.locationName || fullP.location;
+      manualVals.area = locationName || fullP.location;
     }
 
     setHighlights({
@@ -508,14 +542,14 @@ export default function MyProperties({ autoOpenForm = false }) {
       type: pType,
       name: fullP.name || fullP.propertyName || '',
       ownerContact: fullP.ownerContact || '',
-      countryId: fullP.countryId || '',
-      countryName: fullP.countryName || '',
-      stateId: fullP.stateId || '',
-      stateName: fullP.stateName || fullP.state || '',
-      cityId: fullP.cityId || '',
-      cityName: fullP.cityName || fullP.city || '',
-      locationId: fullP.locationId || '',
-      locationName: fullP.locationName || '',
+      countryId,
+      countryName,
+      stateId,
+      stateName,
+      cityId,
+      cityName,
+      locationId,
+      locationName,
       full_address: fullP.full_address || fullP.location || '',
       latitude: parseNumber(fullP.latitude),
       longitude: parseNumber(fullP.longitude),
@@ -975,6 +1009,9 @@ export default function MyProperties({ autoOpenForm = false }) {
                   ) : (
                     <select style={selectStyle} value={formData.countryId} onChange={handleCountryChange} required>
                       <option value="">Select Country</option>
+                      {formData.countryId && formData.countryName && !countries.some(c => String(c._id) === String(formData.countryId)) && (
+                        <option value={formData.countryId}>{formData.countryName}</option>
+                      )}
                       {countries.map(c => <option key={c._id} value={c._id}>{c.countryName}</option>)}
                     </select>
                   )}
@@ -995,6 +1032,9 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <select style={{ ...selectStyle, background: !formData.countryId ? '#F9FAFB' : '#fff', cursor: !formData.countryId ? 'not-allowed' : 'pointer' }}
                       value={formData.stateId} onChange={handleStateChange} required disabled={!formData.countryId}>
                       <option value="">Select State</option>
+                      {formData.stateId && formData.stateName && !states.some(s => String(s._id) === String(formData.stateId)) && (
+                        <option value={formData.stateId}>{formData.stateName}</option>
+                      )}
                       {states.map(s => <option key={s._id} value={s._id}>{s.stateName}</option>)}
                     </select>
                   )}
@@ -1015,6 +1055,9 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <select style={{ ...selectStyle, background: !formData.stateId ? '#F9FAFB' : '#fff', cursor: !formData.stateId ? 'not-allowed' : 'pointer' }}
                       value={formData.cityId} onChange={handleCityChange} required disabled={!formData.stateId}>
                       <option value="">Select City</option>
+                      {formData.cityId && formData.cityName && !cities.some(c => String(c._id) === String(formData.cityId)) && (
+                        <option value={formData.cityId}>{formData.cityName}</option>
+                      )}
                       {cities.map(c => <option key={c._id} value={c._id}>{c.cityName}</option>)}
                     </select>
                   )}
@@ -1040,6 +1083,9 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <select style={{ ...selectStyle, background: !formData.cityId ? '#F9FAFB' : '#fff', cursor: !formData.cityId ? 'not-allowed' : 'pointer' }}
                       value={formData.locationId} onChange={handleLocationChange} disabled={!formData.cityId}>
                       <option value="">Select Area</option>
+                      {formData.locationId && formData.locationName && !(locations.length > 0 ? locations : allLocations).some(l => String(l._id) === String(formData.locationId)) && (
+                        <option value={formData.locationId}>{formData.locationName}</option>
+                      )}
                       {(locations.length > 0 ? locations : allLocations).map(l => <option key={l._id} value={l._id}>{l.locationName}</option>)}
                     </select>
                   )}

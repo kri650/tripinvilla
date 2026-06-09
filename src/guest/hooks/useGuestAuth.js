@@ -180,11 +180,8 @@ export default function useGuestAuth({ API_BASE, API_ORIGIN, setActiveMenu }) {
         formDataToSend.append('avatar', avatarFile);
       }
 
-      const response = await fetch(`${API_BASE}/users/profile`, {
+      const response = await authenticatedFetch(`${API_BASE}/users/profile`, {
         method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
         body: formDataToSend,
       });
       if (response.ok) {
@@ -350,7 +347,22 @@ export default function useGuestAuth({ API_BASE, API_ORIGIN, setActiveMenu }) {
     }, 400);
   };
 
+  const authenticatedFetch = async (url, options = {}) => {
+    const headers = {
+      ...options.headers,
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+    const res = await fetch(url, { ...options, headers });
+    if (res.status === 401) {
+      handleLogout();
+      openLoginModal();
+      throw new Error('Unauthorized');
+    }
+    return res;
+  };
+
   return {
+    authenticatedFetch,
     // User/session
     token,
     setToken,

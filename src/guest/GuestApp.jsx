@@ -323,26 +323,28 @@ export default function GuestApp() {
   });
 
   const activeDetailProp = fullPropertyDetail ? mapDbProperties([fullPropertyDetail], [])[0] : (selectedProperty || null);
+const {
+  guestEnquiryName,
+  setGuestEnquiryName,
+  guestEnquiryPhone,
+  setGuestEnquiryPhone,
+  guestEnquiryEmail,
+  setGuestEnquiryEmail,
+  guestEnquiryMessage,
+  setGuestEnquiryMessage,
+  guestEnquirySubmitting,
+  setGuestEnquirySubmitting,
+  handleEnquirySubmit,
+} = useGuestEnquiry({
+  API_BASE,
+  token,
+  user,
+  selectedProperty,
+  activeDetailProp,
+  fetchProfileAndEnquiries,
+  authenticatedFetch,
+});
 
-  const {
-    guestEnquiryName,
-    setGuestEnquiryName,
-    guestEnquiryPhone,
-    setGuestEnquiryPhone,
-    guestEnquiryEmail,
-    setGuestEnquiryEmail,
-    guestEnquiryMessage,
-    setGuestEnquiryMessage,
-    guestEnquirySubmitting,
-    handleEnquirySubmit,
-  } = useGuestEnquiry({
-    API_BASE,
-    token,
-    user,
-    selectedProperty,
-    activeDetailProp,
-    fetchProfileAndEnquiries,
-  });
   // Gallery modal states
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);

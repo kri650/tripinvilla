@@ -69,8 +69,8 @@
 @media (max-width: 768px) {
   /* Overlay - full viewport optimization */
   .auth-modal-overlay {
-    padding: 8px;
-    align-items: flex-start;
+    padding: 16px;
+    align-items: center; /* Changed from flex-start to center */
     justify-content: center;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
@@ -80,16 +80,17 @@
 
   /* Modal card - full width mobile layout */
   .auth-modal-card {
-    width: calc(100% - 16px);
-    max-width: 100%;
+    width: 95%; /* 95% of screen width */
+    max-width: 450px; /* Cap width on mobile */
     min-height: auto;
-    max-height: none;
-    margin: 8px 0 16px 0;
+    max-height: 90vh; /* Scrollable if taller than screen */
+    margin: 0 auto; /* Centered */
     padding: 0;
     border-radius: 16px;
     position: relative;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
   }
 
   .auth-modal-card.login-split-card {

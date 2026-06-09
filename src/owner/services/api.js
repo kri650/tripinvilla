@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://13.127.196.228:8000/api';
+const API_URL = import.meta.env.VITE_API_BASE || 'http://13.127.196.228:8000/api';
 
 const api = axios.create({
   baseURL: API_URL,
@@ -18,7 +18,7 @@ api.interceptors.request.use((config) => {
 });
 
 export const propertyService = {
-  getMine: () => api.get('/properties/owner'),
+  getMine: (params) => api.get('/properties/owner', { params }),
   add: (data) => api.post('/properties', data, {
     headers: { 'Content-Type': 'application/json' }
   }),

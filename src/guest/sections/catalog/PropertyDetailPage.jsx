@@ -534,11 +534,6 @@ export default function PropertyDetailPage(props) {
                             <span className="trait-value" style={{ color: '#58A429', fontWeight: 600, textTransform: 'capitalize' }}>{roomFoodType}</span>
                           </div>
                         )}
-                        <div className="trait-lbl-item" style={{ width: '100%', marginTop: '4px' }}>
-                          <Clock size={16} color="#58A429" />
-                          <span className="trait-name">Check In/Out:</span>
-                          <span className="trait-value" style={{ color: '#58A429', fontWeight: 600 }}>{room.checkIn || room.checkin_time || '3:00 PM'} - {room.checkOut || room.checkout_time || '12:00 PM'}</span>
-                        </div>
                       </div>
                     </div>
 
