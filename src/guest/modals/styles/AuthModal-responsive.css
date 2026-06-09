@@ -1318,6 +1318,62 @@
   }
 }
 /* ===== CONTENT OVERFLOW HANDLING ===== */
+
+@media (max-width: 768px) {
+  .auth-modal-overlay {
+    align-items: flex-start !important;
+    min-height: 100dvh;
+    height: 100dvh;
+    padding: 10px !important;
+    overflow-y: auto !important;
+  }
+
+  .auth-modal-card,
+  .auth-modal-card.login-split-card {
+    width: 100% !important;
+    max-width: 460px !important;
+    height: auto !important;
+    max-height: calc(100dvh - 20px) !important;
+    min-height: 0 !important;
+    overflow-y: auto !important;
+    -webkit-overflow-scrolling: touch;
+    background: #FFFFFF !important;
+  }
+
+  .auth-signup-content,
+  .auth-login-right-content {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: #FFFFFF !important;
+    color: #111827 !important;
+  }
+
+  .auth-signup-content {
+    padding: 24px 16px !important;
+  }
+
+  .auth-login-right-content {
+    flex-shrink: 0 !important;
+  }
+
+  .auth-modal-card.login-split-card {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  .auth-form-grid-3x3,
+  .auth-signup-form,
+  .auth-login-form,
+  .auth-form-group {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}
 @media (max-width: 768px) {
   /* Ensure modal content fits in viewport */
   .auth-modal-card {
@@ -1387,5 +1443,37 @@
   .auth-submit-btn-green[disabled] {
     opacity: 0.7;
     transform: none;
+  }
+}
+
+/* Final override: keep login/signup content visible and scrollable on phones. */
+@media (max-width: 768px) {
+  .auth-modal-overlay {
+    align-items: flex-start !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    overflow-y: auto !important;
+    padding: 10px !important;
+  }
+
+  .auth-modal-card,
+  .auth-modal-card.login-split-card {
+    width: 100% !important;
+    max-width: 460px !important;
+    height: auto !important;
+    max-height: calc(100dvh - 20px) !important;
+    overflow-y: auto !important;
+    background: #FFFFFF !important;
+  }
+
+  .auth-signup-content,
+  .auth-login-right-content {
+    display: flex !important;
+    flex-direction: column !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    background: #FFFFFF !important;
+    color: #111827 !important;
   }
 }

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ArrowRight, CheckCircle, Heart, MapPin, Phone, Search, Sparkles, Star, Map as MapIcon, List } from 'lucide-react';
+import { ArrowRight, CheckCircle, Filter, Heart, MapPin, Phone, Search, Sparkles, Star, Map as MapIcon, List } from 'lucide-react';
 import './SearchResultsPage.css';
 import MapResultsView from './MapResultsView';
 
@@ -34,13 +34,22 @@ export default function SearchResultsPage(props) {
   } = props;
 
   const [showMap, setShowMap] = useState(false);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   return (
     <div className="search-results-page fade-in">
+      <button
+        type="button"
+        className="mobile-filter-toggle"
+        onClick={() => setShowMobileFilters(prev => !prev)}
+      >
+        <Filter size={18} />
+        {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
+      </button>
       <div className="search-results-layout">
 
         {/* ── LEFT SIDEBAR FILTERS ── */}
-        <div className="search-sidebar">
+        <div className={`search-sidebar ${showMobileFilters ? 'mobile-open' : ''}`}>
           <div className="filter-container-card">
 
             {/* Map Preview */}

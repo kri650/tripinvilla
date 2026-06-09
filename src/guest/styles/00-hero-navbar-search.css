@@ -167,7 +167,7 @@
   padding: 24px 32px;
   z-index: 10;
   box-sizing: border-box;
-  overflow: hidden;
+  overflow: visible;
 }
 
 /* Tabs row specs: Width 445px, Height 32px, Top 29px, Left 417.5px (Centered) */

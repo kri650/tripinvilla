@@ -95,7 +95,7 @@
 .footer-nav-row {
   display: flex;
   align-items: center;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   justify-content: center;
   gap: 50px;
   margin: 15px 0;

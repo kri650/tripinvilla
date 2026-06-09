@@ -11,6 +11,47 @@ const parseNumber = (val) => {
   return isNaN(parsed) ? '' : parsed;
 };
 
+const normalizeStayConfig = (value) => {
+  const normalized = String(value || '').trim().toLowerCase();
+  const stayConfigMap = {
+    'entire-place': 'entire-place',
+    'entire property': 'entire-place',
+    'entire property / villa': 'entire-place',
+    'entire villa': 'entire-place',
+    'villa': 'entire-place',
+    'private-room': 'private-room',
+    'private room': 'private-room',
+    'private room(s)': 'private-room',
+    'shared-room': 'shared-room',
+    'shared room': 'shared-room',
+    dormitory: 'dormitory',
+    suite: 'suite',
+    cottage: 'cottage',
+  };
+  return stayConfigMap[normalized] || value || 'entire-place';
+};
+
+const normalizeFoodPreference = (value) => {
+  const normalized = String(value || '').trim().toLowerCase();
+  const foodPreferenceMap = {
+    none: 'none',
+    'no food': 'none',
+    'no food provided': 'none',
+    veg: 'veg',
+    vegetarian: 'veg',
+    'pure veg': 'veg',
+    'non-veg': 'non-veg',
+    nonveg: 'non-veg',
+    'non veg': 'non-veg',
+    'non-veg allowed': 'non-veg',
+    both: 'both',
+    'veg & non-veg': 'both',
+    'veg and non-veg': 'both',
+    'both (veg & non-veg)': 'both',
+  };
+  return foodPreferenceMap[normalized] || value || 'none';
+};
+
 export default function PropertyMakers() {
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
@@ -596,8 +637,8 @@ export default function PropertyMakers() {
       beds: p.beds || 2,
       capacity: p.capacity || 3,
       bathRooms: p.bathRooms || 1,
-      roomType: p.roomType || 'entire-place',
-      foodPreference: p.foodPreference || 'none',
+      roomType: normalizeStayConfig(p.stayConfig || p.roomType),
+      foodPreference: normalizeFoodPreference(p.foodPreference),
       rules: p.rules || "",
       highlights: p.highlights || {
         breakfastIncluded: false,
@@ -1625,6 +1666,12 @@ export default function PropertyMakers() {
                 <option value="entire-place">Entire Property / Villa</option>
                 <option value="private-room">Private Room(s)</option>
                 <option value="shared-room">Shared Room</option>
+                <option value="dormitory">Dormitory</option>
+                <option value="suite">Suite</option>
+                <option value="cottage">Cottage</option>
+                {formData.roomType && !['entire-place', 'private-room', 'shared-room', 'dormitory', 'suite', 'cottage'].includes(formData.roomType) && (
+                  <option value={formData.roomType}>{formData.roomType}</option>
+                )}
               </select>
             </div>
             <div className="form-group">
@@ -1640,6 +1687,9 @@ export default function PropertyMakers() {
                 <option value="veg">Pure Veg</option>
                 <option value="non-veg">Non-Veg Allowed</option>
                 <option value="both">Both (Veg & Non-Veg)</option>
+                {formData.foodPreference && !['none', 'veg', 'non-veg', 'both'].includes(formData.foodPreference) && (
+                  <option value={formData.foodPreference}>{formData.foodPreference}</option>
+                )}
               </select>
             </div>
             <div className="form-group">

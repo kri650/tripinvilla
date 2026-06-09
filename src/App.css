@@ -36,3 +36,204 @@
 
 /* ── Responsive Styles ───────────────────────────────── */
 @import "./guest/styles/home-responsive.css";
+
+/* ── Final responsive overrides: footer + auth modal ─── */
+.site-footer,
+.site-footer * {
+  box-sizing: border-box;
+}
+
+.site-footer {
+  width: 100%;
+  max-width: 100%;
+  min-height: clamp(300px, 34vw, 430px);
+  overflow: hidden;
+}
+
+.site-footer-overlay {
+  width: 100%;
+  min-width: 0;
+  padding: clamp(22px, 4vw, 44px) clamp(16px, 5vw, 56px) !important;
+}
+
+.footer-logo-row {
+  width: 100%;
+  margin-bottom: clamp(12px, 2vw, 24px) !important;
+}
+
+.footer-logo-row img {
+  max-width: min(260px, 72vw);
+  height: clamp(46px, 7vw, 78px) !important;
+}
+
+.footer-intro-desc {
+  width: min(100%, 760px);
+  max-width: 100% !important;
+  font-size: clamp(12px, 1.8vw, 15px) !important;
+  line-height: 1.6 !important;
+  margin-bottom: clamp(16px, 2.5vw, 30px) !important;
+  padding: 0 !important;
+}
+
+.footer-nav-row {
+  display: flex !important;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(14px, 3vw, 36px) !important;
+  width: min(100%, 1080px);
+  margin: clamp(12px, 2vw, 18px) auto !important;
+}
+
+.footer-nav-row a {
+  width: auto;
+  max-width: 100%;
+  padding: 6px 8px;
+  font-size: clamp(12px, 1.6vw, 15px) !important;
+  line-height: 1.25;
+  text-align: center;
+  white-space: nowrap !important;
+  overflow-wrap: anywhere;
+}
+
+.footer-line-divider {
+  width: min(100%, 1180px) !important;
+}
+
+.footer-copyright-text {
+  font-size: clamp(11px, 1.5vw, 13.5px) !important;
+  line-height: 1.4;
+}
+
+@media (max-width: 520px) {
+  .site-footer {
+    min-height: auto;
+  }
+
+  .site-footer-overlay {
+    padding: 24px 14px !important;
+  }
+
+  .footer-nav-row {
+    flex-wrap: wrap;
+    gap: 8px !important;
+    width: 100%;
+  }
+
+  .footer-nav-row a {
+    width: auto;
+    padding: 8px 6px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+}
+
+@media (max-width: 340px) {
+  .footer-nav-row {
+    flex-wrap: wrap;
+  }
+}
+
+.auth-modal-card.login-split-card {
+  min-width: 0;
+}
+
+.auth-login-split-container {
+  min-width: 0;
+}
+
+.auth-login-right-content {
+  min-width: 0;
+}
+
+@media (max-width: 768px) {
+  .auth-modal-overlay {
+    align-items: flex-start !important;
+    justify-content: center !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    padding: 10px !important;
+    overflow-y: auto !important;
+  }
+
+  .auth-modal-card,
+  .auth-modal-card.login-split-card {
+    display: flex !important;
+    width: min(100%, 460px) !important;
+    max-width: calc(100vw - 20px) !important;
+    height: auto !important;
+    max-height: calc(100dvh - 20px) !important;
+    min-height: 0 !important;
+    padding: 0 !important;
+    overflow-y: auto !important;
+    border-radius: 16px !important;
+    background: #ffffff !important;
+  }
+
+  .auth-login-split-container {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    flex: 0 0 auto !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    overflow: visible !important;
+    background: #ffffff !important;
+  }
+
+  .auth-login-left-image {
+    display: block !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 88px !important;
+    flex: 0 0 88px !important;
+    padding: 0 !important;
+    border-radius: 16px 16px 0 0 !important;
+    overflow: hidden !important;
+  }
+
+  .auth-login-left-image img {
+    display: block !important;
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center 35% !important;
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    border-radius: 0 !important;
+  }
+
+  .auth-login-right-content,
+  .auth-signup-content {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    height: auto !important;
+    flex: 0 0 auto !important;
+    padding: 18px 16px 22px !important;
+    overflow: visible !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: #ffffff !important;
+    color: #111827 !important;
+  }
+
+  .auth-modal-title,
+  .auth-login-form,
+  .auth-signup-form,
+  .auth-form-grid-3x3,
+  .auth-form-group,
+  .auth-input-label,
+  .auth-input-field,
+  .auth-submit-btn-green,
+  .auth-social-row,
+  .auth-footer-links {
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+}

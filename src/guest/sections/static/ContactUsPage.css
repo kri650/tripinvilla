@@ -286,3 +286,26 @@
   line-height: 1.4;
 }
 
+/* ===== RESPONSIVE ADJUSTMENTS ===== */
+@media (max-width: 1024px) {
+  .contact-main-row,
+  .contact-details-wrapper {
+    grid-template-columns: 1fr;
+    max-width: calc(100% - 64px);
+  }
+}
+
+@media (max-width: 768px) {
+  .contact-main-row,
+  .contact-details-wrapper {
+    max-width: calc(100% - 32px);
+    margin: 40px auto;
+  }
+  .contact-input-row {
+    grid-template-columns: 1fr;
+  }
+  .contact-image-panel {
+    min-height: 300px;
+  }
+}
+

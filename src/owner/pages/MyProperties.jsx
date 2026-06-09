@@ -26,6 +26,11 @@ const getLocationName = (value, keys = []) => {
   return value.name || '';
 };
 
+const isValidExperience = (exp) => {
+  const name = String(exp?.experienceName || exp?.name || '').trim();
+  return name && !/^\d+$/.test(name);
+};
+
 const sanitizeCoordinateInput = (val, isLat) => {
   if (val === null || val === undefined || val === '') return undefined;
   let num = Number(val);
@@ -40,6 +45,12 @@ const sanitizeCoordinateInput = (val, isLat) => {
     num = temp;
   }
   return num;
+};
+
+const formatCoordinateInput = (val, isLat) => {
+  const normalized = sanitizeCoordinateInput(val, isLat);
+  if (normalized === undefined) return '';
+  return String(Number(normalized.toFixed(7))).replace(/\.0$/, '');
 };
 
 const API_BASE = import.meta.env.VITE_API_BASE || `${import.meta.env.VITE_API_BASE}`;
@@ -281,7 +292,7 @@ export default function MyProperties({ autoOpenForm = false }) {
     try {
       const res = await fetch(`${API_BASE}/master/experiences/active`);
       const data = await res.json();
-      if (Array.isArray(data)) setAvailableExperiences(data);
+      if (Array.isArray(data)) setAvailableExperiences(data.filter(isValidExperience));
     } catch {
       // fallback
       setAvailableExperiences([
@@ -303,15 +314,19 @@ export default function MyProperties({ autoOpenForm = false }) {
     try {
       const res = await fetch(`${API_BASE}/masters/countries/active`);
       const data = await res.json();
-      setCountries(Array.isArray(data) ? data : data.countries || []);
+      const list = Array.isArray(data) ? data : data.countries || [];
+      setCountries(list);
+      return list;
     } catch {
-      setCountries([
+      const fallbackCountries = [
         { _id: 'c1', countryName: 'India' },
         { _id: 'c2', countryName: 'United States' },
         { _id: 'c3', countryName: 'United Kingdom' },
         { _id: 'c4', countryName: 'Canada' },
         { _id: 'c5', countryName: 'Australia' }
-      ]);
+      ];
+      setCountries(fallbackCountries);
+      return fallbackCountries;
     } finally {
       setLocLoading(false);
     }
@@ -490,12 +505,14 @@ export default function MyProperties({ autoOpenForm = false }) {
     setSelectedFiles([]);
     setRoomsList(Array.isArray(fullP.rooms) && typeof fullP.rooms[0] === 'object' ? fullP.rooms : []);
 
+    const countryOptions = countries.length > 0 ? countries : await fetchCountries();
+
     // Load cascading location
     const countryId = getEntityId(fullP.countryId);
     const stateId = getEntityId(fullP.stateId);
     const cityId = getEntityId(fullP.cityId);
     const locationId = getEntityId(fullP.locationId);
-    const countryName = fullP.countryName || getLocationName(fullP.countryId, ['countryName']) || fullP.country || '';
+    const countryName = fullP.countryName || getLocationName(fullP.countryId, ['countryName']) || fullP.country || countryOptions.find(c => String(c._id) === String(countryId))?.countryName || '';
     const stateName = fullP.stateName || getLocationName(fullP.stateId, ['stateName']) || fullP.state || '';
     const cityName = fullP.cityName || getLocationName(fullP.cityId, ['cityName']) || fullP.city || '';
     const locationName = fullP.locationName || getLocationName(fullP.locationId, ['locationName']) || '';
@@ -551,8 +568,8 @@ export default function MyProperties({ autoOpenForm = false }) {
       locationId,
       locationName,
       full_address: fullP.full_address || fullP.location || '',
-      latitude: parseNumber(fullP.latitude),
-      longitude: parseNumber(fullP.longitude),
+      latitude: formatCoordinateInput(fullP.latitude, true),
+      longitude: formatCoordinateInput(fullP.longitude, false),
       originalPrice: parseNumber(fullP.originalPrice),
       price: parseNumber(fullP.price_per_night !== undefined ? fullP.price_per_night : fullP.price),
       taxAmount: parseNumber(fullP.taxAmount),
@@ -1104,17 +1121,17 @@ export default function MyProperties({ autoOpenForm = false }) {
                   </div>
                   <div>
                     <label style={{ ...labelStyle, fontWeight: 400, color: '#6B7280' }}>Latitude</label>
-                    <input style={inputStyle} type="number" step="any" name="latitude" value={formData.latitude} onChange={handleChange} placeholder="e.g. 15.5736" />
+                    <input style={inputStyle} type="text" inputMode="decimal" name="latitude" value={formData.latitude} onChange={handleChange} placeholder="e.g. 15.5736" />
                   </div>
                   <div>
                     <label style={{ ...labelStyle, fontWeight: 400, color: '#6B7280' }}>Longitude</label>
-                    <input style={inputStyle} type="number" step="any" name="longitude" value={formData.longitude} onChange={handleChange} placeholder="e.g. 73.7397" />
+                    <input style={inputStyle} type="text" inputMode="decimal" name="longitude" value={formData.longitude} onChange={handleChange} placeholder="e.g. 73.7397" />
                   </div>
                   <div style={{ display: 'flex', alignItems: 'flex-end' }}>
                     <button type="button" onClick={() => {
                       if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
-                          pos => setFormData(prev => ({ ...prev, latitude: pos.coords.latitude, longitude: pos.coords.longitude })),
+                          pos => setFormData(prev => ({ ...prev, latitude: formatCoordinateInput(pos.coords.latitude, true), longitude: formatCoordinateInput(pos.coords.longitude, false) })),
                           () => alert('Location access denied. Please enter manually.')
                         );
                       }

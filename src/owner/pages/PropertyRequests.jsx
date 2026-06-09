@@ -717,11 +717,11 @@ export default function PropertyRequests() {
                           {viewingRequest === r._id && (
                             <tr>
                               <td colSpan="11" style={{ padding: 0, borderBottom: 'none' }}>
-                                <div style={{ background: '#F9FAFB', padding: '24px', borderBottom: '1px solid #E5E7EB', borderTop: '1px dashed #D1D5DB' }}>
-                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                                <div style={{ background: '#F9FAFB', padding: '14px', borderBottom: '1px solid #E5E7EB', borderTop: '1px dashed #D1D5DB' }}>
+                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', gap: '12px' }}>
                                     <div>
-                                      <h2 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>{r.propertyName || 'Property'} Request Details</h2>
-                                      <div style={{ fontSize: '13px', color: '#58A429', marginTop: '4px', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                      <h2 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: '#111827' }}>{r.propertyName || 'Property'} Request Details</h2>
+                                      <div style={{ fontSize: '12px', color: '#58A429', marginTop: '3px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
                                         <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#58A429' }}></span>
                                         <span>{r.location || 'Location N/A'}</span>
                                         <span style={{ color: '#9CA3AF' }}>•</span>
@@ -731,53 +731,53 @@ export default function PropertyRequests() {
                                     <button onClick={() => setViewingRequest(null)} style={{ background: '#E5E7EB', border: 'none', cursor: 'pointer', padding: '6px 12px', borderRadius: '6px', fontSize: '12px', fontWeight: 600, color: '#374151' }}>Close Details</button>
                                   </div>
 
-                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                     {getRequestRooms(r).map((room, roomIdx) => (
-                                      <div key={roomIdx} style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '20px', background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                                      <div key={roomIdx} style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '12px', background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
                                         {getRequestRooms(r).length > 1 && (
                                           <div style={{ fontSize: '12px', fontWeight: 700, color: '#2563EB', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
                                             Room {roomIdx + 1} of {getRequestRooms(r).length}
                                           </div>
                                         )}
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr', gap: '20px', alignItems: 'start' }}>
-                                          <img src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=60'} alt={room.room_type} style={{ width: '120px', height: '90px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #E5E7EB' }} />
-                                          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '88px 1fr', gap: '12px', alignItems: 'start' }}>
+                                          <img src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=60'} alt={room.room_type} style={{ width: '88px', height: '66px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #E5E7EB' }} />
+                                          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                                             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                                              <h3 style={{ margin: 0, fontSize: '17px', fontWeight: 700, color: '#111827' }}>{room.room_type || r.room_type}</h3>
+                                              <h3 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: '#111827' }}>{room.room_type || r.room_type}</h3>
                                               <div style={{ textAlign: 'right' }}>
-                                                <div style={{ fontSize: '16px', fontWeight: 700, color: '#58A429' }}>{formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}/night</div>
+                                                <div style={{ fontSize: '14px', fontWeight: 700, color: '#58A429' }}>{formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}/night</div>
                                                 <div style={{ fontSize: '11px', color: '#9CA3AF' }}>Discounted Price</div>
                                               </div>
                                             </div>
-                                            <div style={{ fontSize: '13px', color: '#4B5563' }}>Bed Type: <strong>{room.bed_type || r.bed_type}</strong></div>
+                                            <div style={{ fontSize: '12px', color: '#4B5563' }}>Bed Type: <strong>{room.bed_type || r.bed_type}</strong></div>
                                             
-                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '10px', marginTop: '4px' }}>
-                                              <div style={{ background: '#F9FAFB', padding: '8px 12px', borderRadius: '8px', border: '1px solid #F3F4F6' }}>
+                                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(95px, 1fr))', gap: '6px', marginTop: '2px' }}>
+                                              <div style={{ background: '#F9FAFB', padding: '6px 8px', borderRadius: '7px', border: '1px solid #F3F4F6' }}>
                                                 <div style={{ fontSize: '10px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 600 }}>Original</div>
-                                                <div style={{ fontSize: '13px', fontWeight: 600, color: '#111827', textDecoration: firstPresent(room.original_price, r.original_price) ? 'line-through' : 'none' }}>
+                                                <div style={{ fontSize: '12px', fontWeight: 600, color: '#111827', textDecoration: firstPresent(room.original_price, r.original_price) ? 'line-through' : 'none' }}>
                                                   {formatCurrency(firstPresent(room.original_price, r.original_price))}
                                                 </div>
                                               </div>
-                                              <div style={{ background: '#F9FAFB', padding: '8px 12px', borderRadius: '8px', border: '1px solid #F3F4F6' }}>
+                                              <div style={{ background: '#F9FAFB', padding: '6px 8px', borderRadius: '7px', border: '1px solid #F3F4F6' }}>
                                                 <div style={{ fontSize: '10px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 600 }}>Tax</div>
-                                                <div style={{ fontSize: '13px', fontWeight: 600, color: '#111827' }}>
+                                                <div style={{ fontSize: '12px', fontWeight: 600, color: '#111827' }}>
                                                   {formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}
                                                 </div>
                                               </div>
-                                              <div style={{ background: '#F9FAFB', padding: '8px 12px', borderRadius: '8px', border: '1px solid #F3F4F6' }}>
+                                              <div style={{ background: '#F9FAFB', padding: '6px 8px', borderRadius: '7px', border: '1px solid #F3F4F6' }}>
                                                 <div style={{ fontSize: '10px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 600 }}>In</div>
-                                                <div style={{ fontSize: '13px', fontWeight: 600, color: '#111827' }}>{room.checkin_time || r.checkin_time || '02:00 PM'}</div>
+                                                <div style={{ fontSize: '12px', fontWeight: 600, color: '#111827' }}>{room.checkin_time || r.checkin_time || '02:00 PM'}</div>
                                               </div>
-                                              <div style={{ background: '#F9FAFB', padding: '8px 12px', borderRadius: '8px', border: '1px solid #F3F4F6' }}>
+                                              <div style={{ background: '#F9FAFB', padding: '6px 8px', borderRadius: '7px', border: '1px solid #F3F4F6' }}>
                                                 <div style={{ fontSize: '10px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 600 }}>Out</div>
-                                                <div style={{ fontSize: '13px', fontWeight: 600, color: '#111827' }}>{room.checkout_time || r.checkout_time || '12:00 PM'}</div>
+                                                <div style={{ fontSize: '12px', fontWeight: 600, color: '#111827' }}>{room.checkout_time || r.checkout_time || '12:00 PM'}</div>
                                               </div>
                                             </div>
                                           </div>
                                         </div>
 
-                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px' }}>
+                                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                                           <div>
                                             <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#374151', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: '6px' }}>
                                               <CheckCircle size={14} color="#58A429" /> Amenities
@@ -807,11 +807,11 @@ export default function PropertyRequests() {
 
                                         <div>
                                           <h4 style={{ fontSize: '13px', fontWeight: 700, color: '#374151', margin: '0 0 8px 0' }}>House Rules</h4>
-                                          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
                                             {Array.isArray(room.rules || r.rules) && (room.rules || r.rules).length > 0 ? (room.rules || r.rules).map((rule, j) => (
-                                              <div key={j} style={{ background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '10px', padding: '12px' }}>
-                                                <div style={{ fontSize: '12px', fontWeight: 700, color: '#B45309', marginBottom: '4px' }}>{rule.title}</div>
-                                                <div style={{ fontSize: '12px', color: '#78350F', whiteSpace: 'pre-wrap', lineHeight: 1.5 }}>
+                                              <div key={j} style={{ background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '8px', padding: '8px' }}>
+                                                <div style={{ fontSize: '11px', fontWeight: 700, color: '#B45309', marginBottom: '3px' }}>{rule.title}</div>
+                                                <div style={{ fontSize: '11px', color: '#78350F', whiteSpace: 'pre-wrap', lineHeight: 1.35 }}>
                                                   {Array.isArray(rule.points) ? rule.points.map(p => `• ${p}`).join('\n') : rule.points}
                                                 </div>
                                               </div>

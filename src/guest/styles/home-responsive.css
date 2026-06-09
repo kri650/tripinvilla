@@ -927,11 +927,11 @@
   }
 }
 
-/* ===== FOOTER NAVIGATION GRID FOR MOBILE ===== */
+/* ===== FOOTER NAVIGATION FLEX FOR MOBILE ===== */
 @media (max-width: 640px) {
   .footer-nav-row {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    display: flex;
+    flex-wrap: wrap;
     gap: 8px 16px;
     width: 100%;
     max-width: 300px;
@@ -948,7 +948,6 @@
 
 @media (max-width: 480px) {
   .footer-nav-row {
-    grid-template-columns: repeat(2, 1fr);
     gap: 6px 12px;
     max-width: 280px;
   }
@@ -956,7 +955,6 @@
 
 @media (max-width: 380px) {
   .footer-nav-row {
-    grid-template-columns: 1fr;
     gap: 4px;
     max-width: 200px;
   }

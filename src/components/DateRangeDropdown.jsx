@@ -32,54 +32,44 @@ export default function DateRangeDropdown({
   }, [startDate, endDate]);
 
   useEffect(() => {
-    function updatePosition() {
-      if (isOpen && wrapperRef.current) {
-        const rect = wrapperRef.current.getBoundingClientRect();
-        
-        // Read mainLeft from CSS custom property (sidebar width)
-        let mainLeft = 0;
-        if (typeof document !== 'undefined') {
-          const rootStyles = getComputedStyle(document.documentElement);
-          const mainLeftVal = rootStyles.getPropertyValue('--main-left');
-          if (mainLeftVal) {
-            mainLeft = parseFloat(mainLeftVal) || 0;
-          }
-        }
+  function updatePosition() {
+    if (isOpen && wrapperRef.current) {
+      const rect = wrapperRef.current.getBoundingClientRect();
 
-        // Desktop popup width is around 558px with scaled styles, mobile width is centered via CSS
-        const popupWidth = window.innerWidth <= 640 ? 320 : 558;
-        
-        // Try aligning right edge of popup with right edge of trigger button
-        let leftPos = rect.right - popupWidth + window.scrollX;
-        
-        // Constrain leftPos to not overlap sidebar (if visible)
-        const minLeft = mainLeft + 16 + window.scrollX;
-        if (leftPos < minLeft) {
-          // If aligning to right edge overlaps sidebar, align to left edge instead
-          leftPos = rect.left + window.scrollX;
-        }
-        
-        // Constrain right edge to not overflow the viewport
-        const maxLeft = window.innerWidth + window.scrollX - popupWidth - 16;
-        leftPos = Math.max(minLeft, Math.min(leftPos, maxLeft));
-        
-        setDropdownCoords({
-          top: rect.bottom + window.scrollY + 8,
-          left: leftPos,
-        });
+      // Desktop popup width is around 558px with scaled styles, mobile width is centered via CSS
+      const popupWidth = window.innerWidth <= 640 ? 320 : 558;
+
+      // Try aligning right edge of popup with right edge of trigger button
+      let leftPos = rect.right - popupWidth;
+
+      // Constrain leftPos to not overlap sidebar (if visible)
+      // Note: Assuming no sidebar interference with fixed positioning, or sidebar handled by z-index
+      const minLeft = 16;
+      if (leftPos < minLeft) {
+        leftPos = rect.left;
       }
-    }
 
-    if (isOpen) {
-      updatePosition();
-      window.addEventListener('resize', updatePosition);
-      window.addEventListener('scroll', updatePosition, true);
+      // Constrain right edge to not overflow the viewport
+      const maxLeft = window.innerWidth - popupWidth - 16;
+      leftPos = Math.max(minLeft, Math.min(leftPos, maxLeft));
+
+      setDropdownCoords({
+        top: rect.bottom + 8,
+        left: leftPos,
+      });
     }
-    
-    return () => {
-      window.removeEventListener('resize', updatePosition);
-      window.removeEventListener('scroll', updatePosition, true);
-    };
+  }
+
+  if (isOpen) {
+    updatePosition();
+    window.addEventListener('resize', updatePosition);
+    window.addEventListener('scroll', updatePosition, true);
+  }
+
+  return () => {
+    window.removeEventListener('resize', updatePosition);
+    window.removeEventListener('scroll', updatePosition, true);
+  };
   }, [isOpen]);
 
   useEffect(() => {
@@ -217,14 +207,14 @@ export default function DateRangeDropdown({
       {/* Dropdown Modal via Portal */}
       {isOpen && typeof document !== 'undefined' && createPortal(
         <div ref={popupRef} className="daterange-dropdown-popup" style={{
-          position: 'absolute',
+          position: 'fixed',
           top: dropdownCoords?.top || 0,
           left: dropdownCoords?.left || 0,
           background: '#FFFFFF',
           border: '1px solid #E5E7EB',
           borderRadius: 12,
           boxShadow: '0 10px 25px rgba(0,0,0,0.1)',
-          zIndex: 9999,
+          zIndex: 99999,
           overflow: 'hidden',
           width: 'max-content'
         }}>

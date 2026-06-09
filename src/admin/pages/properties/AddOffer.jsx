@@ -42,7 +42,12 @@ export default function AddOffer() {
         setProperties(propsArray);
 
         if (isEditMode) {
-          const resOffer = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${id}`);
+          const token = localStorage.getItem('admin_token');
+          const resOffer = await fetch(`${import.meta.env.VITE_API_BASE}/offers/${id}`, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          });
           if (resOffer.ok) {
             const offerData = await resOffer.json();
             setSelectedPropertyId(offerData.property_id || offerData.propertyId || '');

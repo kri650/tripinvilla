@@ -7,7 +7,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 0 16px;
+    padding: 120px 16px 0;   /* ADDED top padding to fix navbar overlap */
     box-sizing: border-box;
   }
 
@@ -76,14 +76,14 @@
 
   /* Mobile Search Card */
   .mobile-search-card {
-    background: rgba(255, 255, 255, 0.98);
+    background: #FFFFFF;
     backdrop-filter: blur(20px);
     border-radius: 24px;
     padding: 24px;
     width: 100%;
     max-width: 380px;
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid #E5E7EB;
   }
 
   /* Mobile Tabs Row */
@@ -311,6 +311,13 @@
 
 /* ===== TABLET MOBILE SEARCH CARD OVERRIDE ===== */
 @media (min-width: 768px) and (max-width: 1024px) {
+  /* ADDED - push hero content below the fixed navbar */
+  .hero-wrapper {
+    padding-top: 130px;  /* navbar height (72px) + top offset (39px) + breathing room */
+    align-items: flex-start;
+    justify-content: center;
+  }
+
   /* Show mobile hero content on tablet if needed */
   .mobile-hero-content {
     display: flex !important;
