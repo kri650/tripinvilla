@@ -72,8 +72,6 @@ export default function usePropertyDetailData({ API_BASE, selectedProperty }) {
                   amenities_types: Array.isArray(r.amenities) ? r.amenities : (r.amenitiesText ? r.amenitiesText.split(',').map(a => a.trim()) : []),
                   price_per_room: r.pricePerNight || 0,
                   original_price: r.pricePerNight ? Math.round(r.pricePerNight * 1.2) : 0,
-                  checkin_time: r.checkIn || data.checkIn || '3:00 PM',
-                  checkout_time: r.checkOut || data.checkOut || '12:00 PM',
                   offers: r.offer ? [r.offer] : [],
                   room_image_url: r.imageUrl || r.image || r.room_image_url || '',
                   guests: r.maxGuests ? `${r.maxGuests} Person${r.maxGuests > 1 ? 's' : ''}` : '2 Persons',
@@ -104,4 +102,3 @@ export default function usePropertyDetailData({ API_BASE, selectedProperty }) {
     fullPropertyDetail,
   };
 }
-

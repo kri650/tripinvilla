@@ -43,8 +43,6 @@ const emptyRoom = () => ({
   original_price: '',
   price_per_room: '',
   tax_amount: '',
-  checkin_time: '02:00 PM',
-  checkout_time: '12:00 PM',
   rulesSections: [{ title: '', text: '' }],
   offersList: [],
   selectedAmenities: [],
@@ -173,34 +171,6 @@ function RoomForm({
         <div className="form-group">
           <label className="form-label">Tax Amount (₹)</label>
           <input type="number" className="form-input" name="tax_amount" value={data.tax_amount} onChange={handleInputChange} placeholder="e.g. 212" />
-        </div>
-        <div className="form-group">
-          <label className="form-label">Check-In Time</label>
-          <select className="form-select" name="checkin_time" value={data.checkin_time} onChange={handleInputChange}>
-            <option value="">Select Time</option>
-            {Array.from({ length: 48 }).map((_, i) => {
-              const hrs = Math.floor(i / 2);
-              const mins = i % 2 === 0 ? '00' : '30';
-              const ampm = hrs < 12 ? 'AM' : 'PM';
-              const displayHrs = hrs % 12 || 12;
-              const timeStr = `${displayHrs.toString().padStart(2, '0')}:${mins} ${ampm}`;
-              return <option key={timeStr} value={timeStr}>{timeStr}</option>;
-            })}
-          </select>
-        </div>
-        <div className="form-group">
-          <label className="form-label">Check-Out Time</label>
-          <select className="form-select" name="checkout_time" value={data.checkout_time} onChange={handleInputChange}>
-            <option value="">Select Time</option>
-            {Array.from({ length: 48 }).map((_, i) => {
-              const hrs = Math.floor(i / 2);
-              const mins = i % 2 === 0 ? '00' : '30';
-              const ampm = hrs < 12 ? 'AM' : 'PM';
-              const displayHrs = hrs % 12 || 12;
-              const timeStr = `${displayHrs.toString().padStart(2, '0')}:${mins} ${ampm}`;
-              return <option key={timeStr} value={timeStr}>{timeStr}</option>;
-            })}
-          </select>
         </div>
       </div>
 
@@ -389,8 +359,6 @@ export default function PropertyRequests() {
         offers: [...offersList],
         rules: formattedRules,
         _preview_img: roomImageUrl || roomImagePreview,
-        checkin_time: formData.checkin_time || '02:00 PM',
-        checkout_time: formData.checkout_time || '12:00 PM',
       };
 
       if (editingQueueIdx !== null) {
@@ -420,8 +388,6 @@ export default function PropertyRequests() {
       original_price: r.original_price || '',
       price_per_room: r.price_per_room || '',
       tax_amount: r.tax_amount || '',
-      checkin_time: r.checkin_time || '02:00 PM',
-      checkout_time: r.checkout_time || '12:00 PM',
     });
     setRoomImagePreview(r.room_image_url || r._preview_img || '');
     setSelectedAmenities(r.amenities_types || []);
@@ -649,7 +615,7 @@ export default function PropertyRequests() {
                 <table className="data-table" style={{ whiteSpace: 'nowrap' }}>
                   <thead>
                     <tr>
-                      {['Property', 'Category', 'Room Type', 'Bed', 'Amenities', 'Price', 'Timings', 'Rules', 'Offers', 'Status', 'Actions'].map((h, i) => (
+                      {['Property', 'Category', 'Room Type', 'Bed', 'Amenities', 'Price', 'Rules', 'Offers', 'Status', 'Actions'].map((h, i) => (
                         <th key={i} style={{ color: '#374151', fontWeight: 600, padding: '14px 16px', textAlign: 'left' }}>{h}</th>
                       ))}
                     </tr>
@@ -689,10 +655,6 @@ export default function PropertyRequests() {
                                 ? `From ${formatCurrency(Math.min(...getRequestRooms(r).map((room) => Number(room.price_per_room || 0)).filter(Boolean)))}`
                                 : formatCurrency(firstPresent(r.price_per_room, getRequestRooms(r)[0]?.price_per_room, r.priceByOwner))}
                             </td>
-                            <td style={{ color: '#6B7280', padding: '14px 16px' }}>
-                              <div>In: {r.checkin_time || '02:00 PM'}</div>
-                              <div>Out: {r.checkout_time || '12:00 PM'}</div>
-                            </td>
                             <td style={{ color: '#6B7280', padding: '14px 16px' }}>{Array.isArray(r.rules) ? `${r.rules.length} section(s)` : (r.rules?.length > 35 ? `${r.rules.substring(0, 35)}...` : r.rules)}</td>
                             <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}>{r.offers?.length > 0 ? r.offers.join(', ') : 'None'}</td>
                             <td style={{ padding: '14px 16px' }}>
@@ -716,7 +678,7 @@ export default function PropertyRequests() {
                           </tr>
                           {viewingRequest === r._id && (
                             <tr>
-                              <td colSpan="11" style={{ padding: 0, borderBottom: 'none' }}>
+                              <td colSpan="10" style={{ padding: 0, borderBottom: 'none' }}>
                                 <div style={{ background: '#F9FAFB', padding: '14px', borderBottom: '1px solid #E5E7EB', borderTop: '1px dashed #D1D5DB' }}>
                                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px', gap: '12px' }}>
                                     <div>
@@ -764,14 +726,6 @@ export default function PropertyRequests() {
                                                 <div style={{ fontSize: '12px', fontWeight: 600, color: '#111827' }}>
                                                   {formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}
                                                 </div>
-                                              </div>
-                                              <div style={{ background: '#F9FAFB', padding: '6px 8px', borderRadius: '7px', border: '1px solid #F3F4F6' }}>
-                                                <div style={{ fontSize: '10px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 600 }}>In</div>
-                                                <div style={{ fontSize: '12px', fontWeight: 600, color: '#111827' }}>{room.checkin_time || r.checkin_time || '02:00 PM'}</div>
-                                              </div>
-                                              <div style={{ background: '#F9FAFB', padding: '6px 8px', borderRadius: '7px', border: '1px solid #F3F4F6' }}>
-                                                <div style={{ fontSize: '10px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 600 }}>Out</div>
-                                                <div style={{ fontSize: '12px', fontWeight: 600, color: '#111827' }}>{room.checkout_time || r.checkout_time || '12:00 PM'}</div>
                                               </div>
                                             </div>
                                           </div>
@@ -828,7 +782,7 @@ export default function PropertyRequests() {
                         </React.Fragment>
                       );
                     }) : (
-                      <tr><td colSpan="11" style={{ textAlign: 'center', padding: '20px', color: '#6B7280' }}>No property requests submitted yet.</td></tr>
+                      <tr><td colSpan="10" style={{ textAlign: 'center', padding: '20px', color: '#6B7280' }}>No property requests submitted yet.</td></tr>
                     )}
                   </tbody>
                 </table>

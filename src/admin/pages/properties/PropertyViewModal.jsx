@@ -320,8 +320,6 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
                   const roomBedType   = getValid([room.bedType, room.bed_type, room.beds], 'King Size');
                   const roomGuests    = getValid([room.maxGuests, room.capacity, room.guests], 2);
                   const roomCount     = getValid([room.count, room.rooms], 1);
-                  const roomCheckIn   = getValid([room.checkIn, room.checkin_time], checkIn);
-                  const roomCheckOut  = getValid([room.checkOut, room.checkout_time], checkOut);
                   const roomPrice     = Number(getValid([room.pricePerNight, room.price_per_room, room.price], price || 0));
                   const roomAmenities = Array.isArray(room.amenities) && room.amenities.length > 0
                     ? room.amenities
@@ -351,10 +349,6 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
                               <h4 style={{ fontSize: '16px', fontWeight: 700, color: '#111827', margin: '0 0 4px 0' }}>{roomTitle}</h4>
                               <div style={{ fontSize: '13px', color: '#4B5563', marginBottom: '4px' }}>
                                 {roomBedType} bed · {roomGuests} guests · {roomCount} room{(roomCount > 1 || typeof roomCount === 'string') ? 's' : ''}
-                              </div>
-                              <div style={{ fontSize: '12px', color: '#6B7280', marginBottom: '8px', display: 'flex', gap: '16px' }}>
-                                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={12} color="#58A429" /> In: {roomCheckIn}</span>
-                                <span style={{ display: 'flex', alignItems: 'center', gap: 4 }}><Clock size={12} color="#DC2626" /> Out: {roomCheckOut}</span>
                               </div>
                             </div>
                             <div style={{ textAlign: 'right' }}>

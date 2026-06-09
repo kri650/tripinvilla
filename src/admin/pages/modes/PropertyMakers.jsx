@@ -52,6 +52,33 @@ const normalizeFoodPreference = (value) => {
   return foodPreferenceMap[normalized] || value || 'none';
 };
 
+const cleanLocationPart = (value) => String(value || '').trim();
+
+const uniqueLocationParts = (parts) => {
+  const seen = new Set();
+  return parts
+    .flatMap((part) => cleanLocationPart(part).split(','))
+    .map(cleanLocationPart)
+    .filter(Boolean)
+    .filter((part) => {
+      const key = part.toLowerCase();
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+};
+
+const composeLocationString = ({ area, city, state, country, fallback }) => {
+  const composed = uniqueLocationParts([area, city, state, country]).join(', ');
+  return composed || cleanLocationPart(fallback);
+};
+
+const getAreaLabel = (property) => {
+  const fullLocation = cleanLocationPart(property.location);
+  const fullAddress = cleanLocationPart(property.full_address || property.address);
+  return cleanLocationPart(property.locationName) || (fullAddress && fullAddress !== fullLocation ? fullAddress : '');
+};
+
 export default function PropertyMakers() {
   const navigate = useNavigate();
   const [properties, setProperties] = useState([]);
@@ -525,6 +552,13 @@ export default function PropertyMakers() {
     if (!formData.propertyName) { alert('Property Name is required.'); return; }
     if (!formData.propertyPrice) { alert('Property Price is required.'); return; }
     try {
+      const locationText = composeLocationString({
+        area: selectedArea.name,
+        city: selectedCity.name,
+        state: selectedState.name,
+        country: selectedCountry.name,
+        fallback: formData.location || formData.full_address,
+      });
       const payload = {
         ...formData,
         type: formData.propertyType === 'Other' ? customPropertyType : formData.propertyType,
@@ -537,12 +571,12 @@ export default function PropertyMakers() {
         cityName: selectedCity.name || undefined,
         locationId: selectedArea.id || undefined,
         locationName: selectedArea.name || undefined,
-        address: selectedArea.name ? [selectedArea.name, selectedCity.name, selectedState.name, selectedCountry.name].filter(Boolean).join(', ') : formData.location,
-        location: selectedArea.name ? [selectedArea.name, selectedCity.name, selectedState.name, selectedCountry.name].filter(Boolean).join(', ') : formData.location,
+        address: locationText,
+        location: locationText,
         city: selectedCity.name || undefined,
         state: selectedState.name || undefined,
         country: selectedCountry.name || undefined,
-        full_address: formData.full_address || (selectedArea.name ? [selectedArea.name, selectedCity.name, selectedState.name, selectedCountry.name].filter(Boolean).join(', ') : formData.location),
+        full_address: formData.full_address || locationText,
         latitude: formData.latitude ? Number(formData.latitude) : undefined,
         longitude: formData.longitude ? Number(formData.longitude) : undefined,
         owner: formData.ownerId || undefined,
@@ -688,6 +722,7 @@ export default function PropertyMakers() {
     const stateId = p.stateId?._id || p.stateId;
     const cityId = p.cityId?._id || p.cityId;
     const locationId = p.locationId?._id || p.locationId;
+    const areaLabel = getAreaLabel(p);
 
     const manualLoc = { country: false, state: false, city: false, area: false };
     const manualVals = { country: '', state: '', city: '', area: '' };
@@ -721,9 +756,9 @@ export default function PropertyMakers() {
       manualVals.city = p.city || p.cityName;
     }
 
-    if (!locationId && (p.locationName || p.location || p.address)) {
+    if (!locationId && areaLabel) {
       manualLoc.area = true;
-      manualVals.area = p.locationName || p.location || p.address;
+      manualVals.area = areaLabel;
     }
 
     setManualLocation(manualLoc);
@@ -732,7 +767,7 @@ export default function PropertyMakers() {
     const resolvedCountryName = p.countryName || p.country || countries.find(c => c._id === countryId)?.countryName || "";
     const resolvedStateName = p.stateName || p.state || loadedStates.find(s => s._id === stateId)?.stateName || "";
     const resolvedCityName = p.cityName || p.city || loadedCities.find(c => c._id === cityId)?.cityName || "";
-    const resolvedAreaName = p.locationName || p.location || p.address || loadedAreas.find(a => a._id === locationId)?.locationName || "";
+    const resolvedAreaName = areaLabel || loadedAreas.find(a => a._id === locationId)?.locationName || "";
 
     // Set selections after dropdown lists are fetched
     if (countryId) {
@@ -761,8 +796,8 @@ export default function PropertyMakers() {
 
     if (locationId) {
       setSelectedArea({ id: locationId, name: resolvedAreaName });
-    } else if (p.locationName || p.location || p.address) {
-      setSelectedArea({ id: "", name: p.locationName || p.location || p.address });
+    } else if (areaLabel) {
+      setSelectedArea({ id: "", name: areaLabel });
     } else {
       setSelectedArea({ id: "", name: "" });
     }
@@ -1186,6 +1221,9 @@ export default function PropertyMakers() {
                     }}>
                     <option value="">Select Country</option>
                     {countries.map((c) => <option key={c._id} value={c._id}>{c.countryName}</option>)}
+                    {selectedCountry.id && !countries.some((c) => c._id === selectedCountry.id) && (
+                      <option value={selectedCountry.id}>{selectedCountry.name || 'Saved Country'}</option>
+                    )}
                   </select>
                 )}
               </div>
@@ -1215,6 +1253,9 @@ export default function PropertyMakers() {
                     disabled={!manualLocation.state && !selectedCountry.id}>
                     <option value="">Select State</option>
                     {states.map((s) => <option key={s._id} value={s._id}>{s.stateName}</option>)}
+                    {selectedState.id && !states.some((s) => s._id === selectedState.id) && (
+                      <option value={selectedState.id}>{selectedState.name || 'Saved State'}</option>
+                    )}
                   </select>
                 )}
               </div>
@@ -1243,6 +1284,9 @@ export default function PropertyMakers() {
                     disabled={!manualLocation.city && !selectedState.id}>
                     <option value="">Select City</option>
                     {cities.map((c) => <option key={c._id} value={c._id}>{c.cityName}</option>)}
+                    {selectedCity.id && !cities.some((c) => c._id === selectedCity.id) && (
+                      <option value={selectedCity.id}>{selectedCity.name || 'Saved City'}</option>
+                    )}
                   </select>
                 )}
               </div>
@@ -1286,6 +1330,9 @@ export default function PropertyMakers() {
                     {(areas.length > 0 ? areas : allLocations).map((a) => (
                       <option key={a._id} value={a._id}>{a.locationName}</option>
                     ))}
+                    {selectedArea.id && !((areas.length > 0 ? areas : allLocations).some((a) => a._id === selectedArea.id)) && (
+                      <option value={selectedArea.id}>{selectedArea.name || 'Saved Area'}</option>
+                    )}
                   </select>
                 )}
               </div>
@@ -1653,6 +1700,7 @@ export default function PropertyMakers() {
                 className="form-input"
                 required
               />
+              
             </div>
             <div className="form-group">
               <label className="form-label">Stay Config (Room Type)*</label>

@@ -438,20 +438,22 @@
 .rooms-stack {
   display: flex;
   flex-direction: column;
-  gap: 18px;
+  gap: 12px;
 }
 
 .room-vertical-card {
   display: flex;
   border: 1px solid #E5E7EB;
-  border-radius: 18px;
+  border-radius: 8px;
   overflow: hidden;
   background: #FFFFFF;
+  min-height: 132px;
 }
 
 .room-card-img-wrap {
-  width: 250px;
-  height: 180px;
+  width: clamp(150px, 18vw, 210px);
+  height: auto;
+  min-height: 132px;
   flex-shrink: 0;
 }
 
@@ -466,27 +468,30 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
-  padding: 20px;
+  padding: 14px 16px;
+  gap: 16px;
 }
 
 .room-card-mid-col {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 8px;
+  min-width: 0;
 }
 
 .room-card-title {
   font-family: 'Lato', sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-weight: 700;
   color: #111827;
   margin: 0;
+  line-height: 1.25;
 }
 
 .room-card-bullets-list {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  flex-wrap: wrap;
+  gap: 6px 10px;
 }
 
 .bullet-check {
@@ -500,13 +505,15 @@
 }
 
 .room-card-traits-grid {
-  display: flex;
-  gap: 16px;
-  margin-top: 4px;
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: wrap;
+  gap: 8px 14px !important;
+  margin-top: 2px !important;
 }
 
 .trait-lbl-item {
-  display: flex;
+  display: flex !important;
   align-items: center;
   gap: 6px;
   font-family: 'Lato', sans-serif;
@@ -520,9 +527,10 @@
   flex-direction: column;
   align-items: flex-end;
   justify-content: space-between;
-  width: 230px;
+  width: clamp(170px, 19vw, 220px);
   border-left: 1px solid #F3F4F6;
-  padding-left: 20px;
+  padding-left: 16px;
+  flex-shrink: 0;
 }
 
 .room-taxes-label {
@@ -543,10 +551,65 @@
 
 .room-green-val {
   font-family: 'Lato', sans-serif;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   color: #58A429;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 980px) {
+  .room-vertical-card {
+    align-items: stretch;
+  }
+
+  .room-card-img-wrap {
+    width: 170px;
+    min-height: 140px;
+  }
+
+  .room-card-info-wrap {
+    flex-wrap: wrap;
+  }
+
+  .room-card-pricing-col {
+    width: 100%;
+    border-left: 0;
+    border-top: 1px solid #F3F4F6;
+    padding-left: 0;
+    padding-top: 10px;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 640px) {
+  .room-vertical-card {
+    flex-direction: column;
+  }
+
+  .room-card-img-wrap {
+    width: 100%;
+    height: 150px;
+    min-height: 150px;
+  }
+
+  .room-card-info-wrap {
+    padding: 12px;
+  }
+
+  .room-card-pricing-col {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .room-pricing-text-group {
+    align-items: flex-start !important;
+  }
+
+  .room-taxes-label {
+    text-align: left;
+  }
 }
 
 /* Map & landmarks splitter layout */
@@ -848,4 +911,3 @@
   display: flex;
   gap: 4px;
 }
-

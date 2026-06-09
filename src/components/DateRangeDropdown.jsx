@@ -102,6 +102,8 @@ export default function DateRangeDropdown({
       <style>{`
         .daterange-dropdown-popup {
           font-family: 'Outfit', 'Inter', sans-serif;
+          max-height: calc(100vh - 40px);
+          overflow-y: auto;
         }
         .daterange-dropdown-popup .rdrCalendarWrapper {
           font-size: 10px !important;

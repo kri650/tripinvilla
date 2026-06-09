@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { ChevronDown, Search, Sparkles, Calendar as CalendarIcon } from 'lucide-react';
 import { DateRange, Calendar } from 'react-date-range';
@@ -56,18 +56,58 @@ export default function HeroSection(props) {
   } = props;
 
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [pickerCoords, setPickerCoords] = useState({ top: 0, left: 0 });
   const datePickerRef = useRef(null);
+  const mobileDatePickerRef = useRef(null);
   const portalRef = useRef(null);
+
+  // Function to update picker position
+  const updatePickerPosition = () => {
+    const isMobile = window.innerWidth <= 768;
+    const targetRef = isMobile ? mobileDatePickerRef : datePickerRef;
+    
+    if (showDatePicker && targetRef.current) {
+      const rect = targetRef.current.getBoundingClientRect();
+      const popupWidth = window.innerWidth > 640 ? 560 : 320; // Approx widths
+      
+      let leftPos = rect.left;
+      // Constrain to viewport
+      if (leftPos + popupWidth > window.innerWidth) {
+        leftPos = window.innerWidth - popupWidth - 20;
+      }
+      if (leftPos < 20) leftPos = 20;
+
+      setPickerCoords({
+        top: rect.bottom + 8,
+        left: leftPos
+      });
+    }
+  };
+
+  // Update position on scroll/resize when picker is open
+  useLayoutEffect(() => {
+    if (showDatePicker) {
+      updatePickerPosition();
+      window.addEventListener('scroll', updatePickerPosition, true);
+      window.addEventListener('resize', updatePickerPosition);
+    }
+    return () => {
+      window.removeEventListener('scroll', updatePickerPosition, true);
+      window.removeEventListener('resize', updatePickerPosition);
+    };
+  }, [showDatePicker]);
 
   // Close picker when clicking outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (
-        datePickerRef.current && !datePickerRef.current.contains(event.target) &&
-        (!portalRef.current || !portalRef.current.contains(event.target))
+        (datePickerRef.current && datePickerRef.current.contains(event.target)) ||
+        (mobileDatePickerRef.current && mobileDatePickerRef.current.contains(event.target)) ||
+        (portalRef.current && portalRef.current.contains(event.target))
       ) {
-        setShowDatePicker(false);
+        return;
       }
+      setShowDatePicker(false);
     }
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
@@ -186,7 +226,7 @@ export default function HeroSection(props) {
 
                 {/* When and Who Row */}
                 <div className="mobile-form-row">
-                  <div className="mobile-form-group" style={{ position: 'relative' }} ref={datePickerRef}>
+                  <div className="mobile-form-group" style={{ position: 'relative' }} ref={mobileDatePickerRef}>
                     <label className="mobile-field-label">When</label>
                     <div 
                       className="mobile-form-input" 
@@ -205,7 +245,7 @@ export default function HeroSection(props) {
                       <CalendarIcon size={14} color="#6B7280" />
                     </div>
 
-                    {showDatePicker && (
+                    {showDatePicker && window.innerWidth <= 640 && (
                       <div ref={portalRef} style={{
                         position: 'fixed',
                         top: '50%',
@@ -222,7 +262,7 @@ export default function HeroSection(props) {
                         maxHeight: '80vh',
                         overflow: 'auto'
                       }}>
-                        <div style={{ display: 'flex', flexDirection: window.innerWidth > 640 ? 'row' : 'column', gap: '24px' }}>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                           <div>
                             <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>From</div>
                             <Calendar
@@ -421,12 +461,22 @@ export default function HeroSection(props) {
                   <CalendarIcon size={16} color="#6B7280" />
                 </div>
 
-                {showDatePicker && (() => {
-                  const rect = datePickerRef.current?.getBoundingClientRect();
-                  const top = rect ? rect.bottom + 8 : 0;
-                  const left = rect ? rect.left : 0;
+                {showDatePicker && window.innerWidth > 640 && (() => {
                   const picker = (
-                    <div ref={portalRef} style={{ position: 'fixed', top, left, background: '#fff', borderRadius: '12px', boxShadow: '0 10px 25px rgba(0,0,0,0.1)', zIndex: 30000, padding: '16px', border: '1px solid #E5E7EB', width: 'max-content' }}>
+                    <div ref={portalRef} style={{ 
+                      position: 'fixed', 
+                      top: pickerCoords.top, 
+                      left: pickerCoords.left, 
+                      background: '#fff', 
+                      borderRadius: '12px', 
+                      boxShadow: '0 10px 25px rgba(0,0,0,0.1)', 
+                      zIndex: 30000, 
+                      padding: '16px', 
+                      border: '1px solid #E5E7EB', 
+                      width: 'max-content',
+                      maxHeight: 'calc(100vh - 40px)',
+                      overflowY: 'auto'
+                    }}>
                       <div style={{ display: 'flex', gap: '24px' }}>
                         <div>
                           <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>From</div>
