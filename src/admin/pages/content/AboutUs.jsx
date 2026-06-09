@@ -36,12 +36,12 @@ const FileUpload = ({ label, name, onChange, fileData, accept }) => {
 
   return (
     <div className="form-group" style={{ marginBottom: preview ? 24 : 0 }}>
-      <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+      <label className="form-label" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <span>{label}</span>
       </label>
       
       <div className="file-upload-wrapper" style={{ display: 'flex', background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '8px', overflow: 'hidden' }}>
-        <input type="text" className="form-input" value={filename || 'Choose a file...'} readOnly style={{ border: 'none', background: 'transparent', flex: 1, textOverflow: 'ellipsis', overflow: 'hidden', padding: '10px 14px' }} />
+        <input type="text" className="form-input" value={filename || 'Choose a file...'} readOnly style={{ border: 'none', background: 'transparent', flex: 1, textOverflow: 'ellipsis', overflow: 'hidden', padding: '12px 16px' }} />
         
         <div style={{ position: 'relative' }}>
           <input type="file" name={name} accept={getAcceptType()} onChange={onChange} style={{ position: 'absolute', opacity: 0, top: 0, left: 0, right: 0, bottom: 0, cursor: 'pointer' }} />
@@ -314,9 +314,7 @@ export default function AboutUs() {
                     <label className="form-label">Name*</label>
                     <input type="text" className="form-input" placeholder="Enter person's name..." value={t.name} onChange={e => handleChange(e, `section3.testimonials.${i}.name`)} />
                   </div>
-                  <div className="form-group">
-                    <FileUpload label={`Image ${i + 1}`} name={`section3.testimonials.${i}.image`} onChange={e => handleFileChange(e, `section3.testimonials.${i}.image`)} fileData={getFileDisplay(`section3.testimonials.${i}.image`)} />
-                  </div>
+                  <FileUpload label={`Image ${i + 1}`} name={`section3.testimonials.${i}.image`} onChange={e => handleFileChange(e, `section3.testimonials.${i}.image`)} fileData={getFileDisplay(`section3.testimonials.${i}.image`)} />
                   <div className="form-group">
                     <label className="form-label">Designation*</label>
                     <input type="text" className="form-input" placeholder="Enter designation and company..." value={t.designation} onChange={e => handleChange(e, `section3.testimonials.${i}.designation`)} />
@@ -328,9 +326,7 @@ export default function AboutUs() {
                     <label className="form-label">Name*</label>
                     <input type="text" className="form-input" placeholder="Enter person's name..." value={t.name} onChange={e => handleChange(e, `section3.testimonials.${i}.name`)} />
                   </div>
-                  <div className="form-group">
-                    <FileUpload label={`Video ${i + 1}`} name={`section3.testimonials.${i}.video`} onChange={e => handleFileChange(e, `section3.testimonials.${i}.video`)} fileData={getFileDisplay(`section3.testimonials.${i}.video`)} />
-                  </div>
+                  <FileUpload label={`Video ${i + 1}`} name={`section3.testimonials.${i}.video`} onChange={e => handleFileChange(e, `section3.testimonials.${i}.video`)} fileData={getFileDisplay(`section3.testimonials.${i}.video`)} />
                   <div className="form-group">
                     <label className="form-label">Designation*</label>
                     <input type="text" className="form-input" placeholder="Enter designation and company..." value={t.designation} onChange={e => handleChange(e, `section3.testimonials.${i}.designation`)} />
