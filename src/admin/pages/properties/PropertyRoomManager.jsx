@@ -444,10 +444,6 @@ export default function PropertyRoomManager({ property, onClose }) {
                       <span>· {room.guests || '2 Guests'}</span>
                       <span>· {room.rooms || '1 Room'}</span>
                     </div>
-                    <div style={{ fontSize: 11, color: '#6B7280', marginBottom: 8, display: 'flex', gap: '8px' }}>
-                      <span><strong>In:</strong> {room.checkIn || '3:00 PM'}</span>
-                      <span><strong>Out:</strong> {room.checkOut || '11:00 AM'}</span>
-                    </div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
                       <div>
                         <span style={{ fontSize: 16, fontWeight: 700, color: '#58A429' }}>₹{Number(room.price).toLocaleString()}</span>

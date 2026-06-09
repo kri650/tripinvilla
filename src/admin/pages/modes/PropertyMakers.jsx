@@ -596,6 +596,8 @@ export default function PropertyMakers() {
       beds: p.beds || 2,
       capacity: p.capacity || 3,
       bathRooms: p.bathRooms || 1,
+      roomType: p.roomType || 'entire-place',
+      foodPreference: p.foodPreference || 'none',
       rules: p.rules || "",
       highlights: p.highlights || {
         breakfastIncluded: false,

@@ -311,12 +311,12 @@ export default function SearchResultsPage(props) {
 
                   {/* Pagination */}
                   {totalPages > 1 && (
-                    <div className="pagination-container" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '8px', marginTop: '32px', marginBottom: '16px' }}>
-                      <button disabled={safeCurrentPage === 1} onClick={() => { setSearchCurrentPage(p => Math.max(p - 1, 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', borderRadius: '50%', border: '1px solid #E5E7EB', background: safeCurrentPage === 1 ? '#F9FAFB' : '#ffffff', color: safeCurrentPage === 1 ? '#9CA3AF' : '#374151', cursor: safeCurrentPage === 1 ? 'not-allowed' : 'pointer', transition: 'all 0.2s' }}>&larr;</button>
+                    <div className="search-pagination">
+                      <button disabled={safeCurrentPage === 1} onClick={() => { setSearchCurrentPage(p => Math.max(p - 1, 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>&larr;</button>
                       {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                        <button key={page} onClick={() => { setSearchCurrentPage(page); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', borderRadius: '50%', border: '1px solid', borderColor: page === safeCurrentPage ? '#58A429' : '#E5E7EB', background: page === safeCurrentPage ? '#58A429' : '#ffffff', color: page === safeCurrentPage ? '#ffffff' : '#374151', fontWeight: '600', fontSize: '14px', cursor: 'pointer', transition: 'all 0.2s' }}>{page}</button>
+                        <button key={page} className={page === safeCurrentPage ? 'active' : ''} onClick={() => { setSearchCurrentPage(page); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>{page}</button>
                       ))}
-                      <button disabled={safeCurrentPage === totalPages} onClick={() => { setSearchCurrentPage(p => Math.min(p + 1, totalPages)); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '38px', height: '38px', borderRadius: '50%', border: '1px solid #E5E7EB', background: safeCurrentPage === totalPages ? '#F9FAFB' : '#ffffff', color: safeCurrentPage === totalPages ? '#9CA3AF' : '#374151', cursor: safeCurrentPage === totalPages ? 'not-allowed' : 'pointer', transition: 'all 0.2s' }}>&rarr;</button>
+                      <button disabled={safeCurrentPage === totalPages} onClick={() => { setSearchCurrentPage(p => Math.min(p + 1, totalPages)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>&rarr;</button>
                     </div>
                   )}
                 </>
