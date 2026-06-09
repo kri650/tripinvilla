@@ -2060,7 +2060,7 @@ export default function AllProperties() {
                           }}
                         >
                           <img
-                            src={url}
+                            src={url.startsWith('http') || url.startsWith('blob:') || url.startsWith('data:') ? url : (typeof API !== 'undefined' ? API : import.meta.env.VITE_API_BASE).replace('/api', '') + url}
                             alt={`img-${idx}`}
                             style={{
                               width: "100%",
@@ -2225,15 +2225,23 @@ export default function AllProperties() {
                   >
                     Check-In Time*
                   </label>
-                  <input
-                    type="text"
-                    className="form-input"
+                  <select
+                    className="form-select"
                     name="checkIn"
                     value={form.checkIn}
                     onChange={handleFormChange}
-                    placeholder="e.g. 3:00 PM"
                     required
-                  />
+                  >
+                    <option value="">Select Time</option>
+                    {Array.from({ length: 48 }).map((_, i) => {
+                      const hrs = Math.floor(i / 2);
+                      const mins = i % 2 === 0 ? '00' : '30';
+                      const ampm = hrs < 12 ? 'AM' : 'PM';
+                      const displayHrs = hrs % 12 || 12;
+                      const timeStr = `${displayHrs.toString().padStart(2, '0')}:${mins} ${ampm}`;
+                      return <option key={timeStr} value={timeStr}>{timeStr}</option>;
+                    })}
+                  </select>
                 </div>
                 <div className="form-group">
                   <label
@@ -2242,15 +2250,23 @@ export default function AllProperties() {
                   >
                     Check-Out Time*
                   </label>
-                  <input
-                    type="text"
-                    className="form-input"
+                  <select
+                    className="form-select"
                     name="checkOut"
                     value={form.checkOut}
                     onChange={handleFormChange}
-                    placeholder="e.g. 12:00 PM"
                     required
-                  />
+                  >
+                    <option value="">Select Time</option>
+                    {Array.from({ length: 48 }).map((_, i) => {
+                      const hrs = Math.floor(i / 2);
+                      const mins = i % 2 === 0 ? '00' : '30';
+                      const ampm = hrs < 12 ? 'AM' : 'PM';
+                      const displayHrs = hrs % 12 || 12;
+                      const timeStr = `${displayHrs.toString().padStart(2, '0')}:${mins} ${ampm}`;
+                      return <option key={timeStr} value={timeStr}>{timeStr}</option>;
+                    })}
+                  </select>
                 </div>
                 <div className="form-group">
                   <label

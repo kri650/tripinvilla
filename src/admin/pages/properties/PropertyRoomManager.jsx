@@ -12,8 +12,6 @@ const emptyRoom = {
   bed_type: '',
   price_per_room: '',
   original_price: '',
-  checkin_time: '3:00 PM',
-  checkout_time: '12:00 PM',
   amenities_types: [],
   offers: [],
   room_images: [''],
@@ -24,9 +22,11 @@ export default function PropertyRoomManager({ property, onClose }) {
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState(emptyRoom);
   const [editingId, setEditingId] = useState(null);
+  const [editingIndex, setEditingIndex] = useState(null);
   const [saving, setSaving] = useState(false);
   const [offerInput, setOfferInput] = useState('');
   const [amenitySearch, setAmenitySearch] = useState('');
+  const [hasChanges, setHasChanges] = useState(false);
   const [customAmenity, setCustomAmenity] = useState('');
 
   const token = localStorage.getItem('admin_token');
@@ -68,7 +68,7 @@ export default function PropertyRoomManager({ property, onClose }) {
     fetchRooms();
     fetch(`${API_BASE}/master/room-types`)
       .then(r => r.json())
-      .then(data => { if(Array.isArray(data)) setRoomTypesMaster(data); })
+      .then(data => { if (Array.isArray(data)) setRoomTypesMaster(data); })
       .catch(console.error);
   }, [property?._id]);
 
@@ -125,22 +125,28 @@ export default function PropertyRoomManager({ property, onClose }) {
     setForm(prev => ({ ...prev, room_images: prev.room_images.filter((_, i) => i !== idx) }));
   };
 
+  // Reset new image files when switching modes
+  const resetImageFiles = () => {
+    setNewImageFiles([]);
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
   const handleSave = async () => {
     if (!form.room_type) { alert('Room Type is required'); return; }
     if (!form.price_per_room) { alert('Price per night is required'); return; }
 
     const formData = new FormData();
     formData.append('property_id', property._id);
+    if (editingIndex !== null) formData.append('room_index', editingIndex);
     formData.append('room_type', form.room_type);
     formData.append('bed_type', form.bed_type);
     formData.append('price_per_room', form.price_per_room);
     if (form.original_price) formData.append('original_price', form.original_price);
-    if (form.checkin_time) formData.append('checkin_time', form.checkin_time);
-    if (form.checkout_time) formData.append('checkout_time', form.checkout_time);
-    
+    if (form.tax_amount) formData.append('tax_amount', form.tax_amount);
+
     formData.append('amenities_types', JSON.stringify(form.amenities_types));
     formData.append('offers', JSON.stringify(form.offers));
-    
+
     // Existing URLs
     const existingImgs = form.room_images.filter(u => u && u.trim());
     formData.append('room_images', JSON.stringify(existingImgs));
@@ -173,8 +179,11 @@ export default function PropertyRoomManager({ property, onClose }) {
       if (res.ok) {
         setForm(emptyRoom);
         setNewImageFiles([]);
+        if (fileInputRef.current) fileInputRef.current.value = '';
         setEditingId(null);
+        setEditingIndex(null);
         setOfferInput('');
+        setHasChanges(true);
         fetchRooms();
       } else {
         const err = await res.json();
@@ -188,19 +197,31 @@ export default function PropertyRoomManager({ property, onClose }) {
     }
   };
 
-  const handleEdit = (room) => {
+  const handleEdit = (room, index) => {
+    // Build existing images array from all possible fields
+    let existingImgs = [];
+    if (Array.isArray(room.images) && room.images.length > 0) {
+      existingImgs = room.images.filter(u => u && u.trim());
+    } else if (Array.isArray(room.room_images) && room.room_images.length > 0) {
+      existingImgs = room.room_images.filter(u => u && u.trim());
+    } else if (room.imageUrl || room.room_image_url || room.img) {
+      existingImgs = [room.imageUrl || room.room_image_url || room.img].filter(Boolean);
+    }
+
     setForm({
       room_type: room.title || room.room_type || '',
       bed_type: room.beds || room.bed_type || '',
       price_per_room: room.price || room.price_per_room || '',
       original_price: room.originalPrice || room.original_price || '',
-      checkin_time: room.checkIn || room.checkin_time || '3:00 PM',
-      checkout_time: room.checkOut || room.checkout_time || '12:00 PM',
+      tax_amount: room.taxAmount || room.tax_amount || '',
       amenities_types: room.features || room.amenities_types || [],
       offers: room.offers || [],
-      room_images: room.images && room.images.length > 0 ? room.images : (room.imageUrl || room.room_image_url || room.img ? [room.imageUrl || room.room_image_url || room.img] : ['']),
+      room_images: existingImgs.length > 0 ? existingImgs : [''],
     });
+    setNewImageFiles([]);  // Clear any pending new files
+    if (fileInputRef.current) fileInputRef.current.value = '';
     setEditingId(room._id);
+    setEditingIndex(room.roomIndex !== undefined ? room.roomIndex : index);
     window.scrollTo({ top: document.getElementById('room-form-section')?.offsetTop || 0, behavior: 'smooth' });
   };
 
@@ -220,7 +241,9 @@ export default function PropertyRoomManager({ property, onClose }) {
   const cancelEdit = () => {
     setForm(emptyRoom);
     setEditingId(null);
+    setEditingIndex(null);
     setOfferInput('');
+    resetImageFiles();
   };
 
   const filteredAmenities = COMMON_AMENITIES.filter(a =>
@@ -239,7 +262,7 @@ export default function PropertyRoomManager({ property, onClose }) {
               <strong style={{ color: '#58A429' }}>{property?.propertyName || property?.name || 'Property'}</strong> — Rooms visible on the detail page
             </p>
           </div>
-          <button onClick={onClose} style={{ background: '#F3F4F6', border: 'none', borderRadius: '50%', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#6B7280' }}>
+          <button onClick={() => onClose(hasChanges)} style={{ background: '#F3F4F6', border: 'none', borderRadius: '50%', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: '#6B7280' }}>
             <X size={18} />
           </button>
         </div>
@@ -277,8 +300,8 @@ export default function PropertyRoomManager({ property, onClose }) {
               </div>
             </div>
 
-            {/* Row 2: Price + Original Price + Check-In + Check-Out */}
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: 16, marginBottom: 16 }}>
+            {/* Row 2: Price + Original Price + Tax Amount */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, marginBottom: 16 }}>
               <div>
                 <label style={labelStyle}>Price / Night (₹) *</label>
                 <input type="number" value={form.price_per_room} onChange={e => setForm(p => ({ ...p, price_per_room: e.target.value }))} placeholder="e.g. 4500" style={inputStyle} />
@@ -288,68 +311,41 @@ export default function PropertyRoomManager({ property, onClose }) {
                 <input type="number" value={form.original_price} onChange={e => setForm(p => ({ ...p, original_price: e.target.value }))} placeholder="e.g. 6000" style={inputStyle} />
               </div>
               <div>
-                <label style={labelStyle}>Check-In Time</label>
-                <select value={form.checkin_time} onChange={e => setForm(p => ({ ...p, checkin_time: e.target.value }))} style={inputStyle}>
-                  <option value="">Select Time</option>
-                  {Array.from({ length: 48 }).map((_, i) => {
-                    const hrs = Math.floor(i / 2);
-                    const mins = i % 2 === 0 ? '00' : '30';
-                    const ampm = hrs < 12 ? 'AM' : 'PM';
-                    const displayHrs = hrs % 12 || 12;
-                    const timeStr = `${displayHrs.toString().padStart(2, '0')}:${mins} ${ampm}`;
-                    return <option key={timeStr} value={timeStr}>{timeStr}</option>;
-                  })}
-                </select>
-              </div>
-              <div>
-                <label style={labelStyle}>Check-Out Time</label>
-                <select value={form.checkout_time} onChange={e => setForm(p => ({ ...p, checkout_time: e.target.value }))} style={inputStyle}>
-                  <option value="">Select Time</option>
-                  {Array.from({ length: 48 }).map((_, i) => {
-                    const hrs = Math.floor(i / 2);
-                    const mins = i % 2 === 0 ? '00' : '30';
-                    const ampm = hrs < 12 ? 'AM' : 'PM';
-                    const displayHrs = hrs % 12 || 12;
-                    const timeStr = `${displayHrs.toString().padStart(2, '0')}:${mins} ${ampm}`;
-                    return <option key={timeStr} value={timeStr}>{timeStr}</option>;
-                  })}
-                </select>
+                <label style={labelStyle}>Tax Amount (₹)</label>
+                <input type="number" value={form.tax_amount} onChange={e => setForm(p => ({ ...p, tax_amount: e.target.value }))} placeholder="e.g. 500" style={inputStyle} />
               </div>
             </div>
 
             {/* Room Images */}
             <div style={{ marginBottom: 16 }}>
               <label style={labelStyle}>Room Images</label>
-              
+
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12, marginBottom: 8 }}>
                 {form.room_images.filter(u => u && u.trim()).map((url, idx) => (
                   <div key={`exist-${idx}`} style={{ position: 'relative', width: 60, height: 60 }}>
-                    <img src={getFullRoomImageUrl(url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 6 }} />
-                    {!editingId && (
-                      <button type="button" onClick={() => removeExistingImage(idx)} style={{ position: 'absolute', top: -6, right: -6, background: '#EF4444', color: '#fff', border: 'none', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 12, padding: 0 }}>×</button>
-                    )}
+                    <img src={getFullRoomImageUrl(url)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 6, border: '1px solid #E5E7EB' }} />
+                    <button type="button" onClick={() => removeExistingImage(idx)} style={{ position: 'absolute', top: -6, right: -6, background: '#EF4444', color: '#fff', border: 'none', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 12, padding: 0 }}>×</button>
                   </div>
                 ))}
 
-                {!editingId && newImageFiles.map((file, idx) => (
+                {newImageFiles.map((file, idx) => (
                   <div key={`new-${idx}`} style={{ position: 'relative', width: 60, height: 60 }}>
-                    <img src={URL.createObjectURL(file)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 6 }} />
+                    <img src={URL.createObjectURL(file)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 6, border: '2px solid #58A429' }} />
+                    <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(88,164,41,0.85)', color: '#fff', fontSize: '8px', textAlign: 'center', borderRadius: '0 0 6px 6px', padding: '1px' }}>New</span>
                     <button type="button" onClick={() => removeNewFile(idx)} style={{ position: 'absolute', top: -6, right: -6, background: '#EF4444', color: '#fff', border: 'none', borderRadius: '50%', width: 20, height: 20, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', fontSize: 12, padding: 0 }}>×</button>
                   </div>
                 ))}
 
-                {!editingId && (
-                  <div 
-                    onClick={() => fileInputRef.current.click()}
-                    style={{ width: 60, height: 60, border: '1px dashed #D1D5DB', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: '#F9FAFB' }}
-                  >
-                    <Plus size={20} color="#9CA3AF" />
-                  </div>
-                )}
+                <div
+                  onClick={() => fileInputRef.current && fileInputRef.current.click()}
+                  style={{ width: 60, height: 60, border: '1px dashed #D1D5DB', borderRadius: 6, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', background: '#F9FAFB' }}
+                >
+                  <Plus size={20} color="#9CA3AF" />
+                </div>
               </div>
-              
-              {!editingId && <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden accept="image/*" />}
-              {editingId && <span style={{ fontSize: '11px', color: '#9CA3AF' }}>Room images cannot be modified during edit</span>}
+
+              <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden accept="image/*" />
+              {editingId && <span style={{ fontSize: '11px', color: '#6B7280' }}>✏️ Editing mode — existing images shown above. Add new ones with the + button.</span>}
             </div>
 
             {/* Amenities */}
@@ -439,7 +435,7 @@ export default function PropertyRoomManager({ property, onClose }) {
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 6 }}>
                       <h4 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: '#111827' }}>{room.title}</h4>
                       <div style={{ display: 'flex', gap: 6 }}>
-                        <button onClick={() => handleEdit(room)} style={{ background: '#EFF6FF', border: 'none', borderRadius: 6, padding: 6, cursor: 'pointer', color: '#2563EB', display: 'flex' }}><Edit2 size={13} /></button>
+                        <button onClick={() => handleEdit(room, i)} style={{ background: '#EFF6FF', border: 'none', borderRadius: 6, padding: 6, cursor: 'pointer', color: '#2563EB', display: 'flex' }}><Edit2 size={13} /></button>
                         <button onClick={() => handleDelete(room._id)} style={{ background: '#FEE2E2', border: 'none', borderRadius: 6, padding: 6, cursor: 'pointer', color: '#EF4444', display: 'flex' }}><Trash2 size={13} /></button>
                       </div>
                     </div>

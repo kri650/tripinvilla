@@ -316,7 +316,7 @@ export default function PropertyRooms() {
                       <td style={{ color: '#58A429', fontWeight: 600, padding: '14px', cursor: 'pointer' }} onClick={() => { setSelectedRequest(p); setTimeout(() => document.getElementById('request-detail-div')?.scrollIntoView({ behavior: 'smooth' }), 100); }}>{p.requestNo || `REQ-${3000 + i}`}</td>
                       <td onClick={() => { setSelectedRequest(p); setTimeout(() => document.getElementById('request-detail-div')?.scrollIntoView({ behavior: 'smooth' }), 100); }} style={{ cursor: 'pointer', padding: '14px' }}>
                         <div style={{ width: 40, height: 30, background: '#E5E7EB', borderRadius: 6, overflow: 'hidden' }}>
-                          <img src={p.image || "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=100&q=80"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
+                          <img src={p.image || p.room_image_url || (p.room_images && p.room_images[0]) || (p.images && p.images[0]) || "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=100&q=80"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
                         </div>
                       </td>
                       <td style={{ color: '#111827', fontWeight: 500, padding: '14px', cursor: 'pointer' }} onClick={() => { setSelectedRequest(p); setTimeout(() => document.getElementById('request-detail-div')?.scrollIntoView({ behavior: 'smooth' }), 100); }}><ReadMore maxWords={6}>{p.propertyName}</ReadMore></td>
@@ -547,19 +547,10 @@ export default function PropertyRooms() {
                         <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
                           <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Discount / Offer</div>
                           <div style={{ fontSize: 14, fontWeight: 600, color: '#D97706' }}>
-                            {room.offer || selectedRequest.offer || '—'}
+                            {(room.offers && room.offers.length > 0) || (selectedRequest.offers && selectedRequest.offers.length > 0)
+                              ? (room.offers || selectedRequest.offers).join(', ')
+                              : '—'}
                           </div>
-                        </div>
-                      </div>
-
-                      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                        <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
-                          <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Check-In</div>
-                          <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{room.checkin_time || selectedRequest.checkin_time || '—'}</div>
-                        </div>
-                        <div style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 10, padding: '10px 14px' }}>
-                          <div style={{ fontSize: 11, color: '#6B7280', fontWeight: 500, marginBottom: 2 }}>Check-Out</div>
-                          <div style={{ fontSize: 13, fontWeight: 600, color: '#111827' }}>{room.checkout_time || selectedRequest.checkout_time || '—'}</div>
                         </div>
                       </div>
                     </div>

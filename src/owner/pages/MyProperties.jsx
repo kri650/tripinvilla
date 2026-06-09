@@ -1360,14 +1360,6 @@ export default function MyProperties({ autoOpenForm = false }) {
                 </div>
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', Math: 'flex-end', marginBottom: '12px', width: '40%' }}>
-                <div>
-                  <label style={labelStyle}>Check-In Time</label>
-                  <input style={inputStyle} type="text" value={roomForm.checkIn} onChange={e => setRoomForm(p => ({ ...p, checkIn: e.target.value }))} placeholder="e.g. 3:00 PM" />
-                </div>
-                <div>
-                  <label style={labelStyle}>Check-Out Time</label>
-                  <input style={inputStyle} type="text" value={roomForm.checkOut} onChange={e => setRoomForm(p => ({ ...p, checkOut: e.target.value }))} placeholder="e.g. 12:00 PM" />
-                </div>
               </div>
               <button type="button"
                 onClick={() => {
@@ -1375,7 +1367,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                   const finalRoomType = roomForm.roomType === 'Other' ? customRoomType : roomForm.roomType;
                   if (roomForm.roomType === 'Other' && !finalRoomType.trim()) { alert('Please enter custom room type.'); return; }
                   setRoomsList(prev => [...prev, { ...roomForm, roomType: finalRoomType, pricePerNight: Number(roomForm.pricePerNight), maxGuests: Number(roomForm.maxGuests), count: Number(roomForm.count) }]);
-                  setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], checkIn: '3:00 PM', checkOut: '12:00 PM' });
+                  setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
                   setCustomRoomType('');
                 }}
                 style={{ padding: '8px 20px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: 600, marginBottom: 12 }}>
@@ -1389,7 +1381,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                       <div style={{ flex: 1 }}>
                         <span style={{ fontWeight: 700, color: '#111827', fontSize: 13 }}>{room.roomName || room.roomType}</span>
                         <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed · {room.maxGuests} guests · {room.count} rooms</span>
-                        <div style={{ color: '#6B7280', fontSize: 12, marginTop: 4 }}>Check In: {room.checkIn || '3:00 PM'} · Check Out: {room.checkOut || '12:00 PM'}</div>
+                        <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed · {room.maxGuests} guests · {room.count} rooms</span>
                         <span style={{ color: '#58A429', fontWeight: 600, fontSize: 13, marginTop: 4, display: 'block' }}>₹{room.pricePerNight}/night</span>
                       </div>
                       <button type="button" onClick={() => setRoomsList(prev => prev.filter((_, i) => i !== idx))}

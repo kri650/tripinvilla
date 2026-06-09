@@ -1387,7 +1387,7 @@ export default function PropertyMakers() {
                       }}
                     >
                       <img
-                        src={url}
+                        src={getFullRoomImageUrl(url)}
                         alt={`img-${idx}`}
                         style={{
                           width: "100%",
@@ -2626,7 +2626,10 @@ export default function PropertyMakers() {
   { managingRoomsProperty && (
     <PropertyRoomManager
       property={managingRoomsProperty}
-      onClose={() => setManagingRoomsProperty(null)}
+      onClose={(hasChanges) => {
+        setManagingRoomsProperty(null);
+        if (hasChanges) fetchProperties();
+      }}
     />
   )}
     </>
