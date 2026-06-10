@@ -923,7 +923,7 @@ export default function AllProperties() {
           className="chart-card"
           style={{ padding: 0, overflow: "visible", borderRadius: 12 }}
         >
-          <div style={{ overflowX: "auto" }}>
+          <div style={{ overflowX: "auto", width: '100%', flex: 1, minHeight: 'min-content' }}>
             <table className="data-table" style={{ whiteSpace: "nowrap" }}>
               <thead>
                 <tr>
