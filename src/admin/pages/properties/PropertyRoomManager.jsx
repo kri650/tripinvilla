@@ -57,7 +57,7 @@ export default function PropertyRoomManager({ property, onClose }) {
   const addCustomAmenity = () => { if(!customAmenity.trim()) return; if(!form.amenities_types.includes(customAmenity.trim())) setForm(p=>({...p,amenities_types:[...p.amenities_types,customAmenity.trim()]})); setCustomAmenity(''); };
   const handleFileChange = (e) => { setNewImageFiles(p=>[...p,...Array.from(e.target.files)]); if(fileInputRef.current) fileInputRef.current.value=''; };
   const removeNewFile = (i) => setNewImageFiles(p=>p.filter((_,j)=>j!==i));
-  const removeExistingImage = (i) => setForm(p=>({...p,room_images:p.room_images.filter((_,j)=>j!==i)}));
+  const removeExistingImage = (urlToRemove) => setForm(p=>({...p,room_images:p.room_images.filter(u=>u!==urlToRemove)}));
   const cancelEdit = () => { setForm(emptyRoom); setEditingId(null); setEditingIndex(null); setOfferInput(''); setNewImageFiles([]); if(fileInputRef.current) fileInputRef.current.value=''; };
 
   const filteredAmenities = COMMON_AMENITIES.filter(a => a.toLowerCase().includes(amenitySearch.toLowerCase()) && !form.amenities_types.includes(a));
@@ -197,7 +197,7 @@ export default function PropertyRoomManager({ property, onClose }) {
                 {form.room_images.filter(u=>u&&u.trim()).map((url,idx)=>(
                   <div key={`e-${idx}`} className="prm-img-thumb">
                     <img src={getFullUrl(url)} alt="" onError={e=>{e.target.src='https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200&q=60';}}/>
-                    <button className="prm-img-remove" type="button" onClick={()=>removeExistingImage(idx)}>×</button>
+                    <button className="prm-img-remove" type="button" onClick={()=>removeExistingImage(url)}>×</button>
                   </div>
                 ))}
                 {newImageFiles.map((file,idx)=>(
