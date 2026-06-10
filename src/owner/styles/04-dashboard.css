@@ -84,7 +84,8 @@
   border-radius: 18px;
   padding: 21px;
   border: 1px solid rgba(0,0,0,0.05);
-  height: 100%;
+  height: auto;
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

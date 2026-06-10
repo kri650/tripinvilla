@@ -1680,12 +1680,12 @@ export default function MyProperties({ autoOpenForm = false }) {
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto', minHeight: '250px' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+          <div style={{ overflowX: 'auto', minHeight: '250px', width: '100%' }}>
+            <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '1050px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
                   {['Property No','Image','Property Name','Location','Category','Price/Night','Rooms','Enquiries','Rating','Status','Actions'].map(h => (
-                    <th key={h} style={{ minWidth: { 'Offer ID': 100, 'Property No': 100, 'Enquiry No': 100, 'Owner No': 100, 'Booking ID': 100, 'Request No': 100, 'Date & Time': 150, 'Dates & Time': 150, 'Check In': 150, 'Check Out': 150, 'Property Name': 200, 'Location': 180, 'Category': 100, 'Room Type': 130, 'Room': 130, 'Foods': 100, 'Amenities': 180, 'Amenities Types': 180, 'Offer %': 100, 'Offer': 100, 'Description': 180, 'Status': 100 }[h], color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px', fontFamily: '"Outfit", sans-serif' }}>{h}</th>
+                    <th key={h} style={{ minWidth: { 'Property No': 100, 'Image': 80, 'Property Name': 200, 'Location': 180, 'Category': 100, 'Price/Night': 100, 'Rooms': 80, 'Enquiries': 90, 'Rating': 80, 'Status': 90, 'Actions': 80 }[h], color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -1698,13 +1698,13 @@ export default function MyProperties({ autoOpenForm = false }) {
                         <img src={p.images?.[0] || 'https://via.placeholder.com/44x34'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
                       </div>
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px' }}>
-                      <ReadMore>{p.name}</ReadMore>
+                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'nowrap' }}>
+                      {p.name}
                     </td>
-                    <td style={{ padding: '14px' }}>
+                    <td style={{ padding: '14px', whiteSpace: 'nowrap' }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
                         <span style={{ fontWeight: 400, color: '#4B5563', fontSize: '13px' }}>
-                          <ReadMore>{p.full_address || p.location || (p.cityName || p.city)}</ReadMore>
+                          {p.full_address || p.location || (p.cityName || p.city)}
                         </span>
                         <span style={{ fontSize: '11px', color: '#9CA3AF' }}>{!p.full_address && !p.location ? (p.stateName || p.state) : ''}</span>
                       </div>
@@ -1722,12 +1722,12 @@ export default function MyProperties({ autoOpenForm = false }) {
                         <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor', display: 'inline-block' }} /> {p.status}
                       </span>
                     </td>
-                      <td style={{ padding: '14px', position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+                      <td style={{ padding: '14px', position: 'relative', overflow: 'visible' }} onClick={(e) => e.stopPropagation()}>
                         <button type="button" onClick={() => setActionMenu(actionMenu === p._id ? null : p._id)} style={{ color: '#6B7280', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', padding: 4 }}>
                           <MoreVertical size={16} />
                         </button>
                         {actionMenu === p._id && (
-                          <div style={{ position: 'absolute', right: 16, top: i >= paginatedProps.length - 2 ? 'auto' : 36, bottom: i >= paginatedProps.length - 2 ? 36 : 'auto', background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 140 }}>
+                          <div style={{ position: 'absolute', right: 16, top: (paginatedProps.length <= 3 || i < paginatedProps.length - 2) ? 36 : 'auto', bottom: (paginatedProps.length <= 3 || i < paginatedProps.length - 2) ? 'auto' : 36, background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 140 }}>
                             <button type="button" onClick={() => { 
                               setActionMenu(null); 
                               setViewingProperty(p); 

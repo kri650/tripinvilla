@@ -174,22 +174,22 @@ export default function Enquiries() {
             </div>
 
             {/* Search Bar */}
-            <div className="props-search-wrap" style={{ display: 'flex', alignItems: 'center', width: '100%', background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '8px 12px', boxSizing: 'border-box' }}>
-              <Search size={14} style={{ color: '#9CA3AF', flexShrink: 0, marginRight: '8px' }} />
+            <div className="props-search-wrap" style={{ width: '100%' }}>
+              <Search size={14} style={{ flexShrink: 0 }} />
               <input
                 type="text"
                 placeholder="Search name/email/query..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ outline: 'none', width: '100%', minWidth: 0, border: 'none', background: 'transparent' }}
+                style={{ outline: 'none', width: '100%', minWidth: 0 }}
               />
             </div>
           </div>
         </div>
 
         {/* Card 2: Table List */}
-        <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
-          <div style={{ overflowX: 'auto', width: '100%' }}>
+        <div className="chart-card" style={{ padding: 0, borderRadius: 12, border: 'none', boxShadow: 'none' }}>
+          <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
             <table className="data-table" style={{ whiteSpace: 'nowrap', minWidth: 800, width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr>

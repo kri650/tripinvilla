@@ -549,10 +549,7 @@
     max-width: 100% !important;
   }
 
-  /* 6) All font sizes scale down on mobile */
-  body, p, span, div, .form-input, .form-select, .form-textarea, .btn, td, th {
-    font-size: clamp(16px, 3vw, 24px);
-  }
+  /* 6) Removed aggressive font-size clamp to prevent UI breakage */
 }
 
 /* Enquiries Filter Row Defaults (Desktop/Tablet) */

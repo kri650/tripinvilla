@@ -93,7 +93,7 @@ function RoomForm({
   const manualRoomType = data.manualRoomType || false;
 
   return (
-    <div className="dash-section room-form-section" style={{ border: isEditMode ? '1px solid #2563EB' : 'none', width: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
+    <div className="dash-section room-form-section" style={{ border: isEditMode ? '1px solid #2563EB' : 'none', boxSizing: 'border-box', overflowX: 'hidden' }}>
       <div className="room-form-header">
         <h3 className="room-form-title">
           {isEditMode ? `Room ${idx + 1}: ${data.room_type || 'New Room'}` : 'Configure Room Pricing & Rules'}
@@ -160,7 +160,7 @@ function RoomForm({
         </div>
       </div>
 
-      <div className="offers-input-section" style={{ width: '100%', boxSizing: 'border-box' }}>
+      <div className="offers-input-section" style={{ boxSizing: 'border-box' }}>
         <label className="form-label">Multiple Offers/Discounts</label>
         <input type="text" className="form-input" 
           placeholder="e.g. 20% Off flat, Breakfast Included" 
@@ -184,7 +184,7 @@ function RoomForm({
         </div>
       </div>
 
-      <div className="amenities-selection-section" style={{ width: '100%', boxSizing: 'border-box' }}>
+      <div className="amenities-selection-section" style={{ boxSizing: 'border-box' }}>
         <label className="form-label-bold">Amenities Types</label>
         {amenitiesLoading ? <div className="loading-msg">Loading amenities...</div> : (
           <div className="amenities-pill-cloud">
@@ -198,7 +198,7 @@ function RoomForm({
         )}
       </div>
 
-      <div className="house-rules-config-box" style={{ width: '100%', boxSizing: 'border-box' }}>
+      <div className="house-rules-config-box" style={{ boxSizing: 'border-box' }}>
         <div className="rules-box-header">
           <label className="form-label-bold">House Rules Sections</label>
           <button type="button" onClick={handleAddRuleSection} className="btn-add-section">

@@ -8,16 +8,12 @@
 
 /* Global Table Layout Fixes */
 table {
-  table-layout: fixed;
   width: 100%;
   min-width: 800px;
 }
 th, td {
   min-width: 80px;
-  max-width: 100%;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 /* EXCEPT columns that have cell-text read more applied */
 td:has(.cell-text) {

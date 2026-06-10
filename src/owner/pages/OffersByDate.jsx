@@ -374,8 +374,8 @@ export default function OffersByDate() {
 
       {/* ══ Section 2: Table Card ══ */}
       <div className="dash-section" style={{ marginBottom: 24, padding: '24px' }}>
-        <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
-          <div style={{ overflowX: 'auto', width: '100%' }}>
+        <div className="chart-card" style={{ padding: 0, borderRadius: 12, border: 'none', boxShadow: 'none' }}>
+          <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap', minWidth: 1000 }}>
               <thead>
                 <tr>

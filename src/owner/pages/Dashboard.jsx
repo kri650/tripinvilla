@@ -130,14 +130,14 @@ export default function Dashboard() {
 
       {/* ══ Section 2: Recent Enquiries ══════ */}
       <div className="dash-section" style={{ marginBottom: 24 }}>
-        <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
+        <div className="chart-card" style={{ padding: 0, borderRadius: 12, border: 'none', boxShadow: 'none' }}>
           <div className="table-header" style={{ padding: '14px 20px' }}>
             <span className="table-title">Recent Enquiries</span>
             <div className="table-header-right">
               <button className="table-view-all" onClick={() => navigate('/owner/enquiries')} style={{ cursor: 'pointer' }}>View All</button>
             </div>
           </div>
-          <div style={{ overflowX: 'auto', width: '100%' }}>
+          <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
             <table className="data-table" style={{ tableLayout: 'fixed', width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
