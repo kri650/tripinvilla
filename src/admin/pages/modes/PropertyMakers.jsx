@@ -2579,49 +2579,38 @@ export default function PropertyMakers() {
                 <td style={{ color: "#6B7280" }}>{p.ownerName}</td>
                 <td style={{ color: "#6B7280" }}>{p.ownerContact}</td>
                 <td style={{ color: "#6B7280" }}>
-                  {Array.isArray(p.amenities)
-                    ? p.amenities.slice(0, 2).join(", ") +
-                    (p.amenities.length > 2 ? "..." : "")
-                    : ""}
+                  <ReadMore>
+                    {Array.isArray(p.amenities) ? p.amenities.join(", ") : ""}
+                  </ReadMore>
                 </td>
                 <td style={{ color: "#6B7280" }}>
-                  {Array.isArray(p.experiences)
-                    ? p.experiences
-                      .map((e) => {
-                        if (!e) return '';
-                        if (typeof e === 'string') {
-                          const matchedExp = availableExperiences.find(x => x._id === e || x.id === e);
-                          if (matchedExp) return matchedExp.experienceName || matchedExp.name;
-                          return /^[0-9a-fA-F]{24}$/.test(e) ? "" : e;
-                        }
-                        return e.experienceName || e.name || e || '';
-                      })
-                      .filter(Boolean)
-                      .slice(0, 2)
-                      .join(", ") +
-                    (p.experiences.filter(Boolean).length > 2 ? "..." : "")
-                    : ""}
+                  <ReadMore>
+                    {Array.isArray(p.experiences)
+                      ? p.experiences
+                        .map((e) => {
+                          if (!e) return '';
+                          if (typeof e === 'string') {
+                            const matchedExp = availableExperiences.find(x => x._id === e || x.id === e);
+                            if (matchedExp) return matchedExp.experienceName || matchedExp.name;
+                            return /^[0-9a-fA-F]{24}$/.test(e) ? "" : e;
+                          }
+                          return e.experienceName || e.name || e || '';
+                        })
+                        .filter(Boolean)
+                        .join(", ")
+                      : ""}
+                  </ReadMore>
                 </td>
                 <td style={{ color: "#6B7280" }}><ReadMore maxWords={6}>{p.location}</ReadMore></td>
-                <td
-                  style={{
-                    color: "#6B7280",
-                    maxWidth: 150,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {p.full_address || p.location}
+                <td style={{ color: "#6B7280" }}>
+                  <ReadMore>
+                    {p.full_address || p.location}
+                  </ReadMore>
                 </td>
-                <td
-                  style={{
-                    color: "#6B7280",
-                    maxWidth: 150,
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {p.aboutProperty || p.description}
+                <td style={{ color: "#6B7280" }}>
+                  <ReadMore>
+                    {p.aboutProperty || p.description}
+                  </ReadMore>
                 </td>
                 <td>
                   <span

@@ -1,32 +1,53 @@
 import { useState } from 'react';
 
-export default function ReadMore({ children, maxWords = 6 }) {
+export default function ReadMore({ children, maxChars = 50 }) {
   const [expanded, setExpanded] = useState(false);
   
-  if (children === null || children === undefined) return null;
+  if (children === null || children === undefined || children === '') return null;
   if (typeof children !== 'string' && typeof children !== 'number') {
     return <>{children}</>;
   }
 
   const text = String(children);
-  const words = text.split(/\s+/);
 
-  if (words.length <= maxWords) {
-    return <span className="read-more-text" style={{ whiteSpace: 'normal', overflowWrap: 'anywhere', wordBreak: 'break-word', display: 'inline-block', width: 'min(250px, 100%)', maxWidth: '100%' }}>{text}</span>;
+  if (text.length <= maxChars) {
+    return <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', display: 'inline-block', maxWidth: '300px' }}>{text}</span>;
   }
 
   return (
-    <span className="read-more-text" style={{ whiteSpace: 'normal', overflowWrap: 'anywhere', wordBreak: 'break-word', display: 'inline-block', width: 'min(250px, 100%)', maxWidth: '100%' }}>
-      {expanded ? text : words.slice(0, maxWords).join(' ') + '... '}
+    <div style={{ maxWidth: '300px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
       <span 
+        className={`cell-text ${expanded ? 'expanded' : ''}`}
+        style={{
+          display: expanded ? 'block' : '-webkit-box',
+          WebkitLineClamp: expanded ? 'unset' : 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          lineHeight: 1.4
+        }}
+      >
+        {text}
+      </span>
+      <button 
+        className="read-more-btn"
         onClick={(e) => { 
           e.stopPropagation(); 
           setExpanded(!expanded); 
         }} 
-        style={{ color: 'black', cursor: 'pointer', fontWeight: 500, fontSize: '0.9em', marginLeft: '4px', whiteSpace: 'nowrap' }}
+        style={{
+          fontSize: '12px',
+          color: '#6c757d',
+          cursor: 'pointer',
+          background: 'none',
+          border: 'none',
+          padding: 0,
+          marginTop: '2px',
+          textDecoration: 'underline'
+        }}
       >
         {expanded ? 'read less' : 'read more'}
-      </span>
-    </span>
+      </button>
+    </div>
   );
 }
