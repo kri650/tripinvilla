@@ -2684,23 +2684,35 @@ export default function PropertyMakers() {
 
     {/* Pagination Controls */}
     {totalPages > 1 && (
-      <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px', padding: '16px' }}>
-        <button
-          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-          disabled={currentPage === 1}
-          style={{ background: '#F3F4F6', color: currentPage === 1 ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
-        >
-          Previous
-        </button>
-        <span style={{ fontSize: '13px', color: '#6B7280', fontWeight: 500 }}>
+      <div style={{ position: 'sticky', bottom: 0, zIndex: 10, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'flex-end', alignItems: 'center', padding: '16px 24px', borderTop: '1px solid #F3F4F6', background: '#fff', borderBottomLeftRadius: 12, borderBottomRightRadius: 12, width: '100%', boxSizing: 'border-box' }}>
+        <span style={{ fontSize: '13px', color: '#6B7280' }}>
           Page {currentPage} of {totalPages}
         </span>
         <button
+          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+          disabled={currentPage === 1}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === 1 ? '#F9FAFB' : '#fff', color: currentPage === 1 ? '#D1D5DB' : '#374151', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+        >
+          ‹
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
+          if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
+            return (
+              <button key={page} onClick={() => setCurrentPage(page)}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === page ? '#58A429' : '#fff', color: currentPage === page ? '#fff' : '#374151', cursor: 'pointer', fontWeight: currentPage === page ? 600 : 400 }}
+              >{page}</button>
+            );
+          }
+          if (page === 2 && currentPage > 3) return <span key={page} style={{ color: '#9CA3AF', padding: '0 2px' }}>...</span>;
+          if (page === totalPages - 1 && currentPage < totalPages - 2) return <span key={page} style={{ color: '#9CA3AF', padding: '0 2px' }}>...</span>;
+          return null;
+        })}
+        <button
           onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
-          style={{ background: '#F3F4F6', color: currentPage === totalPages ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === totalPages ? '#F9FAFB' : '#fff', color: currentPage === totalPages ? '#D1D5DB' : '#374151', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
         >
-          Next
+          ›
         </button>
       </div>
     )}

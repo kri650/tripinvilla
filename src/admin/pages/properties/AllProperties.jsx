@@ -859,7 +859,16 @@ export default function AllProperties() {
           >
             <div className="props-table-title" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>All Properties</div>
             <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'nowrap', minWidth: 0, overflowX: 'auto' }}>
-              {/* DateRangeDropdown removed as per user request */}
+              <div style={{ flexShrink: 0 }}>
+                <DateRangeDropdown 
+                  startDate={dateFrom}
+                  endDate={dateTo}
+                  onChange={(start, end) => {
+                    setDateFrom(start);
+                    setDateTo(end);
+                  }}
+                />
+              </div>
               <div
                 className="props-filter-select"
                 style={{

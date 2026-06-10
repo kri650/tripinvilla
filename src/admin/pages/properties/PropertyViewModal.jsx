@@ -219,7 +219,7 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
               <Calendar size={14} color="#58A429" /> In: <strong>{checkIn}</strong>
             </div>
             <div style={{ fontSize: '14px', color: '#111827', display: 'flex', alignItems: 'center', gap: 6 }}>
-              <Calendar size={14} color="#DC2626" /> Out: <strong>{checkOut}</strong>
+              <Calendar size={14} color="#6B7280" /> Out: <strong>{checkOut}</strong>
             </div>
           </div>
 
@@ -352,7 +352,7 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
                               </div>
                             </div>
                             <div style={{ textAlign: 'right' }}>
-                              <div style={{ fontSize: '18px', fontWeight: 700, color: '#10B981' }}>
+                              <div style={{ fontSize: '18px', fontWeight: 700, color: '#58A429' }}>
                                 ₹{Number(roomPrice).toLocaleString()}
                               </div>
                               <div style={{ fontSize: '12px', color: '#6B7280' }}>per night</div>
@@ -364,7 +364,7 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
                               <div style={{ fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: '6px' }}>Room Amenities</div>
                               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                                 {roomAmenities.map((am, i) => (
-                                  <span key={i} style={{ padding: '4px 10px', background: '#E0E7FF', color: '#4338CA', borderRadius: '6px', fontSize: '11px', fontWeight: 600 }}>
+                                  <span key={i} style={{ padding: '4px 10px', background: '#E8F5E0', color: '#58A429', borderRadius: '6px', fontSize: '11px', fontWeight: 600, border: '1px solid #C6E6A0' }}>
                                     {am}
                                   </span>
                                 ))}
@@ -378,8 +378,8 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
                               <div style={{ fontSize: '12px', fontWeight: 600, color: '#374151', marginBottom: '6px' }}>Room Rules</div>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                                 {validRules.map((rule, ri) => (
-                                  <div key={ri} style={{ background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '6px', padding: '6px 10px', fontSize: '11px', color: '#78350F' }}>
-                                    <strong style={{ color: '#B45309' }}>{rule.title || 'Rule'}:</strong> {rule.points.join(', ')}
+                                  <div key={ri} style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '6px', padding: '6px 10px', fontSize: '11px', color: '#374151' }}>
+                                    <strong style={{ color: '#111827' }}>{rule.title || 'Rule'}:</strong> {rule.points.join(', ')}
                                   </div>
                                 ))}
                               </div>
@@ -414,23 +414,21 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
               <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 12px 0' }}>Property Rules</h3>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                 {validDynamicRules.map((sec, sIdx) => (
-                  <div key={sIdx} style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '10px', padding: '14px 16px' }}>
-                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#B91C1C', marginBottom: '8px' }}>
-                      {sec.title}
+                  <div key={sIdx} style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '10px', padding: '14px 16px' }}>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#111827', marginBottom: '8px', display: 'flex', alignItems: 'center', gap: 6 }}>
+                      <Shield size={13} color="#58A429" /> {sec.title}
                     </div>
                     <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                      {/* Handle sec.text (newline-separated string) */}
                       {sec.text && sec.text.trim() !== '' &&
                         sec.text.split('\n')
                           .map(line => line.replace(/^[•*\-]\s*/, '').trim())
                           .filter(line => line !== '')
                           .map((line, lIdx) => (
-                            <li key={lIdx} style={{ fontSize: '13px', color: '#991B1B', lineHeight: 1.6 }}>{line}</li>
+                            <li key={lIdx} style={{ fontSize: '13px', color: '#4B5563', lineHeight: 1.6 }}>{line}</li>
                           ))
                       }
-                      {/* Handle sec.points (array) */}
                       {Array.isArray(sec.points) && sec.points.map((point, pIdx) => (
-                        <li key={pIdx} style={{ fontSize: '13px', color: '#991B1B', lineHeight: 1.6 }}>{point}</li>
+                        <li key={pIdx} style={{ fontSize: '13px', color: '#4B5563', lineHeight: 1.6 }}>{point}</li>
                       ))}
                     </ul>
                   </div>
@@ -443,8 +441,8 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
         {/* House Rules — static string fallback, only if no dynamic rules */}
         {rules && (
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: 6 }}><Shield size={16} color="#DC2626" /> House Rules</h3>
-            <div style={{ background: '#FEF2F2', padding: '14px 16px', borderRadius: '10px', color: '#991B1B', fontSize: '13px', lineHeight: 1.7, whiteSpace: 'pre-wrap', border: '1px solid #FECACA' }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 8px 0', display: 'flex', alignItems: 'center', gap: 6 }}><Shield size={16} color="#58A429" /> House Rules</h3>
+            <div style={{ background: '#F9FAFB', padding: '14px 16px', borderRadius: '10px', color: '#4B5563', fontSize: '13px', lineHeight: 1.7, whiteSpace: 'pre-wrap', border: '1px solid #E5E7EB' }}>
               {rules}
             </div>
           </div>

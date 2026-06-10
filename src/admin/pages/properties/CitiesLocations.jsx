@@ -162,12 +162,12 @@ export default function CitiesLocations() {
                   filteredCities.map((c, i) => (
                     <tr key={`${c._id || 'city'}-${i}`}>
                       <td 
-                        style={{ color: '#58A429', fontWeight: 600, cursor: 'pointer' }}
+                        style={{ color: '#58A429', fontWeight: 600, cursor: 'pointer', whiteSpace: 'nowrap' }}
                         onClick={() => navigate(`/admin/properties/all?city=${encodeURIComponent(c.cityName)}`)}
                       >
-                        <ReadMore maxWords={6}>{c.cityName}</ReadMore>
+                        {c.cityName}
                       </td>
-                      <td style={{ color: '#6B7280' }}><ReadMore maxWords={6}>{c.stateName}</ReadMore></td>
+                      <td style={{ color: '#6B7280', whiteSpace: 'nowrap' }}>{c.stateName}</td>
                       <td style={{ color: '#6B7280', fontWeight: 600 }}>{c.totalProperties} Properties</td>
                       <td style={{ color: '#6B7280' }}>{c.homestays}</td>
                       <td style={{ color: '#6B7280' }}>{c.resorts}</td>

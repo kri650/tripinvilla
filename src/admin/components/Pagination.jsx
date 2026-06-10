@@ -6,7 +6,7 @@ export default function Pagination({ currentPage, totalItems, itemsPerPage = 10,
   if (totalPages <= 1) return null;
 
   return (
-    <div style={{ position: 'sticky', bottom: 0, zIndex: 10, display: 'flex', flexWrap: 'wrap', gap: 16, justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderTop: '1px solid #F3F4F6', background: '#fff', borderBottomLeftRadius: 16, borderBottomRightRadius: 16, width: '100%' }}>
+    <div style={{ position: 'sticky', bottom: 0, zIndex: 10, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'flex-end', alignItems: 'center', padding: '16px 24px', borderTop: '1px solid #F3F4F6', background: '#fff', borderBottomLeftRadius: 16, borderBottomRightRadius: 16, width: '100%', boxSizing: 'border-box' }}>
       <div style={{ fontSize: 13, color: '#6B7280' }}>
         Showing {Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} entries
       </div>
@@ -20,7 +20,6 @@ export default function Pagination({ currentPage, totalItems, itemsPerPage = 10,
         </button>
         
         {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
-          // Show max 5 page numbers: first, last, current, current-1, current+1
           if (
             page === 1 || 
             page === totalPages || 
