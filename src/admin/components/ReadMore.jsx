@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 
-export default function ReadMore({ children, maxChars = 50 }) {
+export default function ReadMore({ children }) {
   const [expanded, setExpanded] = useState(false);
+  const [isClamped, setIsClamped] = useState(false);
+  const textRef = useRef(null);
   
   if (children === null || children === undefined || children === '') return null;
   if (typeof children !== 'string' && typeof children !== 'number') {
@@ -10,44 +12,44 @@ export default function ReadMore({ children, maxChars = 50 }) {
 
   const text = String(children);
 
-  if (text.length <= maxChars) {
-    return <span style={{ whiteSpace: 'normal', wordBreak: 'break-word', display: 'inline-block', maxWidth: '300px' }}>{text}</span>;
-  }
+  const checkOverflow = () => {
+    if (textRef.current) {
+      // If expanded is false, scrollHeight > clientHeight when clamped
+      // We only measure when not expanded to avoid false negatives
+      if (!expanded) {
+        setIsClamped(textRef.current.scrollHeight > textRef.current.clientHeight);
+      }
+    }
+  };
+
+  useLayoutEffect(() => {
+    checkOverflow();
+  }, [text]);
+
+  useEffect(() => {
+    window.addEventListener('resize', checkOverflow);
+    return () => window.removeEventListener('resize', checkOverflow);
+  }, [expanded]);
 
   return (
-    <div style={{ maxWidth: '300px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
+    <div style={{ whiteSpace: 'normal', wordBreak: 'break-word', minWidth: 0 }}>
       <span 
+        ref={textRef}
         className={`cell-text ${expanded ? 'expanded' : ''}`}
-        style={{
-          display: expanded ? 'block' : '-webkit-box',
-          WebkitLineClamp: expanded ? 'unset' : 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          lineHeight: 1.4
-        }}
       >
         {text}
       </span>
-      <button 
-        className="read-more-btn"
-        onClick={(e) => { 
-          e.stopPropagation(); 
-          setExpanded(!expanded); 
-        }} 
-        style={{
-          fontSize: '12px',
-          color: '#6c757d',
-          cursor: 'pointer',
-          background: 'none',
-          border: 'none',
-          padding: 0,
-          marginTop: '2px',
-          textDecoration: 'underline'
-        }}
-      >
-        {expanded ? 'read less' : 'read more'}
-      </button>
+      {(isClamped || expanded) && (
+        <button 
+          className="read-more-btn"
+          onClick={(e) => { 
+            e.stopPropagation(); 
+            setExpanded(!expanded); 
+          }} 
+        >
+          {expanded ? 'read less' : 'read more'}
+        </button>
+      )}
     </div>
   );
 }

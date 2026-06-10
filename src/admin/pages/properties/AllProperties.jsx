@@ -1011,28 +1011,28 @@ export default function AllProperties() {
                         </div>
                       </td>
                       <td style={{ color: "#111827", fontWeight: 500 }}>
-                        <ReadMore maxWords={6}>{p.propertyName || p.name}</ReadMore>
+                        <ReadMore>{p.propertyName || p.name}</ReadMore>
                       </td>
                       <td style={{ color: "#6B7280" }}>
-                        <ReadMore maxWords={6}>
+                        <ReadMore>
                           {p.full_address || p.location || (p.city + (p.state ? ', ' + p.state : ''))}
                         </ReadMore>
                       </td>
                       <td>
                         <span className="category-pill">
-                          {p.category || p.type}
+                          <ReadMore>{p.category || p.type}</ReadMore>
                         </span>
                       </td>
                       <td style={{ color: "#111827", fontWeight: 600 }}>
-                        ₹{(p.bestRoomRate || p.price || 0).toLocaleString()}
+                        <ReadMore>₹{(p.bestRoomRate || p.price || 0).toLocaleString()}</ReadMore>
                       </td>
                       <td style={{ color: "#6B7280" }}>
-                        {p.rooms || p.bedRooms || "—"}
+                        <ReadMore>{p.rooms || p.bedRooms || "—"}</ReadMore>
                       </td>
                       <td style={{ color: "#6B7280" }}>
-                        {p.totalEnquiries ?? 0}
+                        <ReadMore>{p.totalEnquiries ?? 0}</ReadMore>
                       </td>
-                      <td style={{ color: "#6B7280" }}>{p.rating || "—"}</td>
+                      <td style={{ color: "#6B7280" }}><ReadMore>{p.rating || "—"}</ReadMore></td>
                       <td>
                         <button
                           onClick={() => toggleStatus(p._id, p.status)}

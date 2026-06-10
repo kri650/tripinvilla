@@ -12,8 +12,10 @@ export default function OffersByDate() {
   const [foods, setFoods] = useState('Pure Veg');
   const [amenities, setAmenities] = useState('');
   const [price, setPrice] = useState('');
-  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
-  const [time, setTime] = useState('9:00 AM');
+  const [dateFrom, setDateFrom] = useState(new Date().toISOString().split('T')[0]);
+  const [dateTo, setDateTo] = useState(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
+  const [timeFrom, setTimeFrom] = useState('12:00');
+  const [timeTo, setTimeTo] = useState('11:00');
   const [offerPercent, setOfferPercent] = useState('20% Off');
   const [description, setDescription] = useState('Offer will applicable on first book');
 
@@ -126,8 +128,10 @@ export default function OffersByDate() {
       const payload = {
         property_id: propertyId,
         food_type: foods,
-        offer_date: date,
-        offer_time: time,
+        offer_date: dateTo,
+        dateFrom: dateFrom,
+        dateTo: dateTo,
+        offer_time: `${timeFrom} to ${timeTo}`,
         offer_percent: offerPercent,
         description: description
       };
@@ -277,27 +281,50 @@ export default function OffersByDate() {
 
           {/* Form Fields Grid - Row 3 */}
           <div className="form-grid-3">
-            <div className="form-group">
-              <label className="form-label">Date (Valid Offer Date)*</label>
-              <input 
-                type="date" 
-                className="form-input" 
-                value={date} 
-                onChange={(e) => setDate(e.target.value)}
-                required
-              />
+            <div className="form-group" style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ flex: 1 }}>
+                <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>Valid From*</label>
+                <input 
+                  type="date" 
+                  className="form-input" 
+                  value={dateFrom} 
+                  onChange={(e) => setDateFrom(e.target.value)}
+                  required
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>Valid To*</label>
+                <input 
+                  type="date" 
+                  className="form-input" 
+                  value={dateTo} 
+                  onChange={(e) => setDateTo(e.target.value)}
+                  required
+                />
+              </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Time (Offer Start Time)*</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                value={time} 
-                onChange={(e) => setTime(e.target.value)}
-                placeholder="e.g. 9:00 AM"
-                required
-              />
+            <div className="form-group" style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ flex: 1 }}>
+                <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>Start Time*</label>
+                <input 
+                  type="time" 
+                  className="form-input" 
+                  value={timeFrom} 
+                  onChange={(e) => setTimeFrom(e.target.value)}
+                  required
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>End Time*</label>
+                <input 
+                  type="time" 
+                  className="form-input" 
+                  value={timeTo} 
+                  onChange={(e) => setTimeTo(e.target.value)}
+                  required
+                />
+              </div>
             </div>
 
             <div className="form-group">
@@ -371,18 +398,18 @@ export default function OffersByDate() {
                   <tr key={o._id}>
                     <td style={{ color: '#58A429', fontWeight: 600, padding: '14px 16px' }}>{o.id}</td>
                     <td style={{ color: '#6B7280', padding: '14px 16px' }}>{o.dates}</td>
-                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}><ReadMore maxWords={6}>{o.name}</ReadMore></td>
-                    <td style={{ color: '#6B7280', padding: '14px 16px' }}><ReadMore maxWords={6}>{o.location}</ReadMore></td>
+                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}><ReadMore>{o.name}</ReadMore></td>
+                    <td style={{ color: '#6B7280', padding: '14px 16px' }}><ReadMore>{o.location}</ReadMore></td>
                     <td style={{ padding: '14px 16px' }}>
                       <span className="category-pill" style={{ background: '#F0FAF6', color: '#1d9e75', fontWeight: 500, padding: '3px 10px', borderRadius: '4px', fontSize: '11px' }}>
-                        {o.category}
+                        <ReadMore>{o.category}</ReadMore>
                       </span>
                     </td>
-                    <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.room}</td>
-                    <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.foods}</td>
-                    <td style={{ color: '#4B5563', padding: '14px 16px', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis' }}>{o.amenities}</td>
-                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}>{o.offer}</td>
-                    <td style={{ color: '#6B7280', padding: '14px 16px', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '200px' }}>{o.desc}</td>
+                    <td style={{ color: '#4B5563', padding: '14px 16px' }}><ReadMore>{o.room}</ReadMore></td>
+                    <td style={{ color: '#4B5563', padding: '14px 16px' }}><ReadMore>{o.foods}</ReadMore></td>
+                    <td style={{ color: '#4B5563', padding: '14px 16px' }}><ReadMore>{o.amenities}</ReadMore></td>
+                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}><ReadMore>{o.offer}</ReadMore></td>
+                    <td style={{ color: '#6B7280', padding: '14px 16px' }}><ReadMore>{o.desc}</ReadMore></td>
                     <td style={{ padding: '14px 16px' }}>
                       {o.status.toLowerCase() === 'active'
                         ? <span className="status-pill active" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, background: '#DCFCE7', color: '#58A429' }}>

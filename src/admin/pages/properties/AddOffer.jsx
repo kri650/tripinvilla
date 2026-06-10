@@ -20,8 +20,10 @@ export default function AddOffer() {
     foods: 'Pure Veg',
     amenities: 'Barbeque, WiFi',
     price: '₹2,500 per night',
-    date: new Date().toISOString().split('T')[0],
-    time: '9:00 AM',
+    dateFrom: new Date().toISOString().split('T')[0],
+    dateTo: new Date(Date.now() + 86400000).toISOString().split('T')[0],
+    timeFrom: '12:00',
+    timeTo: '11:00',
     offerPercent: '20% Off',
     description: '',
     status: 'Active'
@@ -59,8 +61,10 @@ export default function AddOffer() {
               foods: offerData.food_type || offerData.foods || 'Pure Veg',
               amenities: offerData.amenities ? (Array.isArray(offerData.amenities) ? offerData.amenities.join(', ') : offerData.amenities) : '',
               price: offerData.price ? `₹${offerData.price} per night` : '',
-              date: offerDate,
-              time: offerData.offer_time || '9:00 AM',
+              dateFrom: offerData.dateFrom ? new Date(offerData.dateFrom).toISOString().split('T')[0] : (offerData.offer_date ? new Date(offerData.offer_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
+              dateTo: offerData.dateTo ? new Date(offerData.dateTo).toISOString().split('T')[0] : (offerData.offer_date ? new Date(offerData.offer_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
+              timeFrom: offerData.offer_time ? offerData.offer_time.split(' to ')[0] : '12:00',
+              timeTo: offerData.offer_time && offerData.offer_time.includes(' to ') ? offerData.offer_time.split(' to ')[1] : '11:00',
               offerPercent: offerData.offer_percent || offerData.offerPercent || '20% Off',
               description: offerData.description || '',
               status: offerData.status ? offerData.status.charAt(0).toUpperCase() + offerData.status.slice(1) : 'Active'
@@ -148,8 +152,10 @@ export default function AddOffer() {
         body: JSON.stringify({
           property_id: selectedPropertyId,
           food_type: formData.foods,
-          offer_date: formData.date,
-          offer_time: formData.time,
+          offer_date: formData.dateTo,
+          dateFrom: formData.dateFrom,
+          dateTo: formData.dateTo,
+          offer_time: `${formData.timeFrom} to ${formData.timeTo}`,
           offer_percent: formData.offerPercent,
           description: formData.description,
           status: formData.status
@@ -306,15 +312,27 @@ export default function AddOffer() {
 
           {/* Row 3 */}
           <div className="form-grid-3">
-            <div className="form-group">
-              <label className="form-label">Valid Until Date*</label>
-              <input 
-                type="date" 
-                required 
-                className="form-input" 
-                value={formData.date}
-                onChange={e => setFormData({...formData, date: e.target.value})}
-              />
+            <div className="form-group" style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ flex: 1 }}>
+                <label className="form-label">Valid From*</label>
+                <input 
+                  type="date" 
+                  required 
+                  className="form-input" 
+                  value={formData.dateFrom}
+                  onChange={e => setFormData({...formData, dateFrom: e.target.value})}
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label className="form-label">Valid To*</label>
+                <input 
+                  type="date" 
+                  required 
+                  className="form-input" 
+                  value={formData.dateTo}
+                  onChange={e => setFormData({...formData, dateTo: e.target.value})}
+                />
+              </div>
             </div>
             <div className="form-group">
               <label className="form-label">Offer Discount (e.g. 20% Off)*</label>
@@ -345,6 +363,32 @@ export default function AddOffer() {
           </div>
 
           {/* Row 4 */}
+          <div className="form-grid-3">
+            <div className="form-group" style={{ display: 'flex', gap: '12px' }}>
+              <div style={{ flex: 1 }}>
+                <label className="form-label">Start Time*</label>
+                <input 
+                  type="time" 
+                  className="form-input" 
+                  value={formData.timeFrom} 
+                  onChange={(e) => setFormData({...formData, timeFrom: e.target.value})}
+                  required
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <label className="form-label">End Time*</label>
+                <input 
+                  type="time" 
+                  className="form-input" 
+                  value={formData.timeTo} 
+                  onChange={(e) => setFormData({...formData, timeTo: e.target.value})}
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Row 5 */}
           <div className="form-grid-1" style={{ marginBottom: 0 }}>
             <div className="form-group">
               <label className="form-label">Description*</label>

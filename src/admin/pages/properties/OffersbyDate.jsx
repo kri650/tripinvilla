@@ -221,13 +221,14 @@ export default function OffersbyDate() {
                           ) : 'N/A';
                         })()}
                       </td>
-                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px' }}><ReadMore maxWords={6}>{o.propertyName}</ReadMore></td>
-                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}><ReadMore maxWords={6}>{o.location}</ReadMore></td>
-                      <td style={{ padding: '14px' }}><span className="category-pill">{o.category}</span></td>
-                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}>{o.room}</td>
-                      <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore maxWords={6}>{o.foods}</ReadMore></td>
-                      <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore maxWords={6}>{Array.isArray(o.amenities) ? o.amenities.join(', ') : o.amenities}</ReadMore></td>
+                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px' }}><ReadMore>{o.propertyName}</ReadMore></td>
+                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}><ReadMore>{o.location}</ReadMore></td>
+                      <td style={{ padding: '14px' }}><span className="category-pill"><ReadMore>{o.category}</ReadMore></span></td>
+                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}><ReadMore>{o.room}</ReadMore></td>
+                      <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore>{o.foods}</ReadMore></td>
+                      <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore>{Array.isArray(o.amenities) ? o.amenities.join(', ') : o.amenities}</ReadMore></td>
                       <td style={{ color: '#111827', fontWeight: 600, padding: '14px' }}>
+                        <ReadMore>
                         {(() => {
                           const val = o.offerPercent || o.offer || '20% Off';
                           const str = String(val).trim();
@@ -235,8 +236,9 @@ export default function OffersbyDate() {
                           if (str.endsWith('%')) return `${str} Off`;
                           return `${str}% Off`;
                         })()}
+                        </ReadMore>
                       </td>
-                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}><ReadMore maxWords={6}>{o.description}</ReadMore></td>
+                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}><ReadMore>{o.description}</ReadMore></td>
                       <td style={{ padding: '14px' }}>
                         {o.status && o.status.toLowerCase() === 'active' ? (
                           <span className="status-pill active">Active</span>

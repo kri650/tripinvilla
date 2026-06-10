@@ -198,19 +198,19 @@ export default function Enquiries() {
         </div>
 
         {/* Desktop Table View */}
-        <div className="hidden-mobile desktop-table-wrapper" style={{ overflowX: 'auto' }}>
-          <table className="admin-table admin-enquiries-table">
+        <div className="hidden-mobile desktop-table-wrapper" style={{ overflowX: 'auto', width: '100%' }}>
+          <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap' }}>
             <thead>
-              <tr>
-                <th>Enquiry No</th>
-                <th>Date & Time</th>
-                <th>User Name</th>
-                <th>Phone No</th>
-                <th>Email Address</th>
-                <th>Property</th>
-                <th>Query</th>
-                <th>Status</th>
-                <th>Reply</th>
+              <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Enquiry No</th>
+                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Date & Time</th>
+                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>User Name</th>
+                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Phone No</th>
+                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Email Address</th>
+                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Property</th>
+                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Query</th>
+                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Status</th>
+                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Reply</th>
               </tr>
             </thead>
             <tbody>
@@ -220,25 +220,25 @@ export default function Enquiries() {
                 <tr><td colSpan="9" style={{ textAlign: 'center', padding: '32px', color: '#6B7280' }}>No enquiries found</td></tr>
               ) : (
                 paginated.map((e, idx) => (
-                  <tr key={e._id || idx}>
-                    <td><span className="admin-id-link">{e.enquiryNo || `ENQ-${4000 + idx}`}</span></td>
-                    <td style={{ whiteSpace: 'nowrap', fontSize: '12px' }}>
+                  <tr key={e._id || idx} style={{ borderBottom: '1px solid #F3F4F6' }}>
+                    <td style={{ padding: '14px' }}><span className="admin-id-link">{e.enquiryNo || `ENQ-${4000 + idx}`}</span></td>
+                    <td style={{ padding: '14px', color: '#9CA3AF', fontSize: '13px' }}>
                       {e.createdAt ? new Date(e.createdAt).toLocaleString('en-IN', { dateStyle: 'medium', timeStyle: 'short' }) : '—'}
                     </td>
-                    <td className="enquiry-wrap-cell" style={{ color: '#111827', fontWeight: 500 }}><ReadMore maxWords={6}>{e.user_name || e.name || '—'}</ReadMore></td>
-                    <td className="enquiry-wrap-cell">{e.phone || '—'}</td>
-                    <td className="enquiry-wrap-cell"><ReadMore maxWords={6}>{e.email || '—'}</ReadMore></td>
-                    <td className="enquiry-wrap-cell enquiry-property-cell" style={{ fontSize: '12px', color: '#4B5563' }}><ReadMore maxWords={6}>{e.propertyName || '—'}</ReadMore></td>
-                    <td className="enquiry-wrap-cell enquiry-query-cell" style={{ lineHeight: '1.4', fontSize: '13px' }}>
-                      <ReadMore maxWords={6}>{e.query || e.message || '—'}</ReadMore>
+                    <td style={{ padding: '14px', color: '#111827', fontWeight: 500 }}><ReadMore>{e.user_name || e.name || '—'}</ReadMore></td>
+                    <td style={{ padding: '14px', color: '#6B7280' }}>{e.phone || '—'}</td>
+                    <td style={{ padding: '14px', color: '#6B7280' }}><ReadMore>{e.email || '—'}</ReadMore></td>
+                    <td style={{ padding: '14px', color: '#4B5563', fontSize: '13px' }}><ReadMore>{e.propertyName || '—'}</ReadMore></td>
+                    <td style={{ padding: '14px', color: '#6B7280', fontSize: '13px' }}>
+                      <ReadMore>{e.query || e.message || '—'}</ReadMore>
                       {e.reply && (
-                        <div style={{ marginTop: '6px', padding: '6px 10px', background: '#F0FDF4', borderLeft: '3px solid #22c55e', borderRadius: '4px', fontSize: '12px', color: '#166534', wordBreak: 'break-word' }}>
+                        <div style={{ marginTop: '6px', padding: '6px 10px', background: '#F0FDF4', borderLeft: '3px solid #22c55e', borderRadius: '4px', fontSize: '12px', color: '#166534', wordBreak: 'break-word', whiteSpace: 'normal' }}>
                           <strong>Your reply:</strong> {e.reply}
                         </div>
                       )}
                     </td>
-                    <td>{statusBadge(e.status)}</td>
-                    <td>
+                    <td style={{ padding: '14px' }}>{statusBadge(e.status)}</td>
+                    <td style={{ padding: '14px' }}>
                       <button
                         onClick={() => { setReplyModal(e); setReplyText(e.reply || ''); }}
                         style={{

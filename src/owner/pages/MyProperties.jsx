@@ -5,6 +5,19 @@ import { propertyService, dashboardService } from '../services/api';
 import PropertyViewModal from '../../admin/pages/properties/PropertyViewModal';
 import ReadMore from '../../admin/components/ReadMore';
 
+const TIME_SLOTS = (() => {
+  const slots = [];
+  const periods = ['AM', 'PM'];
+  for (let p = 0; p < 2; p++) {
+    for (let h = 0; h < 12; h++) {
+      const hour = h === 0 ? 12 : h;
+      slots.push(`${hour}:00 ${periods[p]}`);
+      slots.push(`${hour}:30 ${periods[p]}`);
+    }
+  }
+  return slots;
+})();
+
 const parseNumber = (val) => {
   if (typeof val === 'number') return val;
   if (!val) return '';
@@ -1236,11 +1249,15 @@ export default function MyProperties({ autoOpenForm = false }) {
                 </div>
                 <div>
                   <label style={labelStyle}>Check-In Time *</label>
-                  <input style={inputStyle} type="text" name="checkIn" value={formData.checkIn} onChange={handleChange} placeholder="e.g. 3:00 PM" required />
+                  <select style={selectStyle} name="checkIn" value={formData.checkIn} onChange={handleChange} required>
+                    {TIME_SLOTS.map(t => <option key={`in-${t}`} value={t}>{t}</option>)}
+                  </select>
                 </div>
                 <div>
                   <label style={labelStyle}>Check-Out Time *</label>
-                  <input style={inputStyle} type="text" name="checkOut" value={formData.checkOut} onChange={handleChange} placeholder="e.g. 12:00 PM" required />
+                  <select style={selectStyle} name="checkOut" value={formData.checkOut} onChange={handleChange} required>
+                    {TIME_SLOTS.map(t => <option key={`out-${t}`} value={t}>{t}</option>)}
+                  </select>
                 </div>
               </div>
               <div style={{ marginTop: '16px' }}>
@@ -1681,24 +1698,24 @@ export default function MyProperties({ autoOpenForm = false }) {
                         <img src={p.images?.[0] || 'https://via.placeholder.com/44x34'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
                       </div>
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px', fontSize: '13px' }}>
-                      <ReadMore maxWords={6}>{p.name}</ReadMore>
+                    <td style={{ color: '#4B5563', fontWeight: 400, padding: '14px', fontSize: '13px' }}>
+                      <ReadMore>{p.name}</ReadMore>
                     </td>
                     <td style={{ padding: '14px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontWeight: 500, color: '#374151', fontSize: '13px' }}>
-                          <ReadMore maxWords={6}>{p.full_address || p.location || (p.cityName || p.city)}</ReadMore>
+                        <span style={{ fontWeight: 400, color: '#4B5563', fontSize: '13px' }}>
+                          <ReadMore>{p.full_address || p.location || (p.cityName || p.city)}</ReadMore>
                         </span>
                         <span style={{ fontSize: '11px', color: '#9CA3AF' }}>{!p.full_address && !p.location ? (p.stateName || p.state) : ''}</span>
                       </div>
                     </td>
                     <td style={{ padding: '14px' }}>
-                      <span className="category-pill" style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 500, background: '#DCFCE7', color: '#58A429' }}>{p.type}</span>
+                      <span className="category-pill" style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 500, background: '#DCFCE7', color: '#58A429' }}><ReadMore>{p.type}</ReadMore></span>
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px', fontSize: '13px' }}>₹{(p.price_per_night !== undefined ? p.price_per_night : p.price)?.toLocaleString()}</td>
-                    <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}>{p.bedRooms || 1}</td>
-                    <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}>{enquiryCounts[p._id] || 0}</td>
-                    <td style={{ color: '#D97706', fontWeight: 600, padding: '14px', fontSize: '13px' }}>{p.rating || '—'}</td>
+                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px', fontSize: '13px' }}><ReadMore>₹{(p.price_per_night !== undefined ? p.price_per_night : p.price)?.toLocaleString()}</ReadMore></td>
+                    <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}><ReadMore>{p.bedRooms || 1}</ReadMore></td>
+                    <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}><ReadMore>{enquiryCounts[p._id] || 0}</ReadMore></td>
+                    <td style={{ color: '#D97706', fontWeight: 600, padding: '14px', fontSize: '13px' }}><ReadMore>{p.rating || '—'}</ReadMore></td>
                     <td style={{ padding: '14px' }}>
                       <span onClick={() => handleStatusToggle(p._id, p.status)} title="Click to toggle"
                         style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, cursor: 'pointer', userSelect: 'none', background: p.status === 'Active' ? '#DCFCE7' : p.status === 'Pending' ? '#FEF3C7' : '#FEE2E2', color: p.status === 'Active' ? '#58A429' : p.status === 'Pending' ? '#D97706' : '#EF4444' }}>

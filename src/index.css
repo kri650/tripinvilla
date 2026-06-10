@@ -1065,3 +1065,31 @@ input:focus, select:focus {
   align-items: center !important;
   gap: 30px !important;
 }
+
+/* ==========================================
+   TABLE CELL CLAMPING (Read More)
+   ========================================== */
+.cell-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.cell-text.expanded {
+  display: block;
+}
+
+.read-more-btn {
+  font-size: 12px;
+  color: #2563EB;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  margin-top: 4px;
+  text-decoration: underline;
+  font-weight: 500;
+}

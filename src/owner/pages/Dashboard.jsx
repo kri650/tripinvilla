@@ -176,8 +176,8 @@ export default function Dashboard() {
                           </div>
                         </td>
                         <td style={{ padding: '14px' }}>
-                          <span className={`status-pill ${e.replied ? 'active' : 'pending'}`}>
-                            {e.replied ? 'Replied' : 'Pending'}
+                          <span className={`status-pill ${e.status === 'Replied' ? 'active' : 'pending'}`}>
+                            {e.status === 'Replied' ? 'Replied' : e.status || 'Pending'}
                           </span>
                         </td>
                       </tr>

@@ -2547,7 +2547,7 @@ export default function PropertyMakers() {
                 <td style={{ color: "#58A429", fontWeight: 600 }}>
                   {p.propertyNo}
                 </td>
-                <td style={{ color: "#6B7280" }}>{p.propertyType}</td>
+                <td style={{ color: "#6B7280" }}><ReadMore>{p.propertyType}</ReadMore></td>
                 <td>
                   <div
                     style={{
@@ -2574,10 +2574,10 @@ export default function PropertyMakers() {
                   </div>
                 </td>
                 <td style={{ color: "#111827", fontWeight: 600 }}>
-                  <ReadMore maxWords={6}>{p.propertyName}</ReadMore>
+                  <ReadMore>{p.propertyName}</ReadMore>
                 </td>
-                <td style={{ color: "#6B7280" }}>{p.ownerName}</td>
-                <td style={{ color: "#6B7280" }}>{p.ownerContact}</td>
+                <td style={{ color: "#6B7280" }}><ReadMore>{p.ownerName}</ReadMore></td>
+                <td style={{ color: "#6B7280" }}><ReadMore>{p.ownerContact}</ReadMore></td>
                 <td style={{ color: "#6B7280" }}>
                   <ReadMore>
                     {Array.isArray(p.amenities) ? p.amenities.join(", ") : ""}
@@ -2601,7 +2601,7 @@ export default function PropertyMakers() {
                       : ""}
                   </ReadMore>
                 </td>
-                <td style={{ color: "#6B7280" }}><ReadMore maxWords={6}>{p.location}</ReadMore></td>
+                <td style={{ color: "#6B7280" }}><ReadMore>{p.location}</ReadMore></td>
                 <td style={{ color: "#6B7280" }}>
                   <ReadMore>
                     {p.full_address || p.location}
