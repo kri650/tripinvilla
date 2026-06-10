@@ -123,19 +123,7 @@ export default function PropertyOwned() {
             <div className="props-table-title" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>Property Owners</div>
             <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'nowrap', minWidth: 0, overflowX: 'auto' }}>
               {/* Date Range */}
-              <div style={{ flexShrink: 0 }}>
-                <DateRangeDropdown 
-                  startDate={dateFrom}
-                  endDate={dateTo}
-                  onChange={(start, end) => {
-                    setDateFrom(start);
-                    setDateTo(end);
-                  }}
-                />
-              </div>
-              {(dateFrom || dateTo) && (
-                <button onClick={() => { setDateFrom(''); setDateTo(''); }} style={{ fontSize: '11px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0, whiteSpace: 'nowrap' }}>Clear</button>
-              )}
+              {/* DateRangeDropdown removed as per user request */}
               {/* Type dropdown */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 8px', border: '1px solid #E5E7EB', borderRadius: 8, flexShrink: 0 }}>
                 <select 

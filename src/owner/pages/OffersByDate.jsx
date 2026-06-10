@@ -81,8 +81,9 @@ export default function OffersByDate() {
         setPropertyId(first.property_id || first.property?._id || '');
         setCategory(first.category || first.property?.type || 'Homestay');
         setRoomType(first.room_type || 'Deluxe Room');
-        setAmenities(Array.isArray(first.amenities_types) ? first.amenities_types.join(', ') : '');
-        setPrice(first.price_per_room || 0);
+        const ams = first.amenities_types || first.property?.amenities || first.property?.amenityTypes || [];
+        setAmenities(Array.isArray(ams) ? ams.join(', ') : ams);
+        setPrice(first.price_per_room || first.property?.price || first.property?.bestRoomRate || 0);
       }
 
       await refreshOffers();
@@ -105,8 +106,9 @@ export default function OffersByDate() {
       setPropertyId(req.property_id || req.property?._id || '');
       setCategory(req.category || req.property?.type || 'Homestay');
       setRoomType(req.room_type || 'Deluxe Room');
-      setAmenities(Array.isArray(req.amenities_types) ? req.amenities_types.join(', ') : '');
-      setPrice(req.price_per_room || 0);
+      const ams = req.amenities_types || req.property?.amenities || req.property?.amenityTypes || [];
+      setAmenities(Array.isArray(ams) ? ams.join(', ') : ams);
+      setPrice(req.price_per_room || req.property?.price || req.property?.bestRoomRate || 0);
     } else {
       setPropertyId('');
       setCategory('');

@@ -1178,3 +1178,35 @@ input:focus, select:focus {
 .read-more-btn:hover {
   color: #3B82F6;
 }
+
+/* Fix: chart-card with table must not use overflow:visible */
+.chart-card:has(.data-table) {
+  overflow: hidden !important;
+}
+
+.chart-card:has(.data-table) > div {
+  display: block !important;
+  width: 100% !important;
+  overflow-x: auto !important;
+  overflow-y: visible !important;
+  min-height: 0 !important;
+}
+
+.data-table {
+  display: table !important;
+  width: 100% !important;
+  min-width: 900px;
+}
+
+.data-table tbody {
+  display: table-row-group !important;
+}
+
+.data-table tr {
+  display: table-row !important;
+}
+
+.data-table td,
+.data-table th {
+  display: table-cell !important;
+}

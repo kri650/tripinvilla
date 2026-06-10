@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { propertyService, dashboardService } from '../services/api';
 import PropertyViewModal from '../../admin/pages/properties/PropertyViewModal';
 import ReadMore from '../../admin/components/ReadMore';
+import DateRangeDropdown from '../../components/DateRangeDropdown';
 
 const TIME_SLOTS = (() => {
   const slots = [];
@@ -1658,12 +1659,14 @@ export default function MyProperties({ autoOpenForm = false }) {
           <div className="table-header" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
             <span className="table-title" style={{ whiteSpace: 'nowrap' }}>My Property List</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', paddingBottom: '4px', maxWidth: '100%' }}>
-              {[{ val: filterDateFrom, set: (val) => handleLocalDateChange('from', val) }, { val: filterDateTo, set: (val) => handleLocalDateChange('to', val) }].map((f, i) => (
-                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '5px 8px', background: '#ffffff', flexShrink: 0 }}>
-                  <Calendar size={14} style={{ color: '#9CA3AF' }} />
-                  <input type="date" value={f.val} onChange={e => f.set(e.target.value)} style={{ border: 'none', outline: 'none', fontSize: '11px', color: '#374151', width: '95px' }} />
-                </div>
-              ))}
+              <DateRangeDropdown 
+                startDate={filterDateFrom}
+                endDate={filterDateTo}
+                onChange={(start, end) => {
+                  setFilterDateFrom(start);
+                  setFilterDateTo(end);
+                }}
+              />
               <select value={filterType} onChange={e => setFilterType(e.target.value)} style={{ padding: '5px 8px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '11px', color: '#374151', outline: 'none', background: '#ffffff', cursor: 'pointer', flexShrink: 0, maxWidth: '100px' }}>
                 <option value="">Property Type</option>
                 {['Homestay','Villa','Apartment','Resort','Cottage','Hotel'].map(t => <option key={t} value={t}>{t}</option>)}

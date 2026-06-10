@@ -161,14 +161,7 @@ export default function AdminList() {
           <div className="admin-table-header">
             <h2 className="admin-table-title">Admin List</h2>
             <div className="admin-table-toolbar">
-              <DateRangeDropdown 
-                startDate={dateFrom}
-                endDate={dateTo}
-                onChange={(start, end) => {
-                  setDateFrom(start);
-                  setDateTo(end);
-                }}
-              />
+              {/* DateRangeDropdown removed as per user request */}
               <button className="admin-toolbar-btn filter">
                 <Filter size={14} /> Filter
               </button>

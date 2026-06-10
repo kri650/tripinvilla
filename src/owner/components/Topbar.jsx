@@ -108,22 +108,24 @@ export default function Topbar({ onToggleSidebar }) {
       {/* Right – action buttons + date filter + user */}
       <div className="topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
         
-        {/* Date picker pill */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <DateRangeDropdown 
-            startDate={dateFrom}
-            endDate={dateTo}
-            onChange={handleDateChange}
-          />
-          {(dateFrom || dateTo) && (
-            <button 
-              onClick={handleClear} 
-              style={{ fontSize: '12px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500 }}
-            >
-              Clear
-            </button>
-          )}
-        </div>
+        {/* Date picker pill (Only on Dashboard) */}
+        {location.pathname === '/owner/dashboard' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <DateRangeDropdown 
+              startDate={dateFrom}
+              endDate={dateTo}
+              onChange={handleDateChange}
+            />
+            {(dateFrom || dateTo) && (
+              <button 
+                onClick={handleClear} 
+                style={{ fontSize: '12px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500 }}
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        )}
 
         {/* Action Button */}
         {renderActionButton()}

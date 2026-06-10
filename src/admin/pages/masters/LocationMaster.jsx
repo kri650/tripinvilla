@@ -478,15 +478,15 @@ export default function LocationMaster() {
           <table className="data-table">
             <thead>
               <tr>
-                <th style={{ whiteSpace: 'nowrap' }}>Location Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
-                <th style={{ whiteSpace: 'nowrap' }}>Location Type <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
-                <th style={{ whiteSpace: 'nowrap' }}>Parent Location <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
-                <th style={{ whiteSpace: 'nowrap' }}>Key Landmarks <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
-                <th style={{ whiteSpace: 'nowrap' }}>Landmark Popularity <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
-                <th style={{ whiteSpace: 'nowrap' }}>Landmark Image <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
-                <th style={{ whiteSpace: 'nowrap' }}>About <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
-                <th style={{ whiteSpace: 'nowrap' }}>Status <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
-                <th style={{ textAlign: 'right', paddingRight: '24px' }}>Actions</th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 220 }}>Location Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 120 }}>Location Type <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 200 }}>Parent Location <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 150 }}>Key Landmarks <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 150 }}>Landmark Popularity <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 140 }}>Landmark Image <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 200 }}>About <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ whiteSpace: 'nowrap', minWidth: 100 }}>Status <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} color="#9CA3AF" /></th>
+                <th style={{ textAlign: 'right', paddingRight: '24px', minWidth: 100 }}>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -495,11 +495,13 @@ export default function LocationMaster() {
               ) : filteredLocations.length > 0 ? (
                 paginated.map((loc) => (
                   <tr key={loc._id}>
-                    <td style={{ fontWeight: 700, color: '#000000', whiteSpace: 'normal', maxWidth: '180px' }}>
+                    <td style={{ fontWeight: 700, color: '#000000', whiteSpace: 'normal', minWidth: '220px', maxWidth: '280px' }}>
                       <ReadMore lines={2}>{loc.locationName}</ReadMore>
                     </td>
                     <td style={{ fontWeight: 500 }}>{loc.locationType}</td>
-                    <td style={{ fontSize: '11px', color: '#6B7280', whiteSpace: 'normal', maxWidth: '160px', lineHeight: 1.4 }}>{loc.parentLocationHierarchy}</td>
+                    <td style={{ fontSize: '11px', color: '#6B7280', whiteSpace: 'normal', minWidth: '200px', maxWidth: '260px', lineHeight: 1.4 }}>
+                      <ReadMore lines={2}>{loc.parentLocationHierarchy}</ReadMore>
+                    </td>
                     
                     {/* Key Landmarks */}
                     <td style={{ fontSize: '12px', color: '#374151' }}>

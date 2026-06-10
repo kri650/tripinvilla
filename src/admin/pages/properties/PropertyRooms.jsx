@@ -245,16 +245,7 @@ export default function PropertyRooms() {
             <div className="props-table-title" style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif', flexShrink: 0 }}>Property Requests</div>
             
             <div className="props-table-actions no-scrollbar" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'nowrap', overflowX: 'auto', WebkitOverflowScrolling: 'touch', maxWidth: '100%' }}>
-              <div style={{ flexShrink: 0 }}>
-                <DateRangeDropdown 
-                  startDate={filterDateFrom}
-                  endDate={filterDateTo}
-                  onChange={(start, end) => {
-                    setFilterDateFrom(start);
-                    setFilterDateTo(end);
-                  }}
-                />
-              </div>
+              {/* DateRangeDropdown removed as per user request */}
 
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', flexShrink: 1, minWidth: 100, maxWidth: 140 }}>
                 <select 

@@ -126,19 +126,7 @@ export default function Enquiries() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', flex: 1, justifyContent: 'flex-end' }}>
 
             {/* Date From / Date To via DateRangeDropdown */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <DateRangeDropdown
-                startDate={dateFrom}
-                endDate={dateTo}
-                onChange={(start, end) => {
-                  setDateFrom(start);
-                  setDateTo(end);
-                }}
-              />
-              {(dateFrom || dateTo) && (
-                <button onClick={() => { setDateFrom(''); setDateTo(''); }} style={{ fontSize: '11px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>Clear</button>
-              )}
-            </div>
+            {/* DateRangeDropdown removed as per user request */}
 
             {/* Property Type */}
             <select

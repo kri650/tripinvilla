@@ -859,16 +859,7 @@ export default function AllProperties() {
           >
             <div className="props-table-title" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>All Properties</div>
             <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'nowrap', minWidth: 0, overflowX: 'auto' }}>
-              <div style={{ flexShrink: 0 }}>
-                <DateRangeDropdown 
-                  startDate={dateFrom}
-                  endDate={dateTo}
-                  onChange={(start, end) => {
-                    setDateFrom(start);
-                    setDateTo(end);
-                  }}
-                />
-              </div>
+              {/* DateRangeDropdown removed as per user request */}
               <div
                 className="props-filter-select"
                 style={{
@@ -921,9 +912,9 @@ export default function AllProperties() {
 
         <div
           className="chart-card"
-          style={{ padding: 0, overflow: "visible", borderRadius: 12 }}
+          style={{ padding: 0, borderRadius: 12, overflow: "hidden" }}
         >
-          <div style={{ overflowX: "auto", width: '100%', flex: 1, minHeight: 'min-content' }}>
+          <div style={{ overflowX: "auto", overflowY: "visible", width: "100%", minHeight: 0 }}>
             <table className="data-table" style={{ whiteSpace: "nowrap" }}>
               <thead>
                 <tr>
@@ -1164,13 +1155,13 @@ export default function AllProperties() {
                 )}
               </tbody>
             </table>
-            <Pagination 
-              currentPage={currentPage} 
-              totalItems={totalItems} 
-              itemsPerPage={itemsPerPage} 
-              onPageChange={setCurrentPage} 
-            />
           </div>
+          <Pagination 
+            currentPage={currentPage} 
+            totalItems={totalItems} 
+            itemsPerPage={itemsPerPage} 
+            onPageChange={setCurrentPage} 
+          />
         </div>
       </div>
 

@@ -498,15 +498,13 @@ export default function PropertyDetailPage(props) {
                       
                       <div className="room-card-bullets-list">
                         {(room.offers || []).map((off, oIdx) => (
-                          <div key={`o-${oIdx}`} className="bullet-check">
-                            <CheckCircle size={14} color="var(--primary-green, #10B981)" fill="rgba(16, 185, 129, 0.1)" />
-                            <span style={{ fontWeight: 600, color: '#065F46' }}>{off}</span>
+                          <div key={`o-${oIdx}`} style={{ padding: '4px 10px', background: '#ECFDF5', color: '#059669', borderRadius: '6px', fontSize: '11px', fontWeight: 600, border: '1px solid #A7F3D0' }}>
+                            {off}
                           </div>
                         ))}
                         {(room.features || []).map((feat, fIdx) => (
-                          <div key={`f-${fIdx}`} className="bullet-check">
-                            <CheckCircle size={14} color="var(--primary-blue)" fill="rgba(37,99,235,0.1)" />
-                            <span>{feat}</span>
+                          <div key={`f-${fIdx}`} style={{ padding: '4px 10px', background: '#E0E7FF', color: '#4338CA', borderRadius: '6px', fontSize: '11px', fontWeight: 600 }}>
+                            {feat}
                           </div>
                         ))}
                       </div>
@@ -679,11 +677,11 @@ export default function PropertyDetailPage(props) {
               </div>
                 {/* Dynamic Property Rules */}
                 {hasDynamicRules && validOtherDetails.map((sec, sIdx) => (
-                  <div className="must-read-rules-block" style={{ marginTop: sIdx > 0 ? '24px' : '0' }} key={`prop-rule-${sIdx}`}>
-                    <h4 className="rules-sub-hdr">{sec.title || 'Rules'}</h4>
-                    <ul className="rules-ul-list">
+                  <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '10px', padding: '14px 16px', marginTop: sIdx > 0 ? '24px' : '0' }} key={`prop-rule-${sIdx}`}>
+                    <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#B91C1C', margin: '0 0 8px 0' }}>{sec.title || 'Rules'}</h4>
+                    <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                       {sec.text.split('\n').map((rule, rIdx) => (
-                        <li key={`prop-rule-${sIdx}-${rIdx}`}>{rule.replace(/^[•*-]\s*/, '')}</li>
+                        <li key={`prop-rule-${sIdx}-${rIdx}`} style={{ fontSize: '13px', color: '#991B1B', lineHeight: 1.6 }}>{rule.replace(/^[•*-]\s*/, '')}</li>
                       ))}
                     </ul>
                   </div>
@@ -691,11 +689,11 @@ export default function PropertyDetailPage(props) {
 
                 {/* Only show static rules if no dynamic rules */}
                 {!hasDynamicRules && hasStringRules && (
-                  <div className="must-read-rules-block">
-                    <h4 className="rules-sub-hdr">Property Rules</h4>
-                    <ul className="rules-ul-list">
+                  <div style={{ background: '#FEF2F2', border: '1px solid #FECACA', borderRadius: '10px', padding: '14px 16px' }}>
+                    <h4 style={{ fontSize: '14px', fontWeight: 700, color: '#B91C1C', margin: '0 0 8px 0' }}>Property Rules</h4>
+                    <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                       {activeDetailProp.rules.split('\n').map((rule, rIdx) => (
-                        <li key={`prop-${rIdx}`}>{rule.replace(/^[•*-]\s*/, '')}</li>
+                        <li key={`prop-${rIdx}`} style={{ fontSize: '13px', color: '#991B1B', lineHeight: 1.6 }}>{rule.replace(/^[•*-]\s*/, '')}</li>
                       ))}
                     </ul>
                   </div>
@@ -706,10 +704,10 @@ export default function PropertyDetailPage(props) {
                     return room.rules
                       .filter(sec => Array.isArray(sec.points) && sec.points.length > 0) // Only show sections with points
                       .map((sec, sIdx) => (
-                        <div className="must-read-rules-block" key={`room-${idx}-sec-${sIdx}`}>
-                          <h4 className="rules-sub-hdr">{sec.title || 'Additional Rules'}</h4>
-                          <ul className="rules-ul-list">
-                            {sec.points.map((point, pIdx) => <li key={pIdx}>{point}</li>)}
+                        <div style={{ background: '#FFFBEB', border: '1px solid #FDE68A', borderRadius: '6px', padding: '10px 14px', marginTop: '12px' }} key={`room-${idx}-sec-${sIdx}`}>
+                          <h4 style={{ color: '#B45309', margin: '0 0 6px 0', fontSize: '14px', fontWeight: 700 }}>{sec.title || 'Additional Rules'}</h4>
+                          <ul style={{ paddingLeft: '20px', margin: 0, color: '#78350F', fontSize: '13px' }}>
+                            {sec.points.map((point, pIdx) => <li key={pIdx} style={{ marginBottom: '4px' }}>{point}</li>)}
                           </ul>
                         </div>
                       ));

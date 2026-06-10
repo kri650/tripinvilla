@@ -93,7 +93,7 @@ function RoomForm({
   const manualRoomType = data.manualRoomType || false;
 
   return (
-    <div className="dash-section room-form-section" style={{ border: isEditMode ? '1px solid #2563EB' : 'none', boxSizing: 'border-box', overflowX: 'hidden' }}>
+    <div className="room-form-section" style={{ border: isEditMode ? '1px solid #2563EB' : 'none', boxSizing: 'border-box', overflowX: 'hidden' }}>
       <div className="room-form-header">
         <h3 className="room-form-title">
           {isEditMode ? `Room ${idx + 1}: ${data.room_type || 'New Room'}` : 'Configure Room Pricing & Rules'}
@@ -484,7 +484,7 @@ export default function PropertyRequests() {
         </div>
       ) : (
         <>
-          <div className="dash-section property-request-config room-form-section">
+          <div className="property-request-config room-form-section">
             <div className="request-header">
               <h3 className="section-title">Configure Property Request</h3>
               <div className="header-actions">

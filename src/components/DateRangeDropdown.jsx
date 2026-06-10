@@ -231,41 +231,17 @@ export default function DateRangeDropdown({
             <X size={16} style={{ cursor: 'pointer', color: '#6B7280' }} onClick={() => setIsOpen(false)} />
           </div>
 
-          <div style={{ padding: '16px' }}>
-            <div className="daterange-calendars-wrapper" style={{ display: 'flex', gap: '16px' }}>
-              <div>
-                <div style={{ fontWeight: 600, fontSize: '13px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>From</div>
-                <ReactCalendar
-                  date={tempRange[0].startDate}
-                  onChange={(date) => {
-                    const newRange = { ...tempRange[0], startDate: date };
-                    if (newRange.endDate && newRange.endDate < date) {
-                      newRange.endDate = date;
-                    }
-                    setTempRange([newRange]);
-                  }}
-                  color="#2563EB"
-                  showMonthAndYearPickers={false}
-                />
-              </div>
-              <div>
-                <div style={{ fontWeight: 600, fontSize: '13px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>To</div>
-                <ReactCalendar
-                  date={tempRange[0].endDate}
-                  onChange={(date) => {
-                    const newRange = { ...tempRange[0], endDate: date };
-                    if (date < newRange.startDate) {
-                      newRange.startDate = date;
-                      newRange.endDate = date;
-                    }
-                    setTempRange([newRange]);
-                  }}
-                  minDate={tempRange[0].startDate}
-                  color="#2563EB"
-                  showMonthAndYearPickers={false}
-                />
-              </div>
-            </div>
+          <div style={{ padding: '16px', display: 'flex', justifyContent: 'center' }}>
+            <DateRange
+              ranges={tempRange}
+              onChange={handleSelect}
+              months={1}
+              direction="horizontal"
+              showSelectionPreview={true}
+              moveRangeOnFirstSelection={false}
+              rangeColors={['#2563EB']}
+              showMonthAndYearPickers={false}
+            />
           </div>
 
           <div style={{

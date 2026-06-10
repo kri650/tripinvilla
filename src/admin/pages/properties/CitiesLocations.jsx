@@ -91,19 +91,7 @@ export default function CitiesLocations() {
             <div className="props-table-title" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>Cities &amp; Locations</div>
             
             <div className="props-table-actions" style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'nowrap', minWidth: 0, overflowX: 'auto' }}>
-              <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexShrink: 0 }}>
-                <DateRangeDropdown 
-                  startDate={dateFrom}
-                  endDate={dateTo}
-                  onChange={(start, end) => {
-                    setDateFrom(start);
-                    setDateTo(end);
-                  }}
-                />
-                {(dateFrom || dateTo) && (
-                  <button onClick={() => { setDateFrom(''); setDateTo(''); }} style={{ fontSize: '11px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>Clear</button>
-                )}
-              </div>
+              {/* DateRangeDropdown removed as per user request */}
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 8px', flexShrink: 0, maxWidth: 100 }}>
                 <select 
                   value={selectedState}

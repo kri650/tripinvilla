@@ -21,7 +21,7 @@
 .admin-content {
   flex: 1;
   padding: 0;
-  overflow-x: auto;
+  overflow-x: hidden;
 }
 
 /* Table wrapper to allow horizontal scroll on small screens */

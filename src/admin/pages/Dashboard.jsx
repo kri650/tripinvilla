@@ -332,19 +332,7 @@ export default function Dashboard() {
             <div className="table-header-right" style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
               <button className="table-view-all" onClick={() => navigate('/admin/enquiries')} style={{ cursor: 'pointer' }}>View All</button>
               
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                <DateRangeDropdown 
-                  startDate={enqDateFrom}
-                  endDate={enqDateTo}
-                  onChange={(start, end) => {
-                    setEnqDateFrom(start);
-                    setEnqDateTo(end);
-                  }}
-                />
-                {(enqDateFrom || enqDateTo) && (
-                  <button onClick={() => { setEnqDateFrom(''); setEnqDateTo(''); }} style={{ fontSize: '11px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}>Clear</button>
-                )}
-              </div>
+              {/* DateRangeDropdown removed as per user request */}
             </div>
           </div>
           <div style={{ overflowX: 'auto', display: 'block', width: '100%' }}>
@@ -391,15 +379,15 @@ export default function Dashboard() {
                 ))}
               </tbody>
             </table>
-            {enquiries.length > 0 && (
-              <Pagination 
-                currentPage={enqCurrentPage} 
-                totalItems={enquiries.length} 
-                itemsPerPage={itemsPerPage} 
-                onPageChange={setEnqCurrentPage} 
-              />
-            )}
           </div>
+          {enquiries.length > 0 && (
+            <Pagination 
+              currentPage={enqCurrentPage} 
+              totalItems={enquiries.length} 
+              itemsPerPage={itemsPerPage} 
+              onPageChange={setEnqCurrentPage} 
+            />
+          )}
         </div>
       </div>
 

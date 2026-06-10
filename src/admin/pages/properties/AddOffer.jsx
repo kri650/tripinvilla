@@ -70,7 +70,7 @@ export default function AddOffer() {
               status: offerData.status ? offerData.status.charAt(0).toUpperCase() + offerData.status.slice(1) : 'Active'
             }));
             
-            // Re-fetch property details to populate available rooms
+            // Re-fetch property details to populate available rooms and missing fields
             if (offerData.property_id || offerData.propertyId) {
               const propId = offerData.property_id || offerData.propertyId;
               const resProp = await fetch(`${import.meta.env.VITE_API_BASE}/properties/${propId}`);
@@ -78,6 +78,15 @@ export default function AddOffer() {
                 const prop = await resProp.json();
                 const rooms = Array.isArray(prop.rooms) && prop.rooms.length > 0 ? prop.rooms : [{ roomType: 'Deluxe Room' }];
                 setAvailableRooms(rooms);
+                
+                const amenitiesArr = Array.isArray(prop.amenities) ? prop.amenities : (Array.isArray(prop.amenityTypes) ? prop.amenityTypes : []);
+                const priceVal = prop.price || prop.propertyPrice || prop.bestRoomRate || '';
+                
+                setFormData(prev => ({
+                  ...prev,
+                  amenities: prev.amenities || amenitiesArr.join(', '),
+                  price: prev.price || (priceVal ? `₹${priceVal} per night` : '')
+                }));
               }
             }
           }

@@ -64,24 +64,27 @@ export default function Topbar({ onToggleSidebar }) {
         <h1 className="topbar-title">{title}</h1>
       </div>
 
-      {/* Right – date filter + user */}
-      <div className="topbar-right">
-        {/* Date picker pill */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <DateRangeDropdown 
-            startDate={dateFrom}
-            endDate={dateTo}
-            onChange={handleDateChange}
-          />
-          {(dateFrom || dateTo) && (
-            <button 
-              onClick={handleClear} 
-              style={{ fontSize: '12px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500 }}
-            >
-              Clear
-            </button>
-          )}
-        </div>
+      {/* Right – action buttons + user */}
+      <div className="topbar-right" style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+
+        {/* Date picker pill (Only on Dashboard) */}
+        {location.pathname === '/admin/dashboard' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <DateRangeDropdown 
+              startDate={dateFrom}
+              endDate={dateTo}
+              onChange={handleDateChange}
+            />
+            {(dateFrom || dateTo) && (
+              <button 
+                onClick={handleClear} 
+                style={{ fontSize: '12px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 500 }}
+              >
+                Clear
+              </button>
+            )}
+          </div>
+        )}
 
         {/* User block */}
         <div className="topbar-user" style={{ position: 'relative' }}>
