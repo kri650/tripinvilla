@@ -604,25 +604,21 @@ export default function PropertyRequests() {
                         <React.Fragment key={i}>
                           <tr className="request-row">
                             <td className="td-property" style={{ fontWeight: 500, color: '#111827' }}><ReadMore>{r.propertyName}</ReadMore></td>
-                            <td className="td-category"><ReadMore>{r.category}</ReadMore></td>
+                            <td className="td-category">{r.category}</td>
                             <td className="td-room-type">
                               <div className="room-type-cell">
                                 {r.room_image_url && <img src={getFullRoomImageUrl(r.room_image_url)} alt={r.room_type} className="cell-img" />}
                                 <span>
-                                  <ReadMore>
                                   {getRequestRooms(r).length > 1
                                     ? `${getRequestRooms(r).length} Rooms`
                                     : (r.room_type || getRequestRooms(r)[0]?.room_type)}
-                                  </ReadMore>
                                 </span>
                               </div>
                             </td>
                             <td className="td-bed">
-                              <ReadMore>
                               {getRequestRooms(r).length > 1
                                 ? `${getRequestRooms(r).length} Types`
                                 : (r.bed_type || getRequestRooms(r)[0]?.bed_type)}
-                              </ReadMore>
                             </td>
                             <td className="td-amenities">
                               <ReadMore>
@@ -632,14 +628,12 @@ export default function PropertyRequests() {
                               </ReadMore>
                             </td>
                             <td className="td-price">
-                              <ReadMore>
                               {getRequestRooms(r).length > 1
                                 ? `From ${formatCurrency(Math.min(...getRequestRooms(r).map((room) => Number(room.price_per_room || 0)).filter(Boolean)))}`
                                 : formatCurrency(firstPresent(r.price_per_room, getRequestRooms(r)[0]?.price_per_room, r.priceByOwner))}
-                              </ReadMore>
                             </td>
                             <td className="td-rules"><ReadMore>{Array.isArray(r.rules) ? `${r.rules.length} sections` : 'None'}</ReadMore></td>
-                            <td className="td-offers"><ReadMore>{r.offers?.length > 0 ? r.offers.join(', ') : 'None'}</ReadMore></td>
+                            <td className="td-offers">{r.offers?.length > 0 ? r.offers.join(', ') : 'None'}</td>
                             <td className="td-status">
                               <span className={`status-badge ${statusClass}`}>
                                 {statusLabel.toUpperCase()}

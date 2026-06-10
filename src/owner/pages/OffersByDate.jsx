@@ -402,13 +402,13 @@ export default function OffersByDate() {
                     <td style={{ color: '#6B7280', padding: '14px 16px' }}><ReadMore>{o.location}</ReadMore></td>
                     <td style={{ padding: '14px 16px' }}>
                       <span className="category-pill" style={{ background: '#F0FAF6', color: '#1d9e75', fontWeight: 500, padding: '3px 10px', borderRadius: '4px', fontSize: '11px' }}>
-                        <ReadMore>{o.category}</ReadMore>
+                        {o.category}
                       </span>
                     </td>
-                    <td style={{ color: '#4B5563', padding: '14px 16px' }}><ReadMore>{o.room}</ReadMore></td>
-                    <td style={{ color: '#4B5563', padding: '14px 16px' }}><ReadMore>{o.foods}</ReadMore></td>
+                    <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.room}</td>
+                    <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.foods}</td>
                     <td style={{ color: '#4B5563', padding: '14px 16px' }}><ReadMore>{o.amenities}</ReadMore></td>
-                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}><ReadMore>{o.offer}</ReadMore></td>
+                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}>{o.offer}</td>
                     <td style={{ color: '#6B7280', padding: '14px 16px' }}><ReadMore>{o.desc}</ReadMore></td>
                     <td style={{ padding: '14px 16px' }}>
                       {o.status.toLowerCase() === 'active'

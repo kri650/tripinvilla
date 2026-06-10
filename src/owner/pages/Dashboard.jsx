@@ -138,15 +138,16 @@ export default function Dashboard() {
             </div>
           </div>
           <div style={{ overflowX: 'auto', width: '100%' }}>
-            <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <table className="data-table" style={{ tableLayout: 'fixed', width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Enquiry ID</th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Property</th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Guest Name</th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Date & Time</th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Email / Phone</th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Status</th>
+                  <th style={{ minWidth: '90px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Enquiry ID</th>
+                  <th style={{ minWidth: '120px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Property</th>
+                  <th style={{ minWidth: '110px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Guest Name</th>
+                  <th style={{ minWidth: '140px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Date & Time</th>
+                  <th style={{ minWidth: '150px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Email</th>
+                  <th style={{ minWidth: '110px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Phone</th>
+                  <th style={{ minWidth: '80px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -169,11 +170,11 @@ export default function Dashboard() {
                         <td style={{ color: '#6B7280', padding: '14px', fontSize: '13px' }}>
                           {dateStr}
                         </td>
-                        <td style={{ padding: '14px' }}>
-                          <div style={{ display: 'flex', flexDirection: 'column' }}>
-                            <span style={{ fontSize: '12.5px', color: '#374151', fontWeight: 500 }}>{e.email}</span>
-                            <span style={{ fontSize: '11px', color: '#9CA3AF' }}>{e.phone}</span>
-                          </div>
+                        <td style={{ padding: '14px', fontSize: '12.5px', color: '#374151', fontWeight: 500 }}>
+                          {e.email}
+                        </td>
+                        <td style={{ padding: '14px', fontSize: '12.5px', color: '#374151' }}>
+                          {e.phone}
                         </td>
                         <td style={{ padding: '14px' }}>
                           <span className={`status-pill ${e.status === 'Replied' ? 'active' : 'pending'}`}>
@@ -185,7 +186,7 @@ export default function Dashboard() {
                   })
                 ) : (
                   <tr>
-                    <td colSpan="6" style={{ textAlign: 'center', padding: '40px 0', color: '#9CA3AF', fontSize: '13px' }}>
+                    <td colSpan="7" style={{ textAlign: 'center', padding: '40px 0', color: '#9CA3AF', fontSize: '13px' }}>
                       No recent enquiries found.
                     </td>
                   </tr>

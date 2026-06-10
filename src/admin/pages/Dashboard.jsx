@@ -23,9 +23,9 @@ function EnqTooltip({ active, payload, label }) {
   );
 }
 
-function Th({ children }) {
+function Th({ children, style }) {
   return (
-    <th>
+    <th style={style}>
       <span className="th-inner">
         {children}
         <ChevronsUpDown className="sort-icon" style={{ width: 10, height: 10 }} />
@@ -348,16 +348,16 @@ export default function Dashboard() {
             </div>
           </div>
           <div style={{ overflowX: 'auto' }}>
-            <table className="data-table">
+            <table className="data-table" style={{ tableLayout: 'fixed', width: '100%' }}>
               <thead>
                 <tr>
-                  <Th>Enquiry No</Th>
-                  <Th>Date &amp; Time</Th>
-                  <Th>User Name</Th>
-                  <Th>Phone No</Th>
-                  <Th>Email Address</Th>
-                  <Th>Property</Th>
-                  <Th>Query</Th>
+                  <Th style={{ minWidth: '90px' }}>Enquiry No</Th>
+                  <Th style={{ minWidth: '140px' }}>Date &amp; Time</Th>
+                  <Th style={{ minWidth: '110px' }}>User Name</Th>
+                  <Th style={{ minWidth: '110px' }}>Phone No</Th>
+                  <Th style={{ minWidth: '150px' }}>Email Address</Th>
+                  <Th style={{ minWidth: '120px' }}>Property</Th>
+                  <Th style={{ minWidth: '200px' }}>Query</Th>
                   <th></th>
                 </tr>
               </thead>

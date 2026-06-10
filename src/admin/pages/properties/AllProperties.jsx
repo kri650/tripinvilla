@@ -1020,19 +1020,19 @@ export default function AllProperties() {
                       </td>
                       <td>
                         <span className="category-pill">
-                          <ReadMore>{p.category || p.type}</ReadMore>
+                          {p.category || p.type}
                         </span>
                       </td>
                       <td style={{ color: "#111827", fontWeight: 600 }}>
-                        <ReadMore>₹{(p.bestRoomRate || p.price || 0).toLocaleString()}</ReadMore>
+                        ₹{(p.bestRoomRate || p.price || 0).toLocaleString()}
                       </td>
                       <td style={{ color: "#6B7280" }}>
-                        <ReadMore>{p.rooms || p.bedRooms || "—"}</ReadMore>
+                        {p.rooms || p.bedRooms || "—"}
                       </td>
                       <td style={{ color: "#6B7280" }}>
-                        <ReadMore>{p.totalEnquiries ?? 0}</ReadMore>
+                        {p.totalEnquiries ?? 0}
                       </td>
-                      <td style={{ color: "#6B7280" }}><ReadMore>{p.rating || "—"}</ReadMore></td>
+                      <td style={{ color: "#6B7280" }}>{p.rating || "—"}</td>
                       <td>
                         <button
                           onClick={() => toggleStatus(p._id, p.status)}

@@ -1710,12 +1710,12 @@ export default function MyProperties({ autoOpenForm = false }) {
                       </div>
                     </td>
                     <td style={{ padding: '14px' }}>
-                      <span className="category-pill" style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 500, background: '#DCFCE7', color: '#58A429' }}><ReadMore>{p.type}</ReadMore></span>
+                      <span className="category-pill" style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 500, background: '#DCFCE7', color: '#58A429' }}>{p.type}</span>
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px', fontSize: '13px' }}><ReadMore>₹{(p.price_per_night !== undefined ? p.price_per_night : p.price)?.toLocaleString()}</ReadMore></td>
-                    <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}><ReadMore>{p.bedRooms || 1}</ReadMore></td>
-                    <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}><ReadMore>{enquiryCounts[p._id] || 0}</ReadMore></td>
-                    <td style={{ color: '#D97706', fontWeight: 600, padding: '14px', fontSize: '13px' }}><ReadMore>{p.rating || '—'}</ReadMore></td>
+                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px', fontSize: '13px' }}>₹{(p.price_per_night !== undefined ? p.price_per_night : p.price)?.toLocaleString()}</td>
+                    <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}>{p.bedRooms || 1}</td>
+                    <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}>{enquiryCounts[p._id] || 0}</td>
+                    <td style={{ color: '#D97706', fontWeight: 600, padding: '14px', fontSize: '13px' }}>{p.rating || '—'}</td>
                     <td style={{ padding: '14px' }}>
                       <span onClick={() => handleStatusToggle(p._id, p.status)} title="Click to toggle"
                         style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, cursor: 'pointer', userSelect: 'none', background: p.status === 'Active' ? '#DCFCE7' : p.status === 'Pending' ? '#FEF3C7' : '#FEE2E2', color: p.status === 'Active' ? '#58A429' : p.status === 'Pending' ? '#D97706' : '#EF4444' }}>

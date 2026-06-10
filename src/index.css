@@ -10,13 +10,20 @@
 table {
   table-layout: fixed;
   width: 100%;
+  min-width: 700px;
 }
 th, td {
-  min-width: 100px;
-}
-td {
+  min-width: 80px;
   max-width: 100%;
-  word-break: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* EXCEPT columns that have cell-text read more applied */
+td:has(.cell-text) {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 :root {
