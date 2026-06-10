@@ -17,7 +17,7 @@ export default function ReadMore({ children }) {
       // If expanded is false, scrollHeight > clientHeight when clamped
       // We only measure when not expanded to avoid false negatives
       if (!expanded) {
-        setIsClamped(textRef.current.scrollHeight > textRef.current.clientHeight);
+        setIsClamped(textRef.current.scrollHeight > textRef.current.clientHeight + 2);
       }
     }
   };

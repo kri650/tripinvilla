@@ -1091,7 +1091,7 @@ input:focus, select:focus {
    ========================================== */
 .cell-text {
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   white-space: normal;
@@ -1104,7 +1104,7 @@ input:focus, select:focus {
 
 .read-more-btn {
   font-size: 12px;
-  color: #2563EB;
+  color: #111827;
   cursor: pointer;
   background: none;
   border: none;
