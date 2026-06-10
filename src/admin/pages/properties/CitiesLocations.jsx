@@ -91,7 +91,9 @@ export default function CitiesLocations() {
             <div className="props-table-title" style={{ whiteSpace: 'nowrap', flexShrink: 0 }}>Cities &amp; Locations</div>
             
             <div className="props-table-actions" style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'nowrap', minWidth: 0, overflowX: 'auto' }}>
-              {/* DateRangeDropdown removed as per user request */}
+              <DateRangeDropdown
+                onDateChange={(from, to) => { setDateFrom(from); setDateTo(to); }}
+              />
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 8px', flexShrink: 0, maxWidth: 100 }}>
                 <select 
                   value={selectedState}
@@ -182,68 +184,8 @@ export default function CitiesLocations() {
             </table>
           </div>
 
-          {/* Mobile Card View */}
-          <div className="mobile-cities-container" style={{ display: 'none' }}>
-            {loading ? (
-              <div className="mobile-loading-state">Loading cities...</div>
-            ) : filteredCities.length === 0 ? (
-              <div className="mobile-empty-state">No cities found</div>
-            ) : (
-              <div className="mobile-cities-cards">
-                {filteredCities.map((c, i) => (
-                  <div key={`mobile-${c._id || 'city'}-${i}`} className="mobile-city-card">
-                    
-                    {/* City Header */}
-                    <div className="mobile-city-header">
-                      <div 
-                        className="mobile-city-name"
-                        onClick={() => navigate(`/admin/properties/all?city=${encodeURIComponent(c.cityName)}`)}
-                      >
-                        <ReadMore maxWords={6}>{c.cityName}</ReadMore>
-                      </div>
-                      <div className="mobile-city-state">
-                        <ReadMore maxWords={6}>{c.stateName}</ReadMore>
-                      </div>
-                    </div>
 
-                    {/* Total Properties */}
-                    <div className="mobile-total-properties">
-                      {c.totalProperties} Properties
-                    </div>
 
-                    {/* Property Type Grid */}
-                    <div className="mobile-property-grid">
-                      <div className={`mobile-property-item ${c.homestays > 0 ? 'highlight' : ''}`}>
-                        <span className="mobile-property-label">Homestays</span>
-                        <span className="mobile-property-count">{c.homestays}</span>
-                      </div>
-                      <div className={`mobile-property-item ${c.resorts > 0 ? 'highlight' : ''}`}>
-                        <span className="mobile-property-label">Resorts</span>
-                        <span className="mobile-property-count">{c.resorts}</span>
-                      </div>
-                      <div className={`mobile-property-item ${c.villas > 0 ? 'highlight' : ''}`}>
-                        <span className="mobile-property-label">Villas</span>
-                        <span className="mobile-property-count">{c.villas}</span>
-                      </div>
-                      <div className={`mobile-property-item ${c.apartments > 0 ? 'highlight' : ''}`}>
-                        <span className="mobile-property-label">Apartments</span>
-                        <span className="mobile-property-count">{c.apartments}</span>
-                      </div>
-                      <div className={`mobile-property-item ${c.cottages > 0 ? 'highlight' : ''}`}>
-                        <span className="mobile-property-label">Cottages</span>
-                        <span className="mobile-property-count">{c.cottages}</span>
-                      </div>
-                      <div className={`mobile-property-item ${c.others > 0 ? 'highlight' : ''}`}>
-                        <span className="mobile-property-label">Others</span>
-                        <span className="mobile-property-count">{c.others}</span>
-                      </div>
-                    </div>
-
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
 
         </div>
 

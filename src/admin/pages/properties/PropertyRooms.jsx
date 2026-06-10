@@ -245,7 +245,9 @@ export default function PropertyRooms() {
             <div className="props-table-title" style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif', flexShrink: 0 }}>Property Requests</div>
             
             <div className="props-table-actions no-scrollbar" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'nowrap', overflowX: 'auto', WebkitOverflowScrolling: 'touch', maxWidth: '100%' }}>
-              {/* DateRangeDropdown removed as per user request */}
+              <DateRangeDropdown
+                onDateChange={(from, to) => { setFilterDateFrom(from); setFilterDateTo(to); }}
+              />
 
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', flexShrink: 1, minWidth: 100, maxWidth: 140 }}>
                 <select 
@@ -573,39 +575,35 @@ export default function PropertyRooms() {
 
                   {(room.amenities_types || selectedRequest.amenities_types) && (room.amenities_types || selectedRequest.amenities_types).length > 0 && (
                     <div style={{ marginBottom: 16 }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 10 }}>Amenities</div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 8 }}>Amenities</div>
+                      <ul style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
                         {(room.amenities_types || selectedRequest.amenities_types).map((a, i) => (
-                          <span key={i} style={{ padding: '4px 12px', background: '#EFF6FF', color: '#2563EB', borderRadius: 20, fontSize: 12, fontWeight: 500, border: '1px solid #BFDBFE' }}>
-                            {a}
-                          </span>
+                          <li key={i} style={{ fontSize: 13, color: '#374151', lineHeight: 1.6 }}>{a}</li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   )}
 
                   {(room.offers || selectedRequest.offers) && (room.offers || selectedRequest.offers).length > 0 && (
                     <div style={{ marginBottom: 16 }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 10 }}>Offers Included</div>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 8 }}>Offers Included</div>
+                      <ul style={{ margin: 0, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 4 }}>
                         {(room.offers || selectedRequest.offers).map((o, i) => (
-                          <span key={i} style={{ padding: '4px 12px', background: '#F0FDF4', color: '#16A34A', borderRadius: 20, fontSize: 12, fontWeight: 500, border: '1px solid #BBF7D0' }}>
-                            ✓ {o}
-                          </span>
+                          <li key={i} style={{ fontSize: 13, color: '#374151', lineHeight: 1.6 }}>{o}</li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   )}
 
                   {(room.rules || selectedRequest.rules) && (Array.isArray(room.rules || selectedRequest.rules) ? (room.rules || selectedRequest.rules).length > 0 : (room.rules || selectedRequest.rules)) && (
                     <div>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 10 }}>House Rules</div>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: '#111827', marginBottom: 8 }}>House Rules</div>
                       {Array.isArray(room.rules || selectedRequest.rules) ? (
                         <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                           {(room.rules || selectedRequest.rules).map((rule, idx) => (
-                            <div key={idx} style={{ background: '#FFFDF5', border: '1px solid #FEF3C7', borderRadius: 8, padding: '12px 14px' }}>
-                              <div style={{ fontSize: 13, fontWeight: 700, color: '#D97706', marginBottom: 6 }}>{rule.title || 'Rule'}</div>
-                              <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12.5, color: '#6B7280', lineHeight: 1.6 }}>
+                            <div key={idx} style={{ background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: 8, padding: '12px 14px' }}>
+                              <div style={{ fontSize: 13, fontWeight: 700, color: '#111827', marginBottom: 6 }}>{rule.title || 'Rule'}</div>
+                              <ul style={{ margin: 0, paddingLeft: 18, fontSize: 12.5, color: '#4B5563', lineHeight: 1.6 }}>
                                 {Array.isArray(rule.points) ? rule.points.map((pt, pidx) => (
                                   <li key={pidx}>{pt}</li>
                                 )) : <li>{rule.points || rule.text || ''}</li>}
@@ -614,7 +612,7 @@ export default function PropertyRooms() {
                           ))}
                         </div>
                       ) : (
-                        <p style={{ fontSize: 13, color: '#6B7280', lineHeight: 1.6, margin: 0, background: '#FFFDF5', padding: '12px 14px', borderRadius: 8, border: '1px solid #FEF3C7' }}>
+                        <p style={{ fontSize: 13, color: '#4B5563', lineHeight: 1.6, margin: 0, background: '#F9FAFB', padding: '12px 14px', borderRadius: 8, border: '1px solid #E5E7EB' }}>
                           {room.rules || selectedRequest.rules}
                         </p>
                       )}

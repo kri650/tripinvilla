@@ -2681,17 +2681,18 @@ export default function PropertyMakers() {
         </tbody>
       </table>
     </div>
+  </div>
 
     {/* Pagination Controls */}
     {totalPages > 1 && (
-      <div style={{ position: 'sticky', bottom: 0, zIndex: 10, display: 'flex', flexWrap: 'wrap', gap: 12, justifyContent: 'flex-end', alignItems: 'center', padding: '16px 24px', borderTop: '1px solid #F3F4F6', background: '#fff', borderBottomLeftRadius: 12, borderBottomRightRadius: 12, width: '100%', boxSizing: 'border-box' }}>
-        <span style={{ fontSize: '13px', color: '#6B7280' }}>
+      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', gap: 8, justifyContent: 'flex-end', alignItems: 'center', padding: '14px 8px 4px', width: '100%', boxSizing: 'border-box' }}>
+        <span style={{ fontSize: '13px', color: '#6B7280', whiteSpace: 'nowrap', marginRight: 4 }}>
           Page {currentPage} of {totalPages}
         </span>
         <button
           onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
           disabled={currentPage === 1}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === 1 ? '#F9FAFB' : '#fff', color: currentPage === 1 ? '#D1D5DB' : '#374151', cursor: currentPage === 1 ? 'not-allowed' : 'pointer' }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === 1 ? '#F9FAFB' : '#fff', color: currentPage === 1 ? '#D1D5DB' : '#374151', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', flexShrink: 0 }}
         >
           ‹
         </button>
@@ -2699,25 +2700,24 @@ export default function PropertyMakers() {
           if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
             return (
               <button key={page} onClick={() => setCurrentPage(page)}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === page ? '#58A429' : '#fff', color: currentPage === page ? '#fff' : '#374151', cursor: 'pointer', fontWeight: currentPage === page ? 600 : 400 }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === page ? '#58A429' : '#fff', color: currentPage === page ? '#fff' : '#374151', cursor: 'pointer', fontWeight: currentPage === page ? 600 : 400, flexShrink: 0 }}
               >{page}</button>
             );
           }
-          if (page === 2 && currentPage > 3) return <span key={page} style={{ color: '#9CA3AF', padding: '0 2px' }}>...</span>;
-          if (page === totalPages - 1 && currentPage < totalPages - 2) return <span key={page} style={{ color: '#9CA3AF', padding: '0 2px' }}>...</span>;
+          if (page === 2 && currentPage > 3) return <span key={page} style={{ color: '#9CA3AF', padding: '0 2px', lineHeight: '32px' }}>...</span>;
+          if (page === totalPages - 1 && currentPage < totalPages - 2) return <span key={page} style={{ color: '#9CA3AF', padding: '0 2px', lineHeight: '32px' }}>...</span>;
           return null;
         })}
         <button
           onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
           disabled={currentPage === totalPages}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === totalPages ? '#F9FAFB' : '#fff', color: currentPage === totalPages ? '#D1D5DB' : '#374151', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer' }}
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === totalPages ? '#F9FAFB' : '#fff', color: currentPage === totalPages ? '#D1D5DB' : '#374151', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', flexShrink: 0 }}
         >
           ›
         </button>
       </div>
     )}
-  </div>
-        </div >
+  </div >
       </div >
 
   { managingRoomsProperty && (

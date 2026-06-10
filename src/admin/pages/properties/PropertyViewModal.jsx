@@ -254,14 +254,12 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
         {/* Amenities */}
         {amenities.length > 0 && (
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: 6 }}><Shield size={16} color="#58A429" /> Amenities</h3>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: 6 }}><Shield size={16} color="#58A429" /> Amenities</h3>
+            <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {amenities.map((am, i) => (
-                <span key={i} style={{ padding: '6px 14px', background: '#ECFDF5', color: '#059669', borderRadius: '20px', fontSize: '13px', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #A7F3D0' }}>
-                  <CheckCircle2 size={14} /> {am}
-                </span>
+                <li key={i} style={{ fontSize: '13px', color: '#374151', lineHeight: 1.6 }}>{am}</li>
               ))}
-            </div>
+            </ul>
           </div>
         )}
         {amenities.length === 0 && (
@@ -273,8 +271,8 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
         {/* Unique Experiences */}
         {experiences.length > 0 && (
           <div>
-            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 12px 0', display: 'flex', alignItems: 'center', gap: 6 }}><Star size={16} color="#58A429" /> Unique Experiences</h3>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: '0 0 10px 0', display: 'flex', alignItems: 'center', gap: 6 }}><Star size={16} color="#58A429" /> Unique Experiences</h3>
+            <ul style={{ margin: 0, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {experiences.map((exp, i) => {
                 let expName = exp.experienceName || exp.name;
                 if (!expName && typeof exp === 'string') {
@@ -289,12 +287,10 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
                 }
                 if (!expName) return null;
                 return (
-                  <span key={i} style={{ padding: '6px 14px', background: '#EFF6FF', color: '#2563EB', borderRadius: '20px', fontSize: '13px', fontWeight: 500, border: '1px solid #BFDBFE' }}>
-                    {expName}
-                  </span>
+                  <li key={i} style={{ fontSize: '13px', color: '#374151', lineHeight: 1.6 }}>{expName}</li>
                 );
               })}
-            </div>
+            </ul>
           </div>
         )}
 
