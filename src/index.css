@@ -1099,7 +1099,7 @@ input:focus, select:focus {
   .admin-content {
     width: 100% !important;
     min-width: 0 !important;
-    overflow-x: hidden !important;
+    overflow-x: visible !important;
     flex: 1 1 auto !important;
     box-sizing: border-box !important;
   }
@@ -1113,7 +1113,7 @@ input:focus, select:focus {
 
   /* Fix chart-card with table */
   .chart-card:has(.data-table) {
-    overflow: hidden !important;
+    overflow: visible !important;
     width: 100% !important;
     min-width: 0 !important;
   }

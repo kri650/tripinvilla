@@ -43,12 +43,12 @@ export default function OffersByDate() {
           <div style={{ fontSize: '12px', color: '#9CA3AF' }}>{timeFormatted}</div>
         </div>
       ),
-      name: o.propertyName || o.property_id?.name || 'Property',
+      name: o.propertyName || o.property_id?.name || o.property_id?.propertyName || 'Property',
       location: o.location || o.property_id?.location || 'N/A',
-      category: o.category || 'N/A',
-      room: o.room_type || o.room || 'N/A',
+      category: o.category || o.property_id?.type || o.property_id?.category || 'N/A',
+      room: o.room_type || o.room || o.property_id?.roomType || 'N/A',
       foods: o.food_type || o.foods || 'N/A',
-      amenities: Array.isArray(o.amenities) ? o.amenities.join(', ') : (o.amenities || 'N/A'),
+      amenities: Array.isArray(o.amenities) ? o.amenities.join(', ') : (o.amenities || (Array.isArray(o.property_id?.amenities) ? o.property_id.amenities.join(', ') : o.property_id?.amenities) || 'N/A'),
       offer: (() => {
         const val = o.offer_percent || o.offerPercent || o.offer || '20% Off';
         const str = String(val).trim();
@@ -130,8 +130,14 @@ export default function OffersByDate() {
 
     try {
       setSubmitting(true);
+      const req = approvedRequests.find(r => r._id === selectedRequestId || r.id === selectedRequestId);
       const payload = {
         property_id: propertyId,
+        propertyName: req?.propertyName || req?.property?.name || '',
+        location: req?.location || req?.property?.location || '',
+        category: category,
+        room_type: roomType,
+        amenities: amenities,
         food_type: foods,
         offer_date: dateTo,
         dateFrom: dateFrom,
