@@ -1492,6 +1492,8 @@ export default function AllProperties() {
                     <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                       {availableExperiences.map((exp) => {
                         const id = exp._id || exp.experienceName || exp.name;
+                        const expName = exp.experienceName || exp.name || "";
+                        if (/^[0-9a-fA-F]{24}$/.test(expName)) return null;
                         const isSelected = selectedExperiences.includes(id);
                         return (
                           <button
@@ -1521,7 +1523,7 @@ export default function AllProperties() {
                               transition: "all 0.15s",
                             }}
                           >
-                            <span>{exp.experienceName || exp.name}</span>
+                            <span>{expName}</span>
                             {isSelected && (
                               <span
                                 onClick={(e) => {

@@ -1064,6 +1064,8 @@ export default function PropertyMakers() {
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {availableExperiences.map((exp) => {
                     const id = exp._id || exp.experienceName || exp.name;
+                    const expName = exp.experienceName || exp.name || "";
+                    if (/^[0-9a-fA-F]{24}$/.test(expName)) return null;
                     const isSelected = selectedExperiences.includes(id);
                     return (
                       <button
@@ -1094,7 +1096,7 @@ export default function PropertyMakers() {
                         }}
                       >
 
-                        <span>{exp.experienceName || exp.name}</span>
+                        <span>{expName}</span>
                       </button>
                     );
                   })}
@@ -2596,7 +2598,8 @@ export default function PropertyMakers() {
                         if (!e) return '';
                         if (typeof e === 'string') {
                           const matchedExp = availableExperiences.find(x => x._id === e || x.id === e);
-                          return matchedExp ? (matchedExp.experienceName || matchedExp.name) : e;
+                          if (matchedExp) return matchedExp.experienceName || matchedExp.name;
+                          return /^[0-9a-fA-F]{24}$/.test(e) ? "" : e;
                         }
                         return e.experienceName || e.name || e || '';
                       })

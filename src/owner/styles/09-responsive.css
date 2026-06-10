@@ -105,7 +105,8 @@
   .admin-table-card { margin: 0 16px 16px; padding: 16px; }
   .props-breadcrumb { margin: 0 16px 12px !important; }
 
-  .data-table, .admin-table { min-width: 600px; }
+  .data-table, .admin-table { min-width: 600px; width: 100%; }
+  .table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
   .form-grid-3, .form-grid-2 { grid-template-columns: 1fr; }
 

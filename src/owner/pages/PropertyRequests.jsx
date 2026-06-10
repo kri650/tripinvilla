@@ -15,8 +15,6 @@ const getFullRoomImageUrl = (url) => {
   return `${base}${url}`;
 };
 
-const defaultRules = [];
-
 const formatCurrency = (value) => {
   if (value === null || value === undefined || value === '') return '—';
   const amount = Number(value);
@@ -25,17 +23,6 @@ const formatCurrency = (value) => {
 };
 
 const firstPresent = (...values) => values.find((value) => value !== null && value !== undefined && value !== '');
-
-const getDiscountText = (originalValue, priceValue, offers = []) => {
-  const offerText = Array.isArray(offers) && offers.length > 0 ? offers.join(', ') : '';
-  const original = Number(originalValue);
-  const price = Number(priceValue);
-  if (Number.isFinite(original) && Number.isFinite(price) && original > price) {
-    const discountAmount = original - price;
-    return offerText ? `${offerText} · Save ${formatCurrency(discountAmount)}` : `Save ${formatCurrency(discountAmount)}`;
-  }
-  return offerText || '—';
-};
 
 const emptyRoom = () => ({
   room_type: '',
@@ -106,30 +93,30 @@ function RoomForm({
   const manualRoomType = data.manualRoomType || false;
 
   return (
-    <div className="dash-section" style={{ marginBottom: 24, border: isEditMode ? '1px solid #2563EB' : 'none' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-        <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', fontFamily: '"Outfit", sans-serif', margin: 0 }}>
+    <div className="dash-section room-form-section" style={{ border: isEditMode ? '1px solid #2563EB' : 'none' }}>
+      <div className="room-form-header">
+        <h3 className="room-form-title">
           {isEditMode ? `Room ${idx + 1}: ${data.room_type || 'New Room'}` : 'Configure Room Pricing & Rules'}
         </h3>
         {isEditMode && onRemove && (
-          <button type="button" onClick={() => onRemove(idx)} style={{ color: '#EF4444', background: '#FEE2E2', border: 'none', borderRadius: '6px', padding: '6px 12px', fontSize: '12px', fontWeight: 600, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}>
+          <button type="button" onClick={() => onRemove(idx)} className="btn-remove-room">
             <Trash2 size={14} /> Remove Room
           </button>
         )}
       </div>
 
-      <div className="form-grid-3" style={{ marginBottom: '16px' }}>
+      <div className="form-grid-3">
         <div className="form-group">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <label className="form-label" style={{ marginBottom: 0 }}>Room Type*</label>
-            <button type="button" onClick={() => onUpdate({ ...data, manualRoomType: !manualRoomType, room_type: '' })} style={{ background: 'none', border: 'none', color: '#2563EB', fontSize: '12px', cursor: 'pointer', fontWeight: 600 }}>
+          <div className="room-type-label-row">
+            <label className="form-label">Room Type*</label>
+            <button type="button" onClick={() => onUpdate({ ...data, manualRoomType: !manualRoomType, room_type: '' })} className="btn-manual-toggle">
               {manualRoomType ? '← Use Dropdown' : 'Enter Manually'}
             </button>
           </div>
           {manualRoomType ? (
-            <input type="text" className="form-input" name="room_type" value={data.room_type} onChange={handleInputChange} placeholder="e.g. Penthouse Suite" required style={{ marginTop: '6px' }} />
+            <input type="text" className="form-input" name="room_type" value={data.room_type} onChange={handleInputChange} placeholder="e.g. Penthouse Suite" required />
           ) : (
-            <select className="form-select" name="room_type" value={data.room_type} onChange={handleInputChange} required style={{ marginTop: '6px' }}>
+            <select className="form-select" name="room_type" value={data.room_type} onChange={handleInputChange} required>
               <option value="">Select Room Type</option>
               {roomTypes.length > 0
                 ? roomTypes.map(rt => <option key={rt._id || rt.name} value={rt.name}>{rt.name}</option>)
@@ -140,11 +127,10 @@ function RoomForm({
         </div>
         <div className="form-group">
           <label className="form-label">Upload Room Image (Max 5MB)</label>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <input type="file" accept=".jpg,.jpeg,.png" onChange={handleImageChange}
-              style={{ width: '100%', boxSizing: 'border-box', padding: '8px', border: '1px solid #D1D5DB', borderRadius: '8px', fontSize: '13px', background: '#fff' }} />
+          <div className="room-image-input-group">
+            <input type="file" accept=".jpg,.jpeg,.png" onChange={handleImageChange} className="file-input-minimal" />
             {(data.roomImagePreview || data.room_image_url) && (
-              <img src={getFullRoomImageUrl(data.roomImagePreview || data.room_image_url)} alt="preview" style={{ width: '100%', height: '80px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #E5E7EB' }} />
+              <img src={getFullRoomImageUrl(data.roomImagePreview || data.room_image_url)} alt="preview" className="room-form-preview-img" />
             )}
           </div>
         </div>
@@ -159,7 +145,7 @@ function RoomForm({
         </div>
       </div>
 
-      <div className="form-grid-3" style={{ marginBottom: '16px' }}>
+      <div className="form-grid-3">
         <div className="form-group">
           <label className="form-label">Original Price (₹)</label>
           <input type="number" className="form-input" name="original_price" value={data.original_price} onChange={handleInputChange} placeholder="e.g. 118350" />
@@ -174,39 +160,37 @@ function RoomForm({
         </div>
       </div>
 
-      <div style={{ marginBottom: '16px' }}>
+      <div className="offers-input-section">
         <label className="form-label">Multiple Offers/Discounts</label>
-        <div style={{ display: 'flex', gap: '8px', marginBottom: '10px' }}>
-          <input type="text" className="form-input" 
-            placeholder="e.g. 20% Off flat, Breakfast Included" style={{ flex: 1 }} 
-            onKeyDown={e => { 
-              if (e.key === 'Enter') { 
-                e.preventDefault(); 
-                if (e.target.value.trim()) { 
-                  onUpdate({ ...data, offersList: [...offersList, e.target.value.trim()] });
-                  e.target.value = '';
-                } 
+        <input type="text" className="form-input" 
+          placeholder="e.g. 20% Off flat, Breakfast Included" 
+          onKeyDown={e => { 
+            if (e.key === 'Enter') { 
+              e.preventDefault(); 
+              if (e.target.value.trim()) { 
+                onUpdate({ ...data, offersList: [...offersList, e.target.value.trim()] });
+                e.target.value = '';
               } 
-            }} />
-        </div>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+            } 
+          }} />
+        <div className="offers-pill-cloud">
           {offersList.map((off, oIdx) => (
-            <div key={oIdx} style={{ display: 'flex', alignItems: 'center', gap: '6px', background: '#ECFDF5', color: '#065F46', padding: '4px 12px', borderRadius: '16px', fontSize: '13px', border: '1px solid #A7F3D0' }}>
+            <div key={oIdx} className="offer-tag">
               <span>{off}</span>
-              <button type="button" onClick={() => onUpdate({ ...data, offersList: offersList.filter((_, i) => i !== oIdx) })} style={{ background: 'none', border: 'none', color: '#059669', cursor: 'pointer', padding: 0 }}>&times;</button>
+              <button type="button" onClick={() => onUpdate({ ...data, offersList: offersList.filter((_, i) => i !== oIdx) })} className="btn-remove-tag">&times;</button>
             </div>
           ))}
-          {offersList.length === 0 && <span style={{ fontSize: '13px', color: '#6B7280' }}>No offers added.</span>}
+          {offersList.length === 0 && <span className="empty-msg">No offers added.</span>}
         </div>
       </div>
 
-      <div style={{ marginBottom: '16px' }}>
-        <label className="form-label" style={{ marginBottom: '8px', display: 'block' }}>Amenities Types</label>
-        {amenitiesLoading ? <div style={{ color: '#9CA3AF', fontSize: 13 }}>Loading amenities...</div> : (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+      <div className="amenities-selection-section">
+        <label className="form-label">Amenities Types</label>
+        {amenitiesLoading ? <div className="loading-msg">Loading amenities...</div> : (
+          <div className="amenities-pill-cloud">
             {availableAmenities.map(a => (
               <button type="button" key={a} onClick={() => toggleAmenity(a)}
-                style={{ padding: '5px 13px', borderRadius: '20px', border: selectedAmenities.includes(a) ? '1px solid #58A429' : '1px solid #D1D5DB', background: selectedAmenities.includes(a) ? '#ECFDF5' : '#fff', color: selectedAmenities.includes(a) ? '#58A429' : '#374151', fontSize: '12px', fontWeight: 500, cursor: 'pointer' }}>
+                className={`amenity-btn ${selectedAmenities.includes(a) ? 'active' : ''}`}>
                 {a}
               </button>
             ))}
@@ -214,27 +198,29 @@ function RoomForm({
         )}
       </div>
 
-      <div style={{ marginBottom: '20px', padding: '16px', background: '#F9FAFB', borderRadius: '12px', border: '1px solid #E5E7EB' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-          <label className="form-label" style={{ margin: 0, fontWeight: 700 }}>House Rules Sections</label>
-          <button type="button" onClick={handleAddRuleSection} style={{ padding: '6px 12px', background: '#2563EB', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '12px', fontWeight: 600 }}>
+      <div className="house-rules-config-box">
+        <div className="rules-box-header">
+          <label className="form-label-bold">House Rules Sections</label>
+          <button type="button" onClick={handleAddRuleSection} className="btn-add-section">
             + Add Section
           </button>
         </div>
-        {rulesSections.map((sec, rIdx) => (
-          <div key={rIdx} style={{ background: 'white', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '12px', marginBottom: '10px', position: 'relative' }}>
-            <button type="button" onClick={() => handleRemoveRuleSection(rIdx)} style={{ position: 'absolute', top: '10px', right: '10px', background: 'none', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold' }}>&times;</button>
-            <div className="form-group" style={{ marginBottom: '10px' }}>
-              <label className="form-label">Section Title*</label>
-              <input type="text" className="form-input" value={sec.title} onChange={e => handleRuleSectionChange(rIdx, 'title', e.target.value)} placeholder="e.g. Must Read Rules" required />
+        <div className="rules-sections-list">
+          {rulesSections.map((sec, rIdx) => (
+            <div key={rIdx} className="rule-section-card">
+              <button type="button" onClick={() => handleRemoveRuleSection(rIdx)} className="btn-remove-section">&times;</button>
+              <div className="form-group">
+                <label className="form-label">Section Title*</label>
+                <input type="text" className="form-input" value={sec.title} onChange={e => handleRuleSectionChange(rIdx, 'title', e.target.value)} placeholder="e.g. Must Read Rules" required />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Rules Text (one rule per line)*</label>
+                <textarea className="form-textarea minimal-textarea" value={sec.text} onChange={e => handleRuleSectionChange(rIdx, 'text', e.target.value)} placeholder="e.g. • Primary Guest should be atleast 18 years of age." required />
+              </div>
             </div>
-            <div className="form-group" style={{ marginBottom: 0 }}>
-              <label className="form-label">Rules Text (one rule per line)*</label>
-              <textarea className="form-textarea" value={sec.text} onChange={e => handleRuleSectionChange(rIdx, 'text', e.target.value)} placeholder="e.g. • Primary Guest should be atleast 18 years of age." style={{ minHeight: '60px', padding: '8px 12px', width: '100%', border: '1px solid #D1D5DB', borderRadius: '8px' }} required />
-            </div>
-          </div>
-        ))}
-        {rulesSections.length === 0 && <div style={{ fontSize: '13px', color: '#6B7280', fontStyle: 'italic', textAlign: 'center', padding: '10px 0' }}>No rule sections added.</div>}
+          ))}
+          {rulesSections.length === 0 && <div className="empty-rules-msg">No rule sections added.</div>}
+        </div>
       </div>
     </div>
   );
@@ -247,12 +233,10 @@ export default function PropertyRequests() {
   const [propertyId, setPropertyId] = useState('');
   const [formData, setFormData] = useState(emptyRoom());
   const [roomTypes, setRoomTypes] = useState([]);
-  const [editingRoomId, setEditingRoomId] = useState(null);
   const [editingRequestId, setEditingRequestId] = useState(null);
   const [viewingRequest, setViewingRequest] = useState(null);
   const [rulesSections, setRulesSections] = useState([{ title: '', text: '' }]);
-  const [currentOffer, setCurrentOffer] = useState('');
-  const [offersList, setOffersList] = useState(['20% Off']);
+  const [offersList, setOffersList] = useState([]);
   const [manualRoomType, setManualRoomType] = useState(false);
   const fallbackRoomTypes = ['Standard Room', 'Deluxe Room', 'Super Deluxe Room', 'Executive Suite', 'Presidential Suite', 'Family Suite', 'Dormitory', 'Tent', 'Cottage', 'Villa'];
   const [selectedRoomImage, setSelectedRoomImage] = useState(null);
@@ -260,7 +244,6 @@ export default function PropertyRequests() {
   const [selectedAmenities, setSelectedAmenities] = useState([]);
   const [availableAmenities, setAvailableAmenities] = useState([]);
   const [amenitiesLoading, setAmenitiesLoading] = useState(false);
-  // Multi-room queue
   const [roomQueue, setRoomQueue] = useState([]);
   const [editingQueueIdx, setEditingQueueIdx] = useState(null);
   const imageInputRef = useRef(null);
@@ -302,9 +285,7 @@ export default function PropertyRequests() {
       const rtRes = await fetch(`${API_BASE}/master/room-types`);
       const rtData = await rtRes.json();
       if (Array.isArray(rtData)) setRoomTypes(rtData);
-    } catch {
-      // fallback handled in render
-    }
+    } catch { }
   };
 
   useEffect(() => { fetchData(); }, []);
@@ -487,38 +468,38 @@ export default function PropertyRequests() {
   const categoryValue = selectedProperty ? selectedProperty.type : 'N/A';
 
   return (
-    <div className="fade-in">
+    <div className="fade-in property-requests-page">
       <div style={{ height: '16px' }} />
-      <div className="props-breadcrumb" style={{ margin: '0 39px 12px' }}>
+      <div className="props-breadcrumb">
         Property Management &gt; <span>Property Requests</span>
       </div>
 
       {properties.length === 0 ? (
-        <div style={{ margin: '20px 39px', padding: '32px', background: '#FFFBEB', border: '1px solid #F59E0B', borderRadius: '12px', display: 'flex', gap: '16px', alignItems: 'center' }}>
+        <div className="no-properties-alert">
           <ShieldAlert size={28} color="#D97706" />
           <div>
-            <h4 style={{ fontSize: '15px', fontWeight: 600, color: '#92400E', margin: '0 0 4px 0' }}>No Properties Listed Yet</h4>
-            <p style={{ fontSize: '13px', color: '#B45309', margin: 0 }}>Add at least one property under "My Properties" before configuring room pricing.</p>
+            <h4 className="alert-title">No Properties Listed Yet</h4>
+            <p className="alert-text">Add at least one property under "My Properties" before configuring room pricing.</p>
           </div>
         </div>
       ) : (
         <>
-          <div className="dash-section" style={{ marginBottom: 16 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-              <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', margin: 0 }}>Configure Property Request</h3>
-              <div style={{ display: 'flex', gap: '10px' }}>
+          <div className="dash-section property-request-config">
+            <div className="request-header">
+              <h3 className="section-title">Configure Property Request</h3>
+              <div className="header-actions">
                 {editingRequestId && (
-                  <button type="button" onClick={() => { setEditingRequestId(null); setRoomQueue([]); resetRoomForm(); }} style={{ padding: '8px 16px', background: '#F3F4F6', color: '#374151', border: '1px solid #D1D5DB', borderRadius: '8px', cursor: 'pointer', fontWeight: 600, fontSize: '12.5px' }}>Cancel Edit</button>
+                  <button type="button" className="btn-cancel" onClick={() => { setEditingRequestId(null); setRoomQueue([]); resetRoomForm(); }}>Cancel Edit</button>
                 )}
                 {roomQueue.length > 0 && (
-                  <button type="button" onClick={handleSubmitAll} disabled={loading} style={{ cursor: 'pointer', padding: '8px 20px', fontSize: '12.5px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 600 }}>
+                  <button type="button" className="btn-submit-all" onClick={handleSubmitAll} disabled={loading}>
                     {loading ? 'Submitting...' : `Submit Request (${roomQueue.length} Room(s))`}
                   </button>
                 )}
               </div>
             </div>
 
-            <div className="form-grid-3" style={{ marginBottom: '16px' }}>
+            <div className="form-grid-2">
               <div className="form-group">
                 <label className="form-label">Property Name*</label>
                 <select className="form-select" value={propertyId} onChange={handlePropertyChange} required>
@@ -527,7 +508,7 @@ export default function PropertyRequests() {
               </div>
               <div className="form-group">
                 <label className="form-label">Category (Auto-filled)*</label>
-                <input type="text" className="form-input" value={categoryValue} disabled style={{ background: '#F3F4F6', color: '#4B5563', cursor: 'not-allowed' }} />
+                <input type="text" className="form-input category-input" value={categoryValue} disabled />
               </div>
             </div>
           </div>
@@ -551,26 +532,26 @@ export default function PropertyRequests() {
                 amenitiesLoading={amenitiesLoading}
                 getFullRoomImageUrl={getFullRoomImageUrl}
               />
-              <div style={{ textAlign: 'right', marginBottom: 24, padding: '0 39px' }}>
-                <button type="button" onClick={handleAddToQueue} disabled={loading} style={{ cursor: 'pointer', padding: '10px 24px', background: '#2563EB', color: '#fff', border: 'none', borderRadius: '8px', fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+              <div className="add-room-actions">
+                <button type="button" className="btn-add-queue" onClick={handleAddToQueue} disabled={loading}>
                   <Plus size={16} /> Add Room to Queue
                 </button>
               </div>
 
               {roomQueue.length > 0 && (
-                <div className="dash-section" style={{ marginBottom: 16 }}>
-                  <h3 style={{ fontSize: '15px', fontWeight: 700, color: '#111827', marginBottom: '16px' }}>Rooms in Queue ({roomQueue.length})</h3>
-                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
+                <div className="dash-section room-queue-section">
+                  <h3 className="section-title">Rooms in Queue ({roomQueue.length})</h3>
+                  <div className="room-queue-grid">
                     {roomQueue.map((room, idx) => (
-                      <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: '12px', padding: '10px 16px', minWidth: '220px' }}>
-                        <img src={room._preview_img || 'https://via.placeholder.com/48'} alt={room.room_type} style={{ width: '48px', height: '48px', borderRadius: '8px', objectFit: 'cover' }} />
-                        <div style={{ flex: 1 }}>
-                          <div style={{ fontWeight: 700, fontSize: '13px', color: '#065F46' }}>{room.room_type}</div>
-                          <div style={{ fontSize: '12px', color: '#6B7280' }}>₹{room.price_per_room}/night</div>
+                      <div key={idx} className="queue-item">
+                        <img src={room._preview_img || 'https://via.placeholder.com/48'} alt={room.room_type} className="queue-item-img" />
+                        <div className="queue-item-info">
+                          <div className="queue-item-name">{room.room_type}</div>
+                          <div className="queue-item-price">₹{room.price_per_room}/night</div>
                         </div>
-                        <div style={{ display: 'flex', gap: '4px' }}>
-                          <button type="button" onClick={() => handleEditFromQueue(idx)} style={{ background: 'none', border: 'none', color: '#2563EB', cursor: 'pointer' }}><Plus size={14} /></button>
-                          <button type="button" onClick={() => handleRemoveFromQueue(idx)} style={{ background: 'none', border: 'none', color: '#EF4444', cursor: 'pointer' }}><Trash2 size={14} /></button>
+                        <div className="queue-item-actions">
+                          <button type="button" onClick={() => handleEditFromQueue(idx)} className="btn-edit-queue"><Plus size={14} /></button>
+                          <button type="button" onClick={() => handleRemoveFromQueue(idx)} className="btn-remove-queue"><Trash2 size={14} /></button>
                         </div>
                       </div>
                     ))}
@@ -579,7 +560,7 @@ export default function PropertyRequests() {
               )}
             </>
           ) : (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+            <div className="editing-rooms-container">
               {roomQueue.map((room, idx) => (
                 <RoomForm 
                   key={idx}
@@ -595,8 +576,8 @@ export default function PropertyRequests() {
                   getFullRoomImageUrl={getFullRoomImageUrl}
                 />
               ))}
-              <div style={{ textAlign: 'center', marginBottom: 24 }}>
-                <button type="button" onClick={() => setRoomQueue(prev => [...prev, emptyRoom()])} style={{ padding: '10px 24px', background: '#F3F4F6', color: '#374151', border: '1px solid #D1D5DB', borderRadius: '8px', cursor: 'pointer', fontWeight: 600 }}>
+              <div className="editing-actions">
+                <button type="button" className="btn-add-another" onClick={() => setRoomQueue(prev => [...prev, emptyRoom()])}>
                   + Add Another Room
                 </button>
               </div>
@@ -604,170 +585,166 @@ export default function PropertyRequests() {
           )}
 
           {/* ─── SUBMITTED REQUESTS TABLE ─── */}
-          <div className="dash-section" style={{ marginBottom: 24 }}>
-            <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
-              <div style={{ overflowX: 'auto' }}>
-                <table className="data-table" style={{ whiteSpace: 'nowrap' }}>
+          <div className="dash-section requests-table-section">
+            <div className="chart-card table-container">
+              <div className="table-responsive">
+                <table className="data-table">
                   <thead>
                     <tr>
                       {['Property', 'Category', 'Room Type', 'Bed', 'Amenities', 'Price', 'Rules', 'Offers', 'Status', 'Actions'].map((h, i) => (
-                        <th key={i} style={{ color: '#374151', fontWeight: 600, padding: '14px 16px', textAlign: 'left' }}>{h}</th>
+                        <th key={i} className="table-th">{h}</th>
                       ))}
                     </tr>
                   </thead>
                   <tbody>
                     {requests.length > 0 ? requests.map((r, i) => {
                       const statusLabel = r.admin_status || 'pending';
-                      const statusBg = statusLabel === 'approved' ? '#DCFCE7' : statusLabel === 'rejected' ? '#FEE2E2' : '#FEF3C7';
-                      const statusColor = statusLabel === 'approved' ? '#58A429' : statusLabel === 'rejected' ? '#EF4444' : '#D97706';
+                      const statusClass = statusLabel.toLowerCase();
                       return (
                         <React.Fragment key={i}>
-                          <tr>
-                            <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}><ReadMore maxWords={6}>{r.propertyName}</ReadMore></td>
-                            <td style={{ color: '#6B7280', padding: '14px 16px' }}>{r.category}</td>
-                            <td style={{ padding: '14px 16px' }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                {r.room_image_url && <img src={getFullRoomImageUrl(r.room_image_url)} alt={r.room_type} style={{ width: '32px', height: '32px', borderRadius: '6px', objectFit: 'cover' }} />}
-                                <span style={{ color: '#6B7280' }}>
+                          <tr className="request-row">
+                            <td className="td-property"><ReadMore maxWords={6}>{r.propertyName}</ReadMore></td>
+                            <td className="td-category">{r.category}</td>
+                            <td className="td-room-type">
+                              <div className="room-type-cell">
+                                {r.room_image_url && <img src={getFullRoomImageUrl(r.room_image_url)} alt={r.room_type} className="cell-img" />}
+                                <span>
                                   {getRequestRooms(r).length > 1
-                                    ? `${getRequestRooms(r).length} Rooms: ${getRequestRooms(r).map((room) => room.room_type).join(', ')}`
+                                    ? `${getRequestRooms(r).length} Rooms`
                                     : (r.room_type || getRequestRooms(r)[0]?.room_type)}
                                 </span>
                               </div>
                             </td>
-                            <td style={{ color: '#6B7280', padding: '14px 16px' }}>
+                            <td className="td-bed">
                               {getRequestRooms(r).length > 1
-                                ? `${getRequestRooms(r).length} room types`
+                                ? `${getRequestRooms(r).length} Types`
                                 : (r.bed_type || getRequestRooms(r)[0]?.bed_type)}
                             </td>
-                            <td style={{ color: '#6B7280', padding: '14px 16px' }}>
+                            <td className="td-amenities">
                               {getRequestRooms(r).length > 1
-                                ? 'See view for details'
+                                ? 'Multiple'
                                 : (r.amenities_types?.length > 0 ? r.amenities_types.join(', ') : 'None')}
                             </td>
-                            <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}>
+                            <td className="td-price">
                               {getRequestRooms(r).length > 1
                                 ? `From ${formatCurrency(Math.min(...getRequestRooms(r).map((room) => Number(room.price_per_room || 0)).filter(Boolean)))}`
                                 : formatCurrency(firstPresent(r.price_per_room, getRequestRooms(r)[0]?.price_per_room, r.priceByOwner))}
                             </td>
-                            <td style={{ color: '#6B7280', padding: '14px 16px' }}>{Array.isArray(r.rules) ? `${r.rules.length} section(s)` : (r.rules?.length > 35 ? `${r.rules.substring(0, 35)}...` : r.rules)}</td>
-                            <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}>{r.offers?.length > 0 ? r.offers.join(', ') : 'None'}</td>
-                            <td style={{ padding: '14px 16px' }}>
-                              <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, background: statusBg, color: statusColor }}>
-                                <span style={{ width: 6, height: 6, borderRadius: '50%', background: statusColor }} /> {statusLabel.toUpperCase()}
+                            <td className="td-rules">{Array.isArray(r.rules) ? `${r.rules.length} sections` : 'None'}</td>
+                            <td className="td-offers">{r.offers?.length > 0 ? r.offers.join(', ') : 'None'}</td>
+                            <td className="td-status">
+                              <span className={`status-badge ${statusClass}`}>
+                                {statusLabel.toUpperCase()}
                               </span>
                             </td>
-                            <td style={{ padding: '14px 16px' }}>
-                              <div style={{ display: 'flex', gap: '8px' }}>
-                                <button type="button" onClick={() => setViewingRequest(viewingRequest === r._id ? null : r._id)} style={{ color: '#0C6DC4', background: '#EFF6FF', border: 'none', borderRadius: 6, padding: 6, cursor: 'pointer' }} title="View Details">
+                            <td className="td-actions">
+                              <div className="action-btns">
+                                <button type="button" onClick={() => setViewingRequest(viewingRequest === r._id ? null : r._id)} className="btn-action view" title="View Details">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                                 </button>
-                                <button type="button" onClick={() => handleEditRoom(r)} style={{ color: '#2563EB', background: '#EFF6FF', border: 'none', borderRadius: 6, padding: 6, cursor: 'pointer' }} title="Edit Room">
+                                <button type="button" onClick={() => handleEditRoom(r)} className="btn-action edit" title="Edit Room">
                                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                 </button>
-                                <button type="button" onClick={() => handleDelete(r._id)} style={{ color: '#EF4444', background: '#FEE2E2', border: 'none', borderRadius: 6, padding: 6, cursor: 'pointer' }} title="Delete">
+                                <button type="button" onClick={() => handleDelete(r._id)} className="btn-action delete" title="Delete">
                                   <Trash2 size={14} />
                                 </button>
                               </div>
                             </td>
                           </tr>
                           {viewingRequest === r._id && (
-                            <tr>
-                              <td colSpan="10" style={{ padding: 0, borderBottom: 'none' }}>
-                                <div style={{ background: '#F9FAFB', padding: '12px', borderBottom: '1px solid #E5E7EB', borderTop: '1px dashed #D1D5DB' }}>
-                                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px', gap: '12px' }}>
-                                    <div>
-                                      <h2 style={{ margin: 0, fontSize: '14.5px', fontWeight: 700, color: '#111827' }}>{r.propertyName || 'Property'} Request Details</h2>
-                                      <div style={{ fontSize: '11.5px', color: '#58A429', marginTop: '2px', display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
-                                        <span style={{ display: 'inline-block', width: 5, height: 5, borderRadius: '50%', background: '#58A429' }}></span>
-                                        <span>{r.location || 'Location N/A'}</span>
-                                        <span style={{ color: '#9CA3AF' }}>•</span>
-                                        <span style={{ color: '#4B5563', fontWeight: 600 }}>{r.category}</span>
+                            <tr className="detail-expanded-row">
+                              <td colSpan="10" className="detail-td">
+                                <div className="detail-container">
+                                  <div className="detail-header">
+                                    <div className="header-info">
+                                      <h2 className="detail-title">{r.propertyName || 'Property'} Request Details</h2>
+                                      <div className="detail-meta">
+                                        <span className="meta-dot"></span>
+                                        <span className="meta-location">{r.location || 'Location N/A'}</span>
+                                        <span className="meta-sep">•</span>
+                                        <span className="meta-category">{r.category}</span>
                                       </div>
                                     </div>
-                                    <button onClick={() => setViewingRequest(null)} style={{ background: '#E5E7EB', border: 'none', cursor: 'pointer', padding: '5px 10px', borderRadius: '6px', fontSize: '11px', fontWeight: 600, color: '#374151' }}>Close Details</button>
+                                    <button onClick={() => setViewingRequest(null)} className="btn-close-detail">Close Details</button>
                                   </div>
 
-                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                                  <div className="room-details-list">
                                     {getRequestRooms(r).map((room, roomIdx) => (
-                                      <div key={roomIdx} style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '12px', background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', position: 'relative' }}>
-                                        {/* Row 1: Image and Primary Details */}
-                                        <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                                          <div style={{ position: 'relative', flex: '0 0 140px', maxWidth: '100%' }}>
-                                            <img src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=60'} alt={room.room_type} style={{ width: '100%', height: '90px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #E5E7EB' }} />
+                                      <div key={roomIdx} className="room-detail-card">
+                                        <div className="room-main-info">
+                                          <div className="room-image-container">
+                                            <img src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=60'} alt={room.room_type} className="room-img" />
                                             {getRequestRooms(r).length > 1 && (
-                                              <div style={{ position: 'absolute', top: -5, left: -5, background: '#2563EB', color: 'white', fontSize: '10px', fontWeight: 800, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>R{roomIdx + 1}</div>
+                                              <div className="room-badge">R{roomIdx + 1}</div>
                                             )}
                                           </div>
                                           
-                                          <div style={{ flex: '1 1 250px' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px', flexWrap: 'wrap', gap: '8px' }}>
-                                              <div>
-                                                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#111827' }}>{room.room_type || r.room_type}</h3>
-                                                <div style={{ fontSize: '12.5px', color: '#6B7280', marginTop: '2px' }}>Bed: <strong>{room.bed_type || r.bed_type}</strong></div>
+                                          <div className="room-primary-details">
+                                            <div className="room-title-price">
+                                              <div className="title-area">
+                                                <h3 className="room-name">{room.room_type || r.room_type}</h3>
+                                                <div className="room-bed-info">Bed: <strong>{room.bed_type || r.bed_type}</strong></div>
                                               </div>
-                                              <div style={{ textAlign: 'right' }}>
-                                                <div style={{ fontSize: '18px', fontWeight: 800, color: '#58A429' }}>{formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}<span style={{ fontSize: '11px', color: '#9CA3AF', fontWeight: 500 }}>/nt</span></div>
+                                              <div className="price-area">
+                                                <div className="price-val">{formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}<span className="price-unit">/nt</span></div>
                                               </div>
                                             </div>
 
-                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                                            <div className="price-extra-info">
                                               {firstPresent(room.original_price, r.original_price) && (
-                                                <div style={{ background: '#F9FAFB', padding: '6px 14px', borderRadius: '8px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                  <span style={{ fontSize: '11px', color: '#6B7280', textTransform: 'uppercase', fontWeight: 700 }}>Original</span>
-                                                  <span style={{ fontSize: '15px', fontWeight: 700, color: '#4B5563', textDecoration: 'line-through' }}>{formatCurrency(firstPresent(room.original_price, r.original_price))}</span>
+                                                <div className="info-pill original-price">
+                                                  <span className="pill-label">Original</span>
+                                                  <span className="pill-val strike">{formatCurrency(firstPresent(room.original_price, r.original_price))}</span>
                                                 </div>
                                               )}
                                               {firstPresent(room.tax_amount, r.tax_amount) && (
-                                                <div style={{ background: '#F9FAFB', padding: '6px 14px', borderRadius: '8px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '10px' }}>
-                                                  <span style={{ fontSize: '11px', color: '#6B7280', textTransform: 'uppercase', fontWeight: 700 }}>Tax</span>
-                                                  <span style={{ fontSize: '15px', fontWeight: 700, color: '#374151' }}>{formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}</span>
+                                                <div className="info-pill tax-info">
+                                                  <span className="pill-label">Tax</span>
+                                                  <span className="pill-val">{formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}</span>
                                                 </div>
                                               )}
                                             </div>
                                           </div>
                                         </div>
 
-                                        {/* Row 2: Amenities & Offers (Fluid) */}
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
-                                          <div>
-                                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#6B7280', marginBottom: '4px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                        <div className="room-secondary-info">
+                                          <div className="info-section amenities-section">
+                                            <div className="section-label">
                                               <CheckCircle size={12} color="#58A429" /> Amenities
                                             </div>
-                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                                            <div className="pill-grid">
                                               {(room.amenities_types || r.amenities_types)?.length > 0 ? (room.amenities_types || r.amenities_types).map((a, j) => (
-                                                <span key={j} style={{ padding: '2px 7px', background: '#F0FDF4', color: '#166534', borderRadius: '4px', fontSize: '11px', fontWeight: 500, border: '1px solid #DCFCE7' }}>{a}</span>
-                                              )) : <span style={{ fontSize: '11px', color: '#9CA3AF' }}>None</span>}
+                                                <span key={j} className="pill amenity-pill">{a}</span>
+                                              )) : <span className="empty-val">None</span>}
                                             </div>
                                           </div>
-                                          <div>
-                                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#6B7280', marginBottom: '4px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                          <div className="info-section offers-section">
+                                            <div className="section-label">
                                               <Star size={12} color="#F59E0B" /> Special Offers
                                             </div>
-                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
+                                            <div className="pill-grid">
                                               {(room.offers || r.offers)?.length > 0 ? (room.offers || r.offers).map((o, j) => (
-                                                <span key={j} style={{ padding: '2px 7px', background: '#EFF6FF', color: '#1E40AF', borderRadius: '4px', fontSize: '11px', fontWeight: 500, border: '1px solid #DBEAFE' }}>{o}</span>
-                                              )) : <span style={{ fontSize: '11px', color: '#9CA3AF' }}>None</span>}
+                                                <span key={j} className="pill offer-pill">{o}</span>
+                                              )) : <span className="empty-val">None</span>}
                                             </div>
                                           </div>
                                         </div>
 
-                                        {/* Row 3: House Rules (Adaptive) */}
-                                        <div style={{ background: '#F9FAFB', borderRadius: '8px', padding: '8px 12px', border: '1px solid #F3F4F6' }}>
-                                          <div style={{ fontSize: '10px', fontWeight: 700, color: '#6B7280', marginBottom: '6px', textTransform: 'uppercase' }}>House Rules & Policies</div>
-                                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '8px' }}>
+                                        <div className="room-rules-info">
+                                          <div className="section-label">House Rules & Policies</div>
+                                          <div className="rules-grid">
                                             {Array.isArray(room.rules || r.rules) && (room.rules || r.rules).length > 0 ? (room.rules || r.rules).map((rule, j) => (
-                                              <div key={j} style={{ background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '6px', padding: '5px 8px' }}>
-                                                <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#92400E', marginBottom: '1px' }}>{rule.title}</div>
-                                                <div style={{ fontSize: '10.5px', color: '#6B7280', lineHeight: '1.4' }}>
+                                              <div key={j} className="rule-box">
+                                                <div className="rule-title">{rule.title}</div>
+                                                <div className="rule-points">
                                                   {Array.isArray(rule.points) ? (
-                                                    <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: '10px' }}>
-                                                      {rule.points.map((p, pIdx) => <span key={pIdx}>• {p}</span>)}
+                                                    <div className="points-list">
+                                                      {rule.points.map((p, pIdx) => <span key={pIdx} className="point-item">• {p}</span>)}
                                                     </div>
                                                   ) : rule.points}
                                                 </div>
                                               </div>
-                                            )) : <span style={{ fontSize: '10.5px', color: '#9CA3AF' }}>None</span>}
+                                            )) : <span className="empty-val">None</span>}
                                           </div>
                                         </div>
                                       </div>
@@ -780,7 +757,7 @@ export default function PropertyRequests() {
                         </React.Fragment>
                       );
                     }) : (
-                      <tr><td colSpan="10" style={{ textAlign: 'center', padding: '20px', color: '#6B7280' }}>No property requests submitted yet.</td></tr>
+                      <tr><td colSpan="10" className="td-empty">No property requests submitted yet.</td></tr>
                     )}
                   </tbody>
                 </table>
