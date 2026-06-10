@@ -603,7 +603,7 @@ export default function PropertyRequests() {
                       return (
                         <React.Fragment key={i}>
                           <tr className="request-row">
-                            <td className="td-property" style={{ fontWeight: 400, color: '#4B5563' }}><ReadMore>{r.propertyName}</ReadMore></td>
+                            <td className="td-property" style={{ fontWeight: 500, color: '#111827' }}><ReadMore>{r.propertyName}</ReadMore></td>
                             <td className="td-category"><ReadMore>{r.category}</ReadMore></td>
                             <td className="td-room-type">
                               <div className="room-type-cell">
