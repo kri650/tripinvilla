@@ -98,15 +98,31 @@ export default function PropertyRoomManager({ property, onClose }) {
   };
 
   const handleEdit = (room, index) => {
-    let imgs = [];
-    if (Array.isArray(room.images) && room.images.length > 0) imgs = room.images.filter(u=>u&&u.trim());
-    else if (Array.isArray(room.room_images) && room.room_images.length > 0) imgs = room.room_images.filter(u=>u&&u.trim());
-    else if (room.imageUrl || room.room_image_url) imgs = [room.imageUrl||room.room_image_url].filter(Boolean);
-    setForm({ room_type: room.title||room.room_type||'', bed_type: room.beds||room.bed_type||'', price_per_room: room.price||room.price_per_room||'', original_price: room.originalPrice||room.original_price||'', tax_amount: room.taxAmount||room.tax_amount||'', amenities_types: room.features||room.amenities_types||[], offers: room.offers||[], room_images: imgs.length>0?imgs:[''] });
-    setNewImageFiles([]);
-    setEditingId(room._id);
-    setEditingIndex(room.roomIndex!==undefined ? room.roomIndex : index);
-    document.getElementById('prm-form-top')?.scrollIntoView({ behavior: 'smooth' });
+    try {
+      let imgs = [];
+      const extractImgs = (arr) => Array.isArray(arr) ? arr.map(u => typeof u === 'string' ? u : u?.url || '').filter(u => u && u.trim()) : [];
+      if (Array.isArray(room.images) && room.images.length > 0) imgs = extractImgs(room.images);
+      else if (Array.isArray(room.room_images) && room.room_images.length > 0) imgs = extractImgs(room.room_images);
+      else if (room.imageUrl || room.room_image_url) imgs = [room.imageUrl||room.room_image_url].filter(Boolean);
+      
+      setForm({ 
+        room_type: room.title || room.room_type || room.roomName || '', 
+        bed_type: room.beds || room.bed_type || room.bedType || '', 
+        price_per_room: room.price || room.price_per_room || room.pricePerNight || '', 
+        original_price: room.originalPrice || room.original_price || '', 
+        tax_amount: room.taxAmount || room.tax_amount || '', 
+        amenities_types: Array.isArray(room.features) ? room.features : (Array.isArray(room.amenities_types) ? room.amenities_types : []), 
+        offers: Array.isArray(room.offers) ? room.offers : [], 
+        room_images: imgs.length > 0 ? imgs : [''] 
+      });
+      setNewImageFiles([]);
+      setEditingId(room._id || room.requestId || room.id);
+      setEditingIndex(room.roomIndex !== undefined ? room.roomIndex : index);
+      document.getElementById('prm-form-top')?.scrollIntoView({ behavior: 'smooth' });
+    } catch (err) {
+      console.error('Error in handleEdit:', err);
+      toast.error('Failed to edit room data');
+    }
   };
 
   const handleDelete = async (id) => {
