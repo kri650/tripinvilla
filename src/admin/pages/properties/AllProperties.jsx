@@ -940,7 +940,7 @@ export default function AllProperties() {
                     "Status",
                     "",
                   ].map((h, i) => (
-                    <th key={i} style={{ color: "#9CA3AF", fontWeight: 500 }}>
+                    <th key={i} style={{ color: "#9CA3AF", fontWeight: 500, minWidth: h === "Property Name" ? 180 : h === "Location" ? 160 : undefined }}>
                       {h}
                       {h && i < 10 && (
                         <ChevronDown

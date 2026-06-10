@@ -380,7 +380,7 @@ export default function OffersByDate() {
               <thead>
                 <tr>
                   {['Offer ID', 'Dates & Time', 'Property Name', 'Location', 'Category', 'Room', 'Foods', 'Amenities', 'Offer %', 'Description', 'Status', ''].map((h, i) => (
-                    <th key={i} style={{ color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
+                    <th key={i} style={{ minWidth: h === 'Property Name' ? 180 : h === 'Location' ? 160 : undefined, color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
                       <span className="th-inner">
                         {h}
                         {h && <ChevronDown size={10} style={{ color: '#CBD5E1', marginLeft: 4 }} />}

@@ -129,7 +129,7 @@ export default function PricingRules() {
             <table className="data-table" style={{ whiteSpace: 'nowrap' }}>
               <thead>
                 <tr>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Property Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500 }}>Property Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Category <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Room Type* <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Bed Type <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>

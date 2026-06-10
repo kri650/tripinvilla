@@ -128,7 +128,7 @@ export default function Bookings() {
             <thead>
               <tr>
                 <th>Booking ID</th>
-                <th>Property Name</th>
+                <th style={{ minWidth: 180 }}>Property Name</th>
                 <th>Guest</th>
                 <th>Contact</th>
                 <th>Check In</th>

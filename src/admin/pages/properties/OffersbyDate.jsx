@@ -182,8 +182,8 @@ export default function OffersbyDate() {
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
                   <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Offer ID <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Dates &amp; <br/>Time <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Property <br/>Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Location <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Property <br/>Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 160, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Location <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Category <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Room <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Foods <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>

@@ -321,7 +321,7 @@ export default function PropertyRooms() {
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
                   {['Request No','Image','Property Name','Location','Category','Rooms','Owner Name','Owner Contact','Price by Owner','Status','Actions'].map((h, i) => (
-                    <th key={i} style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>{h}</th>
+                    <th key={i} style={{ minWidth: h === 'Property Name' ? 180 : h === 'Location' ? 160 : undefined, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>

@@ -267,8 +267,8 @@ export default function Dashboard() {
                 <tr>
                   <Th>Property No</Th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500, fontSize: 11 }}>Image</th>
-                  <Th>Property Name</Th>
-                  <Th>Location</Th>
+                  <Th style={{ minWidth: 180 }}>Property Name</Th>
+                  <Th style={{ minWidth: 160 }}>Location</Th>
                   <Th>Category</Th>
                   <Th>Best Room Rate</Th>
                   <Th>Rooms</Th>

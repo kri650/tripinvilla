@@ -1680,12 +1680,12 @@ export default function MyProperties({ autoOpenForm = false }) {
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div style={{ overflowX: 'auto', minHeight: '250px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
                   {['Property No','Image','Property Name','Location','Category','Price/Night','Rooms','Enquiries','Rating','Status','Actions'].map(h => (
-                    <th key={h} style={{ color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px', fontFamily: '"Outfit", sans-serif' }}>{h}</th>
+                    <th key={h} style={{ minWidth: h === 'Property Name' ? 180 : h === 'Location' ? 160 : undefined, color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px', fontFamily: '"Outfit", sans-serif' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -1727,7 +1727,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                           <MoreVertical size={16} />
                         </button>
                         {actionMenu === p._id && (
-                          <div style={{ position: 'absolute', right: 16, top: 36, background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 140 }}>
+                          <div style={{ position: 'absolute', right: 16, top: i >= paginatedProps.length - 2 ? 'auto' : 36, bottom: i >= paginatedProps.length - 2 ? 36 : 'auto', background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8, boxShadow: '0 4px 16px rgba(0,0,0,0.12)', zIndex: 100, minWidth: 140 }}>
                             <button type="button" onClick={() => { 
                               setActionMenu(null); 
                               setViewingProperty(p); 
