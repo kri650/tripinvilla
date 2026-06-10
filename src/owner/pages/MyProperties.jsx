@@ -1619,7 +1619,7 @@ export default function MyProperties({ autoOpenForm = false }) {
             {/* ── SECTION 10: About Property ───────────────── */}
             {sectionWrap(<>
               {sectionHeader('10. About Property', 'Detailed description shown on the property listing — make it compelling!')}
-              <textarea style={{ ...inputStyle, minHeight: '120px', resize: 'vertical' }} name="description" value={formData.description} onChange={handleChange}
+                  <textarea style={{ ...inputStyle, minHeight: '120px', resize: 'vertical' }} name="description" value={formData.description} onChange={handleChange}
                 placeholder="Experience a comfortable and refined stay at... describe your property in detail, mention nearby attractions, what makes it special..." required />
             </>)}
 
@@ -1653,8 +1653,8 @@ export default function MyProperties({ autoOpenForm = false }) {
     )}
 
       {/* ── Property List Table ───────────────────────────────── */}
-      <div className="dash-section" style={{ marginBottom: 24 }}>
-        <div className="chart-card" style={{ padding: 0, borderRadius: 12, border: 'none', boxShadow: 'none' }}>
+      <div style={{ margin: '0 24px 24px' }}>
+        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', width: '100%' }}>
           <div className="table-header" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
             <span className="table-title" style={{ whiteSpace: 'nowrap' }}>My Property List</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '4px', maxWidth: '100%' }}>
@@ -1680,7 +1680,7 @@ export default function MyProperties({ autoOpenForm = false }) {
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
+          <div style={{ overflowX: 'auto', width: '100%', display: 'block' }}>
             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '1050px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>

@@ -129,15 +129,15 @@ export default function Dashboard() {
       </div>
 
       {/* ══ Section 2: Recent Enquiries ══════ */}
-      <div className="dash-section" style={{ marginBottom: 24 }}>
-        <div className="chart-card" style={{ padding: 0, borderRadius: 12, border: 'none', boxShadow: 'none' }}>
+      <div style={{ margin: '0 24px 24px' }}>
+        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', width: '100%' }}>
           <div className="table-header" style={{ padding: '14px 20px' }}>
             <span className="table-title">Recent Enquiries</span>
             <div className="table-header-right">
               <button className="table-view-all" onClick={() => navigate('/owner/enquiries')} style={{ cursor: 'pointer' }}>View All</button>
             </div>
           </div>
-          <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
+          <div style={{ overflowX: 'auto', width: '100%', display: 'block' }}>
             <table className="data-table" style={{ minWidth: '600px', width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>

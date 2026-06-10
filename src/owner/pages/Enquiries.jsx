@@ -102,7 +102,7 @@ export default function Enquiries() {
       </div>
 
       {/* ══ Main Section ══ */}
-      <div className="dash-section" style={{ marginBottom: 24, padding: '24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+      <div style={{ margin: '0 24px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
         {/* Card 1: Toolbar — single horizontal row */}
         <div style={{
@@ -114,7 +114,8 @@ export default function Enquiries() {
           background: '#fff',
           borderRadius: 12,
           padding: '12px 16px',
-          border: '1px solid #F3F4F6'
+          border: '1px solid #E5E7EB',
+          boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
         }}>
           {/* Title */}
           <div style={{ fontSize: '15px', fontWeight: 700, color: '#111827', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap', flexShrink: 0 }}>
@@ -208,8 +209,8 @@ export default function Enquiries() {
         </div>
 
         {/* Card 2: Table List */}
-        <div className="chart-card" style={{ padding: 0, borderRadius: 12, border: 'none', boxShadow: 'none' }}>
-          <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
+        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', width: '100%' }}>
+          <div style={{ overflowX: 'auto', width: '100%', display: 'block' }}>
             <table className="data-table" style={{ whiteSpace: 'nowrap', minWidth: 800, width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr>
