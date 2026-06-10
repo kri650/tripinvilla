@@ -123,7 +123,9 @@ export default function OffersbyDate() {
             
             <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'nowrap', minWidth: 0, overflowX: 'auto' }}>
               <DateRangeDropdown
-                onDateChange={(from, to) => { setDateFrom(from); setDateTo(to); }}
+                startDate={dateFrom}
+                endDate={dateTo}
+                onChange={(from, to) => { setDateFrom(from); setDateTo(to); }}
               />
 
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', flexShrink: 0, maxWidth: 140 }}>

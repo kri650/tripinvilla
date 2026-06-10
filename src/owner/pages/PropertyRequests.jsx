@@ -592,7 +592,7 @@ export default function PropertyRequests() {
                   <thead>
                     <tr>
                       {['Property', 'Category', 'Room Type', 'Bed', 'Amenities', 'Price', 'Rules', 'Offers', 'Status', 'Actions'].map((h, i) => (
-                        <th key={i} className="table-th" style={{ minWidth: { 'Property': 120, 'Category': 100, 'Room Type': 100, 'Bed': 80, 'Amenities': 120, 'Price': 90, 'Rules': 80, 'Offers': 80, 'Status': 90, 'Actions': 80 }[h] }}>{h}</th>
+                        <th key={i} className="table-th" style={{ minWidth: { 'Property': 200, 'Category': 100, 'Room Type': 100, 'Bed': 80, 'Amenities': 120, 'Price': 90, 'Rules': 80, 'Offers': 80, 'Status': 90, 'Actions': 80 }[h] }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -603,7 +603,7 @@ export default function PropertyRequests() {
                       return (
                         <React.Fragment key={i}>
                           <tr className="request-row">
-                            <td className="td-property" style={{ fontWeight: 500, color: '#111827', whiteSpace: 'normal', maxWidth: '200px' }}><ReadMore lines={2}>{r.propertyName}</ReadMore></td>
+                            <td className="td-property" style={{ fontWeight: 700, color: '#111827', whiteSpace: 'normal', minWidth: '200px', maxWidth: '250px' }}><ReadMore lines={2}>{r.propertyName}</ReadMore></td>
                             <td className="td-category">{r.category}</td>
                             <td className="td-room-type">
                               <div className="room-type-cell">

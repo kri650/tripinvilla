@@ -124,7 +124,9 @@ export default function PropertyOwned() {
             <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'nowrap', minWidth: 0, overflowX: 'auto' }}>
               {/* Date Range */}
               <DateRangeDropdown
-                onDateChange={(from, to) => { setDateFrom(from); setDateTo(to); }}
+                startDate={dateFrom}
+                endDate={dateTo}
+                onChange={(from, to) => { setDateFrom(from); setDateTo(to); }}
               />
               {/* Type dropdown */}
               <div style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '5px 8px', border: '1px solid #E5E7EB', borderRadius: 8, flexShrink: 0 }}>

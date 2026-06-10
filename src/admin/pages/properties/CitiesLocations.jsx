@@ -92,7 +92,9 @@ export default function CitiesLocations() {
             
             <div className="props-table-actions" style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'nowrap', minWidth: 0, overflowX: 'auto' }}>
               <DateRangeDropdown
-                onDateChange={(from, to) => { setDateFrom(from); setDateTo(to); }}
+                startDate={dateFrom}
+                endDate={dateTo}
+                onChange={(from, to) => { setDateFrom(from); setDateTo(to); }}
               />
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 8px', flexShrink: 0, maxWidth: 100 }}>
                 <select 

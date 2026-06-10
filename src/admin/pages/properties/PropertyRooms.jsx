@@ -246,7 +246,9 @@ export default function PropertyRooms() {
             
             <div className="props-table-actions no-scrollbar" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'nowrap', overflowX: 'auto', WebkitOverflowScrolling: 'touch', maxWidth: '100%' }}>
               <DateRangeDropdown
-                onDateChange={(from, to) => { setFilterDateFrom(from); setFilterDateTo(to); }}
+                startDate={filterDateFrom}
+                endDate={filterDateTo}
+                onChange={(from, to) => { setFilterDateFrom(from); setFilterDateTo(to); }}
               />
 
               <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', flexShrink: 1, minWidth: 100, maxWidth: 140 }}>

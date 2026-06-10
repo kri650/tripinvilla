@@ -1165,14 +1165,12 @@ export default function AllProperties() {
               </tbody>
             </table>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '16px 24px', borderTop: '1px solid #E5E7EB', background: '#fff', borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}>
-            <Pagination 
-              currentPage={currentPage} 
-              totalItems={totalItems} 
-              itemsPerPage={itemsPerPage} 
-              onPageChange={setCurrentPage} 
-            />
-          </div>
+          <Pagination 
+            currentPage={currentPage} 
+            totalItems={totalItems} 
+            itemsPerPage={itemsPerPage} 
+            onPageChange={setCurrentPage} 
+          />
         </div>
       </div>
 

@@ -154,8 +154,14 @@ export default function Enquiries() {
         <div className="enquiries-toolbar admin-table-header" style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexWrap: 'wrap', gap: '32px' }}>
           <h2 className="admin-table-title" style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>Enquiries</h2>
           <div className="enquiries-filters-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
-            {/* DateRangeDropdown removed as per user request */}
-
+            <DateRangeDropdown
+              startDate={dateFrom}
+              endDate={dateTo}
+              onChange={(start, end) => {
+                setDateFrom(start);
+                setDateTo(end);
+              }}
+            />
             <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
               <select value={propertyType} onChange={e => setPropertyType(e.target.value)} style={{ appearance: 'none', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '8px 32px 8px 12px', fontSize: '13px', color: '#9CA3AF', background: '#FFFFFF', outline: 'none', cursor: 'pointer' }}>
                 <option value="All Categories">Property Type</option>
