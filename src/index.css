@@ -43,11 +43,6 @@ td:last-child, th:last-child, td:has(.action-dots) {
 
 /* Mobile Table Override to prevent invisible/clipped rows */
 @media (max-width: 768px) {
-  table {
-    min-width: unset !important;
-    width: 100% !important;
-  }
-  
   .desktop-table-wrapper,
   .table-responsive,
   .dash-section,
@@ -55,9 +50,25 @@ td:last-child, th:last-child, td:has(.action-dots) {
     overflow-x: auto !important;
     overflow-y: visible !important;
     width: 100% !important;
+    min-height: 0 !important;
+  }
+
+  table {
+    display: table !important;
+    min-width: unset !important;
+    width: 100% !important;
+  }
+
+  tbody {
+    display: table-row-group !important;
+  }
+
+  tr {
+    display: table-row !important;
   }
 
   th, td {
+    display: table-cell !important;
     min-width: unset !important;
     white-space: normal !important;
     font-size: 12px !important;
