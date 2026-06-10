@@ -32,7 +32,7 @@ export default function ReadMore({ children }) {
   }, [expanded]);
 
   return (
-    <div style={{ whiteSpace: 'normal', wordBreak: 'break-word', minWidth: 0 }}>
+    <div style={{ whiteSpace: 'normal', wordBreak: 'break-word', width: '100%' }}>
       <span 
         ref={textRef}
         className={`cell-text ${expanded ? 'expanded' : ''}`}

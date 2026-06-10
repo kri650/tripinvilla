@@ -138,7 +138,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
-            <table className="data-table" style={{ tableLayout: 'fixed', width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+            <table className="data-table" style={{ minWidth: '600px', width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
                   <th style={{ minWidth: '100px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Enquiry ID</th>

@@ -195,7 +195,7 @@ export default function PropertyOwned() {
                   <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Owner Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Email <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Contact No <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Properties <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ color: '#9CA3AF', fontWeight: 500, minWidth: 220 }}>Properties <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Number of Properties <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ color: '#9CA3AF', fontWeight: 500 }}>Status <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th></th>
@@ -218,7 +218,11 @@ export default function PropertyOwned() {
                       <td style={{ color: '#111827', fontWeight: 500 }}>{o.ownerName}</td>
                       <td style={{ color: '#9CA3AF' }}>{o.email}</td>
                       <td style={{ color: '#111827', fontWeight: 500 }}>{o.contactNo}</td>
-                      <td style={{ color: '#6B7280' }}>{(o.properties && o.properties.length > 0) ? o.properties.join(', ') : 'None'}</td>
+                      <td style={{ padding: '14px' }}>
+                        <div style={{ maxWidth: 280, whiteSpace: 'normal', lineHeight: 1.4, color: '#6B7280' }}>
+                          <ReadMore maxWords={6}>{(o.properties && o.properties.length > 0) ? o.properties.join(', ') : 'None'}</ReadMore>
+                        </div>
+                      </td>
                       <td style={{ color: '#6B7280' }}>{o.numberOfProperties || (o.properties ? o.properties.length : 0)}</td>
                       <td>
                         <button 

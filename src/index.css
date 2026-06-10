@@ -1106,6 +1106,7 @@ input:focus, select:focus {
   overflow: hidden;
   white-space: normal;
   word-break: break-word;
+  width: 100%;
 }
 
 .cell-text.expanded {
@@ -1113,13 +1114,18 @@ input:focus, select:focus {
 }
 
 .read-more-btn {
-  font-size: 12px;
-  color: #111827;
+  font-size: 11px;
+  color: #6B7280;
   cursor: pointer;
   background: none;
   border: none;
   padding: 0;
   margin-top: 4px;
-  text-decoration: underline;
-  font-weight: 500;
+  text-decoration: none;
+  font-weight: 400;
+  transition: color 0.2s;
+}
+
+.read-more-btn:hover {
+  color: #3B82F6;
 }
