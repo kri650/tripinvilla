@@ -340,7 +340,11 @@ export default function PropertyRooms() {
                         </div>
                       </td>
                       <td style={{ color: '#111827', fontWeight: 500, padding: '14px', cursor: 'pointer' }} onClick={() => { setSelectedRequest(p); setTimeout(() => document.getElementById('request-detail-div')?.scrollIntoView({ behavior: 'smooth' }), 100); }}>{p.propertyName}</td>
-                      <td style={{ color: '#6B7280', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4 }}><ReadMore maxWords={6}>{p.location}</ReadMore></td>
+                      <td style={{ padding: '14px' }}>
+                        <div style={{ maxWidth: 220, whiteSpace: 'normal', lineHeight: 1.4, color: '#6B7280' }}>
+                          <ReadMore maxWords={6}>{p.location}</ReadMore>
+                        </div>
+                      </td>
                       <td style={{ padding: '14px' }}><span className="category-pill">{p.category}</span></td>
                       <td style={{ color: '#374151', padding: '14px', fontWeight: 500 }}>
                         {getRequestRooms(p).length > 1

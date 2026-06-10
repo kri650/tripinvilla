@@ -221,8 +221,12 @@ export default function OffersbyDate() {
                           ) : 'N/A';
                         })()}
                       </td>
-                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px' }}><ReadMore>{o.propertyName}</ReadMore></td>
-                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}><ReadMore>{o.location}</ReadMore></td>
+                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px' }}>{o.propertyName}</td>
+                      <td style={{ padding: '14px' }}>
+                        <div style={{ maxWidth: 220, whiteSpace: 'normal', lineHeight: 1.4, color: '#9CA3AF', fontSize: 13 }}>
+                          <ReadMore>{o.location}</ReadMore>
+                        </div>
+                      </td>
                       <td style={{ padding: '14px' }}><span className="category-pill">{o.category}</span></td>
                       <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}>{o.room}</td>
                       <td style={{ color: '#6B7280', padding: '14px' }}>{o.foods}</td>

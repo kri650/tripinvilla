@@ -2510,19 +2510,19 @@ export default function PropertyMakers() {
       <table className="data-table" style={{ whiteSpace: "nowrap" }}>
         <thead>
           <tr>
-            <th>Property No</th>
-            <th>Property Type</th>
-            <th>Image</th>
-            <th>Property Name</th>
-            <th>Owner Name</th>
-            <th>Owner Contact</th>
-            <th>Amenities</th>
-            <th>Experiences</th>
-            <th>Location</th>
-            <th>Address</th>
-            <th>About Property</th>
-            <th>Status</th>
-            <th style={{ textAlign: "right", paddingRight: 24 }}>
+            <th style={{ minWidth: 90 }}>Property No</th>
+            <th style={{ minWidth: 100 }}>Property Type</th>
+            <th style={{ minWidth: 60 }}>Image</th>
+            <th style={{ minWidth: 180 }}>Property Name</th>
+            <th style={{ minWidth: 150 }}>Owner Name</th>
+            <th style={{ minWidth: 130 }}>Owner Contact</th>
+            <th style={{ minWidth: 180 }}>Amenities</th>
+            <th style={{ minWidth: 180 }}>Experiences</th>
+            <th style={{ minWidth: 180 }}>Location</th>
+            <th style={{ minWidth: 180 }}>Address</th>
+            <th style={{ minWidth: 180 }}>About Property</th>
+            <th style={{ minWidth: 100 }}>Status</th>
+            <th style={{ textAlign: "right", paddingRight: 24, minWidth: 100 }}>
               Actions
             </th>
           </tr>
