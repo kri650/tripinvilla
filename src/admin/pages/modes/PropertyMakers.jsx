@@ -2,7 +2,6 @@ import ReadMore from '../../components/ReadMore';
 import React, { useState, useEffect } from "react";
 import { ChevronDown, Edit2, Trash2, MoreVertical, BedDouble } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { toast } from 'react-hot-toast';
 import PropertyRoomManager from "../properties/PropertyRoomManager";
 
 const parseNumber = (val) => {
@@ -617,7 +616,7 @@ export default function PropertyMakers() {
           { method: "PUT", body: submitData },
         );
         if (res.ok) {
-          toast.success('Property updated successfully!');
+          alert('Property updated successfully!');
           fetchProperties();
           resetForm();
         } else {

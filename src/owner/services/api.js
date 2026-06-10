@@ -38,6 +38,7 @@ export const propertyService = {
 export const propertyRequestService = {
   getMine: () => api.get('/property-requests/owner'),
   add: (data) => api.post('/property-requests', data),
+  update: (id, data) => api.put(`/property-requests/${id}`, data),
   delete: (id) => api.delete(`/property-requests/${id}`),
 };
 

@@ -434,12 +434,7 @@ export default function PropertyRequests() {
       }));
 
       if (editingRequestId) {
-        const token = localStorage.getItem('owner_token');
-        await fetch(`${API_BASE}/property-requests/${editingRequestId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ property_id: propertyId, rooms: finalRooms })
-        });
+        await propertyRequestService.update(editingRequestId, { property_id: propertyId, rooms: finalRooms });
         alert('Property request updated successfully!');
         setEditingRequestId(null);
       } else {
