@@ -15,6 +15,16 @@ th, td {
   min-width: 80px;
   white-space: nowrap;
 }
+
+/* Ensure table scroll wrappers never collapse on mobile/flex layouts */
+.chart-card > div[style*="overflow-x: auto"],
+.table-section > div[style*="overflow-x: auto"],
+.dash-section > div[style*="overflow-x: auto"],
+.desktop-table-wrapper {
+  width: 100% !important;
+  flex: 1 1 auto !important;
+  min-height: min-content !important;
+}
 /* EXCEPT columns that have cell-text read more applied */
 td:has(.cell-text) {
   white-space: normal;
