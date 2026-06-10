@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { DateRange } from 'react-date-range';
+import { Calendar as ReactCalendar } from 'react-date-range';
 import { format } from 'date-fns';
-import { Calendar, X } from 'lucide-react';
+import { Calendar as CalendarIcon, X } from 'lucide-react';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 
@@ -12,25 +12,23 @@ export default function DateRangeDropdown({
   onChange 
 }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [tempRange, setTempRange] = useState([
-    {
-      startDate: startDate ? new Date(startDate) : new Date(),
-      endDate: endDate ? new Date(endDate) : new Date(),
-      key: 'selection'
-    }
-  ]);
+  
+  // Use state to track the selected dates locally before applying
+  const [tempStart, setTempStart] = useState(startDate ? new Date(startDate) : new Date());
+  const [tempEnd, setTempEnd] = useState(endDate ? new Date(endDate) : new Date());
+
   const wrapperRef = useRef(null);
   const popupRef = useRef(null);
   const [dropdownCoords, setDropdownCoords] = useState(null);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
 
+  // Sync with props when opened
   useEffect(() => {
-    setTempRange([{
-      startDate: startDate ? new Date(startDate) : new Date(),
-      endDate: endDate ? new Date(endDate) : new Date(),
-      key: 'selection'
-    }]);
-  }, [startDate, endDate]);
+    if (isOpen) {
+      setTempStart(startDate ? new Date(startDate) : new Date());
+      setTempEnd(endDate ? new Date(endDate) : new Date());
+    }
+  }, [isOpen, startDate, endDate]);
 
   useEffect(() => {
     function updatePosition() {
@@ -39,8 +37,8 @@ export default function DateRangeDropdown({
         const mobile = window.innerWidth <= 640;
         setIsMobile(mobile);
 
-        // Desktop: 2 months = ~580px, Mobile: single month = ~320px
-        const popupWidth = mobile ? Math.min(window.innerWidth - 32, 320) : 580;
+        // Width for dual calendar is approx 600px
+        const popupWidth = mobile ? Math.min(window.innerWidth - 32, 320) : 650;
 
         let leftPos = rect.right - popupWidth;
         const minLeft = 16;
@@ -80,20 +78,18 @@ export default function DateRangeDropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const handleSelect = (ranges) => {
-    setTempRange([ranges.selection]);
+  const handleApply = () => {
+    onChange(format(tempStart, 'yyyy-MM-dd'), format(tempEnd, 'yyyy-MM-dd'));
+    setIsOpen(false);
   };
 
-  const handleApply = () => {
-    const start = format(tempRange[0].startDate, 'yyyy-MM-dd');
-    const end = format(tempRange[0].endDate, 'yyyy-MM-dd');
-    onChange(start, end);
+  const handleCancel = () => {
+    onChange('', '');
     setIsOpen(false);
   };
 
   return (
     <div ref={wrapperRef} style={{ position: 'relative', display: 'inline-block' }}>
-      {/* Scoped styles to keep original calendar appearance */}
       <style>{`
         .daterange-dropdown-popup {
           font-family: 'Outfit', 'Inter', sans-serif;
@@ -101,37 +97,15 @@ export default function DateRangeDropdown({
           overflow-y: auto;
         }
         .daterange-dropdown-popup .rdrCalendarWrapper {
-          font-size: 12px;
+          font-size: 13px;
           font-family: inherit;
-        }
-        .daterange-dropdown-popup .rdrDateRangePickerWrapper {
-          font-family: inherit;
-        }
-        .daterange-dropdown-popup .rdrDefinedRangesWrapper {
-          display: none;
+          width: 100%;
         }
         .daterange-dropdown-popup .rdrMonthAndYearPickers select {
-          font-size: 13px;
+          font-size: 14px;
         }
         .daterange-dropdown-popup .rdrDayNumber span {
-          font-size: 12px;
-        }
-        .daterange-dropdown-popup .rdrStartEdge,
-        .daterange-dropdown-popup .rdrEndEdge,
-        .daterange-dropdown-popup .rdrInRange {
-          color: #2563EB !important;
-        }
-        .daterange-dropdown-popup .rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span,
-        .daterange-dropdown-popup .rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span {
-          color: #fff !important;
-        }
-        @media (max-width: 640px) {
-          .daterange-dropdown-popup .rdrMonth {
-            width: 100% !important;
-          }
-          .daterange-dropdown-popup .rdrMonths {
-            flex-direction: column !important;
-          }
+          font-size: 13px;
         }
       `}</style>
 
@@ -142,26 +116,25 @@ export default function DateRangeDropdown({
         style={{
           display: 'flex',
           alignItems: 'center',
-          gap: 6,
-          padding: '5px 10px',
+          gap: 8,
+          padding: '6px 12px',
           background: '#FFFFFF',
           border: '1px solid #E5E7EB',
           borderRadius: 8,
           cursor: 'pointer',
           minWidth: 170,
-          maxWidth: 220,
-          color: '#374151',
-          fontSize: 12,
+          color: (startDate || endDate) ? '#111827' : '#6B7280',
+          fontSize: 13,
           fontFamily: '"Outfit", sans-serif',
           whiteSpace: 'nowrap',
           overflow: 'hidden'
         }}
       >
-        <Calendar size={13} style={{ color: '#6B7280', flexShrink: 0 }} />
-        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
-          {startDate ? format(new Date(startDate), 'dd MMM yy') : 'Start Date'} 
-          {' – '}
-          {endDate ? format(new Date(endDate), 'dd MMM yy') : 'End Date'}
+        <CalendarIcon size={14} style={{ color: '#6B7280', flexShrink: 0 }} />
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', flex: 1 }}>
+          {(startDate || endDate) 
+            ? `${startDate ? format(new Date(startDate), 'yyyy-MM-dd') : ''} to ${endDate ? format(new Date(endDate), 'yyyy-MM-dd') : ''}` 
+            : 'Select Dates'}
         </span>
       </div>
 
@@ -184,30 +157,38 @@ export default function DateRangeDropdown({
             maxWidth: 'calc(100vw - 32px)',
           }}
         >
-          {/* Header */}
-          <div style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '12px 16px',
-            borderBottom: '1px solid #E5E7EB'
-          }}>
-            <span style={{ fontWeight: 600, fontSize: 14, color: '#111827' }}>Select Date Range</span>
-            <X size={16} style={{ cursor: 'pointer', color: '#6B7280' }} onClick={() => setIsOpen(false)} />
-          </div>
-
-          {/* Calendar — 2 months side by side on desktop, 1 month on mobile */}
-          <div style={{ padding: '0 8px' }}>
-            <DateRange
-              ranges={tempRange}
-              onChange={handleSelect}
-              months={isMobile ? 1 : 2}
-              direction={isMobile ? 'vertical' : 'horizontal'}
-              showSelectionPreview={true}
-              moveRangeOnFirstSelection={false}
-              rangeColors={['#2563EB']}
-              showMonthAndYearPickers={true}
-            />
+          {/* Calendar — 2 independent calendars with From/To titles */}
+          <div style={{ padding: '24px 20px 16px', display: 'flex', gap: '32px', flexDirection: isMobile ? 'column' : 'row' }}>
+            <div>
+              <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>From</div>
+              <ReactCalendar
+                date={tempStart}
+                onChange={(date) => {
+                  setTempStart(date);
+                  // If start date is after end date, update end date to match
+                  if (date > tempEnd) {
+                    setTempEnd(date);
+                  }
+                }}
+                color="#2563EB"
+              />
+            </div>
+            
+            <div>
+              <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>To</div>
+              <ReactCalendar
+                date={tempEnd}
+                onChange={(date) => {
+                  setTempEnd(date);
+                  // If end date is before start date, update start date to match
+                  if (date < tempStart) {
+                    setTempStart(date);
+                  }
+                }}
+                minDate={tempStart}
+                color="#2563EB"
+              />
+            </div>
           </div>
 
           {/* Footer */}
@@ -215,19 +196,19 @@ export default function DateRangeDropdown({
             display: 'flex',
             justifyContent: 'flex-end',
             gap: 12,
-            padding: '12px 16px',
+            padding: '16px 20px',
             borderTop: '1px solid #E5E7EB',
             background: '#F9FAFB'
           }}>
             <button 
-              onClick={() => setIsOpen(false)}
+              onClick={handleCancel}
               style={{
-                padding: '8px 16px',
+                padding: '8px 20px',
                 background: '#FFFFFF',
                 border: '1px solid #D1D5DB',
                 borderRadius: 8,
-                fontSize: 13,
-                fontWeight: 600,
+                fontSize: 14,
+                fontWeight: 500,
                 color: '#374151',
                 cursor: 'pointer'
               }}
@@ -237,17 +218,17 @@ export default function DateRangeDropdown({
             <button 
               onClick={handleApply}
               style={{
-                padding: '8px 16px',
+                padding: '8px 20px',
                 background: '#2563EB',
                 border: 'none',
                 borderRadius: 8,
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: 600,
                 color: '#FFFFFF',
                 cursor: 'pointer'
               }}
             >
-              Apply Filter
+              Filter
             </button>
           </div>
         </div>,

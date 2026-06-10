@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Search, Filter, Calendar, ChevronDown, MoreVertical, Edit2, Trash2, Clock } from 'lucide-react';
 import { offerService, propertyRequestService } from '../services/api';
 import ReadMore from '../../admin/components/ReadMore';
+import DateRangeDropdown from '../../components/DateRangeDropdown';
 
 export default function OffersByDate() {
   // Form State
@@ -24,6 +25,8 @@ export default function OffersByDate() {
   const [offersList, setOffersList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [filterDateFrom, setFilterDateFrom] = useState('');
+  const [filterDateTo, setFilterDateTo] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
   const mapOffer = (o) => {
@@ -163,15 +166,48 @@ export default function OffersByDate() {
   };
 
   const filteredOffers = useMemo(() => {
-    if (!searchTerm) return offersList;
-    const q = searchTerm.toLowerCase();
-    return offersList.filter((o) =>
-      (o.name || '').toLowerCase().includes(q) ||
-      (o.location || '').toLowerCase().includes(q) ||
-      (o.category || '').toLowerCase().includes(q) ||
-      String(o.id || '').toLowerCase().includes(q)
-    );
-  }, [offersList, searchTerm]);
+    return offersList.filter((o) => {
+      let matchQuery = true;
+      if (searchTerm) {
+        const q = searchTerm.toLowerCase();
+        matchQuery = (o.name || '').toLowerCase().includes(q) ||
+          (o.location || '').toLowerCase().includes(q) ||
+          (o.category || '').toLowerCase().includes(q) ||
+          String(o.id || '').toLowerCase().includes(q);
+      }
+
+      let matchDate = true;
+      if (filterDateFrom || filterDateTo) {
+        // Find raw date data from original object
+        // Re-construct the raw date from the original offersList mapping
+        const oDateStr = o.dates?.props?.children?.[0]?.props?.children; // React node extraction
+        let od = null;
+        if (oDateStr && typeof oDateStr === 'string' && oDateStr !== 'N/A') {
+           // It's in 'en-GB' format DD MMM YYYY, so parse it
+           const d = new Date(oDateStr);
+           if (!isNaN(d)) od = d;
+        }
+
+        if (!od) {
+          // Fallback parsing or assume no match if dates are filtered
+          matchDate = false;
+        } else {
+          od.setHours(0,0,0,0);
+          if (filterDateFrom) {
+            const fd = new Date(filterDateFrom);
+            fd.setHours(0,0,0,0);
+            if (od < fd) matchDate = false;
+          }
+          if (filterDateTo) {
+            const td = new Date(filterDateTo);
+            td.setHours(0,0,0,0);
+            if (od > td) matchDate = false;
+          }
+        }
+      }
+      return matchQuery && matchDate;
+    });
+  }, [offersList, searchTerm, filterDateFrom, filterDateTo]);
 
   return (
     <div className="fade-in">
@@ -362,15 +398,25 @@ export default function OffersByDate() {
 
       {/* Search Filter Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 24px 12px' }}>
-        <div style={{ display: 'flex', alignItems: 'center', background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', maxWidth: '100%', minWidth: '200px', flex: 1 }}>
-          <Search size={16} style={{ color: '#9CA3AF', marginRight: '8px' }} />
-          <input 
-            type="text" 
-            placeholder="Search offers..." 
-            value={searchTerm} 
-            onChange={(e) => setSearchTerm(e.target.value)}
-            style={{ border: 'none', outline: 'none', width: '100%', fontSize: '13px' }}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flex: 1, justifyContent: 'flex-end' }}>
+          <DateRangeDropdown 
+            startDate={filterDateFrom}
+            endDate={filterDateTo}
+            onChange={(start, end) => {
+              setFilterDateFrom(start);
+              setFilterDateTo(end);
+            }}
           />
+          <div style={{ display: 'flex', alignItems: 'center', background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', maxWidth: '300px', minWidth: '200px' }}>
+            <Search size={16} style={{ color: '#9CA3AF', marginRight: '8px' }} />
+            <input 
+              type="text" 
+              placeholder="Search offers..." 
+              value={searchTerm} 
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ border: 'none', outline: 'none', width: '100%', fontSize: '13px' }}
+            />
+          </div>
         </div>
       </div>
 

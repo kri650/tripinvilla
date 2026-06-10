@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Filter, Calendar, CheckSquare, Clock, UserX } from 'lucide-react';
 import { bookingService } from '../services/api';
 import ReadMore from '../../admin/components/ReadMore';
+import DateRangeDropdown from '../../components/DateRangeDropdown';
 
 export default function Bookings() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -10,6 +11,8 @@ export default function Bookings() {
   
   const [propertyFilter, setPropertyFilter] = useState('All Properties');
   const [statusFilter, setStatusFilter] = useState('All Status');
+  const [filterDateFrom, setFilterDateFrom] = useState('');
+  const [filterDateTo, setFilterDateTo] = useState('');
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -84,6 +87,14 @@ export default function Bookings() {
         {/* Table Filters bar */}
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 20 }}>
           <div style={{ display: 'flex', gap: 10, flex: 1, minWidth: 260 }}>
+            <DateRangeDropdown 
+              startDate={filterDateFrom}
+              endDate={filterDateTo}
+              onChange={(start, end) => {
+                setFilterDateFrom(start);
+                setFilterDateTo(end);
+              }}
+            />
             <div style={{ position: 'relative', flex: 1 }}>
               <Search size={15} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9ca3af' }} />
               <input 
@@ -148,7 +159,26 @@ export default function Bookings() {
                   const matchSearch = (b.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || String(b.razorpayOrderId || b._id).toLowerCase().includes(searchTerm.toLowerCase());
                   const matchProp = propertyFilter === 'All Properties' ? true : (b.property?.propertyName === propertyFilter || b.property?.name === propertyFilter);
                   const matchStatus = statusFilter === 'All Status' ? true : b.status === statusFilter;
-                  return matchSearch && matchProp && matchStatus;
+                  let matchDate = true;
+                  if (filterDateFrom || filterDateTo) {
+                    const checkInD = new Date(b.checkIn || b.createdAt);
+                    if (!isNaN(checkInD)) {
+                      checkInD.setHours(0,0,0,0);
+                      if (filterDateFrom) {
+                        const fd = new Date(filterDateFrom);
+                        fd.setHours(0,0,0,0);
+                        if (checkInD < fd) matchDate = false;
+                      }
+                      if (filterDateTo) {
+                        const td = new Date(filterDateTo);
+                        td.setHours(0,0,0,0);
+                        if (checkInD > td) matchDate = false;
+                      }
+                    } else {
+                      matchDate = false;
+                    }
+                  }
+                  return matchSearch && matchProp && matchStatus && matchDate;
                 })
                 .map((booking, index) => (
                   <tr key={index} style={{ borderBottom: '1px solid #F3F4F6' }}>

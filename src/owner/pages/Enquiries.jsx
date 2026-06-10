@@ -125,9 +125,14 @@ export default function Enquiries() {
           {/* Filters Row */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', flex: 1, justifyContent: 'flex-end' }}>
 
-            {/* Date From / Date To via DateRangeDropdown */}
-            {/* DateRangeDropdown removed as per user request */}
-
+            <DateRangeDropdown
+              startDate={dateFrom}
+              endDate={dateTo}
+              onChange={(start, end) => {
+                setDateFrom(start);
+                setDateTo(end);
+              }}
+            />
             {/* Property Type */}
             <select
               value={propertyType}
