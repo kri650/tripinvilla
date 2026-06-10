@@ -496,7 +496,7 @@ export default function LocationMaster() {
                 paginated.map((loc) => (
                   <tr key={loc._id}>
                     <td style={{ fontWeight: 700, color: '#000000', whiteSpace: 'normal', maxW: '180px' }}>
-                      <ReadMore maxWords={6}>{loc.locationName}</ReadMore>
+                      {loc.locationName}
                     </td>
                     <td style={{ fontWeight: 500 }}>{loc.locationType}</td>
                     <td style={{ fontSize: '11px', color: '#6B7280', whiteSpace: 'normal', maxW: '160px', lineHeight: 1.4 }}>{loc.parentLocationHierarchy}</td>

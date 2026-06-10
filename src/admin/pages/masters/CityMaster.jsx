@@ -312,8 +312,8 @@ export default function CityMaster() {
               ) : filteredCities.length > 0 ? (
                 paginated.map((city) => (
                   <tr key={city._id}>
-                    <td style={{ fontWeight: 600, color: '#111827' }}><ReadMore maxWords={6}>{city.cityName}</ReadMore></td>
-                    <td style={{ fontWeight: 500 }}><ReadMore maxWords={6}>{city.stateName}</ReadMore></td>
+                    <td style={{ fontWeight: 600, color: '#111827' }}>{city.cityName}</td>
+                    <td style={{ fontWeight: 500 }}>{city.stateName}</td>
                     <td style={{ color: '#4B5563' }}>{city.countryName || 'N/A'}</td>
                     <td style={{ textAlign: 'center', fontWeight: 600, color: 'var(--primary)' }}>{city.propertiesCount ?? 0}</td>
                     <td>

@@ -2506,7 +2506,7 @@ export default function PropertyMakers() {
       < div className = "dash-section" style = {{ marginBottom: 24 }
 }>
   <div className="chart-card" style={{ padding: 0, overflow: "hidden" }}>
-    <div style={{ overflowX: "auto" }}>
+    <div style={{ overflowX: "auto", width: '100%', flex: 1, minHeight: 'min-content' }}>
       <table className="data-table" style={{ whiteSpace: "nowrap" }}>
         <thead>
           <tr>
@@ -2547,7 +2547,7 @@ export default function PropertyMakers() {
                 <td style={{ color: "#58A429", fontWeight: 600 }}>
                   {p.propertyNo}
                 </td>
-                <td style={{ color: "#6B7280" }}><ReadMore>{p.propertyType}</ReadMore></td>
+                <td style={{ color: "#6B7280" }}>{p.propertyType}</td>
                 <td>
                   <div
                     style={{
@@ -2574,10 +2574,10 @@ export default function PropertyMakers() {
                   </div>
                 </td>
                 <td style={{ color: "#111827", fontWeight: 600 }}>
-                  <ReadMore>{p.propertyName}</ReadMore>
+                  {p.propertyName}
                 </td>
-                <td style={{ color: "#6B7280" }}><ReadMore>{p.ownerName}</ReadMore></td>
-                <td style={{ color: "#6B7280" }}><ReadMore>{p.ownerContact}</ReadMore></td>
+                <td style={{ color: "#6B7280" }}>{p.ownerName}</td>
+                <td style={{ color: "#6B7280" }}>{p.ownerContact}</td>
                 <td style={{ color: "#6B7280" }}>
                   <ReadMore>
                     {Array.isArray(p.amenities) ? p.amenities.join(", ") : ""}

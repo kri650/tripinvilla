@@ -501,8 +501,8 @@ export default function DestinationMaster() {
                         <img src={getFullImageUrl(dest.coverImageUrl)} alt={dest.destinationName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       </div>
                     </td>
-                    <td style={{ fontWeight: 700, color: '#111827' }}><ReadMore maxWords={6}>{dest.destinationName}</ReadMore></td>
-                    <td style={{ fontWeight: 500, fontSize: '11.5px' }}><ReadMore maxWords={6}>{`${getStateName(dest.stateId)}, ${getCountryName(dest.countryId)}`}</ReadMore></td>
+                    <td style={{ fontWeight: 700, color: '#111827' }}>{dest.destinationName}</td>
+                    <td style={{ fontWeight: 500, fontSize: '11.5px' }}>{`${getStateName(dest.stateId)}, ${getCountryName(dest.countryId)}`}</td>
                     <td>
                       <div style={{ display: 'flex', gap: 4 }}>
                         {(dest.propertyTypesOffered || []).map(t => (

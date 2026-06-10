@@ -300,7 +300,7 @@ export default function CountryMaster() {
                         <img src={country.flagImageUrl} alt={country.countryName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                       </div>
                     </td>
-                    <td style={{ fontWeight: 600, color: '#111827' }}><ReadMore maxWords={6}>{country.countryName}</ReadMore></td>
+                    <td style={{ fontWeight: 600, color: '#111827' }}>{country.countryName}</td>
                     <td style={{ fontWeight: 500 }}>{country.dialCode}</td>
                     <td style={{ fontWeight: 600 }}>{country.currencyCode}</td>
                     <td style={{ fontSize: '15px', fontWeight: 700, color: '#111827' }}>{country.currencySymbol}</td>

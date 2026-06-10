@@ -316,7 +316,7 @@ export default function PropertyRooms() {
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto', width: '100%' }}>
+          <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
@@ -339,7 +339,7 @@ export default function PropertyRooms() {
                           <img src={p.image || p.room_image_url || (p.room_images && p.room_images[0]) || (p.images && p.images[0]) || "https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=100&q=80"} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
                         </div>
                       </td>
-                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px', cursor: 'pointer' }} onClick={() => { setSelectedRequest(p); setTimeout(() => document.getElementById('request-detail-div')?.scrollIntoView({ behavior: 'smooth' }), 100); }}><ReadMore maxWords={6}>{p.propertyName}</ReadMore></td>
+                      <td style={{ color: '#111827', fontWeight: 500, padding: '14px', cursor: 'pointer' }} onClick={() => { setSelectedRequest(p); setTimeout(() => document.getElementById('request-detail-div')?.scrollIntoView({ behavior: 'smooth' }), 100); }}>{p.propertyName}</td>
                       <td style={{ color: '#6B7280', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4 }}><ReadMore maxWords={6}>{p.location}</ReadMore></td>
                       <td style={{ padding: '14px' }}><span className="category-pill">{p.category}</span></td>
                       <td style={{ color: '#374151', padding: '14px', fontWeight: 500 }}>

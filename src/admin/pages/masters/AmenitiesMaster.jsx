@@ -408,7 +408,7 @@ export default function AmenitiesMaster() {
                         {getIconComp(am.icon, am.amenitiesCategory)}
                       </div>
                     </td>
-                    <td style={{ fontWeight: 700, color: '#111827' }}><ReadMore maxWords={6}>{am.amenitiesName}</ReadMore></td>
+                    <td style={{ fontWeight: 700, color: '#111827' }}>{am.amenitiesName}</td>
                     <td>
                       <span className="category-pill" style={{ textTransform: 'capitalize' }}>
                         {am.amenitiesCategory || 'Basic'}

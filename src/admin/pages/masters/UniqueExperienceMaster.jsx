@@ -375,7 +375,7 @@ export default function UniqueExperienceMaster() {
                         {getIconComponent(exp.representingIcon || exp.icon)}
                       </div>
                     </td>
-                    <td style={{ fontWeight: 700, color: '#111827' }}><ReadMore maxWords={6}>{exp.experienceName || exp.name}</ReadMore></td>
+                    <td style={{ fontWeight: 700, color: '#111827' }}>{exp.experienceName || exp.name}</td>
                     <td style={{ fontSize: '11.5px', color: '#6B7280', whiteSpace: 'normal', maxWidth: '240px', lineHeight: 1.4 }}><ReadMore maxWords={6}>{exp.description}</ReadMore></td>
                     <td>
                       <div style={{ width: 44, height: 32, borderRadius: 4, overflow: 'hidden', border: '1px solid #E5E7EB' }}>

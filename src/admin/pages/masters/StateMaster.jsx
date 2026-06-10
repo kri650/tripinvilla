@@ -300,8 +300,8 @@ export default function StateMaster() {
               ) : filteredStates.length > 0 ? (
                 paginated.map((stateObj) => (
                   <tr key={stateObj._id}>
-                    <td style={{ fontWeight: 600, color: '#111827' }}><ReadMore maxWords={6}>{stateObj.stateName}</ReadMore></td>
-                    <td style={{ fontWeight: 500 }}><ReadMore maxWords={6}>{stateObj.countryName || stateObj.countryId?.countryName || 'N/A'}</ReadMore></td>
+                    <td style={{ fontWeight: 600, color: '#111827' }}>{stateObj.stateName}</td>
+                    <td style={{ fontWeight: 500 }}>{stateObj.countryName || stateObj.countryId?.countryName || 'N/A'}</td>
                     <td style={{ textAlign: 'center', fontWeight: 600 }}>
                       <span 
                         onClick={() => navigate(`/masters/city?stateId=${stateObj._id}`)}
