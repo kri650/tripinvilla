@@ -454,9 +454,9 @@ export default function AllProperties() {
 
     setExistingImages(p.images || []);
     setSelectedFiles([]);
-    setRoomsList(Array.isArray(p.rooms) && typeof p.rooms[0] === 'object' ? p.rooms : []);
+    setRoomsList(Array.isArray(p.rooms) ? p.rooms.filter(r => r && typeof r === 'object') : []);
     setEditingRoomIdx(null);
-    setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
+    setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', originalPrice: '', taxAmount: '', offer: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
     setSelectedAmenitiesList(p.amenities || []);
     setSelectedExperiences(p.experiences || []);
     setLandmarksList([]); // Will need separate fetch if editing landmarks
@@ -506,7 +506,7 @@ export default function AllProperties() {
     setExistingImages([]);
     setRoomsList([]);
     setEditingRoomIdx(null);
-    setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
+    setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', originalPrice: '', taxAmount: '', offer: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
     setSelectedAmenitiesList([]);
     setLandmarksList([]);
     setLandmarkName("");
@@ -1651,11 +1651,42 @@ export default function AllProperties() {
                   </div>
                   <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12, flexWrap: 'wrap' }}>
                     <button type="button"
-                      onClick={() => {
+                      onClick={async () => {
                         if (!roomForm.roomName.trim() || !roomForm.pricePerNight) { alert('Please fill Room Name and Price.'); return; }
                         const finalRoomType = roomForm.roomType === 'Other' ? customRoomType : roomForm.roomType;
                         if (roomForm.roomType === 'Other' && !finalRoomType.trim()) { alert('Please enter custom room type.'); return; }
-                        const newRoom = { ...roomForm, roomType: finalRoomType, pricePerNight: Number(roomForm.pricePerNight), maxGuests: Number(roomForm.maxGuests), count: Number(roomForm.count) };
+                        
+                        let uploadedUrl = "";
+                        if (roomForm.imageFile) {
+                          const uploadData = new FormData();
+                          uploadData.append("images", roomForm.imageFile);
+                          const token = localStorage.getItem("admin_token");
+                          try {
+                            const uploadRes = await fetch(`${import.meta.env.VITE_API_BASE}/properties/upload`, {
+                              method: "POST",
+                              headers: { Authorization: `Bearer ${token}` },
+                              body: uploadData,
+                            });
+                            const uploadDataJson = await uploadRes.json();
+                            if (uploadDataJson && uploadDataJson.urls && uploadDataJson.urls.length > 0) {
+                              uploadedUrl = uploadDataJson.urls[0];
+                            }
+                          } catch (err) {
+                            console.error("Room image upload failed", err);
+                          }
+                        }
+
+                        const newRoom = { 
+                          ...roomForm, 
+                          roomType: finalRoomType, 
+                          imageUrl: uploadedUrl || roomForm.imageUrl || roomForm.room_image_url || roomForm.img,
+                          room_image_url: uploadedUrl || roomForm.room_image_url || roomForm.imageUrl || roomForm.img,
+                          pricePerNight: Number(roomForm.pricePerNight), 
+                          maxGuests: Number(roomForm.maxGuests), 
+                          count: Number(roomForm.count) 
+                        };
+                        delete newRoom.imageFile;
+
                         if (editingRoomIdx !== null) {
                           // Update existing room
                           setRoomsList(prev => prev.map((r, i) => i === editingRoomIdx ? newRoom : r));
@@ -1663,7 +1694,7 @@ export default function AllProperties() {
                         } else {
                           setRoomsList(prev => [...prev, newRoom]);
                         }
-                        setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
+                        setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', originalPrice: '', taxAmount: '', offer: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
                         setCustomRoomType('');
                       }}
                       style={{ padding: '8px 20px', background: editingRoomIdx !== null ? '#2563EB' : '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: 600 }}>
@@ -1671,7 +1702,7 @@ export default function AllProperties() {
                     </button>
                     {editingRoomIdx !== null && (
                       <button type="button"
-                        onClick={() => { setEditingRoomIdx(null); setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] }); setCustomRoomType(''); }}
+                        onClick={() => { setEditingRoomIdx(null); setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', originalPrice: '', taxAmount: '', offer: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] }); setCustomRoomType(''); }}
                         style={{ padding: '8px 16px', background: '#F3F4F6', color: '#374151', border: '1px solid #D1D5DB', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: 500 }}>
                         Cancel Edit
                       </button>
@@ -1690,11 +1721,11 @@ export default function AllProperties() {
                           <button type="button"
                             onClick={() => {
                               setEditingRoomIdx(idx);
-                              setRoomForm({ roomType: room.roomType, roomName: room.roomName || '', pricePerNight: room.pricePerNight, maxGuests: room.maxGuests, bedType: room.bedType, count: room.count, amenities: room.amenities || [] });
+                              setRoomForm({ roomType: room.roomType, roomName: room.roomName || '', pricePerNight: room.pricePerNight, maxGuests: room.maxGuests, bedType: room.bedType, count: room.count, amenities: room.amenities || [], imageUrl: room.imageUrl || room.room_image_url || room.img, room_image_url: room.room_image_url || room.imageUrl || room.img });
                             }}
                             style={{ background: 'none', border: '1px solid #93C5FD', borderRadius: 6, color: '#2563EB', cursor: 'pointer', fontSize: 12, padding: '3px 10px', fontWeight: 600 }}>Edit</button>
                           {/* Delete button */}
-                          <button type="button" onClick={() => { setRoomsList(prev => prev.filter((_, i) => i !== idx)); if (editingRoomIdx === idx) { setEditingRoomIdx(null); setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] }); } }}
+                          <button type="button" onClick={() => { setRoomsList(prev => prev.filter((_, i) => i !== idx)); if (editingRoomIdx === idx) { setEditingRoomIdx(null); setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', originalPrice: '', taxAmount: '', offer: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] }); } }}
                             style={{ background: 'none', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>
                         </div>
                       ))}
