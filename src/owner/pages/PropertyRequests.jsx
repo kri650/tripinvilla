@@ -673,14 +673,21 @@ export default function PropertyRequests() {
                                   <div className="room-details-list">
                                     {getRequestRooms(r).map((room, roomIdx) => (
                                       <div key={roomIdx} className="room-detail-card">
+
+                                        {/* ── Full-width image header ── */}
+                                        <div className="room-image-container">
+                                          <img
+                                            src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=60'}
+                                            alt={room.room_type}
+                                            className="room-img"
+                                          />
+                                          {getRequestRooms(r).length > 1 && (
+                                            <div className="room-badge">Room {roomIdx + 1}</div>
+                                          )}
+                                        </div>
+
+                                        {/* ── Title & Price ── */}
                                         <div className="room-main-info">
-                                          <div className="room-image-container">
-                                            <img src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=60'} alt={room.room_type} className="room-img" />
-                                            {getRequestRooms(r).length > 1 && (
-                                              <div className="room-badge">R{roomIdx + 1}</div>
-                                            )}
-                                          </div>
-                                          
                                           <div className="room-primary-details">
                                             <div className="room-title-price">
                                               <div className="title-area">
@@ -688,10 +695,12 @@ export default function PropertyRequests() {
                                                 <div className="room-bed-info">Bed: <strong>{room.bed_type || r.bed_type}</strong></div>
                                               </div>
                                               <div className="price-area">
-                                                <div className="price-val">{formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}<span className="price-unit">/nt</span></div>
+                                                <div className="price-val">
+                                                  {formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}
+                                                  <span className="price-unit">/nt</span>
+                                                </div>
                                               </div>
                                             </div>
-
                                             <div className="price-extra-info">
                                               {firstPresent(room.original_price, r.original_price) && (
                                                 <div className="info-pill original-price">
@@ -709,17 +718,29 @@ export default function PropertyRequests() {
                                           </div>
                                         </div>
 
+                                        <div className="room-divider" />
+
+                                        {/* ── Amenities + Offers ── */}
                                         <div className="room-secondary-info">
+
+                                          {/* Amenities — vertical bulleted list */}
                                           <div className="info-section amenities-section">
                                             <div className="section-label">
                                               <CheckCircle size={12} color="#58A429" /> Amenities
                                             </div>
-                                            <div className="pill-grid">
-                                              {(room.amenities_types || r.amenities_types)?.length > 0 ? (room.amenities_types || r.amenities_types).map((a, j) => (
-                                                <span key={j} className="pill amenity-pill">{a}</span>
-                                              )) : <span className="empty-val">None</span>}
-                                            </div>
+                                            {(room.amenities_types || r.amenities_types)?.length > 0 ? (
+                                              <div className="amenity-list">
+                                                {(room.amenities_types || r.amenities_types).map((a, j) => (
+                                                  <div key={j} className="amenity-list-item">
+                                                    <span className="amenity-bullet" />
+                                                    {a}
+                                                  </div>
+                                                ))}
+                                              </div>
+                                            ) : <span className="empty-val">None</span>}
                                           </div>
+
+                                          {/* Special Offers */}
                                           <div className="info-section offers-section">
                                             <div className="section-label">
                                               <Star size={12} color="#F59E0B" /> Special Offers
@@ -730,25 +751,30 @@ export default function PropertyRequests() {
                                               )) : <span className="empty-val">None</span>}
                                             </div>
                                           </div>
+
                                         </div>
 
+                                        <div className="room-divider" />
+
+                                        {/* ── House Rules ── */}
                                         <div className="room-rules-info">
-                                          <div className="section-label">House Rules & Policies</div>
+                                          <div className="section-label" style={{ marginTop: 14 }}>House Rules &amp; Policies</div>
                                           <div className="rules-grid">
                                             {Array.isArray(room.rules || r.rules) && (room.rules || r.rules).length > 0 ? (room.rules || r.rules).map((rule, j) => (
                                               <div key={j} className="rule-box">
                                                 <div className="rule-title">{rule.title}</div>
                                                 <div className="rule-points">
                                                   {Array.isArray(rule.points) ? (
-                                                    <div className="points-list">
-                                                      {rule.points.map((p, pIdx) => <span key={pIdx} className="point-item">• {p}</span>)}
-                                                    </div>
-                                                  ) : rule.points}
+                                                    rule.points.map((p, pIdx) => (
+                                                      <span key={pIdx} className="point-item">• {p}</span>
+                                                    ))
+                                                  ) : <span className="point-item">{rule.points}</span>}
                                                 </div>
                                               </div>
                                             )) : <span className="empty-val">None</span>}
                                           </div>
                                         </div>
+
                                       </div>
                                     ))}
                                   </div>

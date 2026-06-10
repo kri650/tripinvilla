@@ -498,11 +498,260 @@
 }
 .btn-close-detail:hover { background: #F3F4F6; }
 
+/* ══════════════════════════════════════════════
+   ROOM DETAIL — PREMIUM REDESIGN
+   Inspired by property details page (reference image 2)
+══════════════════════════════════════════════ */
+
 .room-details-list {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 4px;
 }
+
+/* ── Card shell ── */
+.room-detail-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Image header — full-width ── */
+.room-image-container {
+  position: relative;
+  width: 100%;
+  height: 180px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.room-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.room-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  letter-spacing: 0.3px;
+}
+
+/* ── Card body ── */
+.room-main-info {
+  padding: 16px 18px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-bottom: 0;
+}
+
+.room-primary-details { width: 100%; }
+
+.room-title-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.room-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 3px;
+  font-family: 'Outfit', sans-serif;
+}
+
+.room-bed-info {
+  font-size: 12px;
+  color: #6B7280;
+}
+.room-bed-info strong { color: #374151; }
+
+.price-val {
+  font-size: 17px;
+  font-weight: 700;
+  color: #58A429;
+  white-space: nowrap;
+}
+.price-unit { font-size: 11px; font-weight: 400; color: #6B7280; }
+
+.price-extra-info {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.info-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+}
+
+.original-price { background: #FEF9C3; }
+.tax-info { background: #EFF6FF; }
+
+.pill-label { font-weight: 500; color: #6B7280; }
+.pill-val { font-weight: 600; color: #374151; }
+.pill-val.strike { text-decoration: line-through; color: #9CA3AF; }
+
+/* ── Divider between sections ── */
+.room-divider {
+  height: 1px;
+  background: #F3F4F6;
+  margin: 0 18px;
+}
+
+/* ── Secondary sections (Amenities, Offers, Rules) ── */
+.room-secondary-info {
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.info-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 2px;
+}
+
+/* ── Amenities: vertical bulleted list ── */
+.amenity-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-left: 4px;
+}
+
+.amenity-list-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: #374151;
+  font-weight: 500;
+}
+
+.amenity-bullet {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #58A429;
+  flex-shrink: 0;
+}
+
+/* ── Offers: small pill grid ── */
+.pill-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.pill {
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.amenity-pill { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+.offer-pill { background: #FEFCE8; color: #854D0E; border: 1px solid #FDE68A; }
+.empty-val { font-size: 12px; color: #9CA3AF; font-style: italic; }
+
+/* ── Rules ── */
+.room-rules-info {
+  padding: 0 18px 16px;
+}
+
+.rules-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.rule-box {
+  background: #F9FAFB;
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid #E5E7EB;
+}
+
+.rule-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.rule-points { display: flex; flex-direction: column; gap: 3px; }
+.point-item {
+  font-size: 12px;
+  color: #4B5563;
+  padding-left: 4px;
+}
+
+/* ══════════════════════════════════════════════
+   LISTING & TABLE RESPONSIVENESS
+══════════════════════════════════════════════ */
+
+.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+.td-property, .td-category, .td-room-type,
+.td-bed, .td-amenities, .td-price,
+.td-rules, .td-offers, .td-status, .td-actions {
+  font-size: 13px;
+  padding: 10px 12px;
+  vertical-align: middle;
+}
+
+.td-amenities, .td-offers { min-width: 140px; }
+
+@media (max-width: 900px) {
+  .room-details-list { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 700px) {
+  .room-details-list { grid-template-columns: 1fr; }
+  .detail-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .room-image-container { height: 200px; }
+}
+
+@media (max-width: 480px) {
+  .room-secondary-info { padding: 12px 14px; }
+  .room-main-info { padding: 14px 14px 0; }
+  .room-rules-info { padding: 0 14px 14px; }
+}
+
 
 .room-detail-card {
   background: #fff;

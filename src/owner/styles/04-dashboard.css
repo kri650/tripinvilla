@@ -14,9 +14,21 @@
   animation: fadeIn 0.35s ease forwards;
 }
 
-.dash-section > div,
-.dash-section > div > div {
+/* Allow flex children to shrink — but NOT table scroll wrappers */
+.dash-section > div:not([style*="overflow-x"]),
+.dash-section > div > div:not([style*="overflow-x"]) {
   min-width: 0;
+}
+
+/* Table scroll wrappers inside dash-section must NEVER collapse */
+.dash-section > div[style*="overflow-x"],
+.dash-section > div > div[style*="overflow-x"],
+.chart-card > div[style*="overflow-x"] {
+  min-width: 0 !important; /* allow shrinking the container */
+  width: 100% !important;
+  flex: 1 1 auto !important;
+  min-height: min-content !important;
+  display: block !important;
 }
 
 /* Stat cards row */
@@ -85,10 +97,10 @@
   padding: 21px;
   border: 1px solid rgba(0,0,0,0.05);
   height: auto;
-  min-height: 100%;
+  min-height: min-content;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  /* removed justify-content: space-between — it was compressing table rows on mobile */
 }
 
 @media (max-width: 640px) {

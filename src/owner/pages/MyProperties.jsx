@@ -1654,7 +1654,7 @@ export default function MyProperties({ autoOpenForm = false }) {
 
       {/* ── Property List Table ───────────────────────────────── */}
       <div className="dash-section" style={{ marginBottom: 24 }}>
-        <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
+        <div className="chart-card" style={{ padding: 0, borderRadius: 12, border: 'none', boxShadow: 'none' }}>
           <div className="table-header" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
             <span className="table-title" style={{ whiteSpace: 'nowrap' }}>My Property List</span>
             <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '4px', maxWidth: '100%' }}>
@@ -1680,7 +1680,7 @@ export default function MyProperties({ autoOpenForm = false }) {
             </div>
           </div>
 
-          <div style={{ overflowX: 'auto', minHeight: '250px', width: '100%' }}>
+          <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', minWidth: '1050px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
