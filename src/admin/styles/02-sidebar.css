@@ -27,7 +27,7 @@
 /* Logo Container */
 .sidebar-logo {
   margin-left: 19px;
-  margin-bottom: 12px;
+  margin-bottom: 0px;
 }
 .sidebar-logo-img {
   width: 192px;
@@ -41,7 +41,7 @@
   width: 253px;
   height: 1px;
   background-color: #DDDDDD;
-  margin: 16px 22px;
+  margin: 8px 22px;
   border: none;
 }
 

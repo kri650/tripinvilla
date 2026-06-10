@@ -723,12 +723,12 @@ export default function PropertyRequests() {
                                           {/* Amenities */}
                                           <div className="room-section">
                                             <div className="section-label">AMENITIES</div>
-                                            <div className="pill-grid">
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                               {(room.amenities_types || r.amenities_types)?.length > 0 ? (
                                                 (room.amenities_types || r.amenities_types).map((a, j) => (
-                                                  <span key={j} className="pill amenity-pill">
-                                                    <span className="amenity-dot"></span>{a}
-                                                  </span>
+                                                  <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#4B5563' }}>
+                                                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#58A429' }}></span> {a}
+                                                  </div>
                                                 ))
                                               ) : <span className="empty-val">None</span>}
                                             </div>

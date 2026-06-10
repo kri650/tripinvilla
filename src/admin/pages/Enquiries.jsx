@@ -151,7 +151,7 @@ export default function Enquiries() {
       </div>
 
       <div className="admin-table-card">
-        <div className="enquiries-toolbar admin-table-header" style={{ marginBottom: '16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' }}>
+        <div className="enquiries-toolbar admin-table-header" style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexWrap: 'wrap', gap: '32px' }}>
           <h2 className="admin-table-title" style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>Enquiries</h2>
           <div className="enquiries-filters-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
