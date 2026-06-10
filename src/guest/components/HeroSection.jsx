@@ -8,22 +8,8 @@ import { format, parse } from 'date-fns';
 import { heroBgImg } from '../../assets';
 
 export default function HeroSection(props) {
-  const [propertyTypes, setPropertyTypes] = useState([]);
-  
-  useEffect(() => {
-    const fetchTypes = async () => {
-      try {
-        const res = await fetch(`${import.meta.env.VITE_API_BASE}/master/property-types`);
-        const data = await res.json();
-        if (Array.isArray(data)) setPropertyTypes(data);
-      } catch (err) {
-        console.error("Error fetching property types:", err);
-      }
-    };
-    fetchTypes();
-  }, []);
-
   const {
+    API_BASE,
     activeMenu,
     homepageContent,
 
@@ -54,6 +40,21 @@ export default function HeroSection(props) {
     handleAISearch,
     aiSearchLoading,
   } = props;
+
+  const [roomTypes, setRoomTypes] = useState([]);
+  
+  useEffect(() => {
+    const fetchTypes = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/master/room-types`);
+        const data = await res.json();
+        if (Array.isArray(data)) setRoomTypes(data);
+      } catch (err) {
+        console.error("Error fetching room types:", err);
+      }
+    };
+    fetchTypes();
+  }, [API_BASE]);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [pickerCoords, setPickerCoords] = useState({ top: 0, left: 0 });
@@ -344,9 +345,16 @@ export default function HeroSection(props) {
                       onChange={(e) => setStayType(e.target.value)}
                     >
                       <option value="Any">Any</option>
-                      <option value="1 Deluxe Room">1 Deluxe Room</option>
-                      <option value="2 Deluxe Rooms">2 Deluxe Rooms</option>
-                      <option value="Entire Villa">Entire Villa</option>
+                      {roomTypes.map(rt => (
+                        <option key={rt._id} value={rt.name}>{rt.name}</option>
+                      ))}
+                      {roomTypes.length === 0 && (
+                        <>
+                          <option value="1 Deluxe Room">1 Deluxe Room</option>
+                          <option value="2 Deluxe Rooms">2 Deluxe Rooms</option>
+                          <option value="Entire Villa">Entire Villa</option>
+                        </>
+                      )}
                     </select>
                   </div>
                 </div>
@@ -569,10 +577,10 @@ export default function HeroSection(props) {
                     onChange={(e) => setStayType(e.target.value)}
                   >
                     <option value="Any">Any</option>
-                    {propertyTypes.map(pt => (
-                      <option key={pt._id} value={pt.name}>{pt.name}</option>
+                    {roomTypes.map(rt => (
+                      <option key={rt._id} value={rt.name}>{rt.name}</option>
                     ))}
-                    {propertyTypes.length === 0 && (
+                    {roomTypes.length === 0 && (
                       <>
                         <option value="1 Deluxe Room">1 Deluxe Room</option>
                         <option value="2 Deluxe Rooms">2 Deluxe Rooms</option>

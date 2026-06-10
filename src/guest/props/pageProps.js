@@ -1,4 +1,5 @@
 export function buildHeroSectionProps({
+  API_BASE,
   activeMenu,
   homepageContent,
   activeSearchTab,
@@ -26,6 +27,7 @@ export function buildHeroSectionProps({
   aiSearchLoading,
 }) {
   return {
+    API_BASE,
     activeMenu,
     homepageContent,
     activeSearchTab,

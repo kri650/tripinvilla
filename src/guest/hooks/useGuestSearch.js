@@ -150,7 +150,7 @@ export default function useGuestSearch({ API_BASE, setActiveMenu }) {
           '2 Deluxe Rooms': 'private-room',
           'Entire Villa': 'entire-place',
         };
-        if (roomMap[stayTypeVal]) query.append('roomType', roomMap[stayTypeVal]);
+        query.append('roomType', roomMap[stayTypeVal] || stayTypeVal);
       }
 
       const foodPrefVal = get('foodPref', foodPref);
