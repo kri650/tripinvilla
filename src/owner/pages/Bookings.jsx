@@ -123,26 +123,26 @@ export default function Bookings() {
         </div>
 
         {/* Table wrapper */}
-        <div className="table-wrapper">
-          <table className="custom-table">
+        <div style={{ overflowX: 'auto', width: '100%', flex: 1, minHeight: 'min-content' }}>
+          <table style={{ minWidth: 800, width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap', fontSize: 13 }}>
             <thead>
-              <tr>
-                <th>Booking ID</th>
-                <th style={{ minWidth: 180 }}>Property Name</th>
-                <th>Guest</th>
-                <th>Contact</th>
-                <th>Check In</th>
-                <th>Check Out</th>
-                <th>Nights</th>
-                <th>Payout</th>
-                <th>Status</th>
+              <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
+                <th style={{ padding: '12px 14px', color: '#9CA3AF', fontWeight: 500 }}>Booking ID</th>
+                <th style={{ padding: '12px 14px', color: '#9CA3AF', fontWeight: 500, minWidth: 180 }}>Property Name</th>
+                <th style={{ padding: '12px 14px', color: '#9CA3AF', fontWeight: 500, minWidth: 130 }}>Guest</th>
+                <th style={{ padding: '12px 14px', color: '#9CA3AF', fontWeight: 500, minWidth: 110 }}>Contact</th>
+                <th style={{ padding: '12px 14px', color: '#9CA3AF', fontWeight: 500, minWidth: 120 }}>Check In</th>
+                <th style={{ padding: '12px 14px', color: '#9CA3AF', fontWeight: 500, minWidth: 120 }}>Check Out</th>
+                <th style={{ padding: '12px 14px', color: '#9CA3AF', fontWeight: 500 }}>Nights</th>
+                <th style={{ padding: '12px 14px', color: '#9CA3AF', fontWeight: 500 }}>Payout</th>
+                <th style={{ padding: '12px 14px', color: '#9CA3AF', fontWeight: 500 }}>Status</th>
               </tr>
             </thead>
             <tbody>
               {loading ? (
-                <tr><td colSpan="9" style={{ textAlign: 'center', padding: '20px' }}>Loading bookings...</td></tr>
+                <tr><td colSpan="9" style={{ textAlign: 'center', padding: '20px', color: '#6B7280' }}>Loading bookings...</td></tr>
               ) : bookingsList.length === 0 ? (
-                <tr><td colSpan="9" style={{ textAlign: 'center', padding: '20px' }}>No bookings found.</td></tr>
+                <tr><td colSpan="9" style={{ textAlign: 'center', padding: '20px', color: '#6B7280' }}>No bookings found.</td></tr>
               ) : bookingsList
                 .filter(b => {
                   const matchSearch = (b.user?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) || String(b.razorpayOrderId || b._id).toLowerCase().includes(searchTerm.toLowerCase());
@@ -151,17 +151,21 @@ export default function Bookings() {
                   return matchSearch && matchProp && matchStatus;
                 })
                 .map((booking, index) => (
-                  <tr key={index}>
-                    <td style={{ fontWeight: 600, color: '#1d9e75' }}>{booking.razorpayOrderId || booking._id.substring(0, 8)}</td>
-                    <td style={{ fontWeight: 500 }}><ReadMore maxWords={6}>{booking.property?.propertyName || booking.property?.name}</ReadMore></td>
-                    <td style={{ fontWeight: 500, color: '#111827' }}><ReadMore maxWords={6}>{booking.user?.name || 'Guest'}</ReadMore></td>
-                    <td>{booking.user?.phone || 'N/A'}</td>
-                    <td>{new Date(booking.checkIn).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
-                    <td>{new Date(booking.checkOut).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
-                    <td>{Math.ceil((new Date(booking.checkOut) - new Date(booking.checkIn)) / (1000 * 60 * 60 * 24))}</td>
-                    <td style={{ fontWeight: 600, color: '#111827' }}>₹{booking.totalPrice}</td>
-                    <td>
-                      <span className={`badge ${booking.status.toLowerCase()}`}>
+                  <tr key={index} style={{ borderBottom: '1px solid #F3F4F6' }}>
+                    <td style={{ fontWeight: 600, color: '#58A429', padding: '14px' }}>{booking.razorpayOrderId || booking._id.substring(0, 8)}</td>
+                    <td style={{ fontWeight: 500, padding: '14px' }}>{booking.property?.propertyName || booking.property?.name}</td>
+                    <td style={{ fontWeight: 500, color: '#111827', padding: '14px' }}>{booking.user?.name || 'Guest'}</td>
+                    <td style={{ padding: '14px' }}>{booking.user?.phone || 'N/A'}</td>
+                    <td style={{ padding: '14px', color: '#6B7280' }}>{new Date(booking.checkIn).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                    <td style={{ padding: '14px', color: '#6B7280' }}>{new Date(booking.checkOut).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
+                    <td style={{ padding: '14px' }}>{Math.ceil((new Date(booking.checkOut) - new Date(booking.checkIn)) / (1000 * 60 * 60 * 24))}</td>
+                    <td style={{ fontWeight: 600, color: '#111827', padding: '14px' }}>₹{booking.totalPrice}</td>
+                    <td style={{ padding: '14px' }}>
+                      <span style={{
+                        padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600,
+                        background: booking.status === 'Confirmed' ? '#DCFCE7' : booking.status === 'Cancelled' ? '#FEE2E2' : '#FEF3C7',
+                        color: booking.status === 'Confirmed' ? '#16A34A' : booking.status === 'Cancelled' ? '#EF4444' : '#D97706'
+                      }}>
                         {booking.status}
                       </span>
                     </td>

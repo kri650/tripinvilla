@@ -398,8 +398,12 @@ export default function OffersByDate() {
                   <tr key={o._id}>
                     <td style={{ color: '#58A429', fontWeight: 600, padding: '14px 16px' }}>{o.id}</td>
                     <td style={{ color: '#6B7280', padding: '14px 16px' }}>{o.dates}</td>
-                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}><ReadMore>{o.name}</ReadMore></td>
-                    <td style={{ color: '#6B7280', padding: '14px 16px' }}><ReadMore>{o.location}</ReadMore></td>
+                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}>{o.name}</td>
+                    <td style={{ padding: '14px 16px' }}>
+                      <div style={{ maxWidth: 200, whiteSpace: 'normal', lineHeight: 1.4, color: '#6B7280' }}>
+                        <ReadMore>{o.location}</ReadMore>
+                      </div>
+                    </td>
                     <td style={{ padding: '14px 16px' }}>
                       <span className="category-pill" style={{ background: '#F0FAF6', color: '#1d9e75', fontWeight: 500, padding: '3px 10px', borderRadius: '4px', fontSize: '11px' }}>
                         {o.category}

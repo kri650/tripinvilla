@@ -104,86 +104,106 @@ export default function Enquiries() {
       {/* ══ Main Section ══ */}
       <div className="dash-section" style={{ marginBottom: 24, padding: '24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
-        {/* Card 1: Toolbar Filters */}
-        <div className="chart-card" style={{ padding: '16px 20px', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
-          <div className="props-table-toolbar" style={{ margin: 0, borderBottom: 'none', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <div className="props-table-title" style={{ fontSize: '15px', fontWeight: 700, color: '#111827', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap' }}>
-              Enquiries Inbox
+        {/* Card 1: Toolbar — single horizontal row */}
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 12,
+          flexWrap: 'wrap',
+          background: '#fff',
+          borderRadius: 12,
+          padding: '12px 16px',
+          border: '1px solid #F3F4F6'
+        }}>
+          {/* Title */}
+          <div style={{ fontSize: '15px', fontWeight: 700, color: '#111827', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap', flexShrink: 0 }}>
+            Enquiries
+          </div>
+
+          {/* Filters Row */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', flex: 1, justifyContent: 'flex-end' }}>
+
+            {/* Date From / Date To via DateRangeDropdown */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <DateRangeDropdown
+                startDate={dateFrom}
+                endDate={dateTo}
+                onChange={(start, end) => {
+                  setDateFrom(start);
+                  setDateTo(end);
+                }}
+              />
+              {(dateFrom || dateTo) && (
+                <button onClick={() => { setDateFrom(''); setDateTo(''); }} style={{ fontSize: '11px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>Clear</button>
+              )}
             </div>
 
-            {/* Filter Row */}
-            <div className="enquiries-filter-row">
-              {/* Date Range Picker */}
-              <div className="filter-item" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <DateRangeDropdown 
-                  startDate={dateFrom}
-                  endDate={dateTo}
-                  onChange={(start, end) => {
-                    setDateFrom(start);
-                    setDateTo(end);
-                  }}
-                />
-                {(dateFrom || dateTo) && (
-                  <button onClick={() => { setDateFrom(''); setDateTo(''); }} style={{ fontSize: '11px', color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}>Clear</button>
-                )}
-              </div>
+            {/* Property Type */}
+            <select
+              value={propertyType}
+              onChange={(e) => setPropertyType(e.target.value)}
+              style={{ border: '1px solid #E5E7EB', outline: 'none', fontSize: '12px', padding: '6px 10px', borderRadius: '6px', cursor: 'pointer', background: '#ffffff', color: '#374151' }}
+            >
+              <option value="All">Property Type</option>
+              <option value="Homestay">Homestay</option>
+              <option value="Hotel">Hotel</option>
+              <option value="Villa">Villa</option>
+              <option value="Apartment">Apartment</option>
+              <option value="Cottage">Cottage</option>
+            </select>
 
-              {/* Property Type Dropdown */}
-              <select
-                value={propertyType}
-                onChange={(e) => setPropertyType(e.target.value)}
-                className="props-filter-select filter-item"
-                style={{ border: '1px solid #E5E7EB', outline: 'none', fontSize: '12px', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', background: '#ffffff' }}
-              >
-                <option value="All">All Categories</option>
-                <option value="Homestay">Homestay</option>
-                <option value="Hotel">Hotel</option>
-                <option value="Villa">Villa</option>
-                <option value="Apartment">Apartment</option>
-                <option value="Cottage">Cottage</option>
-              </select>
+            {/* Location */}
+            <input
+              type="text"
+              placeholder="Location"
+              value={location}
+              onChange={(e) => setLocation(e.target.value)}
+              style={{
+                padding: '6px 10px',
+                fontSize: '12px',
+                border: '1px solid #E5E7EB',
+                borderRadius: '6px',
+                background: '#ffffff',
+                outline: 'none',
+                color: '#374151',
+                minWidth: 80,
+                maxWidth: 130
+              }}
+            />
 
-              {/* Location Input */}
-              <div className="filter-item" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-                <input
-                  type="text"
-                  placeholder="Location"
-                  value={location}
-                  onChange={(e) => setLocation(e.target.value)}
-                  style={{
-                    padding: '6px 12px',
-                    fontSize: '12px',
-                    border: '1px solid #E5E7EB',
-                    borderRadius: '6px',
-                    width: '100%',
-                    background: '#ffffff',
-                    outline: 'none',
-                    boxSizing: 'border-box'
-                  }}
-                />
-              </div>
+            {/* Filter Button */}
+            <button
+              onClick={() => fetchEnquiries()}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 6,
+                padding: '6px 14px',
+                border: '1.5px solid #58A429',
+                borderRadius: '6px',
+                background: '#fff',
+                color: '#58A429',
+                fontSize: '12px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                flexShrink: 0
+              }}
+            >
+              <FilterIcon size={13} /> Filter
+            </button>
 
-              {/* Filter Button */}
-              <button
-                onClick={() => fetchEnquiries()}
-                className="props-btn-filter filter-item btn"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', whiteSpace: 'nowrap', justifyContent: 'center' }}
-              >
-                <FilterIcon size={13} style={{ color: '#58A429' }} /> Filter
-              </button>
-            </div>
-
-            {/* Search Bar */}
-            <div className="props-search-wrap" style={{ width: '100%' }}>
-              <Search size={14} style={{ flexShrink: 0 }} />
+            {/* Search */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '6px', padding: '5px 10px', background: '#fff', minWidth: 120 }}>
+              <Search size={13} style={{ color: '#9CA3AF', flexShrink: 0 }} />
               <input
                 type="text"
-                placeholder="Search name/email/query..."
+                placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ outline: 'none', width: '100%', minWidth: 0 }}
+                style={{ border: 'none', outline: 'none', fontSize: '12px', width: '100%', minWidth: 0, background: 'transparent', color: '#374151' }}
               />
             </div>
+
           </div>
         </div>
 
