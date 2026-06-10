@@ -93,7 +93,7 @@ function RoomForm({
   const manualRoomType = data.manualRoomType || false;
 
   return (
-    <div className="dash-section room-form-section" style={{ border: isEditMode ? '1px solid #2563EB' : 'none' }}>
+    <div className="dash-section room-form-section" style={{ border: isEditMode ? '1px solid #2563EB' : 'none', width: '100%', boxSizing: 'border-box', overflowX: 'hidden' }}>
       <div className="room-form-header">
         <h3 className="room-form-title">
           {isEditMode ? `Room ${idx + 1}: ${data.room_type || 'New Room'}` : 'Configure Room Pricing & Rules'}
@@ -160,7 +160,7 @@ function RoomForm({
         </div>
       </div>
 
-      <div className="offers-input-section">
+      <div className="offers-input-section" style={{ width: '100%', boxSizing: 'border-box' }}>
         <label className="form-label">Multiple Offers/Discounts</label>
         <input type="text" className="form-input" 
           placeholder="e.g. 20% Off flat, Breakfast Included" 
@@ -184,7 +184,7 @@ function RoomForm({
         </div>
       </div>
 
-      <div className="amenities-selection-section">
+      <div className="amenities-selection-section" style={{ width: '100%', boxSizing: 'border-box' }}>
         <label className="form-label-bold">Amenities Types</label>
         {amenitiesLoading ? <div className="loading-msg">Loading amenities...</div> : (
           <div className="amenities-pill-cloud">
@@ -198,7 +198,7 @@ function RoomForm({
         )}
       </div>
 
-      <div className="house-rules-config-box">
+      <div className="house-rules-config-box" style={{ width: '100%', boxSizing: 'border-box' }}>
         <div className="rules-box-header">
           <label className="form-label-bold">House Rules Sections</label>
           <button type="button" onClick={handleAddRuleSection} className="btn-add-section">
@@ -587,12 +587,12 @@ export default function PropertyRequests() {
           {/* ─── SUBMITTED REQUESTS TABLE ─── */}
           <div className="dash-section requests-table-section">
             <div className="chart-card table-container">
-              <div className="table-responsive">
-                <table className="data-table">
+              <div className="table-responsive" style={{ overflowX: 'auto', width: '100%' }}>
+                <table className="data-table" style={{ minWidth: 900 }}>
                   <thead>
                     <tr>
                       {['Property', 'Category', 'Room Type', 'Bed', 'Amenities', 'Price', 'Rules', 'Offers', 'Status', 'Actions'].map((h, i) => (
-                        <th key={i} className="table-th" style={{ minWidth: { 'Property': 200, 'Category': 100, 'Room Type': 130, 'Amenities': 180, 'Status': 100 }[h] }}>{h}</th>
+                        <th key={i} className="table-th" style={{ minWidth: { 'Property': 120, 'Category': 100, 'Room Type': 100, 'Bed': 80, 'Amenities': 120, 'Price': 90, 'Rules': 80, 'Offers': 80, 'Status': 90, 'Actions': 80 }[h] }}>{h}</th>
                       ))}
                     </tr>
                   </thead>

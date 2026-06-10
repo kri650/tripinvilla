@@ -1655,9 +1655,9 @@ export default function MyProperties({ autoOpenForm = false }) {
       {/* ── Property List Table ───────────────────────────────── */}
       <div className="dash-section" style={{ marginBottom: 24 }}>
         <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
-          <div className="table-header" style={{ padding: '14px 20px' }}>
-            <span className="table-title">My Property List</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap', minWidth: 0, overflowX: 'auto' }}>
+          <div className="table-header" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
+            <span className="table-title" style={{ whiteSpace: 'nowrap' }}>My Property List</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '4px', maxWidth: '100%' }}>
               {[{ val: filterDateFrom, set: (val) => handleLocalDateChange('from', val) }, { val: filterDateTo, set: (val) => handleLocalDateChange('to', val) }].map((f, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '5px 8px', background: '#ffffff', flexShrink: 0 }}>
                   <Calendar size={14} style={{ color: '#9CA3AF' }} />

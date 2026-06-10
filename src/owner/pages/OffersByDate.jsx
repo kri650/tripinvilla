@@ -281,8 +281,8 @@ export default function OffersByDate() {
 
           {/* Form Fields Grid - Row 3 */}
           <div className="form-grid-3">
-            <div className="form-group" style={{ display: 'flex', gap: '12px' }}>
-              <div style={{ flex: 1 }}>
+            <div className="form-group split-date-time-grid">
+              <div style={{ width: '100%' }}>
                 <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>Valid From*</label>
                 <input 
                   type="date" 
@@ -292,7 +292,7 @@ export default function OffersByDate() {
                   required
                 />
               </div>
-              <div style={{ flex: 1 }}>
+              <div style={{ width: '100%' }}>
                 <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>Valid To*</label>
                 <input 
                   type="date" 
@@ -304,8 +304,8 @@ export default function OffersByDate() {
               </div>
             </div>
 
-            <div className="form-group" style={{ display: 'flex', gap: '12px' }}>
-              <div style={{ flex: 1 }}>
+            <div className="form-group split-date-time-grid">
+              <div style={{ width: '100%' }}>
                 <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>Start Time*</label>
                 <input 
                   type="time" 
@@ -315,7 +315,7 @@ export default function OffersByDate() {
                   required
                 />
               </div>
-              <div style={{ flex: 1 }}>
+              <div style={{ width: '100%' }}>
                 <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>End Time*</label>
                 <input 
                   type="time" 
@@ -375,12 +375,12 @@ export default function OffersByDate() {
       {/* ══ Section 2: Table Card ══ */}
       <div className="dash-section" style={{ marginBottom: 24, padding: '24px' }}>
         <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table" style={{ whiteSpace: 'nowrap' }}>
+          <div style={{ overflowX: 'auto', width: '100%' }}>
+            <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap', minWidth: 1000 }}>
               <thead>
                 <tr>
                   {['Offer ID', 'Dates & Time', 'Property Name', 'Location', 'Category', 'Room', 'Foods', 'Amenities', 'Offer %', 'Description', 'Status', ''].map((h, i) => (
-                    <th key={i} style={{ minWidth: { 'Offer ID': 100, 'Property No': 100, 'Enquiry No': 100, 'Owner No': 100, 'Booking ID': 100, 'Request No': 100, 'Date & Time': 150, 'Dates & Time': 150, 'Check In': 150, 'Check Out': 150, 'Property Name': 200, 'Location': 180, 'Category': 100, 'Room Type': 130, 'Room': 130, 'Foods': 100, 'Amenities': 180, 'Amenities Types': 180, 'Offer %': 100, 'Offer': 100, 'Description': 180, 'Status': 100 }[h], color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
+                    <th key={i} style={{ minWidth: { 'Offer ID': 90, 'Dates & Time': 140, 'Property Name': 160, 'Location': 150, 'Category': 100, 'Room': 100, 'Foods': 90, 'Amenities': 150, 'Offer %': 90, 'Description': 150, 'Status': 90 }[h], color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
                       <span className="th-inner">
                         {h}
                         {h && <ChevronDown size={10} style={{ color: '#CBD5E1', marginLeft: 4 }} />}

@@ -106,14 +106,15 @@ export default function Enquiries() {
 
         {/* Card 1: Toolbar Filters */}
         <div className="chart-card" style={{ padding: '16px 20px', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
-          <div className="props-table-toolbar" style={{ margin: 0, borderBottom: 'none', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: 'nowrap', minWidth: 0 }}>
-            <div className="props-table-title" style={{ fontSize: '15px', fontWeight: 700, color: '#111827', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap', flexShrink: 0 }}>
+          <div className="props-table-toolbar" style={{ margin: 0, borderBottom: 'none', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div className="props-table-title" style={{ fontSize: '15px', fontWeight: 700, color: '#111827', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap' }}>
               Enquiries Inbox
             </div>
 
-            <div className="props-table-actions" style={{ gap: '10px', display: 'flex', flexWrap: 'nowrap', alignItems: 'center', minWidth: 0, overflowX: 'auto' }}>
+            {/* Filter Row */}
+            <div className="enquiries-filter-row">
               {/* Date Range Picker */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
+              <div className="filter-item" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <DateRangeDropdown 
                   startDate={dateFrom}
                   endDate={dateTo}
@@ -131,8 +132,8 @@ export default function Enquiries() {
               <select
                 value={propertyType}
                 onChange={(e) => setPropertyType(e.target.value)}
-                className="props-filter-select"
-                style={{ border: '1px solid #E5E7EB', outline: 'none', fontSize: '12px', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', background: '#ffffff', flexShrink: 0, maxWidth: 120 }}
+                className="props-filter-select filter-item"
+                style={{ border: '1px solid #E5E7EB', outline: 'none', fontSize: '12px', padding: '6px 12px', borderRadius: '6px', cursor: 'pointer', background: '#ffffff' }}
               >
                 <option value="All">All Categories</option>
                 <option value="Homestay">Homestay</option>
@@ -143,7 +144,7 @@ export default function Enquiries() {
               </select>
 
               {/* Location Input */}
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flexShrink: 0, maxWidth: 110 }}>
+              <div className="filter-item" style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
                 <input
                   type="text"
                   placeholder="Location"
@@ -156,7 +157,8 @@ export default function Enquiries() {
                     borderRadius: '6px',
                     width: '100%',
                     background: '#ffffff',
-                    outline: 'none'
+                    outline: 'none',
+                    boxSizing: 'border-box'
                   }}
                 />
               </div>
@@ -164,35 +166,35 @@ export default function Enquiries() {
               {/* Filter Button */}
               <button
                 onClick={() => fetchEnquiries()}
-                className="props-btn-filter"
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', flexShrink: 0, whiteSpace: 'nowrap' }}
+                className="props-btn-filter filter-item btn"
+                style={{ display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer', whiteSpace: 'nowrap', justifyContent: 'center' }}
               >
                 <FilterIcon size={13} style={{ color: '#58A429' }} /> Filter
               </button>
+            </div>
 
-              {/* Search Bar */}
-              <div className="props-search-wrap" style={{ flexShrink: 1, minWidth: 80, maxWidth: 200 }}>
-                <Search size={14} style={{ flexShrink: 0 }} />
-                <input
-                  type="text"
-                  placeholder="Search name/email/query..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  style={{ outline: 'none', width: '100%', minWidth: 0 }}
-                />
-              </div>
+            {/* Search Bar */}
+            <div className="props-search-wrap" style={{ display: 'flex', alignItems: 'center', width: '100%', background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '8px 12px', boxSizing: 'border-box' }}>
+              <Search size={14} style={{ color: '#9CA3AF', flexShrink: 0, marginRight: '8px' }} />
+              <input
+                type="text"
+                placeholder="Search name/email/query..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                style={{ outline: 'none', width: '100%', minWidth: 0, border: 'none', background: 'transparent' }}
+              />
             </div>
           </div>
         </div>
 
         {/* Card 2: Table List */}
         <div className="chart-card" style={{ padding: 0, overflow: 'hidden', borderRadius: 12, border: 'none', boxShadow: 'none' }}>
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table" style={{ whiteSpace: 'nowrap' }}>
+          <div style={{ overflowX: 'auto', width: '100%' }}>
+            <table className="data-table" style={{ whiteSpace: 'nowrap', minWidth: 800, width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr>
                   {['Enquiry No.', 'Property', 'Dates & Time', 'Guest Name', 'Query', 'Status', 'Actions'].map((h, i) => (
-                    <th key={i} style={{ color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
+                    <th key={i} style={{ minWidth: { 'Enquiry No.': 100, 'Property': 140, 'Dates & Time': 140, 'Guest Name': 120, 'Query': 150, 'Status': 90, 'Actions': 80 }[h], color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
                       <span className="th-inner">
                         {h}
                         {h && h !== 'Actions' && <ChevronDown size={10} style={{ color: '#CBD5E1', marginLeft: 4 }} />}
@@ -203,19 +205,19 @@ export default function Enquiries() {
               </thead>
               <tbody>
                 {loading ? (
-                  <tr><td colSpan="7" style={{ padding: '14px 16px', color: '#6B7280' }}>Loading enquiries...</td></tr>
+                  <tr><td colSpan="7" style={{ padding: '14px 16px', color: '#6B7280', textAlign: 'center' }}>Loading enquiries...</td></tr>
                 ) : enquiriesList.length === 0 ? (
-                  <tr><td colSpan="7" style={{ padding: '14px 16px', color: '#6B7280' }}>No guest enquiries found in inbox.</td></tr>
+                  <tr><td colSpan="7" style={{ padding: '14px 16px', color: '#6B7280', textAlign: 'center' }}>No guest enquiries found in inbox.</td></tr>
                 ) : enquiriesList.map((e) => (
                   <tr key={e.id}>
                     <td style={{ color: '#58A429', fontWeight: 600, padding: '14px 16px' }}>{e.enquiryNo}</td>
                     <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}>{e.propertyName}</td>
                     <td style={{ color: '#6B7280', padding: '14px 16px' }}>{e.dates}</td>
-                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}>
-                      <div>{e.name}</div>
-                      <div style={{ fontSize: '11px', color: '#9CA3AF', fontWeight: 400 }}>{e.phone}</div>
+                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px', whiteSpace: 'normal', wordBreak: 'break-word' }}>
+                      <div style={{ marginBottom: '2px' }}>{e.name}</div>
+                      <div style={{ fontSize: '11px', color: '#6B7280', fontWeight: 400 }}>{e.phone}</div>
                     </td>
-                    <td style={{ color: '#6B7280', padding: '14px 16px', textOverflow: 'ellipsis', overflow: 'hidden', maxWidth: '280px' }}><ReadMore maxWords={6}>{e.query}</ReadMore></td>
+                    <td style={{ color: '#6B7280', padding: '14px 16px', whiteSpace: 'normal', wordBreak: 'break-word' }}><ReadMore maxWords={6}>{e.query}</ReadMore></td>
                     <td style={{ padding: '14px 16px' }}>
                       <span style={{
                         padding: '4px 10px',
