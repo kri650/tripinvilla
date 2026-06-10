@@ -241,10 +241,10 @@ export default function PropertyRooms() {
           flexDirection: 'column',
           gap: '24px'
         }}>
-          <div className="props-table-toolbar" style={{ margin: 0, borderBottom: 'none', padding: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
-            <div className="props-table-title" style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif' }}>Property Requests</div>
+          <div className="props-table-toolbar" style={{ margin: 0, borderBottom: 'none', padding: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'nowrap', gap: '16px', overflow: 'hidden' }}>
+            <div className="props-table-title" style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif', flexShrink: 0 }}>Property Requests</div>
             
-            <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+            <div className="props-table-actions" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'nowrap', overflow: 'hidden' }}>
               <div style={{ flexShrink: 0 }}>
                 <DateRangeDropdown 
                   startDate={filterDateFrom}
@@ -256,11 +256,11 @@ export default function PropertyRooms() {
                 />
               </div>
 
-              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', flexShrink: 0, maxWidth: 140 }}>
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', flexShrink: 1, minWidth: 100, maxWidth: 140 }}>
                 <select 
                   value={selectedCategory} 
                   onChange={e => setSelectedCategory(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif', maxWidth: '100%' }}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif', maxWidth: '100%', width: '100%' }}
                 >
                   <option value="">Property Type</option>
                   <option value="Villa">Villa</option>
@@ -271,7 +271,7 @@ export default function PropertyRooms() {
                 </select>
               </div>
 
-              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', width: 140, flexShrink: 0 }}>
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', flexShrink: 1, minWidth: 100, maxWidth: 140 }}>
                 <input 
                   type="text"
                   placeholder="Location"
@@ -281,11 +281,11 @@ export default function PropertyRooms() {
                 />
               </div>
 
-              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', flexShrink: 0, maxWidth: 140 }}>
+              <div className="props-filter-select" style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', background: '#ffffff', flexShrink: 1, minWidth: 100, maxWidth: 140 }}>
                 <select 
                   value={selectedStatus} 
                   onChange={e => setSelectedStatus(e.target.value)}
-                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif', maxWidth: '100%' }}
+                  style={{ border: 'none', background: 'transparent', outline: 'none', color: '#374151', fontSize: 13, cursor: 'pointer', fontFamily: '"Outfit", sans-serif', maxWidth: '100%', width: '100%' }}
                 >
                   <option value="">All Status</option>
                   <option value="Pending">Pending</option>
