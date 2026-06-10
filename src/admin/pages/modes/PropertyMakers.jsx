@@ -2056,8 +2056,8 @@ export default function PropertyMakers() {
                   setRoomsList(prev => [...prev, {
                     ...roomForm,
                     roomType: finalRoomType,
-                    imageUrl: uploadedUrl || roomForm.imageUrl,
-                    room_image_url: uploadedUrl || roomForm.imageUrl,
+                    imageUrl: uploadedUrl || roomForm.imageUrl || roomForm.room_image_url || roomForm.img,
+                    room_image_url: uploadedUrl || roomForm.room_image_url || roomForm.imageUrl || roomForm.img,
                     amenities: amenArr,
                     pricePerNight: Number(roomForm.pricePerNight),
                     original_price: Number(roomForm.originalPrice),
