@@ -185,7 +185,7 @@ function RoomForm({
       </div>
 
       <div className="amenities-selection-section">
-        <label className="form-label">Amenities Types</label>
+        <label className="form-label-bold">Amenities Types</label>
         {amenitiesLoading ? <div className="loading-msg">Loading amenities...</div> : (
           <div className="amenities-pill-cloud">
             {availableAmenities.map(a => (
@@ -484,7 +484,7 @@ export default function PropertyRequests() {
         </div>
       ) : (
         <>
-          <div className="dash-section property-request-config">
+          <div className="dash-section property-request-config room-form-section">
             <div className="request-header">
               <h3 className="section-title">Configure Property Request</h3>
               <div className="header-actions">

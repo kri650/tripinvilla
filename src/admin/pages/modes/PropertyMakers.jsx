@@ -1,5 +1,6 @@
 import ReadMore from '../../components/ReadMore';
 import React, { useState, useEffect } from "react";
+import { toast } from 'react-hot-toast';
 import { ChevronDown, Edit2, Trash2, MoreVertical, BedDouble } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import PropertyRoomManager from "../properties/PropertyRoomManager";
@@ -549,8 +550,8 @@ export default function PropertyMakers() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.propertyName) { alert('Property Name is required.'); return; }
-    if (!formData.propertyPrice) { alert('Property Price is required.'); return; }
+    if (!formData.propertyName) { toast.error('Property Name is required.'); return; }
+    if (!formData.propertyPrice) { toast.error('Property Price is required.'); return; }
     try {
       const locationText = composeLocationString({
         area: selectedArea.name,
@@ -616,12 +617,12 @@ export default function PropertyMakers() {
           { method: "PUT", body: submitData },
         );
         if (res.ok) {
-          alert('Property updated successfully!');
+          toast.success('Property updated successfully!');
           fetchProperties();
           resetForm();
         } else {
           const d = await res.json().catch(() => ({}));
-          alert(d.message || 'Failed to update property. Please try again.');
+          toast.error(d.message || 'Failed to update property. Please try again.');
         }
       } else {
         const res = await fetch(`${import.meta.env.VITE_API_BASE}/master/properties`, {
@@ -629,18 +630,18 @@ export default function PropertyMakers() {
           body: submitData,
         });
         if (res.ok) {
-          alert('Property added successfully! It is now visible on the guest website.');
+          toast.success('Property added successfully! It is now visible on the guest website.');
           fetchProperties();
           resetForm();
           window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         } else {
           const d = await res.json().catch(() => ({}));
-          alert(d.message || 'Failed to add property. Please try again.');
+          toast.error(d.message || 'Failed to add property. Please try again.');
         }
       }
     } catch (err) {
       console.error("Error submitting property master:", err);
-      alert('Network error. Please check your connection and try again.');
+      toast.error('Network error. Please check your connection and try again.');
     }
   };
 
@@ -841,15 +842,7 @@ export default function PropertyMakers() {
               <span style={{ fontSize: 14, fontWeight: 500, color: '#6B7280', marginLeft: 16 }}>Step {formStep} of 4</span>
             </div>
             <div className="master-form-actions">
-              {formStep === 4 && (
-                <button
-                  type="submit"
-                  className="btn-solid-green"
-                  style={{ cursor: "pointer" }}
-                >
-                  {isEditing ? "Update Property" : "Add Property"}
-                </button>
-              )}
+              {/* Primary submit button is now only at the bottom of the multi-step form */}
             </div>
           </div>
 
@@ -2029,9 +2022,9 @@ export default function PropertyMakers() {
               <button type="button"
                 disabled={roomImageUploading}
                 onClick={async () => {
-                  if (!roomForm.roomName.trim() || !roomForm.pricePerNight) { alert('Please fill Room Name and Price.'); return; }
+                  if (!roomForm.roomName.trim() || !roomForm.pricePerNight) { toast.error('Please fill Room Name and Price.'); return; }
                   const finalRoomType = roomForm.roomType === 'Other' ? customRoomType : roomForm.roomType;
-                  if (roomForm.roomType === 'Other' && !finalRoomType.trim()) { alert('Please enter custom room type.'); return; }
+                  if (roomForm.roomType === 'Other' && !finalRoomType.trim()) { toast.error('Please enter custom room type.'); return; }
 
                   let uploadedUrl = "";
                   if (roomImageFile) {

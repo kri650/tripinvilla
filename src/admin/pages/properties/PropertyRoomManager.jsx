@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 import { Plus, Trash2, Edit2, X, Check, Image, Tag } from 'lucide-react';
 
 const API_BASE = import.meta.env.VITE_API_BASE;
@@ -132,8 +133,8 @@ export default function PropertyRoomManager({ property, onClose }) {
   };
 
   const handleSave = async () => {
-    if (!form.room_type) { alert('Room Type is required'); return; }
-    if (!form.price_per_room) { alert('Price per night is required'); return; }
+    if (!form.room_type) { toast.error('Room Type is required'); return; }
+    if (!form.price_per_room) { toast.error('Price per night is required'); return; }
 
     const formData = new FormData();
     formData.append('property_id', property._id);
@@ -177,6 +178,7 @@ export default function PropertyRoomManager({ property, onClose }) {
       }
 
       if (res.ok) {
+        toast.success(editingId ? 'Room updated successfully!' : 'Room added successfully!');
         setForm(emptyRoom);
         setNewImageFiles([]);
         if (fileInputRef.current) fileInputRef.current.value = '';
@@ -187,11 +189,11 @@ export default function PropertyRoomManager({ property, onClose }) {
         fetchRooms();
       } else {
         const err = await res.json();
-        alert(err.message || 'Failed to save room');
+        toast.error(err.message || 'Failed to save room');
       }
     } catch (err) {
       console.error(err);
-      alert('Network error saving room');
+      toast.error('Network error saving room');
     } finally {
       setSaving(false);
     }
@@ -232,9 +234,15 @@ export default function PropertyRoomManager({ property, onClose }) {
         method: 'DELETE',
         headers: authHeaders,
       });
-      if (res.ok) fetchRooms();
+      if (res.ok) {
+        toast.success('Room deleted successfully!');
+        fetchRooms();
+      } else {
+        toast.error('Failed to delete room');
+      }
     } catch (err) {
       console.error(err);
+      toast.error('Error deleting room');
     }
   };
 

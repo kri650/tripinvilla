@@ -738,11 +738,11 @@ export default function AllProperties() {
         toast.success(editingPropertyId ? 'Property updated successfully!' : 'Property added successfully!');
       } else {
         const d = await res.json();
-        alert(d.message || (editingPropertyId ? "Failed to update property" : "Failed to add property"));
+        toast.error(d.message || (editingPropertyId ? "Failed to update property" : "Failed to add property"));
       }
     } catch (err) {
       console.error(err);
-      alert("Error adding property");
+      toast.error("Error saving property");
     } finally {
       setSubmitting(false);
     }
