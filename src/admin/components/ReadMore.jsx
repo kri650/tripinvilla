@@ -1,6 +1,6 @@
 import { useState, useRef, useLayoutEffect, useEffect } from 'react';
 
-export default function ReadMore({ children }) {
+export default function ReadMore({ children, lines = 3 }) {
   const [expanded, setExpanded] = useState(false);
   const [isClamped, setIsClamped] = useState(false);
   const textRef = useRef(null);
@@ -36,6 +36,7 @@ export default function ReadMore({ children }) {
       <span 
         ref={textRef}
         className={`cell-text ${expanded ? 'expanded' : ''}`}
+        style={!expanded ? { WebkitLineClamp: lines } : {}}
       >
         {text}
       </span>

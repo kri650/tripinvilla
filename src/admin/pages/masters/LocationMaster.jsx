@@ -495,11 +495,11 @@ export default function LocationMaster() {
               ) : filteredLocations.length > 0 ? (
                 paginated.map((loc) => (
                   <tr key={loc._id}>
-                    <td style={{ fontWeight: 700, color: '#000000', whiteSpace: 'normal', maxW: '180px' }}>
-                      {loc.locationName}
+                    <td style={{ fontWeight: 700, color: '#000000', whiteSpace: 'normal', maxWidth: '180px' }}>
+                      <ReadMore lines={2}>{loc.locationName}</ReadMore>
                     </td>
                     <td style={{ fontWeight: 500 }}>{loc.locationType}</td>
-                    <td style={{ fontSize: '11px', color: '#6B7280', whiteSpace: 'normal', maxW: '160px', lineHeight: 1.4 }}>{loc.parentLocationHierarchy}</td>
+                    <td style={{ fontSize: '11px', color: '#6B7280', whiteSpace: 'normal', maxWidth: '160px', lineHeight: 1.4 }}>{loc.parentLocationHierarchy}</td>
                     
                     {/* Key Landmarks */}
                     <td style={{ fontSize: '12px', color: '#374151' }}>
@@ -529,8 +529,8 @@ export default function LocationMaster() {
                       ) : '-'}
                     </td>
 
-                    <td style={{ color: '#9CA3AF', fontSize: '11px', whiteSpace: 'normal', maxW: '180px' }}>
-                      <ReadMore maxWords={6}>{loc.aboutLocation || 'N/A'}</ReadMore>
+                    <td style={{ color: '#9CA3AF', fontSize: '11px', whiteSpace: 'normal', maxWidth: '180px' }}>
+                      <ReadMore lines={3}>{loc.aboutLocation || 'N/A'}</ReadMore>
                     </td>
                     <td>
                       <span className={`status-pill ${loc.status ? loc.status.toLowerCase() : 'active'}`}>
