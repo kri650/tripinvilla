@@ -398,10 +398,12 @@ export default function OffersByDate() {
                   <tr key={o._id}>
                     <td style={{ color: '#58A429', fontWeight: 600, padding: '14px 16px' }}>{o.id}</td>
                     <td style={{ color: '#6B7280', padding: '14px 16px' }}>{o.dates}</td>
-                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}>{o.name}</td>
+                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px', whiteSpace: 'normal', maxWidth: '160px' }}>
+                      <ReadMore lines={2}>{o.name}</ReadMore>
+                    </td>
                     <td style={{ padding: '14px 16px' }}>
                       <div style={{ maxWidth: 200, whiteSpace: 'normal', lineHeight: 1.4, color: '#6B7280' }}>
-                        <ReadMore>{o.location}</ReadMore>
+                        <ReadMore lines={2}>{o.location}</ReadMore>
                       </div>
                     </td>
                     <td style={{ padding: '14px 16px' }}>
@@ -411,9 +413,9 @@ export default function OffersByDate() {
                     </td>
                     <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.room}</td>
                     <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.foods}</td>
-                    <td style={{ color: '#4B5563', padding: '14px 16px' }}><ReadMore>{o.amenities}</ReadMore></td>
+                    <td style={{ color: '#4B5563', padding: '14px 16px', whiteSpace: 'normal', maxWidth: '160px' }}><ReadMore lines={2}>{o.amenities}</ReadMore></td>
                     <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}>{o.offer}</td>
-                    <td style={{ color: '#6B7280', padding: '14px 16px' }}><ReadMore>{o.desc}</ReadMore></td>
+                    <td style={{ color: '#6B7280', padding: '14px 16px', whiteSpace: 'normal', maxWidth: '160px' }}><ReadMore lines={2}>{o.desc}</ReadMore></td>
                     <td style={{ padding: '14px 16px' }}>
                       {o.status.toLowerCase() === 'active'
                         ? <span className="status-pill active" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, background: '#DCFCE7', color: '#58A429' }}>

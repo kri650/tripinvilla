@@ -6,7 +6,7 @@ export default function Pagination({ currentPage, totalItems, itemsPerPage = 10,
   if (totalPages <= 1) return null;
 
   return (
-    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderTop: '1px solid #F3F4F6', background: '#fff', borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
+    <div style={{ position: 'sticky', bottom: 0, zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 24px', borderTop: '1px solid #F3F4F6', background: '#fff', borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
       <div style={{ fontSize: 13, color: '#6B7280' }}>
         Showing {Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} entries
       </div>

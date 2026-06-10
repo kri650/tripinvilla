@@ -603,7 +603,7 @@ export default function PropertyRequests() {
                       return (
                         <React.Fragment key={i}>
                           <tr className="request-row">
-                            <td className="td-property" style={{ fontWeight: 500, color: '#111827' }}><ReadMore>{r.propertyName}</ReadMore></td>
+                            <td className="td-property" style={{ fontWeight: 500, color: '#111827', whiteSpace: 'normal', maxWidth: '200px' }}><ReadMore lines={2}>{r.propertyName}</ReadMore></td>
                             <td className="td-category">{r.category}</td>
                             <td className="td-room-type">
                               <div className="room-type-cell">
@@ -620,8 +620,8 @@ export default function PropertyRequests() {
                                 ? `${getRequestRooms(r).length} Types`
                                 : (r.bed_type || getRequestRooms(r)[0]?.bed_type)}
                             </td>
-                            <td className="td-amenities">
-                              <ReadMore>
+                            <td className="td-amenities" style={{ whiteSpace: 'normal', maxWidth: '160px' }}>
+                              <ReadMore lines={2}>
                               {getRequestRooms(r).length > 1
                                 ? 'Multiple'
                                 : (r.amenities_types?.length > 0 ? r.amenities_types.join(', ') : 'None')}
@@ -632,8 +632,8 @@ export default function PropertyRequests() {
                                 ? `From ${formatCurrency(Math.min(...getRequestRooms(r).map((room) => Number(room.price_per_room || 0)).filter(Boolean)))}`
                                 : formatCurrency(firstPresent(r.price_per_room, getRequestRooms(r)[0]?.price_per_room, r.priceByOwner))}
                             </td>
-                            <td className="td-rules"><ReadMore>{Array.isArray(r.rules) ? `${r.rules.length} sections` : 'None'}</ReadMore></td>
-                            <td className="td-offers">{r.offers?.length > 0 ? r.offers.join(', ') : 'None'}</td>
+                            <td className="td-rules" style={{ whiteSpace: 'normal', maxWidth: '160px' }}><ReadMore lines={2}>{Array.isArray(r.rules) ? `${r.rules.length} sections` : 'None'}</ReadMore></td>
+                            <td className="td-offers" style={{ whiteSpace: 'normal', maxWidth: '160px' }}>{r.offers?.length > 0 ? r.offers.join(', ') : 'None'}</td>
                             <td className="td-status">
                               <span className={`status-badge ${statusClass}`}>
                                 {statusLabel.toUpperCase()}

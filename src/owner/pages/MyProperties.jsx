@@ -1657,7 +1657,7 @@ export default function MyProperties({ autoOpenForm = false }) {
         <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', width: '100%' }}>
           <div className="table-header" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
             <span className="table-title" style={{ whiteSpace: 'nowrap' }}>My Property List</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap', overflowX: 'auto', WebkitOverflowScrolling: 'touch', paddingBottom: '4px', maxWidth: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', paddingBottom: '4px', maxWidth: '100%' }}>
               {[{ val: filterDateFrom, set: (val) => handleLocalDateChange('from', val) }, { val: filterDateTo, set: (val) => handleLocalDateChange('to', val) }].map((f, i) => (
                 <div key={i} style={{ display: 'flex', alignItems: 'center', gap: '4px', border: '1px solid #E5E7EB', borderRadius: '8px', padding: '5px 8px', background: '#ffffff', flexShrink: 0 }}>
                   <Calendar size={14} style={{ color: '#9CA3AF' }} />
@@ -1698,15 +1698,19 @@ export default function MyProperties({ autoOpenForm = false }) {
                         <img src={p.images?.[0] || 'https://via.placeholder.com/44x34'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
                       </div>
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'nowrap' }}>
-                      {p.name}
+                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'normal', maxWidth: '200px' }}>
+                      <ReadMore lines={2}>{p.name}</ReadMore>
                     </td>
-                    <td style={{ padding: '14px', whiteSpace: 'nowrap' }}>
+                    <td style={{ padding: '14px', whiteSpace: 'normal', maxWidth: '180px' }}>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <span style={{ fontWeight: 400, color: '#4B5563', fontSize: '13px' }}>
-                          {p.full_address || p.location || (p.cityName || p.city)}
-                        </span>
-                        <span style={{ fontSize: '11px', color: '#9CA3AF' }}>{!p.full_address && !p.location ? (p.stateName || p.state) : ''}</span>
+                        <ReadMore lines={2}>
+                          <span style={{ fontWeight: 400, color: '#4B5563', fontSize: '13px' }}>
+                            {p.full_address || p.location || (p.cityName || p.city)}
+                          </span>
+                          <span style={{ fontSize: '11px', color: '#9CA3AF', marginLeft: '4px' }}>
+                            {!p.full_address && !p.location ? (p.stateName || p.state) : ''}
+                          </span>
+                        </ReadMore>
                       </div>
                     </td>
                     <td style={{ padding: '14px' }}>
@@ -1754,7 +1758,7 @@ export default function MyProperties({ autoOpenForm = false }) {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px', marginTop: '24px' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px', position: 'sticky', bottom: 0, background: '#fff', padding: '16px 24px', borderTop: '1px solid #E5E7EB', zIndex: 10, margin: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}>
               <button 
                 onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
                 disabled={currentPage === 1}

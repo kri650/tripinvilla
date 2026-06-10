@@ -279,13 +279,13 @@ export default function OffersbyDate() {
                 )}
               </tbody>
             </table>
-            <Pagination 
-              currentPage={currentPage} 
-              totalItems={totalItems} 
-              itemsPerPage={itemsPerPage} 
-              onPageChange={setCurrentPage} 
-            />
           </div>
+          <Pagination 
+            currentPage={currentPage} 
+            totalItems={totalItems} 
+            itemsPerPage={itemsPerPage} 
+            onPageChange={setCurrentPage} 
+          />
         </div>
       </div>
     </div>
