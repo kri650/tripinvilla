@@ -11,11 +11,9 @@ export default function OwnerLayout() {
   return (
     <div className="owner-theme admin-layout">
       {isSidebarOpen && (
-        <div className="sidebar-overlay open" onClick={() => setIsSidebarOpen(false)}></div>
+        <div className="sidebar-overlay open" onClick={() => setIsSidebarOpen(false)} />
       )}
-      <div className={`sidebar-container ${isSidebarOpen ? 'open' : ''}`}>
-        <Sidebar className={isSidebarOpen ? 'open' : ''} />
-      </div>
+      <Sidebar className={isSidebarOpen ? 'open' : ''} />
       <div className="admin-main">
         <Topbar onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         <main className="admin-content">

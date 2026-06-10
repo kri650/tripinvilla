@@ -114,8 +114,8 @@
   border-radius: 0 4px 4px 0;
 }
 .nav-icon {
-  width: 16px;
-  height: 16px;
+  width: 20px;
+  height: 20px;
   color: #9CA3AF;
   flex-shrink: 0;
   display: flex;
@@ -124,6 +124,15 @@
   transition: var(--transition);
 }
 .nav-icon svg {
-  width: 15px;
-  height: 15px;
+  width: 18px;
+  height: 18px;
 }
+
+/* Responsive sidebar tweaks */
+@media (max-width: 900px) {
+  .sidebar-logo-img { width: 150px; height: 72px; }
+  .nav-item { padding: 10px 14px; font-size: 14px; }
+  .nav-icon svg { width: 18px; height: 18px; }
+  .sidebar-section-label { font-size: 11px; }
+}
+
