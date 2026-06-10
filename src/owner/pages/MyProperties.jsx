@@ -1685,7 +1685,7 @@ export default function MyProperties({ autoOpenForm = false }) {
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
                   {['Property No','Image','Property Name','Location','Category','Price/Night','Rooms','Enquiries','Rating','Status','Actions'].map(h => (
-                    <th key={h} style={{ minWidth: h === 'Property Name' ? 180 : h === 'Location' ? 160 : undefined, color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px', fontFamily: '"Outfit", sans-serif' }}>{h}</th>
+                    <th key={h} style={{ minWidth: { 'Offer ID': 100, 'Property No': 100, 'Enquiry No': 100, 'Owner No': 100, 'Booking ID': 100, 'Request No': 100, 'Date & Time': 150, 'Dates & Time': 150, 'Check In': 150, 'Check Out': 150, 'Property Name': 200, 'Location': 180, 'Category': 100, 'Room Type': 130, 'Room': 130, 'Foods': 100, 'Amenities': 180, 'Amenities Types': 180, 'Offer %': 100, 'Offer': 100, 'Description': 180, 'Status': 100 }[h], color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px', fontFamily: '"Outfit", sans-serif' }}>{h}</th>
                   ))}
                 </tr>
               </thead>

@@ -180,17 +180,17 @@ export default function OffersbyDate() {
             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Offer ID <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Dates &amp; <br/>Time <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Property <br/>Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ minWidth: 160, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Location <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Category <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Room <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Foods <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Amenities <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Offer <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Description <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Status <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Offer ID <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 150, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Dates &amp; <br/>Time <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 200, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Property <br/>Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Location <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Category <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 130, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Room <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Foods <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Amenities <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Offer <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Description <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
+                  <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Status <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th></th>
                 </tr>
               </thead>

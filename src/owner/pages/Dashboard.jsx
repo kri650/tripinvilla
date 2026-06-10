@@ -141,13 +141,13 @@ export default function Dashboard() {
             <table className="data-table" style={{ tableLayout: 'fixed', width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                  <th style={{ minWidth: '90px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Enquiry ID</th>
-                  <th style={{ minWidth: '120px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Property</th>
+                  <th style={{ minWidth: '100px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Enquiry ID</th>
+                  <th style={{ minWidth: '200px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Property</th>
                   <th style={{ minWidth: '110px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Guest Name</th>
-                  <th style={{ minWidth: '140px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Date & Time</th>
+                  <th style={{ minWidth: '150px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Date & Time</th>
                   <th style={{ minWidth: '150px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Email</th>
                   <th style={{ minWidth: '110px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Phone</th>
-                  <th style={{ minWidth: '80px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Status</th>
+                  <th style={{ minWidth: '100px', color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px' }}>Status</th>
                 </tr>
               </thead>
               <tbody>

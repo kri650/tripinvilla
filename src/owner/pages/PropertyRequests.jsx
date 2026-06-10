@@ -592,7 +592,7 @@ export default function PropertyRequests() {
                   <thead>
                     <tr>
                       {['Property', 'Category', 'Room Type', 'Bed', 'Amenities', 'Price', 'Rules', 'Offers', 'Status', 'Actions'].map((h, i) => (
-                        <th key={i} className="table-th">{h}</th>
+                        <th key={i} className="table-th" style={{ minWidth: { 'Property': 200, 'Category': 100, 'Room Type': 130, 'Amenities': 180, 'Status': 100 }[h] }}>{h}</th>
                       ))}
                     </tr>
                   </thead>

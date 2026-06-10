@@ -321,7 +321,7 @@ export default function PropertyRooms() {
               <thead>
                 <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
                   {['Request No','Image','Property Name','Location','Category','Rooms','Owner Name','Owner Contact','Price by Owner','Status','Actions'].map((h, i) => (
-                    <th key={i} style={{ minWidth: h === 'Property Name' ? 180 : h === 'Location' ? 160 : undefined, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>{h}</th>
+                    <th key={i} style={{ minWidth: { 'Offer ID': 100, 'Property No': 100, 'Enquiry No': 100, 'Owner No': 100, 'Booking ID': 100, 'Request No': 100, 'Date & Time': 150, 'Dates & Time': 150, 'Check In': 150, 'Check Out': 150, 'Property Name': 200, 'Location': 180, 'Category': 100, 'Room Type': 130, 'Room': 130, 'Foods': 100, 'Amenities': 180, 'Amenities Types': 180, 'Offer %': 100, 'Offer': 100, 'Description': 180, 'Status': 100 }[h], color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>{h}</th>
                   ))}
                 </tr>
               </thead>

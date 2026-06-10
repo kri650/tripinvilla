@@ -265,16 +265,16 @@ export default function Dashboard() {
             <table className="data-table">
               <thead>
                 <tr>
-                  <Th>Property No</Th>
-                  <th style={{ color: '#9CA3AF', fontWeight: 500, fontSize: 11 }}>Image</th>
-                  <Th style={{ minWidth: 180 }}>Property Name</Th>
-                  <Th style={{ minWidth: 160 }}>Location</Th>
-                  <Th>Category</Th>
-                  <Th>Best Room Rate</Th>
-                  <Th>Rooms</Th>
-                  <Th>Total Enquiries</Th>
-                  <Th>Rating</Th>
-                  <Th>Status</Th>
+                  <Th style={{ minWidth: 100 }}>Property No</Th>
+                  <th style={{ minWidth: 80, color: '#9CA3AF', fontWeight: 500, fontSize: 11 }}>Image</th>
+                  <Th style={{ minWidth: 200 }}>Property Name</Th>
+                  <Th style={{ minWidth: 180 }}>Location</Th>
+                  <Th style={{ minWidth: 100 }}>Category</Th>
+                  <Th style={{ minWidth: 100 }}>Best Room Rate</Th>
+                  <Th style={{ minWidth: 100 }}>Rooms</Th>
+                  <Th style={{ minWidth: 100 }}>Total Enquiries</Th>
+                  <Th style={{ minWidth: 80 }}>Rating</Th>
+                  <Th style={{ minWidth: 100 }}>Status</Th>
                   <th></th>
                 </tr>
               </thead>
@@ -351,13 +351,13 @@ export default function Dashboard() {
             <table className="data-table" style={{ tableLayout: 'fixed', width: '100%' }}>
               <thead>
                 <tr>
-                  <Th style={{ minWidth: '90px' }}>Enquiry No</Th>
-                  <Th style={{ minWidth: '140px' }}>Date &amp; Time</Th>
-                  <Th style={{ minWidth: '110px' }}>User Name</Th>
-                  <Th style={{ minWidth: '110px' }}>Phone No</Th>
-                  <Th style={{ minWidth: '150px' }}>Email Address</Th>
-                  <Th style={{ minWidth: '120px' }}>Property</Th>
-                  <Th style={{ minWidth: '200px' }}>Query</Th>
+                  <Th style={{ minWidth: 100 }}>Enquiry No</Th>
+                  <Th style={{ minWidth: 150 }}>Date &amp; Time</Th>
+                  <Th style={{ minWidth: 110 }}>User Name</Th>
+                  <Th style={{ minWidth: 110 }}>Phone No</Th>
+                  <Th style={{ minWidth: 150 }}>Email Address</Th>
+                  <Th style={{ minWidth: 200 }}>Property</Th>
+                  <Th style={{ minWidth: 200 }}>Query</Th>
                   <th></th>
                 </tr>
               </thead>
