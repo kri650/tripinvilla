@@ -445,7 +445,7 @@
 .detail-expanded-row td { padding: 0 !important; background: #F9FAFB; }
 
 .detail-container {
-  background: #F5F0E8;
+  background: #F9FAFB;
   border-radius: 0 0 12px 12px;
   padding: 24px;
   box-sizing: border-box;
@@ -514,10 +514,10 @@
 /* ── Card shell: 50/50 split ── */
 .room-detail-card {
   background: #fff;
-  border: none;
+  border: 1px solid #E5E7EB;
   border-radius: 12px;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.05);
+  box-shadow: none;
   display: flex;
   flex-direction: row;
   height: 350px; /* Fixed height so images are uniform */

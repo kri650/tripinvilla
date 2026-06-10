@@ -30,7 +30,17 @@ export default function PropertiesGridPage(props) {
     (p?.category || '').toLowerCase() === activeType.toLowerCase()
   ) || [];
 
-  const mappedProps = mapDbProperties ? mapDbProperties(actualProps, []) : [];
+  // Sort properties so premium owners appear first
+  const sortedProps = [...actualProps].sort((a, b) => {
+    const aIsPremium = a.owner?.isPremium || a.owner?.subscription?.isActive || ['monthly', 'yearly'].includes(a.owner?.plan) ? 1 : 0;
+    const bIsPremium = b.owner?.isPremium || b.owner?.subscription?.isActive || ['monthly', 'yearly'].includes(b.owner?.plan) ? 1 : 0;
+    return bIsPremium - aIsPremium;
+  });
+
+  // Limit to exactly 3 properties as requested
+  const top3Props = sortedProps.slice(0, 3);
+
+  const mappedProps = mapDbProperties ? mapDbProperties(top3Props, []) : [];
 
   // Handle scroll behavior for mobile (simplified)
   useEffect(() => {

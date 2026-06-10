@@ -722,12 +722,11 @@ export default function PropertyRequests() {
 
                                           {/* Amenities */}
                                           <div className="room-section">
-                                            <div className="section-label">AMENITIES</div>
-                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                                               {(room.amenities_types || r.amenities_types)?.length > 0 ? (
                                                 (room.amenities_types || r.amenities_types).map((a, j) => (
-                                                  <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12.5px', color: '#4B5563' }}>
-                                                    <span style={{ width: 4, height: 4, borderRadius: '50%', background: '#58A429' }}></span> {a}
+                                                  <div key={j} style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', color: '#374151', fontWeight: 500 }}>
+                                                    <CheckCircle size={14} color="#3B82F6" /> {a}
                                                   </div>
                                                 ))
                                               ) : <span className="empty-val">None</span>}
@@ -735,16 +734,16 @@ export default function PropertyRequests() {
                                           </div>
 
                                           {/* Special Offers */}
-                                          <div className="room-section">
-                                            <div className="section-label">SPECIAL OFFERS</div>
-                                            <div className="pill-grid">
-                                              {(room.offers || r.offers)?.length > 0 ? (
-                                                (room.offers || r.offers).map((o, j) => (
-                                                  <span key={j} className="pill offer-pill">{o}</span>
-                                                ))
-                                              ) : <span className="empty-val">None</span>}
+                                          {((room.offers || r.offers)?.length > 0) && (
+                                            <div className="room-section" style={{ marginTop: '4px' }}>
+                                              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#F0FDF4', border: '1px dashed #A7F3D0', borderRadius: '8px', padding: '10px 12px' }}>
+                                                <div style={{ background: '#16A34A', color: '#FFFFFF', padding: '4px 10px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
+                                                  {(room.offers || r.offers)[0]}
+                                                </div>
+                                                <span style={{ fontSize: '12px', color: '#166534', fontWeight: 500 }}>Special offer applicable on rooms in this property.</span>
+                                              </div>
                                             </div>
-                                          </div>
+                                          )}
 
                                           {/* House Rules & Policies */}
                                           <div className="room-section" style={{ borderBottom: 'none' }}>
