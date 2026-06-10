@@ -6,6 +6,19 @@
   padding: 0;
 }
 
+/* Global Table Layout Fixes */
+table {
+  table-layout: fixed;
+  width: 100%;
+}
+th, td {
+  min-width: 100px;
+}
+td {
+  max-width: 100%;
+  word-break: break-word;
+}
+
 :root {
   --primary-blue: #0C6DC4; /* Brand exact blue color */
   --primary-blue-dark: #0A5AA3; /* Beautiful darker blue shade for hover states */
@@ -28,7 +41,7 @@ body {
   font-family: 'Inter', sans-serif;
   background-color: var(--bg-main);
   color: var(--text-dark);
-  overflow-x: hidden;
+  overflow-x: auto;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-size-adjust: 100%;
