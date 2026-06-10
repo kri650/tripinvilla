@@ -448,8 +448,6 @@
   background: #ffffff;
   border-radius: 0 0 12px 12px;
   padding: 24px;
-  max-width: 700px;
-  margin: 0 auto;
   box-sizing: border-box;
   overflow: hidden;
   box-shadow: 0 4px 16px rgba(0,0,0,0.08);
@@ -522,7 +520,7 @@
   box-shadow: 0 2px 10px rgba(0,0,0,0.06);
   display: flex;
   flex-direction: row;
-  min-height: 260px;
+  height: 350px; /* Fixed height so images are uniform */
 }
 
 /* ── LEFT: Room image ~45% ── */
@@ -563,6 +561,7 @@
   padding: 24px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 }
 
 /* Header row */
@@ -792,6 +791,7 @@
   .room-detail-card {
     flex-direction: column;
     min-height: unset;
+    height: auto;
   }
   .room-hero-img-wrap {
     flex: unset;
