@@ -690,85 +690,84 @@ export default function PropertyRequests() {
 
                                   <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
                                     {getRequestRooms(r).map((room, roomIdx) => (
-                                      <div key={roomIdx} style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '16px', background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>
+                                      <div key={roomIdx} style={{ display: 'flex', flexDirection: 'column', gap: '12px', padding: '12px', background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '12px', boxShadow: '0 2px 4px rgba(0,0,0,0.02)', position: 'relative' }}>
                                         {/* Row 1: Image and Primary Details */}
-                                        <div style={{ display: 'flex', gap: '20px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
-                                          <div style={{ position: 'relative', flex: '0 0 160px' }}>
-                                            <img src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=60'} alt={room.room_type} style={{ width: '160px', height: '110px', borderRadius: '10px', objectFit: 'cover', border: '1px solid #E5E7EB' }} />
+                                        <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start', flexWrap: 'wrap' }}>
+                                          <div style={{ position: 'relative', flex: '0 0 140px', maxWidth: '100%' }}>
+                                            <img src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=500&auto=format&fit=crop&q=60'} alt={room.room_type} style={{ width: '100%', height: '90px', borderRadius: '8px', objectFit: 'cover', border: '1px solid #E5E7EB' }} />
                                             {getRequestRooms(r).length > 1 && (
-                                              <div style={{ position: 'absolute', top: -6, left: -6, background: '#2563EB', color: 'white', fontSize: '11px', fontWeight: 800, padding: '3px 8px', borderRadius: '6px', textTransform: 'uppercase', boxShadow: '0 2px 4px rgba(37,99,235,0.3)' }}>Room {roomIdx + 1}</div>
+                                              <div style={{ position: 'absolute', top: -5, left: -5, background: '#2563EB', color: 'white', fontSize: '10px', fontWeight: 800, padding: '2px 6px', borderRadius: '4px', textTransform: 'uppercase' }}>R{roomIdx + 1}</div>
                                             )}
                                           </div>
                                           
-                                          <div style={{ flex: '1 1 300px' }}>
-                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px', flexWrap: 'wrap', gap: '12px' }}>
+                                          <div style={{ flex: '1 1 250px' }}>
+                                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '6px', flexWrap: 'wrap', gap: '8px' }}>
                                               <div>
-                                                <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 700, color: '#111827' }}>{room.room_type || r.room_type}</h3>
-                                                <div style={{ fontSize: '14px', color: '#4B5563', marginTop: '4px' }}>Bed Type: <strong>{room.bed_type || r.bed_type}</strong></div>
+                                                <h3 style={{ margin: 0, fontSize: '16px', fontWeight: 700, color: '#111827' }}>{room.room_type || r.room_type}</h3>
+                                                <div style={{ fontSize: '12.5px', color: '#6B7280', marginTop: '2px' }}>Bed: <strong>{room.bed_type || r.bed_type}</strong></div>
                                               </div>
-                                              <div style={{ textAlign: 'right', minWidth: '120px' }}>
-                                                <div style={{ fontSize: '20px', fontWeight: 800, color: '#58A429' }}>{formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}<span style={{ fontSize: '12px', color: '#6B7280', fontWeight: 500 }}> /night</span></div>
-                                                <div style={{ fontSize: '11px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 600, letterSpacing: '0.05em' }}>Discounted Rate</div>
+                                              <div style={{ textAlign: 'right' }}>
+                                                <div style={{ fontSize: '18px', fontWeight: 800, color: '#58A429' }}>{formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}<span style={{ fontSize: '11px', color: '#9CA3AF', fontWeight: 500 }}>/nt</span></div>
                                               </div>
                                             </div>
 
-                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
                                               {firstPresent(room.original_price, r.original_price) && (
-                                                <div style={{ background: '#F9FAFB', padding: '4px 10px', borderRadius: '6px', border: '1px solid #F3F4F6', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                  <span style={{ fontSize: '9px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 700 }}>Original</span>
-                                                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#6B7280', textDecoration: 'line-through' }}>{formatCurrency(firstPresent(room.original_price, r.original_price))}</span>
+                                                <div style={{ background: '#F9FAFB', padding: '6px 14px', borderRadius: '8px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                  <span style={{ fontSize: '11px', color: '#6B7280', textTransform: 'uppercase', fontWeight: 700 }}>Original</span>
+                                                  <span style={{ fontSize: '15px', fontWeight: 700, color: '#4B5563', textDecoration: 'line-through' }}>{formatCurrency(firstPresent(room.original_price, r.original_price))}</span>
                                                 </div>
                                               )}
                                               {firstPresent(room.tax_amount, r.tax_amount) && (
-                                                <div style={{ background: '#F9FAFB', padding: '4px 10px', borderRadius: '6px', border: '1px solid #F3F4F6', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                  <span style={{ fontSize: '9px', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 700 }}>Tax</span>
-                                                  <span style={{ fontSize: '13px', fontWeight: 600, color: '#4B5563' }}>{formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}</span>
+                                                <div style={{ background: '#F9FAFB', padding: '6px 14px', borderRadius: '8px', border: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                                                  <span style={{ fontSize: '11px', color: '#6B7280', textTransform: 'uppercase', fontWeight: 700 }}>Tax</span>
+                                                  <span style={{ fontSize: '15px', fontWeight: 700, color: '#374151' }}>{formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}</span>
                                                 </div>
                                               )}
                                             </div>
                                           </div>
                                         </div>
 
-                                        {/* Row 2: Amenities & Offers (Compact) */}
-                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
+                                        {/* Row 2: Amenities & Offers (Fluid) */}
+                                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
                                           <div>
-                                            <h4 style={{ fontSize: '11px', fontWeight: 700, color: '#374151', marginBottom: '6px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                              <CheckCircle size={14} color="#58A429" /> Amenities
-                                            </h4>
+                                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#6B7280', marginBottom: '4px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                              <CheckCircle size={12} color="#58A429" /> Amenities
+                                            </div>
                                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                                               {(room.amenities_types || r.amenities_types)?.length > 0 ? (room.amenities_types || r.amenities_types).map((a, j) => (
-                                                <span key={j} style={{ padding: '2px 8px', background: '#ECFDF5', color: '#065F46', borderRadius: '4px', fontSize: '11px', fontWeight: 500, border: '1px solid #A7F3D0' }}>{a}</span>
+                                                <span key={j} style={{ padding: '2px 7px', background: '#F0FDF4', color: '#166534', borderRadius: '4px', fontSize: '11px', fontWeight: 500, border: '1px solid #DCFCE7' }}>{a}</span>
                                               )) : <span style={{ fontSize: '11px', color: '#9CA3AF' }}>None</span>}
                                             </div>
                                           </div>
                                           <div>
-                                            <h4 style={{ fontSize: '11px', fontWeight: 700, color: '#374151', marginBottom: '6px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                              <Star size={14} color="#F59E0B" /> Offers
-                                            </h4>
+                                            <div style={{ fontSize: '10px', fontWeight: 700, color: '#6B7280', marginBottom: '4px', textTransform: 'uppercase', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                                              <Star size={12} color="#F59E0B" /> Special Offers
+                                            </div>
                                             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '4px' }}>
                                               {(room.offers || r.offers)?.length > 0 ? (room.offers || r.offers).map((o, j) => (
-                                                <span key={j} style={{ padding: '2px 8px', background: '#EFF6FF', color: '#1E40AF', borderRadius: '4px', fontSize: '11px', fontWeight: 500, border: '1px solid #BFDBFE' }}>{o}</span>
+                                                <span key={j} style={{ padding: '2px 7px', background: '#EFF6FF', color: '#1E40AF', borderRadius: '4px', fontSize: '11px', fontWeight: 500, border: '1px solid #DBEAFE' }}>{o}</span>
                                               )) : <span style={{ fontSize: '11px', color: '#9CA3AF' }}>None</span>}
                                             </div>
                                           </div>
                                         </div>
 
-                                        {/* Row 3: House Rules (Compact Grid) */}
-                                        <div style={{ background: '#F9FAFB', borderRadius: '8px', padding: '10px', border: '1px solid #F3F4F6' }}>
-                                          <h4 style={{ fontSize: '11px', fontWeight: 700, color: '#374151', marginBottom: '8px', textTransform: 'uppercase' }}>Rules & Policies</h4>
-                                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
+                                        {/* Row 3: House Rules (Adaptive) */}
+                                        <div style={{ background: '#F9FAFB', borderRadius: '8px', padding: '8px 12px', border: '1px solid #F3F4F6' }}>
+                                          <div style={{ fontSize: '10px', fontWeight: 700, color: '#6B7280', marginBottom: '6px', textTransform: 'uppercase' }}>House Rules & Policies</div>
+                                          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '8px' }}>
                                             {Array.isArray(room.rules || r.rules) && (room.rules || r.rules).length > 0 ? (room.rules || r.rules).map((rule, j) => (
-                                              <div key={j} style={{ background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '6px', padding: '6px 10px' }}>
-                                                <div style={{ fontSize: '12px', fontWeight: 700, color: '#B45309', marginBottom: '2px' }}>{rule.title}</div>
-                                                <div style={{ fontSize: '11px', color: '#4B5563', lineHeight: '1.4' }}>
+                                              <div key={j} style={{ background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '6px', padding: '5px 8px' }}>
+                                                <div style={{ fontSize: '11.5px', fontWeight: 700, color: '#92400E', marginBottom: '1px' }}>{rule.title}</div>
+                                                <div style={{ fontSize: '10.5px', color: '#6B7280', lineHeight: '1.4' }}>
                                                   {Array.isArray(rule.points) ? (
-                                                    <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: '12px' }}>
+                                                    <div style={{ display: 'flex', flexWrap: 'wrap', columnGap: '10px' }}>
                                                       {rule.points.map((p, pIdx) => <span key={pIdx}>• {p}</span>)}
                                                     </div>
                                                   ) : rule.points}
                                                 </div>
                                               </div>
-                                            )) : <span style={{ fontSize: '11px', color: '#9CA3AF' }}>None</span>}
+                                            )) : <span style={{ fontSize: '10.5px', color: '#9CA3AF' }}>None</span>}
                                           </div>
                                         </div>
                                       </div>
