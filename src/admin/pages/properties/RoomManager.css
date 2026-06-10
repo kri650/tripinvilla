@@ -385,7 +385,7 @@
 .prm-offer-display { font-size: 11px; color: #92400E; background: #FEF9C3; border-radius: 6px; padding: 4px 8px; }
 
 /* ── RESPONSIVE ── */
-@media (max-width: 640px) {
+@media (max-width: 768px) {
   .prm-overlay { padding: 0; align-items: flex-end; }
   .prm-modal { border-radius: 20px 20px 0 0; max-height: 95vh; overflow-y: auto; margin: 0; }
   .prm-header { padding: 16px 16px; }

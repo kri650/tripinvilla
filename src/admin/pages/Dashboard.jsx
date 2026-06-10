@@ -253,16 +253,16 @@ export default function Dashboard() {
       </div>
 
       {/* ══ Section 3: Top Properties by Enquiries ══════ */}
-      <div className="dash-section">
-        <div className="chart-card" style={{ padding: 0, overflow: 'visible' }}>
+      <div style={{ margin: '0 24px 24px' }}>
+        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', width: '100%', overflow: 'visible' }}>
           <div className="table-header" style={{ padding: '14px 20px' }}>
             <span className="table-title">Top 10 Most Enquired Properties</span>
             <div className="table-header-right">
               <button className="table-view-all" onClick={() => navigate('/admin/properties/all')} style={{ cursor: 'pointer' }}>View All</button>
             </div>
           </div>
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table">
+          <div style={{ overflowX: 'auto', display: 'block', width: '100%' }}>
+            <table className="data-table" style={{ minWidth: 1000 }}>
               <thead>
                 <tr>
                   <Th style={{ minWidth: 100 }}>Property No</Th>
@@ -325,8 +325,8 @@ export default function Dashboard() {
       </div>
 
       {/* ══ Section 4: Recent Enquiries ══════════ */}
-      <div className="dash-section" style={{ marginBottom: 24 }}>
-        <div className="chart-card" style={{ padding: 0, overflow: 'visible' }}>
+      <div style={{ margin: '0 24px 24px' }}>
+        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', width: '100%', overflow: 'visible' }}>
           <div className="table-header" style={{ padding: '14px 20px' }}>
             <span className="table-title">Recent Enquiries</span>
             <div className="table-header-right" style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
@@ -347,8 +347,8 @@ export default function Dashboard() {
               </div>
             </div>
           </div>
-          <div style={{ overflowX: 'auto' }}>
-            <table className="data-table" style={{ tableLayout: 'fixed', width: '100%' }}>
+          <div style={{ overflowX: 'auto', display: 'block', width: '100%' }}>
+            <table className="data-table" style={{ minWidth: 1000, width: '100%' }}>
               <thead>
                 <tr>
                   <Th style={{ minWidth: 100 }}>Enquiry No</Th>

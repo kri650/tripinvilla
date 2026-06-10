@@ -513,29 +513,24 @@
 }
 
 /* Card shell — full width, clean border */
+/* ── Card shell: 50/50 split ── */
 .room-detail-card {
   background: #fff;
   border: 1px solid #E5E7EB;
-  border-radius: 16px;
+  border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0,0,0,0.06);
   display: flex;
-  flex-direction: column;
-}
-
-/* ── HERO SECTION: Image left + Details right ── */
-.room-hero {
-  display: flex;
   flex-direction: row;
-  min-height: 220px;
+  min-height: 260px;
 }
 
-/* Left: room image ~40% */
+/* ── LEFT: Room image ~45% ── */
 .room-hero-img-wrap {
   position: relative;
-  flex: 0 0 40%;
-  min-height: 200px;
-  overflow: hidden;
+  flex: 0 0 45%;
+  min-height: 100%;
+  background: #f3f4f6;
 }
 
 .room-hero-img {
@@ -543,192 +538,188 @@
   height: 100%;
   object-fit: cover;
   display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .room-badge {
   position: absolute;
-  top: 10px;
-  left: 10px;
+  top: 12px;
+  left: 12px;
   background: rgba(0,0,0,0.55);
   backdrop-filter: blur(4px);
   color: #fff;
   font-size: 11px;
   font-weight: 700;
-  padding: 3px 10px;
+  padding: 4px 10px;
   border-radius: 20px;
   letter-spacing: 0.3px;
 }
 
-/* Right: details ~60% */
+/* ── RIGHT: Details ~55% ── */
 .room-hero-details {
   flex: 1;
-  padding: 20px 22px;
+  padding: 24px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  gap: 8px;
-  border-left: 1px solid #F3F4F6;
 }
 
-/* Name + price in one row */
-.room-hero-top {
+/* Header row */
+.room-info-header {
   display: flex;
-  align-items: baseline;
   justify-content: space-between;
-  gap: 12px;
+  align-items: flex-start;
+  gap: 16px;
   flex-wrap: wrap;
-  margin-bottom: 4px;
+}
+
+.info-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
 }
 
 .room-name {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: #111827;
   margin: 0;
   font-family: 'Outfit', sans-serif;
+  line-height: 1.2;
 }
-
-.price-val {
-  font-size: 20px;
-  font-weight: 700;
-  color: #58A429;
-  white-space: nowrap;
-}
-.price-unit { font-size: 12px; font-weight: 400; color: #6B7280; margin-left: 2px; }
 
 .room-bed-info {
   font-size: 13px;
-  color: #6B7280;
-}
-.room-bed-info strong { color: #374151; }
-
-.price-extra-info {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+  color: #4B5563;
 }
 
-.info-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  padding: 3px 10px;
-  border-radius: 20px;
-  font-size: 12px;
-}
-
-.original-price { background: #FEF9C3; }
-.tax-info { background: #EFF6FF; }
-
-.pill-label { font-weight: 500; color: #6B7280; }
-.pill-val { font-weight: 600; color: #374151; }
-.pill-val.strike { text-decoration: line-through; color: #9CA3AF; }
-
-/* Offer tag inline in hero */
-.room-hero-offer-tag {
-  display: inline-flex;
-  align-items: center;
-  padding: 4px 12px;
-  background: #F0FDF4;
-  border: 1px dashed #86EFAC;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #16A34A;
-  width: fit-content;
-}
-
-/* ── Divider between hero and sections ── */
-.room-divider {
-  height: 1px;
-  background: #F3F4F6;
-  margin: 0;
-}
-
-/* ── Sections below hero (Amenities, Offers, Rules) ── */
-.room-sections {
+.info-right {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  align-items: flex-end;
+  gap: 6px;
 }
 
+.price-val {
+  font-size: 22px;
+  font-weight: 700;
+  color: #3B82F6; /* Matched image accent */
+  white-space: nowrap;
+  line-height: 1;
+}
+.price-unit { font-size: 12px; font-weight: 500; color: #6B7280; margin-left: 2px; }
+
+.original-price {
+  font-size: 11px;
+  color: #6B7280;
+  text-decoration: line-through;
+  border: 1px solid #D1D5DB;
+  border-radius: 20px;
+  padding: 2px 10px;
+  background: transparent;
+}
+
+.tag-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.tax-info {
+  border: 1px solid #D1D5DB;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 11px;
+  color: #4B5563;
+  background: transparent;
+}
+
+.top-offer-tag {
+  background: #FEFCE8;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* Divider */
+.room-divider {
+  height: 1px;
+  background: #E5E7EB;
+  margin: 20px 0;
+}
+
+/* Sections */
 .room-section {
-  padding: 16px 20px;
-  border-bottom: 1px solid #F3F4F6;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-bottom: 20px;
 }
-.room-section:last-child { border-bottom: none; }
-
+.room-section:last-child {
+  margin-bottom: 0;
+}
 
 .section-label {
   font-size: 11px;
   font-weight: 700;
-  color: #374151;
+  color: #6B7280;
   text-transform: uppercase;
-  letter-spacing: 0.6px;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-bottom: 2px;
+  letter-spacing: 0.5px;
 }
 
-/* ── Amenities: vertical bulleted list ── */
-.amenity-list {
+.pill-grid {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
-  padding-left: 4px;
-}
-
-.amenity-list-item {
-  display: flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: 8px;
-  font-size: 13px;
-  color: #374151;
-  font-weight: 500;
 }
-
-.amenity-bullet {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #58A429;
-  flex-shrink: 0;
-}
-
-/* ── Offers: small pill grid ── */
-.pill-grid { display: flex; flex-wrap: wrap; gap: 5px; }
 
 .pill {
-  padding: 3px 9px;
+  padding: 5px 12px;
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 500;
+  border: 1px solid #E5E7EB;
+  background: #F9FAFB;
+  color: #374151;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
-.amenity-pill { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
-.offer-pill { background: #FEFCE8; color: #854D0E; border: 1px solid #FDE68A; }
+.amenity-dot {
+  width: 6px;
+  height: 6px;
+  background-color: #3B82F6;
+  border-radius: 50%;
+}
+
+.offer-pill {
+  background: #FEFCE8;
+  color: #92400E;
+  border-color: #FDE68A;
+  font-weight: 600;
+}
+
 .empty-val { font-size: 12px; color: #9CA3AF; font-style: italic; }
 
-/* ── Rules ── */
-.room-rules-info {
-  padding: 0 18px 16px;
-}
-
+/* Rules */
 .rules-grid {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  margin-top: 6px;
 }
 
 .rule-box {
   background: #F9FAFB;
   border-radius: 8px;
-  padding: 10px 12px;
+  padding: 12px;
   border: 1px solid #E5E7EB;
 }
 
@@ -739,11 +730,10 @@
   margin-bottom: 6px;
 }
 
-.rule-points { display: flex; flex-direction: column; gap: 3px; }
+.rule-points { display: flex; flex-direction: column; gap: 4px; }
 .point-item {
   font-size: 12px;
   color: #4B5563;
-  padding-left: 4px;
 }
 
 /* ══════════════════════════════════════════════
@@ -797,29 +787,37 @@
   .detail-header { flex-direction: column; align-items: flex-start; gap: 12px; }
 }
 
-/* Mobile: stack hero vertically — image on top, details below */
-@media (max-width: 640px) {
-  .room-hero {
+/* Mobile & Tablet: stack card vertically — image on top, details below */
+@media (max-width: 768px) {
+  .room-detail-card {
     flex-direction: column;
     min-height: unset;
   }
   .room-hero-img-wrap {
     flex: unset;
     width: 100%;
-    height: 200px;
+    height: 220px;
     min-height: unset;
   }
+  .room-hero-img-wrap .room-hero-img {
+    position: absolute;
+  }
   .room-hero-details {
-    border-left: none;
-    border-top: 1px solid #F3F4F6;
     padding: 16px;
   }
-  .room-hero-top {
+  .room-info-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
+    gap: 8px;
   }
-  .room-section { padding: 14px 16px; }
-  .room-name { font-size: 16px; }
-  .price-val { font-size: 18px; }
+  .info-right {
+    align-items: flex-start;
+    width: 100%;
+  }
+  .tag-row {
+    justify-content: flex-start;
+  }
+  .room-section { padding: 0 0; }
+  .room-name { font-size: 18px; }
+  .price-val { font-size: 20px; }
 }

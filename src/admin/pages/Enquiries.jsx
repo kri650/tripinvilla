@@ -198,19 +198,19 @@ export default function Enquiries() {
         </div>
 
         {/* Desktop Table View */}
-        <div className="hidden-mobile desktop-table-wrapper" style={{ overflowX: 'auto', width: '100%' }}>
-          <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap' }}>
+        <div className="hidden-mobile desktop-table-wrapper" style={{ overflowX: 'auto', width: '100%', display: 'block' }}>
+          <table className="data-table" style={{ minWidth: 1200, width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap' }}>
             <thead>
               <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
-                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Enquiry No</th>
-                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Date & Time</th>
-                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>User Name</th>
-                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Phone No</th>
-                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Email Address</th>
-                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Property</th>
-                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Query</th>
-                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Status</th>
-                <th style={{ color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Reply</th>
+                <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Enquiry No</th>
+                <th style={{ minWidth: 150, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Date & Time</th>
+                <th style={{ minWidth: 140, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>User Name</th>
+                <th style={{ minWidth: 130, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Phone No</th>
+                <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Email Address</th>
+                <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Property</th>
+                <th style={{ minWidth: 150, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Query</th>
+                <th style={{ minWidth: 90, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Status</th>
+                <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Reply</th>
               </tr>
             </thead>
             <tbody>

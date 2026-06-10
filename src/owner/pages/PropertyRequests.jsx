@@ -673,113 +673,96 @@ export default function PropertyRequests() {
                                   <div className="room-details-list">
                                     {getRequestRooms(r).map((room, roomIdx) => (
                                       <div key={roomIdx} className="room-detail-card">
+                                        
+                                        {/* ══ Left Half: Image ══ */}
+                                        <div className="room-hero-img-wrap">
+                                          <img
+                                            src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80'}
+                                            alt={room.room_type}
+                                            className="room-hero-img"
+                                          />
+                                          {getRequestRooms(r).length > 1 && (
+                                            <div className="room-badge">Room {roomIdx + 1}</div>
+                                          )}
+                                        </div>
 
-                                        {/* ══ HERO: Image LEFT + Details RIGHT (like Image 2) ══ */}
-                                        <div className="room-hero">
-                                          {/* Left: Room Image */}
-                                          <div className="room-hero-img-wrap">
-                                            <img
-                                              src={getFullRoomImageUrl(room.room_image_url || r.room_image_url) || 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&auto=format&fit=crop&q=80'}
-                                              alt={room.room_type}
-                                              className="room-hero-img"
-                                            />
-                                            {getRequestRooms(r).length > 1 && (
-                                              <div className="room-badge">Room {roomIdx + 1}</div>
-                                            )}
-                                          </div>
-
-                                          {/* Right: Details */}
-                                          <div className="room-hero-details">
-                                            <div className="room-hero-top">
+                                        {/* ══ Right Half: All Details ══ */}
+                                        <div className="room-hero-details">
+                                          
+                                          {/* Top Info (Name/Bed vs Prices/Tags) */}
+                                          <div className="room-info-header">
+                                            <div className="info-left">
                                               <h3 className="room-name">{room.room_type || r.room_type}</h3>
+                                              <div className="room-bed-info">
+                                                Bed: {room.bed_type || r.bed_type}
+                                              </div>
+                                            </div>
+                                            <div className="info-right">
                                               <div className="price-val">
                                                 {formatCurrency(firstPresent(room.price_per_room, r.price_per_room, r.priceByOwner))}
                                                 <span className="price-unit">/night</span>
                                               </div>
-                                            </div>
-
-                                            <div className="room-bed-info">
-                                              Bed: <strong>{room.bed_type || r.bed_type}</strong>
-                                            </div>
-
-                                            <div className="price-extra-info" style={{ marginTop: 10 }}>
                                               {firstPresent(room.original_price, r.original_price) && (
                                                 <div className="info-pill original-price">
-                                                  <span className="pill-label">Original</span>
-                                                  <span className="pill-val strike">{formatCurrency(firstPresent(room.original_price, r.original_price))}</span>
+                                                  Original {formatCurrency(firstPresent(room.original_price, r.original_price))}
                                                 </div>
                                               )}
-                                              {firstPresent(room.tax_amount, r.tax_amount) && (
-                                                <div className="info-pill tax-info">
-                                                  <span className="pill-label">Tax</span>
-                                                  <span className="pill-val">{formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}</span>
-                                                </div>
-                                              )}
-                                            </div>
-
-                                            {/* Offers inline in hero */}
-                                            {(room.offers || r.offers)?.length > 0 && (
-                                              <div className="room-hero-offer-tag">
-                                                {(room.offers || r.offers)[0]}
-                                                {(room.offers || r.offers).length > 1 && ` +${(room.offers || r.offers).length - 1} more`}
+                                              <div className="tag-row">
+                                                {firstPresent(room.tax_amount, r.tax_amount) && (
+                                                  <span className="info-pill tax-info">Tax {formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}</span>
+                                                )}
+                                                {(room.offers || r.offers)?.length > 0 && (
+                                                  <span className="info-pill top-offer-tag">{(room.offers || r.offers)[0]}</span>
+                                                )}
                                               </div>
-                                            )}
+                                            </div>
                                           </div>
-                                        </div>
 
-                                        <div className="room-divider" />
-
-                                        {/* ══ SECTIONS BELOW HERO ══ */}
-                                        <div className="room-sections">
+                                          <div className="room-divider" />
 
                                           {/* Amenities */}
                                           <div className="room-section">
-                                            <div className="section-label">
-                                              <CheckCircle size={12} color="#58A429" /> Amenities
+                                            <div className="section-label">AMENITIES</div>
+                                            <div className="pill-grid">
+                                              {(room.amenities_types || r.amenities_types)?.length > 0 ? (
+                                                (room.amenities_types || r.amenities_types).map((a, j) => (
+                                                  <span key={j} className="pill amenity-pill">
+                                                    <span className="amenity-dot"></span>{a}
+                                                  </span>
+                                                ))
+                                              ) : <span className="empty-val">None</span>}
                                             </div>
-                                            {(room.amenities_types || r.amenities_types)?.length > 0 ? (
-                                              <div className="amenity-list">
-                                                {(room.amenities_types || r.amenities_types).map((a, j) => (
-                                                  <div key={j} className="amenity-list-item">
-                                                    <span className="amenity-bullet" />
-                                                    {a}
-                                                  </div>
-                                                ))}
-                                              </div>
-                                            ) : <span className="empty-val">None</span>}
                                           </div>
 
                                           {/* Special Offers */}
                                           <div className="room-section">
-                                            <div className="section-label">
-                                              <Star size={12} color="#F59E0B" /> Special Offers
-                                            </div>
+                                            <div className="section-label">SPECIAL OFFERS</div>
                                             <div className="pill-grid">
-                                              {(room.offers || r.offers)?.length > 0
-                                                ? (room.offers || r.offers).map((o, j) => (
-                                                    <span key={j} className="pill offer-pill">{o}</span>
-                                                  ))
-                                                : <span className="empty-val">None</span>}
+                                              {(room.offers || r.offers)?.length > 0 ? (
+                                                (room.offers || r.offers).map((o, j) => (
+                                                  <span key={j} className="pill offer-pill">{o}</span>
+                                                ))
+                                              ) : <span className="empty-val">None</span>}
                                             </div>
                                           </div>
 
-                                          {/* House Rules */}
-                                          <div className="room-section">
-                                            <div className="section-label">House Rules &amp; Policies</div>
-                                            {Array.isArray(room.rules || r.rules) && (room.rules || r.rules).length > 0
-                                              ? (room.rules || r.rules).map((rule, j) => (
+                                          {/* House Rules & Policies */}
+                                          <div className="room-section" style={{ borderBottom: 'none' }}>
+                                            <div className="section-label">HOUSE RULES &amp; POLICIES</div>
+                                            {Array.isArray(room.rules || r.rules) && (room.rules || r.rules).length > 0 ? (
+                                              <div className="rules-grid">
+                                                {(room.rules || r.rules).map((rule, j) => (
                                                   <div key={j} className="rule-box">
                                                     <div className="rule-title">{rule.title}</div>
                                                     <div className="rule-points">
-                                                      {Array.isArray(rule.points)
-                                                        ? rule.points.map((p, pIdx) => (
-                                                            <span key={pIdx} className="point-item">• {p}</span>
-                                                          ))
-                                                        : <span className="point-item">{rule.points}</span>}
+                                                      {Array.isArray(rule.points) ? (
+                                                        rule.points.map((p, pIdx) => <span key={pIdx} className="point-item">• {p}</span>)
+                                                      ) : <span className="point-item">{rule.points}</span>}
                                                     </div>
                                                   </div>
-                                                ))
-                                              : <span className="empty-val">None</span>}
+                                                ))}
+                                              </div>
+                                            ) : <span className="empty-val">None</span>}
                                           </div>
 
                                         </div>
