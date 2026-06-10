@@ -414,5 +414,258 @@
 .btn-remove-queue:hover { background: #FEE2E2; }
 
 /* ══════════════════════════════════════════════
+   TABLE — image cells
+══════════════════════════════════════════════ */
+
+/* Small thumbnail shown inside the Room Type table cell */
+.cell-img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid #E5E7EB;
+  flex-shrink: 0;
+  display: block;
+}
+
+/* Wrapper so the thumbnail sits next to the room-type text */
+.room-type-cell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+}
+
+/* ══════════════════════════════════════════════
+   DETAIL EXPANDED ROW
+══════════════════════════════════════════════ */
+
+.detail-container {
+  background: #F9FAFB;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.detail-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 4px;
+}
+
+.detail-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #6B7280;
+}
+
+.meta-sep { color: #D1D5DB; }
+
+.btn-close-detail {
+  padding: 6px 14px;
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s;
+}
+.btn-close-detail:hover { background: #F3F4F6; }
+
+.room-details-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.room-detail-card {
+  background: #fff;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+/* Image in the expanded room detail — properly constrained */
+.room-image-container {
+  position: relative;
+  width: 100px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.room-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+}
+
+.room-badge {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.room-main-info {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.room-primary-details { flex: 1; min-width: 0; }
+
+.room-title-price {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.room-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 2px;
+}
+
+.room-bed-info { font-size: 12px; color: #6B7280; }
+
+.price-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: #58A429;
+  white-space: nowrap;
+}
+.price-unit { font-size: 11px; font-weight: 400; color: #6B7280; }
+
+.price-extra-info { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.info-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+}
+
+.original-price { background: #FEF9C3; }
+.tax-info { background: #EFF6FF; }
+
+.pill-label { font-weight: 500; color: #6B7280; }
+.pill-val { font-weight: 600; color: #374151; }
+.pill-val.strike { text-decoration: line-through; color: #9CA3AF; }
+
+.room-secondary-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.info-section { background: #F9FAFB; border-radius: 8px; padding: 10px 12px; }
+
+.section-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #374151;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.pill-grid { display: flex; flex-wrap: wrap; gap: 5px; }
+
+.pill {
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 500;
+}
+
+.amenity-pill { background: #F0FDF4; color: #15803D; border: 1px solid #BBF7D0; }
+.offer-pill { background: #FEFCE8; color: #854D0E; border: 1px solid #FDE68A; }
+.empty-val { font-size: 12px; color: #9CA3AF; font-style: italic; }
+
+.room-rules-info { margin-top: 4px; }
+
+.rules-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.rule-box {
+  background: #F9FAFB;
+  border-radius: 8px;
+  padding: 10px 12px;
+  border: 1px solid #E5E7EB;
+}
+
+.rule-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.rule-points { display: flex; flex-direction: column; gap: 3px; }
+.point-item { font-size: 12px; color: #4B5563; }
+
+/* ══════════════════════════════════════════════
    LISTING & TABLE RESPONSIVENESS
 ══════════════════════════════════════════════ */
+
+/* Make the table scroll horizontally on small screens */
+.table-responsive { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+/* Constrain table cells to not blow up */
+.td-property, .td-category, .td-room-type,
+.td-bed, .td-amenities, .td-price,
+.td-rules, .td-offers, .td-status, .td-actions {
+  white-space: nowrap;
+  font-size: 13px;
+  padding: 10px 12px;
+  vertical-align: middle;
+}
+
+.td-amenities, .td-offers { max-width: 140px; overflow: hidden; text-overflow: ellipsis; }
+
+@media (max-width: 768px) {
+  .room-secondary-info { grid-template-columns: 1fr; }
+  .room-main-info { flex-direction: column; }
+  .room-image-container { width: 100%; height: 160px; }
+  .room-img { height: 160px; }
+  .detail-header { flex-direction: column; }
+  .rules-grid { grid-template-columns: 1fr; }
+}
