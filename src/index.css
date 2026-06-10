@@ -9,11 +9,16 @@
 /* Global Table Layout Fixes */
 table {
   width: 100%;
-  min-width: 800px;
+  /* Remove min-width: 800px — let each table wrapper handle scroll */
 }
 th, td {
-  min-width: 80px;
+  min-width: 0;       /* remove the global 80px */
   white-space: nowrap;
+}
+
+/* Only tables inside a scroll wrapper get the min-width */
+.table-responsive table {
+  min-width: 800px;
 }
 
 /* Ensure table scroll wrappers never collapse on mobile/flex layouts */
