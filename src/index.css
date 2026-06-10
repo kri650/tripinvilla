@@ -25,6 +25,10 @@ td:has(.cell-text) {
   overflow: visible;
   text-overflow: clip;
 }
+/* Ensure action menus (last columns or those with dots) are not clipped */
+td:last-child, th:last-child, td:has(.action-dots) {
+  overflow: visible;
+}
 
 :root {
   --primary-blue: #0C6DC4; /* Brand exact blue color */
