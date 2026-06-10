@@ -41,6 +41,30 @@ td:last-child, th:last-child, td:has(.action-dots) {
   overflow: visible;
 }
 
+/* Mobile Table Override to prevent invisible/clipped rows */
+@media (max-width: 768px) {
+  table {
+    min-width: unset !important;
+    width: 100% !important;
+  }
+  
+  .desktop-table-wrapper,
+  .table-responsive,
+  .dash-section,
+  .table-section {
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    width: 100% !important;
+  }
+
+  th, td {
+    min-width: unset !important;
+    white-space: normal !important;
+    font-size: 12px !important;
+    padding: 8px !important;
+  }
+}
+
 :root {
   --primary-blue: #0C6DC4; /* Brand exact blue color */
   --primary-blue-dark: #0A5AA3; /* Beautiful darker blue shade for hover states */
