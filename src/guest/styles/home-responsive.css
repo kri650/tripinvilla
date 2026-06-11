@@ -3306,9 +3306,9 @@
   }
 
   /* Convert table to card layout on mobile */
-  .data-table {
+  /* .data-table {
     display: none !important;
-  }
+  } */
 
   .mobile-cities-cards {
     display: block !important;
@@ -3499,9 +3499,9 @@
 
 /* ===== HIDE TABLE ON MOBILE AND SHOW CARD LAYOUT ===== */
 @media (max-width: 768px) {
-  .data-table {
+  /* .data-table {
     display: none !important;
-  }
+  } */
 
   .mobile-cities-container {
     display: block !important;
