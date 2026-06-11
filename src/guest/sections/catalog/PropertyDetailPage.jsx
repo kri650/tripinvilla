@@ -181,7 +181,7 @@ export default function PropertyDetailPage(props) {
     : `₹${Number(rawVal).toLocaleString('en-IN')}`;
   const oldPriceString = activeDetailProp.originalPrice 
     ? `₹${Number(activeDetailProp.originalPrice).toLocaleString('en-IN')}`
-    : `₹${Math.round(rawVal * 1.2).toLocaleString('en-IN')}`;
+    : null;
 
   return (
     <div className="detail-page-wrapper fade-in">

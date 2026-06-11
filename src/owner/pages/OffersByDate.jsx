@@ -62,8 +62,9 @@ export default function OffersByDate() {
       foods: o.food_type || o.foods || 'N/A',
       amenities: (Array.isArray(o.amenities) && o.amenities.length > 0) ? o.amenities.join(', ') : (o.amenities?.length ? o.amenities : ((Array.isArray(o.property_id?.amenities) && o.property_id.amenities.length > 0) ? o.property_id.amenities.join(', ') : (o.property_id?.amenities || 'N/A'))),
       offer: (() => {
-        const val = o.offer_percent || o.offerPercent || o.offer || '20% Off';
+        const val = o.offer_percent || o.offerPercent || o.offer || '';
         const str = String(val).trim();
+        if (!str) return 'No Offer';
         if (/off/i.test(str)) return str;
         if (str.endsWith('%')) return `${str} Off`;
         return `${str}% Off`;

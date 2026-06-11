@@ -71,6 +71,7 @@ export const enquiryService = {
 export const offerService = {
   getMine: () => api.get('/offers/owner'),
   create: (data) => api.post('/offers', data),
+  update: (id, data) => api.put(`/offers/${id}`, data),
   remove: (id) => api.delete(`/offers/${id}`),
 };
 

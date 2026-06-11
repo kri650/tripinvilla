@@ -631,6 +631,7 @@ export default function MyProperties({ autoOpenForm = false }) {
       restaurantOnSite: fullP.restaurantOnSite || false, spaWellness: fullP.spaWellness || false, conferenceRoom: fullP.conferenceRoom || false, roomService: fullP.roomService || false, receptionAllDay: fullP.receptionAllDay || false, liftElevator: fullP.liftElevator || false, starRating: fullP.starRating || '', totalRooms: fullP.totalRooms || '', totalFloors: fullP.totalFloors || '', activities: fullP.activities || [],
       floorNumber: fullP.floorNumber || '', totalFloorsBuilding: fullP.totalFloorsBuilding || '', furnishedStatus: fullP.furnishedStatus || '', washingMachine: fullP.washingMachine || false, societyAmenities: fullP.societyAmenities || [],
       bonfireArea: fullP.bonfireArea || false, viewType: fullP.viewType || '', outdoorSeating: fullP.outdoorSeating || false, nearestHikingTrail: fullP.nearestHikingTrail || '', distanceFromCity: fullP.distanceFromCity || '',
+      foodPreference: fullP.foodPreference || 'none',
     });
     setManualLocation(manualLoc);
     setManualValues(manualVals);
@@ -727,6 +728,7 @@ export default function MyProperties({ autoOpenForm = false }) {
         restaurantOnSite: formData.restaurantOnSite, spaWellness: formData.spaWellness, conferenceRoom: formData.conferenceRoom, roomService: formData.roomService, receptionAllDay: formData.receptionAllDay, liftElevator: formData.liftElevator, starRating: formData.starRating, totalRooms: formData.totalRooms, totalFloors: formData.totalFloors, activities: formData.activities,
         floorNumber: formData.floorNumber, totalFloorsBuilding: formData.totalFloorsBuilding, furnishedStatus: formData.furnishedStatus, washingMachine: formData.washingMachine, societyAmenities: formData.societyAmenities,
         bonfireArea: formData.bonfireArea, viewType: formData.viewType, outdoorSeating: formData.outdoorSeating, nearestHikingTrail: formData.nearestHikingTrail, distanceFromCity: formData.distanceFromCity,
+        foodPreference: formData.foodPreference,
       };
 
       console.log('📤 Sending property data to backend:', propertyData);
