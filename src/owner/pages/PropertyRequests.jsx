@@ -332,7 +332,7 @@ export default function PropertyRequests() {
       };
 
       if (editingQueueIdx !== null) {
-        setRoomQueue(prev => prev.map((item, i) => i === editingQueueIdx ? roomEntry : item));
+        setRoomQueue(prev => prev.map((item, i) => i === editingQueueIdx ? { ...item, ...roomEntry } : item));
         setEditingQueueIdx(null);
       } else {
         setRoomQueue(prev => [...prev, roomEntry]);
@@ -358,6 +358,7 @@ export default function PropertyRequests() {
       original_price: r.original_price || '',
       price_per_room: r.price_per_room || '',
       tax_amount: r.tax_amount || '',
+      offer: r.offer || (r.offers && r.offers[0]) || '',
     });
     setRoomImagePreview(r.room_image_url || r._preview_img || '');
     setSelectedAmenities(r.amenities_types || []);
@@ -393,13 +394,14 @@ export default function PropertyRequests() {
           points: (typeof sec.text === 'string' ? sec.text : '').split('\n').filter(p => p.trim()).map(p => p.replace(/^[•\-\*]\s*/, '').trim())
         })) : room.rules;
 
-        const { _preview_img, _selectedFile, rulesSections, selectedAmenities, manualRoomType, roomImagePreview, ...rest } = room;
+        const { _preview_img, _selectedFile, rulesSections, selectedAmenities, manualRoomType, roomImagePreview, offers, ...rest } = room;
         return {
           ...rest,
           room_image_url: roomImageUrl,
           rules,
-          offer: room.offer || (room.offers && room.offers[0]) || '',
-          amenities_types: selectedAmenities || room.amenities_types || []
+          amenities_types: selectedAmenities || room.amenities_types || [],
+          offer: room.offer || '',
+          offers: room.offer ? [room.offer] : [],
         };
       }));
 

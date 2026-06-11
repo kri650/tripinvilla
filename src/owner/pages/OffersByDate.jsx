@@ -61,7 +61,7 @@ export default function OffersByDate() {
       category: o.category || o.property_id?.type || o.property_id?.category || 'N/A',
       room: o.room_type || o.room || o.property_id?.roomType || 'N/A',
       price: o.price || o.price_per_room || o.property_id?.price || o.property_id?.bestRoomRate || '',
-      foods: o.food_type || o.foods || 'N/A',
+      foods: o.food_type || o.foods || o.property_id?.foodPreference || 'N/A',
       amenities: (Array.isArray(o.amenities) && o.amenities.length > 0) ? o.amenities.join(', ') : (o.amenities?.length ? o.amenities : ((Array.isArray(o.property_id?.amenities) && o.property_id.amenities.length > 0) ? o.property_id.amenities.join(', ') : (o.property_id?.amenities || 'N/A'))),
       offer: (() => {
         const val = o.offer_percent || o.offerPercent || o.offer || '';
