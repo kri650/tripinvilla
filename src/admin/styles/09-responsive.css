@@ -284,3 +284,36 @@
   .enquiries-filters-wrap { flex-direction: column; align-items: stretch !important; width: 100%; }
   .enquiries-filters-wrap > div, .enquiries-filters-wrap > input, .enquiries-filters-wrap > button { width: 100%; }
 }
+
+/* Force the second dash-section (table) to never collapse */
+@media (max-width: 900px) {
+  .dash-section:has(.data-table) {
+    display: flex !important;
+    flex-direction: column !important;
+    min-height: auto !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .dash-section:has(.data-table) > * {
+    flex-shrink: 0 !important;
+    min-width: 0 !important;
+    min-height: 0 !important;
+    width: 100% !important;
+  }
+
+  /* The direct table wrapper must scroll, not collapse */
+  .dash-section:has(.data-table) > div {
+    flex: 1 1 auto !important;
+    overflow-x: auto !important;
+    overflow-y: visible !important;
+    -webkit-overflow-scrolling: touch !important;
+    display: block !important;
+  }
+
+  .data-table {
+    display: table !important;
+    width: max-content !important;
+    min-width: 100% !important;
+  }
+}
