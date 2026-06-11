@@ -331,7 +331,7 @@ export default function TermsConditions() {
         <div className="master-form-card" style={{ margin: 0, padding: '32px' }}>
           
           {/* Header */}
-          <div className="master-form-header" style={{ marginBottom: 24 }}>
+          <div className="master-form-header" style={{ marginBottom: 0 }}>
             <div className="master-form-title" style={{ fontSize: '20px', fontWeight: 700 }}>Terms &amp; Conditions</div>
             <div className="master-form-actions">
               <button className="btn-solid-green" onClick={handleUpdate} style={{ cursor: 'pointer' }}>
@@ -340,7 +340,7 @@ export default function TermsConditions() {
             </div>
           </div>
 
-          <hr style={{ border: 'none', borderBottom: '1px solid #F3F4F6', margin: '0 -32px 32px -32px' }} />
+
 
           {/* Editors List */}
           <RichTextEditor 
