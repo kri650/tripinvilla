@@ -37,8 +37,8 @@ export default function DateRangeDropdown({
         const mobile = window.innerWidth <= 640;
         setIsMobile(mobile);
 
-        // Width for dual calendar is approx 600px
-        const popupWidth = mobile ? Math.min(window.innerWidth - 32, 320) : 650;
+        // Width for dual calendar is approx 740px (332x2 + 32 gap + 40 padding)
+        const popupWidth = mobile ? Math.min(window.innerWidth - 32, 320) : 740;
 
         let leftPos = rect.right - popupWidth;
         const minLeft = 16;

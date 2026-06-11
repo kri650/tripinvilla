@@ -153,7 +153,7 @@ export default function Enquiries() {
       <div className="admin-table-card">
         <div className="enquiries-toolbar admin-table-header" style={{ marginBottom: '16px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center', flexWrap: 'wrap', gap: '32px' }}>
           <h2 className="admin-table-title" style={{ margin: 0, fontSize: '18px', fontWeight: 600 }}>Enquiries</h2>
-          <div className="enquiries-filters-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <div className="enquiries-filters-wrap" style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap', flex: 1 }}>
             <DateRangeDropdown
               startDate={dateFrom}
               endDate={dateTo}
@@ -178,7 +178,7 @@ export default function Enquiries() {
               <Filter size={13} /> Filter
             </button>
 
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
+            <div style={{ position: 'relative', display: 'flex', alignItems: 'center', marginLeft: 'auto' }}>
               <Search size={13} color="#9CA3AF" style={{ position: 'absolute', left: '10px' }} />
               <input 
                 type="text" 
