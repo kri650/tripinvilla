@@ -416,7 +416,7 @@
 .alert-title { font-size: 15px; font-weight: 700; color: #92400E; margin-bottom: 4px; }
 .alert-text { font-size: 13px; color: #78350F; }
 
-.property-request-config { margin-bottom: 0 !important; border-bottom: none !important; }
+/* .property-request-config removed to allow separate boxes */
 
 .editing-actions {
   display: flex;

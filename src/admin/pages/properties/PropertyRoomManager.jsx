@@ -102,8 +102,10 @@ export default function PropertyRoomManager({ property, onClose }) {
 
   // ── FIX: accumulate files instead of replacing them ──────────────────────────
   const handleFileChange = (e) => {
-    const newFiles = Array.from(e.target.files);
-    setNewImageFiles(prev => [...prev, ...newFiles]);
+    const file = e.target.files[0];
+    if (file) {
+      setNewImageFiles([file]);
+    }
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
@@ -314,11 +316,13 @@ export default function PropertyRoomManager({ property, onClose }) {
                     <button className="prm-img-remove" type="button" onClick={() => removeNewFile(idx)} title="Remove image">×</button>
                   </div>
                 ))}
-                <div className="prm-add-img-btn" onClick={() => fileInputRef.current && fileInputRef.current.click()}>
-                  <Plus size={20} color="#9CA3AF"/>
-                </div>
+                {(form.room_images.length + newImageFiles.length) === 0 && (
+                  <div className="prm-add-img-btn" onClick={() => fileInputRef.current && fileInputRef.current.click()}>
+                    <Plus size={20} color="#9CA3AF"/>
+                  </div>
+                )}
               </div>
-              <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden accept="image/*"/>
+              <input type="file" ref={fileInputRef} onChange={handleFileChange} hidden accept="image/*"/>
               <input type="file" ref={replaceInputRef} onChange={handleReplaceFileChange} hidden accept="image/*"/>
               {editingId && (
                 <p style={{fontSize:11,color:'#6B7280',margin:'6px 0 0'}}>

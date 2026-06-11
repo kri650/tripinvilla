@@ -180,7 +180,11 @@ export default function AddOffer() {
         },
         body: JSON.stringify({
           property_id: selectedPropertyId,
+          category: formData.category,
+          room_type: formData.room,
           food_type: formData.foods,
+          amenities: formData.amenities,
+          price: parseFloat(String(formData.price).replace(/[^\d.]/g, '')) || 0,
           offer_date: formData.dateTo,
           dateFrom: formData.dateFrom,
           dateTo: formData.dateTo,
