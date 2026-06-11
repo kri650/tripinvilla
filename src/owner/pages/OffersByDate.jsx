@@ -256,7 +256,7 @@ export default function OffersByDate() {
                 <option value="">Select approved configuration...</option>
                 {approvedRequests.map(r => (
                   <option key={r._id || r.id} value={r._id || r.id}>
-                    {r.propertyName || r.property?.name} ({r.room_type})
+                    {r.propertyName || r.property?.name}
                   </option>
                 ))}
               </select>
@@ -273,22 +273,10 @@ export default function OffersByDate() {
                 placeholder="Select property first"
               />
             </div>
-
-            <div className="form-group">
-              <label className="form-label">Room Type (Auto-filled)*</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                value={roomType} 
-                readOnly 
-                disabled 
-                placeholder="Select property first"
-              />
-            </div>
           </div>
 
           {/* Form Fields Grid - Row 2 */}
-          <div className="form-grid-3">
+          <div className="form-grid-2">
             <div className="form-group">
               <label className="form-label">Foods*</label>
               <select className="form-select" value={foods} onChange={(e) => setFoods(e.target.value)}>
@@ -304,18 +292,6 @@ export default function OffersByDate() {
                 type="text" 
                 className="form-input" 
                 value={amenities} 
-                readOnly 
-                disabled 
-                placeholder="Select property first"
-              />
-            </div>
-
-            <div className="form-group">
-              <label className="form-label">Price for Room (Auto-filled)*</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                value={price ? `₹${price} per night` : ''} 
                 readOnly 
                 disabled 
                 placeholder="Select property first"
@@ -433,8 +409,8 @@ export default function OffersByDate() {
             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap', minWidth: 1000 }}>
               <thead>
                 <tr>
-                  {['Offer ID', 'Dates & Time', 'Property Name', 'Location', 'Category', 'Room', 'Foods', 'Amenities', 'Offer %', 'Description', 'Status', ''].map((h, i) => (
-                    <th key={i} style={{ minWidth: { 'Offer ID': 90, 'Dates & Time': 140, 'Property Name': 160, 'Location': 150, 'Category': 100, 'Room': 100, 'Foods': 90, 'Amenities': 150, 'Offer %': 90, 'Description': 150, 'Status': 90 }[h], color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
+                  {['Offer ID', 'Dates & Time', 'Property Name', 'Location', 'Category', 'Foods', 'Amenities', 'Offer %', 'Description', 'Status', ''].map((h, i) => (
+                    <th key={i} style={{ minWidth: { 'Offer ID': 90, 'Dates & Time': 140, 'Property Name': 160, 'Location': 150, 'Category': 100, 'Foods': 90, 'Amenities': 150, 'Offer %': 90, 'Description': 150, 'Status': 90 }[h], color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
                       <span className="th-inner">
                         {h}
                         {h && <ChevronDown size={10} style={{ color: '#CBD5E1', marginLeft: 4 }} />}
@@ -465,7 +441,6 @@ export default function OffersByDate() {
                         {o.category}
                       </span>
                     </td>
-                    <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.room}</td>
                     <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.foods}</td>
                     <td style={{ color: '#4B5563', padding: '14px 16px', whiteSpace: 'normal', maxWidth: '160px' }}><ReadMore lines={2}>{o.amenities}</ReadMore></td>
                     <td style={{ color: '#111827', fontWeight: 600, padding: '14px 16px' }}>{o.offer}</td>

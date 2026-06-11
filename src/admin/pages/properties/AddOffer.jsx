@@ -218,7 +218,7 @@ export default function AddOffer() {
           </div>
 
           {/* Row 1 */}
-          <div className="form-grid-3">
+          <div className="form-grid-2">
             <div className="form-group">
               <label className="form-label">Property Name*</label>
               <div style={{ position: 'relative' }}>
@@ -248,37 +248,10 @@ export default function AddOffer() {
                 placeholder="Select property first"
               />
             </div>
-            <div className="form-group">
-              <label className="form-label">Room Type*</label>
-              {availableRooms.length > 0 ? (
-                <div style={{ position: 'relative' }}>
-                  <select 
-                    className="form-select" 
-                    style={{ appearance: 'none' }}
-                    value={formData.room}
-                    onChange={e => setFormData({...formData, room: e.target.value})}
-                  >
-                    {availableRooms.map(r => (
-                      <option key={r.roomType || r._id} value={r.roomType}>{r.roomType}</option>
-                    ))}
-                  </select>
-                  <ChevronDown size={16} style={{ position: 'absolute', right: 16, top: 14, color: '#6B7280', pointerEvents: 'none' }} />
-                </div>
-              ) : (
-                <input 
-                  type="text" 
-                  className="form-input" 
-                  value={formData.room} 
-                  readOnly 
-                  disabled 
-                  placeholder="Select property first"
-                />
-              )}
-            </div>
           </div>
 
           {/* Row 2 */}
-          <div className="form-grid-3">
+          <div className="form-grid-2">
             <div className="form-group">
               <label className="form-label">Foods*</label>
               <div style={{ position: 'relative' }}>
@@ -301,17 +274,6 @@ export default function AddOffer() {
                 type="text" 
                 className="form-input" 
                 value={formData.amenities} 
-                readOnly 
-                disabled 
-                placeholder="Select property first"
-              />
-            </div>
-            <div className="form-group">
-              <label className="form-label">Price for Room (Auto-filled)*</label>
-              <input 
-                type="text" 
-                className="form-input" 
-                value={formData.price} 
                 readOnly 
                 disabled 
                 placeholder="Select property first"

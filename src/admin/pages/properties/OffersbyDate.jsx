@@ -180,7 +180,6 @@ export default function OffersbyDate() {
                   <th style={{ minWidth: 200, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Property <br/>Name <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Location <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Category <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
-                  <th style={{ minWidth: 130, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Room <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Foods <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ minWidth: 180, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Amenities <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
                   <th style={{ minWidth: 100, color: '#9CA3AF', fontWeight: 500, padding: '12px 14px', fontSize: '12px' }}>Offer <ChevronDown size={12} style={{ display: 'inline', marginLeft: 4 }} /></th>
@@ -223,7 +222,6 @@ export default function OffersbyDate() {
                         </div>
                       </td>
                       <td style={{ padding: '14px' }}><span className="category-pill">{o.category}</span></td>
-                      <td style={{ color: '#9CA3AF', padding: '14px', whiteSpace: 'pre-line', lineHeight: 1.4, fontSize: 13 }}>{o.room}</td>
                       <td style={{ color: '#6B7280', padding: '14px' }}>{o.foods}</td>
                       <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore>{Array.isArray(o.amenities) ? o.amenities.join(', ') : o.amenities}</ReadMore></td>
                       <td style={{ color: '#111827', fontWeight: 600, padding: '14px' }}>
