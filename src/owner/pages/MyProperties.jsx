@@ -1761,24 +1761,26 @@ export default function MyProperties({ autoOpenForm = false }) {
 
           {/* Pagination Controls */}
           {totalPages > 1 && (
-            <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px', position: 'sticky', bottom: 0, background: '#fff', padding: '16px 24px', borderTop: '1px solid #E5E7EB', zIndex: 10, margin: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}>
-              <button 
-                onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                style={{ background: '#F3F4F6', color: currentPage === 1 ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
-              >
-                Previous
-              </button>
-              <span style={{ fontSize: '13px', color: '#6B7280', fontWeight: 500 }}>
-                Page {currentPage} of {totalPages}
-              </span>
-              <button 
-                onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                style={{ background: '#F3F4F6', color: currentPage === totalPages ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
-              >
-                Next
-              </button>
+            <div style={{ position: 'sticky', bottom: 0, background: '#fff', padding: '16px 24px', borderTop: '1px solid #E5E7EB', zIndex: 10, margin: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
+                <button 
+                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  disabled={currentPage === 1}
+                  style={{ background: '#F3F4F6', color: currentPage === 1 ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
+                >
+                  Previous
+                </button>
+                <span style={{ fontSize: '13px', color: '#6B7280', fontWeight: 500 }}>
+                  Page {currentPage} of {totalPages}
+                </span>
+                <button 
+                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  disabled={currentPage === totalPages}
+                  style={{ background: '#F3F4F6', color: currentPage === totalPages ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
+                >
+                  Next
+                </button>
+              </div>
             </div>
           )}
         </div>
