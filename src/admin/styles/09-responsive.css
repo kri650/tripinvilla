@@ -221,37 +221,7 @@
     align-items: center !important;
   }
 
-  /* Stacking the filter bar actions */
-  .props-table-actions {
-    width: 100% !important;
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 8px !important;
-  }
-  .props-table-actions > * {
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-  .props-filter-select {
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
-  .props-filter-select select {
-    width: 100% !important;
-    border: none;
-    background: transparent;
-    outline: none;
-    font-size: 13px;
-    color: #374151;
-  }
-  .props-btn-filter {
-    justify-content: center !important;
-    width: 100% !important;
-  }
-  .props-search-wrap {
-    width: 100% !important;
-    box-sizing: border-box !important;
-  }
+
 }
 
 /* ─── Small Mobile (480px) ─── */
