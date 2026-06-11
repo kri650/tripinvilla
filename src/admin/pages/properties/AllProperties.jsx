@@ -50,8 +50,8 @@ export default function AllProperties() {
     inactiveAdmin: 0,
   });
   const [searchQuery, setSearchQuery] = useState("");
-  const [dateFrom, setDateFrom] = useState(() => localStorage.getItem('dashboard_date_from') || "");
-  const [dateTo, setDateTo] = useState(() => localStorage.getItem('dashboard_date_to') || "");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [loading, setLoading] = useState(false); // Add Panel State
   const [showPanel, setShowPanel] = useState(false);

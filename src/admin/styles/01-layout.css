@@ -9,7 +9,7 @@
 
 /* The white main card (Side Menu): left:337px top:20px radius:16px shadow */
 .admin-main {
-  background: #ffffff;
+  background: #F9FAFB;
   border-radius: 16px;
   box-shadow: 0px 4px 40px 0px rgba(0, 61, 92, 0.04);
   min-height: calc(100vh - 40px);

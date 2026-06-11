@@ -62,8 +62,8 @@ export default function Dashboard() {
   const [enqCurrentPage, setEnqCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
-  const [dashboardDateFrom, setDashboardDateFrom] = useState(() => localStorage.getItem('dashboard_date_from') || '');
-  const [dashboardDateTo, setDashboardDateTo] = useState(() => localStorage.getItem('dashboard_date_to') || '');
+  const [dashboardDateFrom, setDashboardDateFrom] = useState('');
+  const [dashboardDateTo, setDashboardDateTo] = useState('');
 
   useEffect(() => {
     const handleDateChange = (e) => {

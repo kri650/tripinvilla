@@ -187,8 +187,8 @@ export default function MyProperties({ autoOpenForm = false }) {
   // ─── Filters ──────────────────────────────────────────────
   const [filterType, setFilterType] = useState('');
   const [filterSearch, setFilterSearch] = useState('');
-  const [filterDateFrom, setFilterDateFrom] = useState(() => localStorage.getItem('dashboard_date_from') || '');
-  const [filterDateTo, setFilterDateTo] = useState(() => localStorage.getItem('dashboard_date_to') || '');
+  const [filterDateFrom, setFilterDateFrom] = useState('');
+  const [filterDateTo, setFilterDateTo] = useState('');
 
   useEffect(() => {
     const handleDateChange = (e) => {

@@ -4,7 +4,7 @@
 .topbar {
   min-height: 72px;
   background: #fff;
-  border-bottom: none;
+  border-bottom: 1px solid #E5E7EB;
   display: flex; align-items: center; justify-content: space-between;
   padding: 12px 40px 12px 32px;
   flex-shrink: 0;

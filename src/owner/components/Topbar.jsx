@@ -24,22 +24,20 @@ export default function Topbar({ onToggleSidebar }) {
   const user = userStr ? JSON.parse(userStr) : { name: 'Jhon Doe', email: 'jhon@gmail.com' };
   const initials = user.name ? user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase() : 'J';
 
-  const [dateFrom, setDateFrom] = useState(() => localStorage.getItem('dashboard_date_from') || '');
-  const [dateTo, setDateTo] = useState(() => localStorage.getItem('dashboard_date_to') || '');
+  const [dateFrom, setDateFrom] = useState('');
+  const [dateTo, setDateTo] = useState('');
 
   const handleDateChange = (start, end) => {
     setDateFrom(start);
     setDateTo(end);
-    localStorage.setItem('dashboard_date_from', start);
-    localStorage.setItem('dashboard_date_to', end);
+
     window.dispatchEvent(new CustomEvent('dashboard_date_changed', { detail: { dateFrom: start, dateTo: end } }));
   };
 
   const handleClear = () => {
     setDateFrom('');
     setDateTo('');
-    localStorage.removeItem('dashboard_date_from');
-    localStorage.removeItem('dashboard_date_to');
+
     window.dispatchEvent(new CustomEvent('dashboard_date_changed', { detail: { dateFrom: '', dateTo: '' } }));
   };
 
