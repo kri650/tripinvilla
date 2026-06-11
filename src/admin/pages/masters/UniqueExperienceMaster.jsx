@@ -258,8 +258,8 @@ export default function UniqueExperienceMaster() {
               <label className="form-label">
                 Theme Cover Image <span style={{ color: '#6B7280', fontSize: 11, fontWeight: 400, marginLeft: 4 }}>(Upload image or paste URL)</span>
               </label>
-              <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-                <div className="file-upload-wrapper" style={{ flex: 1 }}>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'center' }}>
+                <div className="file-upload-wrapper" style={{ flex: '1 1 200px', width: '100%' }}>
                   <input 
                     type="file" 
                     accept=".jpg,.jpeg,.png"
@@ -275,7 +275,7 @@ export default function UniqueExperienceMaster() {
                       setFilePreviewUrl(URL.createObjectURL(file));
                     }}
                     className="file-upload-input" 
-                    style={{ padding: '8px' }}
+                    style={{ padding: '8px', width: '100%', boxSizing: 'border-box' }}
                   />
                 </div>
                 <input 
@@ -291,7 +291,7 @@ export default function UniqueExperienceMaster() {
                   }}
                   placeholder="Or paste image URL..." 
                   className="form-input"
-                  style={{ flex: 1 }}
+                  style={{ flex: '1 1 200px', width: '100%', boxSizing: 'border-box' }}
                 />
               </div>
               {filePreviewUrl && (
