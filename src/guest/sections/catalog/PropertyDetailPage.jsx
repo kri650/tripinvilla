@@ -544,16 +544,7 @@ export default function PropertyDetailPage(props) {
                         )}
                       </div>
                       
-                      {currentOfferForRoom && (currentOfferForRoom.offerPercent || currentOfferForRoom.offer_percent) && (
-                        <div style={{ marginTop: '12px', background: 'rgba(56, 161, 105, 0.08)', border: '1px dashed rgba(56, 161, 105, 0.5)', borderRadius: '6px', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                          <div style={{ background: '#38A169', color: '#fff', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold', fontSize: '12px' }}>
-                            {currentOfferForRoom.offerPercent || currentOfferForRoom.offer_percent}
-                          </div>
-                          <span style={{ fontSize: '12px', color: '#276749', fontWeight: '500' }}>
-                            {currentOfferForRoom.description || 'Special room offer applied.'}
-                          </span>
-                        </div>
-                      )}
+
                     </div>
 
                     <div className="room-card-pricing-col">
