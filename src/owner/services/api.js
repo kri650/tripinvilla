@@ -17,6 +17,23 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response && error.response.status === 401) {
+      const msg = error.response.data?.message || '';
+      if (msg.includes('invalid token') || msg.includes('missing token') || msg.includes('expired')) {
+        alert('Your session has expired. Please login again.');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user_token');
+        localStorage.removeItem('user_role');
+        window.location.href = '/owner/login';
+      }
+    }
+    return Promise.reject(error);
+  }
+);
+
 export const propertyService = {
   getMine: (params) => api.get('/properties/owner', { params }),
   add: (data) => api.post('/properties', data, {
