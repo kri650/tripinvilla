@@ -156,8 +156,7 @@
 
   .topbar-right { gap: 8px; }
 
-  .master-form-header { flex-direction: column; align-items: flex-start; gap: 12px; }
-  .master-form-actions { width: 100%; justify-content: flex-end; }
+
 
   .props-search-wrap input { width: auto; }
   .admin-toolbar-search input { width: auto; }

@@ -91,7 +91,7 @@ export default function OffersbyDate() {
   return (
     <div className="fade-in">
       {/* Breadcrumb & Action */}
-      <div className="props-breadcrumb" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '24px 39px 24px', margin: 0 }}>
+      <div className="props-breadcrumb" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 39px 8px', margin: 0 }}>
         <div>
           Property Management &gt; <span>Offers by Date</span>
         </div>
