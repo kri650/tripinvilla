@@ -578,9 +578,9 @@ export default function PropertyRequests() {
               <div className="table-responsive" style={{ overflowX: 'auto', width: '100%' }}>
                 <table className="data-table" style={{ minWidth: 900 }}>
                   <thead>
-                    <tr>
+                    <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
                       {['Property', 'Category', 'Room Type', 'Bed', 'Amenities', 'Price', 'Rules', 'Offers', 'Status', 'Actions'].map((h, i) => (
-                        <th key={i} className="table-th" style={{ minWidth: { 'Property': 200, 'Category': 100, 'Room Type': 100, 'Bed': 80, 'Amenities': 120, 'Price': 90, 'Rules': 80, 'Offers': 80, 'Status': 90, 'Actions': 80 }[h] }}>{h}</th>
+                        <th key={i} style={{ minWidth: { 'Property': 200, 'Category': 100, 'Room Type': 100, 'Bed': 80, 'Amenities': 120, 'Price': 90, 'Rules': 80, 'Offers': 80, 'Status': 90, 'Actions': 80 }[h], color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -590,10 +590,12 @@ export default function PropertyRequests() {
                       const statusClass = statusLabel.toLowerCase();
                       return (
                         <React.Fragment key={i}>
-                          <tr className="request-row">
-                            <td className="td-property" style={{ fontWeight: 700, color: '#111827', whiteSpace: 'normal', minWidth: '200px', maxWidth: '250px' }}><ReadMore lines={2}>{r.propertyName}</ReadMore></td>
-                            <td className="td-category">{r.category}</td>
-                            <td className="td-room-type">
+                          <tr className="request-row" style={{ borderBottom: '1px solid #F3F4F6' }}>
+                            <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'normal', minWidth: '200px', maxWidth: '250px' }}><ReadMore lines={2}>{r.propertyName}</ReadMore></td>
+                            <td style={{ padding: '14px' }}>
+                              <span className="category-pill" style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 500, background: '#DCFCE7', color: '#58A429' }}>{r.category}</span>
+                            </td>
+                            <td style={{ color: '#4B5563', padding: '14px', fontSize: '13px' }}>
                               <div className="room-type-cell">
                                 {r.room_image_url && <img src={getFullRoomImageUrl(r.room_image_url)} alt={r.room_type} className="cell-img" />}
                                 <span>
@@ -603,40 +605,40 @@ export default function PropertyRequests() {
                                 </span>
                               </div>
                             </td>
-                            <td className="td-bed">
+                            <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}>
                               {getRequestRooms(r).length > 1
                                 ? `${getRequestRooms(r).length} Types`
                                 : (r.bed_type || getRequestRooms(r)[0]?.bed_type)}
                             </td>
-                            <td className="td-amenities" style={{ whiteSpace: 'normal', maxWidth: '160px' }}>
+                            <td style={{ color: '#4B5563', padding: '14px', fontSize: '13px', whiteSpace: 'normal', maxWidth: '160px' }}>
                               <ReadMore lines={2}>
                               {getRequestRooms(r).length > 1
                                 ? 'Multiple'
                                 : (r.amenities_types?.length > 0 ? r.amenities_types.join(', ') : 'None')}
                               </ReadMore>
                             </td>
-                            <td className="td-price">
+                            <td style={{ color: '#111827', fontWeight: 600, padding: '14px', fontSize: '13px' }}>
                               {getRequestRooms(r).length > 1
                                 ? `From ${formatCurrency(Math.min(...getRequestRooms(r).map((room) => Number(room.price_per_room || 0)).filter(Boolean)))}`
                                 : formatCurrency(firstPresent(r.price_per_room, getRequestRooms(r)[0]?.price_per_room, r.priceByOwner))}
                             </td>
-                            <td className="td-rules" style={{ whiteSpace: 'normal', maxWidth: '160px' }}><ReadMore lines={2}>{Array.isArray(r.rules) ? `${r.rules.length} sections` : 'None'}</ReadMore></td>
-                            <td className="td-offers" style={{ whiteSpace: 'normal', maxWidth: '160px' }}>{r.offer || (r.offers && r.offers[0]) || 'None'}</td>
-                            <td className="td-status">
-                              <span className={`status-badge ${statusClass}`}>
-                                {statusLabel.toUpperCase()}
+                            <td style={{ color: '#4B5563', padding: '14px', fontSize: '13px', whiteSpace: 'normal', maxWidth: '160px' }}><ReadMore lines={2}>{Array.isArray(r.rules) ? `${r.rules.length} sections` : 'None'}</ReadMore></td>
+                            <td style={{ color: '#4B5563', padding: '14px', fontSize: '13px', whiteSpace: 'normal', maxWidth: '160px' }}>{r.offer || (r.offers && r.offers[0]) || 'None'}</td>
+                            <td style={{ padding: '14px' }}>
+                              <span className={`status-badge ${statusClass}`} style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '3px 10px', borderRadius: '20px', fontSize: '11px', fontWeight: 600, userSelect: 'none', background: statusLabel.toLowerCase() === 'approved' ? '#DCFCE7' : statusLabel.toLowerCase() === 'pending' ? '#FEF3C7' : '#FEE2E2', color: statusLabel.toLowerCase() === 'approved' ? '#58A429' : statusLabel.toLowerCase() === 'pending' ? '#D97706' : '#EF4444' }}>
+                                <span style={{ width: 6, height: 6, borderRadius: '50%', background: 'currentColor', display: 'inline-block' }} /> {statusLabel.toUpperCase()}
                               </span>
                             </td>
-                            <td className="td-actions">
-                              <div className="action-btns">
-                                <button type="button" onClick={() => setViewingRequest(viewingRequest === r._id ? null : r._id)} className="btn-action view" title="View Details">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            <td style={{ padding: '14px' }}>
+                              <div className="action-btns" style={{ display: 'flex', gap: '8px' }}>
+                                <button type="button" onClick={() => setViewingRequest(viewingRequest === r._id ? null : r._id)} className="btn-action view" title="View Details" style={{ color: '#58A429', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
                                 </button>
-                                <button type="button" onClick={() => handleEditRoom(r)} className="btn-action edit" title="Edit Room">
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                                <button type="button" onClick={() => handleEditRoom(r)} className="btn-action edit" title="Edit Room" style={{ color: '#58A429', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}>
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
                                 </button>
-                                <button type="button" onClick={() => handleDelete(r._id)} className="btn-action delete" title="Delete">
-                                  <Trash2 size={14} />
+                                <button type="button" onClick={() => handleDelete(r._id)} className="btn-action delete" title="Delete" style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer', padding: '4px' }}>
+                                  <Trash2 size={16} />
                                 </button>
                               </div>
                             </td>
