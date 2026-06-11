@@ -17,8 +17,9 @@ export default function OffersByDate() {
   const [dateTo, setDateTo] = useState(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
   const [timeFrom, setTimeFrom] = useState('12:00');
   const [timeTo, setTimeTo] = useState('11:00');
-  const [offerPercent, setOfferPercent] = useState('20% Off');
-  const [description, setDescription] = useState('Offer will applicable on first book');
+  const [offerPercent, setOfferPercent] = useState('');
+  const [description, setDescription] = useState('');
+  const [editId, setEditId] = useState(null);
 
   // State lists
   const [approvedRequests, setApprovedRequests] = useState([]);
@@ -48,6 +49,7 @@ export default function OffersByDate() {
     return {
       _id: o._id || o.id,
       id: o.offerId || 'N/A',
+      raw: o, // Keep original object for editing
       dates: (
         <div style={{ whiteSpace: 'nowrap', lineHeight: '1.4' }}>
           <div>{dateFormatted}</div>
@@ -98,8 +100,8 @@ export default function OffersByDate() {
       
       setApprovedRequests(approved);
 
-      // Auto-select first request if available
-      if (approved.length > 0) {
+      // Only auto-select first if NOT editing
+      if (!editId && approved.length > 0) {
         const first = approved[0];
         setSelectedRequestId(first._id || first.id);
         setPropertyId(first.property_id || first.property?._id || '');
@@ -151,6 +153,51 @@ export default function OffersByDate() {
     }
   };
 
+  const handleEditOffer = (offer) => {
+    setEditId(offer._id);
+    const raw = offer.raw;
+    
+    // Find the matching request to populate fields
+    const reqId = raw.property_id?._id || raw.property_id;
+    const req = approvedRequests.find(r => (r.property_id?._id || r.property_id || r.property?._id) === reqId);
+    
+    if (req) {
+      setSelectedRequestId(req._id || req.id);
+    }
+    
+    setPropertyId(reqId);
+    setCategory(raw.category || '');
+    setRoomType(raw.room_type || '');
+    setAmenities(Array.isArray(raw.amenities) ? raw.amenities.join(', ') : (raw.amenities || ''));
+    setFoods(raw.food_type || '');
+    setPrice(raw.price || '');
+    
+    if (raw.dateFrom) setDateFrom(new Date(raw.dateFrom).toISOString().split('T')[0]);
+    if (raw.dateTo) setDateTo(new Date(raw.dateTo).toISOString().split('T')[0]);
+    
+    if (raw.offer_time && raw.offer_time.includes(' to ')) {
+      const [f, t] = raw.offer_time.split(' to ');
+      setTimeFrom(f);
+      setTimeTo(t);
+    }
+    
+    setOfferPercent(raw.offer_percent || raw.offerPercent || '');
+    setDescription(raw.description || '');
+    
+    // Scroll to form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const resetForm = () => {
+    setEditId(null);
+    setOfferPercent('');
+    setDescription('');
+    // Re-select first request
+    if (approvedRequests.length > 0) {
+      handleRequestChange(approvedRequests[0]._id || approvedRequests[0].id);
+    }
+  };
+
   const handleCreateOffer = async (e) => {
     e.preventDefault();
     if (!propertyId) {
@@ -177,12 +224,19 @@ export default function OffersByDate() {
         description: description
       };
 
-      await offerService.create(payload);
+      if (editId) {
+        await offerService.update(editId, payload);
+        alert('Promotional offer updated successfully!');
+      } else {
+        await offerService.create(payload);
+        alert('Promotional offer created successfully and is live instantly!');
+      }
+      
+      resetForm();
       await refreshOffers();
-      alert('Promotional offer created successfully and is live instantly!');
     } catch (err) {
-      console.error('Error creating offer:', err);
-      alert(err.response?.data?.message || 'Failed to create offer.');
+      console.error('Error saving offer:', err);
+      alert(err.response?.data?.message || 'Failed to save offer.');
     } finally {
       setSubmitting(false);
     }
@@ -261,16 +315,28 @@ export default function OffersByDate() {
           {/* Form Header */}
           <div className="master-form-header" style={{ marginBottom: '24px' }}>
             <h3 className="master-form-title" style={{ fontSize: '15px', fontWeight: 700, color: '#111827', fontFamily: '"Outfit", sans-serif' }}>
-              Create Promotional Offer
+              {editId ? 'Edit Promotional Offer' : 'Create Promotional Offer'}
             </h3>
-            <button 
-              type="submit" 
-              className="btn-solid-green" 
-              disabled={submitting}
-              style={{ cursor: 'pointer', padding: '8px 24px', fontSize: '12.5px', background: '#58A429', color: '#ffffff', border: 'none', borderRadius: '8px', fontWeight: 600, opacity: submitting ? 0.7 : 1 }}
-            >
-              {submitting ? 'Adding...' : 'Add Offer'}
-            </button>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              {editId && (
+                <button 
+                  type="button" 
+                  onClick={resetForm}
+                  className="btn-outline" 
+                  style={{ cursor: 'pointer', padding: '8px 24px', fontSize: '12.5px', borderRadius: '8px', fontWeight: 600 }}
+                >
+                  Cancel
+                </button>
+              )}
+              <button 
+                type="submit" 
+                className="btn-solid-green" 
+                disabled={submitting}
+                style={{ cursor: 'pointer', padding: '8px 24px', fontSize: '12.5px', background: '#58A429', color: '#ffffff', border: 'none', borderRadius: '8px', fontWeight: 600, opacity: submitting ? 0.7 : 1 }}
+              >
+                {submitting ? 'Saving...' : (editId ? 'Update Offer' : 'Add Offer')}
+              </button>
+            </div>
           </div>
 
           {/* Form Fields Grid - Row 1 */}
@@ -505,6 +571,7 @@ export default function OffersByDate() {
                     </td>
                     <td style={{ padding: '14px 16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <button onClick={() => handleEditOffer(o)} style={{ color: '#58A429', background: 'none', border: 'none', cursor: 'pointer' }}><Edit2 size={14} /></button>
                         <button onClick={() => handleDeleteOffer(o._id)} style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}><Trash2 size={14} /></button>
                       </div>
                     </td>

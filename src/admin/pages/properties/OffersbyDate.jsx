@@ -230,9 +230,10 @@ export default function OffersbyDate() {
                       <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore>{Array.isArray(o.amenities) ? o.amenities.join(', ') : o.amenities}</ReadMore></td>
                       <td style={{ color: '#111827', fontWeight: 600, padding: '14px' }}>
                         {(() => {
-                          const val = o.offerPercent || o.offer || '20% Off';
+                          const val = o.offerPercent || o.offer || '';
                           const str = String(val).trim();
-                          if (/off/i.test(str)) return str;
+                          if (!str) return 'No Offer';
+                        if (/off/i.test(str)) return str;
                           if (str.endsWith('%')) return `${str} Off`;
                           return `${str}% Off`;
                         })()}

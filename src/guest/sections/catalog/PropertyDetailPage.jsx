@@ -272,9 +272,8 @@ export default function PropertyDetailPage(props) {
             {/* Offer Display Block */}
             {(() => {
               let currentOffer = popularOffers.find(o => 
-                (o.property_id && o.property_id._id === activeDetailProp._id) || 
-                o.property_id === activeDetailProp._id ||
-                o.propertyId === activeDetailProp._id
+                (o.property_id && String(o.property_id._id || o.property_id) === String(activeDetailProp._id)) || 
+                String(o.propertyId) === String(activeDetailProp._id)
               );
               
               if (!currentOffer && propertyRooms && propertyRooms.length > 0) {
@@ -489,11 +488,10 @@ export default function PropertyDetailPage(props) {
               const roomImg = room.room_image_url || room.img || room.image || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80';
               const roomTitle = room.room_type || room.title || room.name || room.type || 'Standard Room';
               const roomPrice = Number(String(room.price_per_room || room.price || room.rate || 1400).replace(/[^\d]/g, ''));
-              const roomOriginalPrice = room.original_price || room.originalPrice || room.original_rate || Math.round(roomPrice * 1.2);
+              const roomOriginalPrice = room.original_price || room.originalPrice || room.original_rate;
               const currentOfferForRoom = popularOffers.find(o => 
-                (o.property_id && o.property_id._id === activeDetailProp._id) || 
-                o.property_id === activeDetailProp._id ||
-                o.propertyId === activeDetailProp._id
+                (o.property_id && String(o.property_id._id || o.property_id) === String(activeDetailProp._id)) || 
+                String(o.propertyId) === String(activeDetailProp._id)
               );
               const roomFoodType = currentOfferForRoom ? (currentOfferForRoom.foods || currentOfferForRoom.food_type) : (activeDetailProp.foodPreference && activeDetailProp.foodPreference !== 'none' ? activeDetailProp.foodPreference : null);
 
@@ -545,13 +543,24 @@ export default function PropertyDetailPage(props) {
                           </div>
                         )}
                       </div>
+                      
+                      {currentOfferForRoom && (currentOfferForRoom.offerPercent || currentOfferForRoom.offer_percent) && (
+                        <div style={{ marginTop: '12px', background: 'rgba(56, 161, 105, 0.08)', border: '1px dashed rgba(56, 161, 105, 0.5)', borderRadius: '6px', padding: '8px 12px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ background: '#38A169', color: '#fff', padding: '2px 6px', borderRadius: '4px', fontWeight: 'bold', fontSize: '12px' }}>
+                            {currentOfferForRoom.offerPercent || currentOfferForRoom.offer_percent}
+                          </div>
+                          <span style={{ fontSize: '12px', color: '#276749', fontWeight: '500' }}>
+                            {currentOfferForRoom.description || 'Special room offer applied.'}
+                          </span>
+                        </div>
+                      )}
                     </div>
 
                     <div className="room-card-pricing-col">
                       <div className="room-pricing-text-group">
                         <span className="room-taxes-label">+{room.tax_amount || room.taxAmount || activeDetailProp.taxAmount || 212} taxes & fees per<br />room per night</span>
-                        {roomOriginalPrice && (
-                          <span className="room-old-strike">₹{Number(roomOriginalPrice).toLocaleString('en-IN')}/night</span>
+                        {(room.original_price || room.originalPrice || room.original_rate) && (
+                          <span className="room-old-strike">₹{Number(room.original_price || room.originalPrice || room.original_rate).toLocaleString('en-IN')}/night</span>
                         )}
                         <span className="room-green-val">₹{Number(roomPrice).toLocaleString('en-IN')}/night</span>
                       </div>
