@@ -311,7 +311,7 @@ export default function OffersByDate() {
       <div style={{ height: '16px' }} />
 
       {/* Breadcrumb */}
-      <div className="props-breadcrumb" style={{ margin: '0 24px 12px' }}>
+      <div className="props-breadcrumb" style={{ margin: '24px 24px 24px' }}>
         Property Management &gt; <span>Offers by Date</span>
       </div>
 

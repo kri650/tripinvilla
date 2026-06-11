@@ -222,7 +222,7 @@ export default function AddOffer() {
   return (
     <div className="fade-in">
       {/* Breadcrumb */}
-      <div className="props-breadcrumb" style={{ margin: '0 39px 12px' }}>
+      <div className="props-breadcrumb" style={{ margin: '24px 39px 24px' }}>
         Property Management &gt; <span onClick={() => navigate('/admin/properties/offers')} style={{ cursor: 'pointer' }}>Offers by Date</span> &gt; <span>{isEditMode ? 'Edit Offer' : 'Add Offer'}</span>
       </div>
 
