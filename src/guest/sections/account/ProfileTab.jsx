@@ -43,7 +43,7 @@ export default function ProfileTab({ user, token, setActiveMenu, openLoginModal,
           </div>
 
           <div className="profile-grid-block">
-            <div className="block-header"><h4>Address</h4><button className="btn-edit-details" onClick={openEditProfileModal}><Edit2 size={12} /><span>Edit</span></button></div>
+            <div className="block-header"><h4>Address</h4></div>
             <div className="block-fields-grid">
               <div className="field-cell full-width"><span className="field-cell-lbl">Home Address</span><span className="field-cell-val">{user?.address || 'N/A'}</span></div>
               <div className="field-cell"><span className="field-cell-lbl">Pin Code</span><span className="field-cell-val">{user?.pincode || 'N/A'}</span></div>
@@ -53,7 +53,7 @@ export default function ProfileTab({ user, token, setActiveMenu, openLoginModal,
           </div>
 
           <div className="profile-grid-block" style={{ borderBottom: 'none', paddingBottom: 0 }}>
-            <div className="block-header"><h4>Other Details</h4><button className="btn-edit-details" onClick={openEditProfileModal}><Edit2 size={12} /><span>Edit</span></button></div>
+            <div className="block-header"><h4>Other Details</h4></div>
             <div className="block-fields-grid">
               <div className="field-cell"><span className="field-cell-lbl">Emergency Contact Person</span><span className="field-cell-val">{user?.emergencyName || 'N/A'}</span></div>
               <div className="field-cell"><span className="field-cell-lbl">Phone Number</span><span className="field-cell-val">{user?.emergencyPhone || 'N/A'}</span></div>
