@@ -5,7 +5,7 @@ import { Bell, Calendar, ChevronDown, Menu } from 'lucide-react';
 import DateRangeDropdown from '../../components/DateRangeDropdown';
 
 const PAGE_TITLES = {
-  '/admin/dashboard':                  'Dashboard',
+  '/admin/dashboard':                  'Dashboard Analytics',
   '/admin/properties/all':             'All Properties',
   '/admin/properties/rooms':           'Property Requests',
   '/admin/properties/cities':          'Cities & Locations',

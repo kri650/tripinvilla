@@ -484,7 +484,7 @@ export default function PropertyRequests() {
         </div>
       ) : (
         <>
-          <div className="property-request-config room-form-section">
+          <div className="property-request-config room-form-section" style={{ marginBottom: '24px' }}>
             <div className="request-header">
               <h3 className="section-title">Configure Property Request</h3>
               <div className="header-actions">

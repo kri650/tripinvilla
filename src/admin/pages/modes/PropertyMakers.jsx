@@ -141,6 +141,8 @@ export default function PropertyMakers() {
   // Upload/images state
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const [replaceTarget, setReplaceTarget] = useState(null);
+  const replaceInputRef = React.useRef(null);
   const [roomsList, setRoomsList] = useState([]);
   const [roomForm, setRoomForm] = useState({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', originalPrice: '', taxAmount: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], offer: '', rules: '' });
   const [customRoomType, setCustomRoomType] = useState('');
@@ -472,6 +474,29 @@ export default function PropertyMakers() {
 
   const handleRemoveNewFile = (idx) => {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== idx));
+  };
+
+  const handleReplaceClick = (type, index) => {
+    setReplaceTarget({ type, index });
+    if (replaceInputRef.current) replaceInputRef.current.click();
+  };
+
+  const handleReplaceFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      setReplaceTarget(null);
+      return;
+    }
+
+    if (replaceTarget?.type === 'existing') {
+      setExistingImages(prev => prev.filter((_, i) => i !== replaceTarget.index));
+      setSelectedFiles(prev => [...prev, file]);
+    } else if (replaceTarget?.type === 'new') {
+      setSelectedFiles(prev => prev.map((f, i) => i === replaceTarget.index ? file : f));
+    }
+
+    if (replaceInputRef.current) replaceInputRef.current.value = '';
+    setReplaceTarget(null);
   };
 
   const handleRemoveExistingImage = (idx) => {
@@ -1484,6 +1509,29 @@ export default function PropertyMakers() {
                       />
                       <button
                         type="button"
+                        onClick={() => handleReplaceClick('existing', idx)}
+                        style={{
+                          position: "absolute",
+                          bottom: "-6px",
+                          right: "-6px",
+                          background: "#3B82F6",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "18px",
+                          height: "18px",
+                          fontSize: "10px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        title="Replace image"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => handleRemoveExistingImage(idx)}
                         style={{
                           position: "absolute",
@@ -1523,6 +1571,29 @@ export default function PropertyMakers() {
                           border: "2px solid #58A429",
                         }}
                       />
+                      <button
+                        type="button"
+                        onClick={() => handleReplaceClick('new', idx)}
+                        style={{
+                          position: "absolute",
+                          bottom: "-6px",
+                          right: "-6px",
+                          background: "#3B82F6",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "18px",
+                          height: "18px",
+                          fontSize: "10px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        title="Replace image"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      </button>
                       <button
                         type="button"
                         onClick={() => handleRemoveNewFile(idx)}
@@ -1592,6 +1663,13 @@ export default function PropertyMakers() {
                     ref={fileInputRef}
                     onChange={handleFileChange}
                     multiple
+                    hidden
+                    accept="image/*"
+                  />
+                  <input
+                    type="file"
+                    ref={replaceInputRef}
+                    onChange={handleReplaceFileChange}
                     hidden
                     accept="image/*"
                   />

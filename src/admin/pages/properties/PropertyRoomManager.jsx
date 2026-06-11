@@ -49,6 +49,8 @@ export default function PropertyRoomManager({ property, onClose }) {
   const [newImageFiles, setNewImageFiles] = useState([]);
   const [roomTypesMaster, setRoomTypesMaster] = useState([]);
   const fileInputRef = React.useRef(null);
+  const replaceInputRef = React.useRef(null);
+  const [replaceTarget, setReplaceTarget] = useState(null);
 
   const token = localStorage.getItem('admin_token');
   const authHeaders = { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) };
@@ -108,6 +110,29 @@ export default function PropertyRoomManager({ property, onClose }) {
   const removeNewFile = (i) => setNewImageFiles(p=>p.filter((_,j)=>j!==i));
   const removeExistingImage = (urlToRemove) => setForm(p=>({...p, room_images: p.room_images.filter(u=>u!==urlToRemove)}));
 
+  const handleReplaceClick = (type, index) => {
+    setReplaceTarget({ type, index });
+    if (replaceInputRef.current) replaceInputRef.current.click();
+  };
+
+  const handleReplaceFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      setReplaceTarget(null);
+      return;
+    }
+
+    if (replaceTarget?.type === 'existing') {
+      setForm(p => ({ ...p, room_images: p.room_images.filter((_, i) => i !== replaceTarget.index) }));
+      setNewImageFiles(prev => [...prev, file]);
+    } else if (replaceTarget?.type === 'new') {
+      setNewImageFiles(prev => prev.map((f, i) => i === replaceTarget.index ? file : f));
+    }
+
+    if (replaceInputRef.current) replaceInputRef.current.value = '';
+    setReplaceTarget(null);
+  };
+
   const cancelEdit = () => {
     setForm(emptyRoom);
     setEditingId(null);
@@ -116,6 +141,8 @@ export default function PropertyRoomManager({ property, onClose }) {
     setNewImageFiles([]);
     setAmenitySearch('');
     if (fileInputRef.current) fileInputRef.current.value = '';
+    if (replaceInputRef.current) replaceInputRef.current.value = '';
+    setReplaceTarget(null);
   };
 
   const filteredAmenities = COMMON_AMENITIES.filter(a => a.toLowerCase().includes(amenitySearch.toLowerCase()) && !form.amenities_types.includes(a));
@@ -274,7 +301,8 @@ export default function PropertyRoomManager({ property, onClose }) {
                       alt=""
                       onError={e => { e.target.src='https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=200&q=60'; }}
                     />
-                    <button className="prm-img-remove" type="button" onClick={() => removeExistingImage(url)}>×</button>
+                    <button className="prm-img-edit" type="button" onClick={() => handleReplaceClick('existing', idx)} title="Replace image"><Edit2 size={11}/></button>
+                    <button className="prm-img-remove" type="button" onClick={() => removeExistingImage(url)} title="Remove image">×</button>
                   </div>
                 ))}
                 {/* Newly selected files (not yet uploaded) */}
@@ -282,7 +310,8 @@ export default function PropertyRoomManager({ property, onClose }) {
                   <div key={`n-${idx}`} className="prm-img-thumb">
                     <img src={URL.createObjectURL(file)} alt=""/>
                     <span className="new-badge">New</span>
-                    <button className="prm-img-remove" type="button" onClick={() => removeNewFile(idx)}>×</button>
+                    <button className="prm-img-edit" type="button" onClick={() => handleReplaceClick('new', idx)} title="Replace image"><Edit2 size={11}/></button>
+                    <button className="prm-img-remove" type="button" onClick={() => removeNewFile(idx)} title="Remove image">×</button>
                   </div>
                 ))}
                 <div className="prm-add-img-btn" onClick={() => fileInputRef.current && fileInputRef.current.click()}>
@@ -290,6 +319,7 @@ export default function PropertyRoomManager({ property, onClose }) {
                 </div>
               </div>
               <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden accept="image/*"/>
+              <input type="file" ref={replaceInputRef} onChange={handleReplaceFileChange} hidden accept="image/*"/>
               {editingId && (
                 <p style={{fontSize:11,color:'#6B7280',margin:'6px 0 0'}}>
                   ✏️ Editing — existing images shown. Add new ones with +

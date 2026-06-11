@@ -1201,6 +1201,29 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <div key={`ex-${idx}`} style={{ position: 'relative', width: '80px', height: '80px' }}>
                       <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px', border: idx === 0 ? '2px solid #58A429' : '1px solid #D1D5DB' }} />
                       {idx === 0 && <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(88,164,41,0.85)', color: '#fff', fontSize: '9px', textAlign: 'center', borderRadius: '0 0 10px 10px', padding: '2px' }}>Cover</span>}
+                      <button
+                        type="button"
+                        onClick={() => handleReplaceClick('existing', idx)}
+                        style={{
+                          position: "absolute",
+                          bottom: "-6px",
+                          right: "-6px",
+                          background: "#3B82F6",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "18px",
+                          height: "18px",
+                          fontSize: "10px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        title="Replace image"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      </button>
                       <button type="button" onClick={() => handleRemoveExistingImage(idx)} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#EF4444', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
                     </div>
                   ))}
@@ -1208,6 +1231,29 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <div key={`new-${idx}`} style={{ position: 'relative', width: '80px', height: '80px' }}>
                       <img src={URL.createObjectURL(file)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px', border: '2px solid #58A429' }} />
                       <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(0,0,0,0.5)', color: '#fff', fontSize: '9px', textAlign: 'center', borderRadius: '0 0 10px 10px', padding: '2px' }}>New</span>
+                      <button
+                        type="button"
+                        onClick={() => handleReplaceClick('new', idx)}
+                        style={{
+                          position: "absolute",
+                          bottom: "-6px",
+                          right: "-6px",
+                          background: "#3B82F6",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "18px",
+                          height: "18px",
+                          fontSize: "10px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        title="Replace image"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      </button>
                       <button type="button" onClick={() => handleRemoveNewFile(idx)} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#EF4444', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
                     </div>
                   ))}
@@ -1217,8 +1263,8 @@ export default function MyProperties({ autoOpenForm = false }) {
                 <div onClick={() => fileInputRef.current.click()} style={{ border: '2px dashed #D1D5DB', borderRadius: '10px', padding: '24px', textAlign: 'center', cursor: 'pointer', background: '#FAFAFA' }}>
                   <Upload size={24} style={{ color: '#9CA3AF', marginBottom: '8px' }} />
                   <p style={{ margin: 0, fontSize: '13px', color: '#6B7280', fontFamily: '"Outfit", sans-serif' }}>Click to upload images (JPG, PNG — max 5MB each)</p>
-                  <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#9CA3AF' }}>{existingImages.length + selectedFiles.length}/30 images added</p>
                   <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden accept="image/*" />
+                  <input type="file" ref={replaceInputRef} onChange={handleReplaceFileChange} hidden accept="image/*" />
                 </div>
               ) : (
                 <p style={{ color: '#EF4444', fontSize: '12px' }}>Maximum 30 images reached.</p>

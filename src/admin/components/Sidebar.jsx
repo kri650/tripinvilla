@@ -22,6 +22,7 @@ import {
   Compass,
   Sparkles,
   BedDouble,
+  LayoutDashboard,
 } from 'lucide-react';
 
 /* ─── Navigation Config (matches Figma exactly) ─────────────── */
@@ -29,7 +30,7 @@ const NAV_SECTIONS = [
   {
     label: 'Dashboard',
     items: [
-      { label: 'Dashboard Analytics', icon: LayoutGrid, to: '/admin/dashboard' },
+      { label: 'Dashboard Analytics', icon: LayoutDashboard, to: '/admin/dashboard' },
     ],
   },
   {
