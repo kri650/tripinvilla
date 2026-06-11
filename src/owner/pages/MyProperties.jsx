@@ -1228,7 +1228,7 @@ export default function MyProperties({ autoOpenForm = false }) {
             {sectionWrap(<>
               {sectionHeader('4. Property Images', 'Upload minimum 4 images, maximum 10. First image becomes cover photo.')}
               {(existingImages.length > 0 || selectedFiles.length > 0) && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '14px' }}>
+                <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '10px', marginBottom: '14px' }}>
                   {existingImages.map((url, idx) => (
                     <div key={`ex-${idx}`} style={{ position: 'relative', width: '80px', height: '80px' }}>
                       <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px', border: idx === 0 ? '2px solid #58A429' : '1px solid #D1D5DB' }} />
@@ -1411,7 +1411,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     {currentType === 'resort' && (
                       <div style={{ gridColumn: 'span 3' }}>
                         <label style={labelStyle}>Activities Offered</label>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '8px' }}>
                           {['Swimming', 'Trekking', 'Cycling', 'Yoga', 'Bonfire', 'Wildlife Safari'].map(act => (
                             <button key={act} type="button" onClick={() => {
                               const curr = formData.activities || [];
@@ -1444,7 +1444,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><input type="checkbox" name="washingMachine" checked={formData.washingMachine} onChange={e => setFormData(p => ({...p, washingMachine: e.target.checked}))} style={{ accentColor: '#58A429' }} /> Washing Machine</label>
                     <div style={{ gridColumn: 'span 3' }}>
                       <label style={labelStyle}>Society Amenities</label>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '8px' }}>
                         {['Gym', 'Pool', 'Security', 'Clubhouse', 'Power Backup'].map(act => (
                           <button key={act} type="button" onClick={() => {
                             const curr = formData.societyAmenities || [];
@@ -1583,7 +1583,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                   <input type="checkbox" checked={highlights.freeCancellation}
                     onChange={e => setHighlights(prev => ({ ...prev, freeCancellation: e.target.checked }))}
                     style={{ width: '18px', height: '18px', accentColor: '#58A429', cursor: 'pointer' }} />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px' }}>
                     <span style={{ fontSize: '13px', fontWeight: 600, color: '#111827', fontFamily: '"Outfit", sans-serif' }}>❌ Free Cancellation till</span>
                     <input type="number" value={highlights.freeCancellationHours} disabled={!highlights.freeCancellation}
                       onChange={e => setHighlights(prev => ({ ...prev, freeCancellationHours: e.target.value }))}
@@ -1600,7 +1600,7 @@ export default function MyProperties({ autoOpenForm = false }) {
               {amenitiesLoading ? (
                 <p style={{ color: '#9CA3AF', fontSize: '13px' }}>Loading amenities...</p>
               ) : (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '8px' }}>
                   {availableAmenitiesList.map(am => {
                     const isSelected = selectedAmenitiesList.includes(am);
                     return (
@@ -1627,7 +1627,7 @@ export default function MyProperties({ autoOpenForm = false }) {
               {experiencesLoading ? (
                 <p style={{ color: '#9CA3AF', fontSize: '13px' }}>Loading experiences...</p>
               ) : (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '10px' }}>
                   {availableExperiences.map(exp => {
                     const id = exp._id || exp.experienceName || exp.name;
                     const isSelected = selectedExperiences.includes(id);
@@ -1692,7 +1692,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                   </button>
                 </div>
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '8px' }}>
                 {landmarksList.map((lm, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#F3F4F6', padding: '6px 10px 6px 6px', borderRadius: '16px', fontSize: '13px', border: '1px solid #E5E7EB' }}>
                     {lm.landmark_image_url ? <img src={lm.landmark_image_url} alt="" style={{ width: '32px', height: '32px', borderRadius: '8px', objectFit: 'cover' }} /> : <span>📍</span>}
@@ -1743,9 +1743,9 @@ export default function MyProperties({ autoOpenForm = false }) {
       {/* ── Property List Table ───────────────────────────────── */}
       <div style={{ margin: '0 24px 24px' }}>
         <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', width: '100%' }}>
-          <div className="table-header" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
+          <div className="table-header" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
             <span className="table-title" style={{ whiteSpace: 'nowrap' }}>My Property List</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', paddingBottom: '4px', maxWidth: '100%' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', paddingBottom: '4px', maxWidth: '100%' }}>
               <DateRangeDropdown 
                 startDate={filterDateFrom}
                 endDate={filterDateTo}

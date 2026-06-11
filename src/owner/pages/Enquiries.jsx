@@ -105,25 +105,21 @@ export default function Enquiries() {
       <div style={{ margin: '0 24px 24px', display: 'flex', flexDirection: 'column', gap: 16 }}>
 
         {/* Card 1: Toolbar — single horizontal row */}
-        <div style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: 12,
-          flexWrap: 'wrap',
+        <div className="props-table-toolbar" style={{
           background: '#fff',
           borderRadius: 12,
           padding: '12px 16px',
           border: '1px solid #E5E7EB',
-          boxShadow: '0 1px 4px rgba(0,0,0,0.04)'
+          boxShadow: '0 1px 4px rgba(0,0,0,0.04)',
+          marginBottom: 0
         }}>
           {/* Title */}
-          <div style={{ fontSize: '15px', fontWeight: 700, color: '#111827', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap', flexShrink: 0 }}>
+          <div className="props-table-title" style={{ fontSize: '15px' }}>
             Enquiries
           </div>
 
           {/* Filters Row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', flex: 1, justifyContent: 'flex-end' }}>
+          <div className="props-table-actions" style={{ flex: 1, justifyContent: 'flex-end' }}>
 
             <DateRangeDropdown
               startDate={dateFrom}
