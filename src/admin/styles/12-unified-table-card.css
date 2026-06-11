@@ -101,6 +101,7 @@
   font-size: 13px;
   color: #4B5563;
   border-bottom: 1px solid #F3F4F6;
+  white-space: nowrap;
 }
 
 .admin-table tr:last-child td {
