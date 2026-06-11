@@ -130,10 +130,23 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
     : { position: 'relative', width: '100%', maxWidth: '860px', maxHeight: '90vh', background: '#fff', borderRadius: '16px', overflow: 'hidden', display: 'flex', flexDirection: 'column', boxShadow: '0 25px 50px -12px rgba(0,0,0,0.3)' };
 
   const content = (
-    <div id={inline ? "property-detail-div" : ""} style={containerStyle}>
+    <div id={inline ? "property-detail-div" : ""} className={inline ? "" : "prop-modal-container"} style={inline ? containerStyle : { ...containerStyle, margin: 'auto' }}>
+      <style>{`
+        .prop-modal-header { padding: 20px 24px; }
+        .prop-modal-body { padding: 24px; gap: 24px; }
+        .prop-modal-img { width: 240px; height: 160px; border-radius: 12px; }
+        .prop-modal-img-wrap { gap: 10px; }
+        @media (max-width: 640px) {
+          .prop-modal-container { margin: 12px !important; width: calc(100% - 24px) !important; max-height: calc(100vh - 24px) !important; }
+          .prop-modal-header { padding: 16px; }
+          .prop-modal-body { padding: 16px; gap: 16px; }
+          .prop-modal-img { width: 80vw; max-width: 280px; height: 180px; scroll-snap-align: center; }
+          .prop-modal-img-wrap { gap: 12px; scroll-snap-type: x mandatory; padding-bottom: 12px; scroll-padding-left: 16px; }
+        }
+      `}</style>
 
       {/* ── Header ── */}
-      <div style={{ padding: '20px 24px', borderBottom: '1px solid #E5E7EB', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', background: 'linear-gradient(135deg, #F9FAFB 0%, #F0FDF4 100%)', flexShrink: 0 }}>
+      <div className="prop-modal-header" style={{ borderBottom: '1px solid #E5E7EB', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', background: 'linear-gradient(135deg, #F9FAFB 0%, #F0FDF4 100%)', flexShrink: 0 }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
             {propertyNo && (
@@ -158,18 +171,19 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
       </div>
 
       {/* ── Scrollable body ── */}
-      <div style={{ overflowY: 'auto', padding: '24px', flex: 1, display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      <div className="prop-modal-body" style={{ overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column' }}>
 
         {/* Images gallery */}
         {images.length > 0 && (
-          <div style={{ display: 'flex', gap: '10px', overflowX: 'auto', paddingBottom: '8px', flexShrink: 0, minHeight: '168px', scrollbarWidth: 'thin' }}>
+          <div className="prop-modal-img-wrap" style={{ display: 'flex', overflowX: 'auto', paddingBottom: '8px', flexShrink: 0, minHeight: '168px', scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}>
             {images.map((img, idx) => (
               <img
                 key={idx}
+                className="prop-modal-img"
                 src={img.startsWith('http') ? img : `${window.location.origin}${img}`}
                 alt={`img-${idx}`}
                 onError={e => { e.target.style.display = 'none'; }}
-                style={{ height: '160px', width: '240px', objectFit: 'cover', borderRadius: '12px', flexShrink: 0, border: '2px solid #E5E7EB', transition: 'transform 0.2s', cursor: 'pointer' }}
+                style={{ objectFit: 'cover', flexShrink: 0, border: '1px solid #E5E7EB', transition: 'transform 0.2s', cursor: 'pointer' }}
                 onMouseOver={e => { e.currentTarget.style.transform = 'scale(1.02)'; e.currentTarget.style.borderColor = '#58A429'; }}
                 onMouseOut={e => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.borderColor = '#E5E7EB'; }}
               />
@@ -469,7 +483,7 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
   }
 
   return (
-    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '16px' }}>
+    <div style={{ position: 'fixed', inset: 0, zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(4px)' }} onClick={onClose} />
       {content}
     </div>
