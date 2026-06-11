@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
+import SearchableDropdown from '../../../components/SearchableDropdown';
 
 export default function AddOffer() {
   const navigate = useNavigate();
@@ -15,16 +16,16 @@ export default function AddOffer() {
 
   const [formData, setFormData] = useState({
     propertyName: '',
-    category: 'Homestay',
-    room: 'Deluxe Room',
-    foods: 'Pure Veg',
-    amenities: 'Barbeque, WiFi',
-    price: '₹2,500 per night',
+    category: '',
+    room: '',
+    foods: '',
+    amenities: '',
+    price: '',
     dateFrom: new Date().toISOString().split('T')[0],
     dateTo: new Date(Date.now() + 86400000).toISOString().split('T')[0],
-    timeFrom: '12:00',
-    timeTo: '11:00',
-    offerPercent: '20% Off',
+    timeFrom: '',
+    timeTo: '',
+    offerPercent: '',
     description: '',
     status: 'Active'
   });
@@ -62,7 +63,15 @@ export default function AddOffer() {
               ...prev,
               category: offerData.category || 'Homestay',
               room: offerData.room_type || offerData.room || 'Deluxe Room',
-              foods: offerData.food_type || offerData.foods || 'Pure Veg',
+              foods: (() => {
+                const fp = offerData.food_type || offerData.foods;
+                if (!fp || fp === 'none' || fp === 'None') return 'None';
+                const fpLower = fp.toLowerCase();
+                if (fpLower === 'veg' || fp === 'Pure Veg') return 'Pure Veg';
+                if (fpLower === 'non-veg' || fp === 'Non-Veg') return 'Non-Veg';
+                if (fpLower === 'both' || fp === 'Both') return 'Both';
+                return fp;
+              })(),
               amenities: offerData.amenities ? (Array.isArray(offerData.amenities) ? offerData.amenities.join(', ') : offerData.amenities) : '',
               price: offerData.price ? `₹${offerData.price} per night` : '',
               dateFrom: offerData.dateFrom ? new Date(offerData.dateFrom).toISOString().split('T')[0] : (offerData.offer_date ? new Date(offerData.offer_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
@@ -97,7 +106,7 @@ export default function AddOffer() {
                   ...prev,
                   amenities: prev.amenities || amenitiesArr.join(', '),
                   price: prev.price || (priceVal ? `₹${priceVal} per night` : ''),
-                  foods: prev.foods && prev.foods !== 'Pure Veg' ? prev.foods : formattedFood
+                  foods: prev.foods && prev.foods !== 'None' ? prev.foods : formattedFood
                 }));
               }
             }
@@ -139,10 +148,11 @@ export default function AddOffer() {
       
       const fp = prop.foodPreference || 'none';
       let formattedFood = 'None';
-      if (fp === 'veg') formattedFood = 'Pure Veg';
-      if (fp === 'non-veg') formattedFood = 'Non-Veg';
-      if (fp === 'both') formattedFood = 'Both';
-      if (fp === 'none') formattedFood = 'None';
+      const fpLower = fp.toLowerCase();
+      if (fpLower === 'veg' || fp === 'Pure Veg') formattedFood = 'Pure Veg';
+      else if (fpLower === 'non-veg' || fp === 'Non-Veg') formattedFood = 'Non-Veg';
+      else if (fpLower === 'both' || fp === 'Both') formattedFood = 'Both';
+      else formattedFood = 'None';
       
       setFormData(prev => ({
         ...prev,
@@ -246,19 +256,14 @@ export default function AddOffer() {
             <div className="form-group">
               <label className="form-label">Property Name*</label>
               <div style={{ position: 'relative' }}>
-                <select 
-                  className="form-select" 
-                  style={{ appearance: 'none' }}
-                  required
+                <SearchableDropdown
+                  options={properties.map(p => ({ value: p._id, label: `${p.name || p.propertyName} (${p.location || p.city})` }))}
                   value={selectedPropertyId}
-                  onChange={e => handlePropertyChange(e.target.value)}
-                >
-                  <option value="">Select a property...</option>
-                  {properties.map(p => (
-                    <option key={p._id} value={p._id}>{p.name || p.propertyName} ({p.location || p.city})</option>
-                  ))}
-                </select>
-                <ChevronDown size={16} style={{ position: 'absolute', right: 16, top: 14, color: '#6B7280', pointerEvents: 'none' }} />
+                  onChange={handlePropertyChange}
+                  placeholder="Select a property..."
+                  searchPlaceholder="Search properties..."
+                  disabled={isEditMode}
+                />
               </div>
             </div>
             <div className="form-group">

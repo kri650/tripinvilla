@@ -226,7 +226,17 @@ export default function OffersbyDate() {
                       <td style={{ color: '#111827', fontWeight: 500, padding: '14px' }}>
                         {o.price || o.price_per_room || (o.property_id && (o.property_id.price || o.property_id.bestRoomRate)) ? `₹${o.price || o.price_per_room || (o.property_id && (o.property_id.price || o.property_id.bestRoomRate))}` : 'N/A'}
                       </td>
-                      <td style={{ color: '#6B7280', padding: '14px' }}>{o.foods || o.food_type || o.property_id?.foodPreference || 'N/A'}</td>
+                      <td style={{ color: '#6B7280', padding: '14px' }}>
+                        {(() => {
+                          const fp = o.foods || o.food_type || o.property_id?.foodPreference;
+                          if (!fp || fp === 'none' || fp === 'None') return 'None';
+                          const fpLower = fp.toLowerCase();
+                          if (fpLower === 'veg' || fp === 'Pure Veg') return 'Pure Veg';
+                          if (fpLower === 'non-veg' || fp === 'Non-Veg') return 'Non-Veg';
+                          if (fpLower === 'both' || fp === 'Both') return 'Both';
+                          return fp;
+                        })()}
+                      </td>
                       <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore>{Array.isArray(o.amenities) ? o.amenities.join(', ') : o.amenities}</ReadMore></td>
                       <td style={{ color: '#111827', fontWeight: 600, padding: '14px' }}>
                         {(() => {

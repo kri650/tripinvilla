@@ -324,11 +324,7 @@ export default function PropertyRoomManager({ property, onClose }) {
               </div>
               <input type="file" ref={fileInputRef} onChange={handleFileChange} hidden accept="image/*"/>
               <input type="file" ref={replaceInputRef} onChange={handleReplaceFileChange} hidden accept="image/*"/>
-              {editingId && (
-                <p style={{fontSize:11,color:'#6B7280',margin:'6px 0 0'}}>
-                  ✏️ Editing — existing images shown. Add new ones with +
-                </p>
-              )}
+
             </div>
 
             {/* Amenities */}

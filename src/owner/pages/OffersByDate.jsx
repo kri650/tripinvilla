@@ -3,6 +3,7 @@ import { Search, Filter, Calendar, ChevronDown, MoreVertical, Edit2, Trash2, Clo
 import { offerService, propertyRequestService } from '../services/api';
 import ReadMore from '../../admin/components/ReadMore';
 import DateRangeDropdown from '../../components/DateRangeDropdown';
+import SearchableDropdown from '../../components/SearchableDropdown';
 
 export default function OffersByDate() {
   // Form State
@@ -10,13 +11,13 @@ export default function OffersByDate() {
   const [propertyId, setPropertyId] = useState('');
   const [category, setCategory] = useState('');
   const [roomType, setRoomType] = useState('');
-  const [foods, setFoods] = useState('Pure Veg');
+  const [foods, setFoods] = useState('');
   const [amenities, setAmenities] = useState('');
   const [price, setPrice] = useState('');
   const [dateFrom, setDateFrom] = useState(new Date().toISOString().split('T')[0]);
   const [dateTo, setDateTo] = useState(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
-  const [timeFrom, setTimeFrom] = useState('12:00');
-  const [timeTo, setTimeTo] = useState('11:00');
+  const [timeFrom, setTimeFrom] = useState('');
+  const [timeTo, setTimeTo] = useState('');
   const [offerPercent, setOfferPercent] = useState('');
   const [description, setDescription] = useState('');
   const [editId, setEditId] = useState(null);
@@ -61,7 +62,15 @@ export default function OffersByDate() {
       category: o.category || o.property_id?.type || o.property_id?.category || 'N/A',
       room: o.room_type || o.room || o.property_id?.roomType || 'N/A',
       price: o.price || o.price_per_room || o.property_id?.price || o.property_id?.bestRoomRate || '',
-      foods: o.food_type || o.foods || o.property_id?.foodPreference || 'N/A',
+      foods: (() => {
+        const fp = o.food_type || o.foods || o.property_id?.foodPreference;
+        if (!fp || fp === 'none' || fp === 'None') return 'None';
+        const fpLower = fp.toLowerCase();
+        if (fpLower === 'veg' || fp === 'Pure Veg') return 'Pure Veg';
+        if (fpLower === 'non-veg' || fp === 'Non-Veg') return 'Non-Veg';
+        if (fpLower === 'both' || fp === 'Both') return 'Both';
+        return fp;
+      })(),
       amenities: (Array.isArray(o.amenities) && o.amenities.length > 0) ? o.amenities.join(', ') : (o.amenities?.length ? o.amenities : ((Array.isArray(o.property_id?.amenities) && o.property_id.amenities.length > 0) ? o.property_id.amenities.join(', ') : (o.property_id?.amenities || 'N/A'))),
       offer: (() => {
         const val = o.offer_percent || o.offerPercent || o.offer || '';
@@ -100,17 +109,7 @@ export default function OffersByDate() {
       
       setApprovedRequests(approved);
 
-      // Only auto-select first if NOT editing
-      if (!editId && approved.length > 0) {
-        const first = approved[0];
-        setSelectedRequestId(first._id || first.id);
-        setPropertyId(first.property_id || first.property?._id || '');
-        setCategory(first.category || first.property?.type || 'Homestay');
-        setRoomType(first.room_type || 'Deluxe Room');
-        const ams = first.amenities_types || first.property?.amenities || first.property?.amenityTypes || [];
-        setAmenities(Array.isArray(ams) ? ams.join(', ') : ams);
-        setPrice(first.price_per_room || first.property?.price || first.property?.bestRoomRate || 0);
-      }
+      // Removed auto-select of the first request on mount
 
       await refreshOffers();
     } catch (err) {
@@ -138,10 +137,11 @@ export default function OffersByDate() {
       
       const fp = req.foodPreference || req.property?.foodPreference || 'none';
       let formattedFood = 'None';
-      if (fp === 'veg') formattedFood = 'Pure Veg';
-      if (fp === 'non-veg') formattedFood = 'Non-Veg';
-      if (fp === 'both') formattedFood = 'Both';
-      if (fp === 'none') formattedFood = 'None';
+      const fpLower = fp.toLowerCase();
+      if (fpLower === 'veg' || fp === 'Pure Veg') formattedFood = 'Pure Veg';
+      else if (fpLower === 'non-veg' || fp === 'Non-Veg') formattedFood = 'Non-Veg';
+      else if (fpLower === 'both' || fp === 'Both') formattedFood = 'Both';
+      else formattedFood = 'None';
       setFoods(formattedFood);
     } else {
       setPropertyId('');
@@ -190,12 +190,19 @@ export default function OffersByDate() {
 
   const resetForm = () => {
     setEditId(null);
+    setSelectedRequestId('');
+    setPropertyId('');
+    setCategory('');
+    setRoomType('');
+    setAmenities('');
+    setFoods('');
+    setPrice('');
+    setDateFrom(new Date().toISOString().split('T')[0]);
+    setDateTo(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
+    setTimeFrom('');
+    setTimeTo('');
     setOfferPercent('');
     setDescription('');
-    // Re-select first request
-    if (approvedRequests.length > 0) {
-      handleRequestChange(approvedRequests[0]._id || approvedRequests[0].id);
-    }
   };
 
   const handleCreateOffer = async (e) => {
@@ -343,19 +350,15 @@ export default function OffersByDate() {
           <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">Property Name (Only Approved Properties)*</label>
-              <select 
-                className="form-select" 
-                value={selectedRequestId} 
-                onChange={(e) => handleRequestChange(e.target.value)}
-                required
-              >
-                <option value="">Select approved configuration...</option>
-                {approvedRequests.map(r => (
-                  <option key={r._id || r.id} value={r._id || r.id}>
-                    {r.propertyName || r.property?.name}
-                  </option>
-                ))}
-              </select>
+              <div style={{ position: 'relative' }}>
+                <SearchableDropdown
+                  options={approvedRequests.map(r => ({ value: r._id || r.id, label: r.propertyName || r.property?.name }))}
+                  value={selectedRequestId}
+                  onChange={handleRequestChange}
+                  placeholder="Select approved configuration..."
+                  searchPlaceholder="Search properties..."
+                />
+              </div>
             </div>
 
             <div className="form-group">
