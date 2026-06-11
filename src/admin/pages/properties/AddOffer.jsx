@@ -41,6 +41,10 @@ export default function AddOffer() {
         } else if (dataProps && Array.isArray(dataProps.properties)) {
           propsArray = dataProps.properties;
         }
+        
+        // Sort alphabetically by name
+        propsArray.sort((a, b) => (a.name || '').localeCompare(b.name || ''));
+        
         setProperties(propsArray);
 
         if (isEditMode) {
@@ -133,8 +137,8 @@ export default function AddOffer() {
       const amenitiesArr = Array.isArray(prop.amenities) ? prop.amenities : (Array.isArray(prop.amenityTypes) ? prop.amenityTypes : []);
       const priceVal = prop.price || prop.propertyPrice || prop.bestRoomRate || '';
       
-      const fp = prop.foodPreference || 'both';
-      let formattedFood = 'Both';
+      const fp = prop.foodPreference || 'none';
+      let formattedFood = 'None';
       if (fp === 'veg') formattedFood = 'Pure Veg';
       if (fp === 'non-veg') formattedFood = 'Non-Veg';
       if (fp === 'both') formattedFood = 'Both';

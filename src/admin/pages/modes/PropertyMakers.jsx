@@ -207,7 +207,10 @@ export default function PropertyMakers() {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_BASE}/master/properties`);
       const data = await res.json();
-      if (Array.isArray(data)) setProperties(data);
+      if (Array.isArray(data)) {
+        data.sort((a, b) => (b.createdAt && a.createdAt) ? new Date(b.createdAt) - new Date(a.createdAt) : (b._id || '').toString().localeCompare((a._id || '').toString()));
+        setProperties(data);
+      }
     } catch (err) {
       console.error("Error fetching property masters:", err);
     } finally {

@@ -93,7 +93,7 @@ export default function Sidebar({ className = '' }) {
       </div>
 
       {/* ── Divider under Logo ── */}
-      <div className="sidebar-divider" />
+      <hr className="sidebar-divider" style={{ border: 'none', borderBottom: '1px solid #DDDDDD', margin: '8px 22px', width: '253px' }} />
 
       {/* ── Navigation List ─────────────────────────────────── */}
       <nav className="sidebar-nav">

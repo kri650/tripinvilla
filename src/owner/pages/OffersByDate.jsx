@@ -87,6 +87,14 @@ export default function OffersByDate() {
       setLoading(true);
       const reqsRes = await propertyRequestService.getMine();
       const approved = (reqsRes.data || []).filter(r => r.admin_status === 'approved');
+      
+      // Sort alphabetically by property name
+      approved.sort((a, b) => {
+        const nameA = a.propertyName || a.property?.name || '';
+        const nameB = b.propertyName || b.property?.name || '';
+        return nameA.localeCompare(nameB);
+      });
+      
       setApprovedRequests(approved);
 
       // Auto-select first request if available
@@ -125,8 +133,8 @@ export default function OffersByDate() {
       setAmenities(Array.isArray(ams) ? ams.join(', ') : ams);
       setPrice(req.price_per_room || req.property?.price || req.property?.bestRoomRate || 0);
       
-      const fp = req.foodPreference || req.property?.foodPreference || 'both';
-      let formattedFood = 'Both';
+      const fp = req.foodPreference || req.property?.foodPreference || 'none';
+      let formattedFood = 'None';
       if (fp === 'veg') formattedFood = 'Pure Veg';
       if (fp === 'non-veg') formattedFood = 'Non-Veg';
       if (fp === 'both') formattedFood = 'Both';

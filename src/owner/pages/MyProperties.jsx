@@ -111,6 +111,7 @@ export default function MyProperties({ autoOpenForm = false }) {
     restaurantOnSite: false, spaWellness: false, conferenceRoom: false, roomService: false, receptionAllDay: false, liftElevator: false, starRating: '', totalRooms: '', totalFloors: '', activities: [],
     floorNumber: '', totalFloorsBuilding: '', furnishedStatus: '', washingMachine: false, societyAmenities: [],
     bonfireArea: false, viewType: '', outdoorSeating: false, nearestHikingTrail: '', distanceFromCity: '',
+    foodPreference: 'both',
   });
 
   const currentType = (formData.type || '').toLowerCase();
@@ -126,6 +127,8 @@ export default function MyProperties({ autoOpenForm = false }) {
   // ─── Images ───────────────────────────────────────────────
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const replaceInputRef = useRef(null);
+  const [replaceTarget, setReplaceTarget] = useState(null);
 
   // ─── Rooms (for Hotel / Resort) ──────────────────────
   const [roomsList, setRoomsList] = useState([]);
@@ -481,6 +484,33 @@ export default function MyProperties({ autoOpenForm = false }) {
     const combined = [...selectedFiles, ...newFiles].slice(0, totalAllowed);
     setSelectedFiles(combined);
     if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleReplaceClick = (type, index) => {
+    setReplaceTarget({ type, index });
+    if (replaceInputRef.current) replaceInputRef.current.click();
+  };
+
+  const handleReplaceFileChange = (e) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size exceeds 5MB limit");
+      return;
+    }
+    
+    if (replaceTarget) {
+      if (replaceTarget.type === 'new') {
+        setSelectedFiles(prev => prev.map((f, i) => i === replaceTarget.index ? file : f));
+      } else if (replaceTarget.type === 'existing') {
+        const removedImage = existingImages[replaceTarget.index];
+        setFormData(prev => ({ ...prev, removedImages: [...(prev.removedImages || []), removedImage] }));
+        setExistingImages(prev => prev.filter((_, i) => i !== replaceTarget.index));
+        setSelectedFiles(prev => [...prev, file]);
+      }
+    }
+    setReplaceTarget(null);
+    if (replaceInputRef.current) replaceInputRef.current.value = '';
   };
 
   const handleRemoveNewFile = (idx) => setSelectedFiles(prev => prev.filter((_, i) => i !== idx));
@@ -1289,7 +1319,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                   </div>
                 ))}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
                 <div>
                   <label style={labelStyle}>Area Size *</label>
                   <input style={inputStyle} type="text" name="area" value={formData.area} onChange={handleChange} placeholder="e.g. 31 sq. ft." required />
@@ -1304,6 +1334,15 @@ export default function MyProperties({ autoOpenForm = false }) {
                   <label style={labelStyle}>Check-Out Time *</label>
                   <select style={selectStyle} name="checkOut" value={formData.checkOut} onChange={handleChange} required>
                     {TIME_SLOTS.map(t => <option key={`out-${t}`} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={labelStyle}>Food Preference</label>
+                  <select style={selectStyle} name="foodPreference" value={formData.foodPreference || 'none'} onChange={handleChange}>
+                    <option value="none">None</option>
+                    <option value="veg">Pure Veg</option>
+                    <option value="non-veg">Non-Veg</option>
+                    <option value="both">Both</option>
                   </select>
                 </div>
               </div>

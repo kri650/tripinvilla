@@ -31,7 +31,7 @@ const emptyRoom = () => ({
   price_per_room: '',
   tax_amount: '',
   rulesSections: [{ title: '', text: '' }],
-  offersList: [],
+  offer: '',
   selectedAmenities: [],
   manualRoomType: false,
   roomImagePreview: ''
@@ -88,12 +88,11 @@ function RoomForm({
   };
 
   const rulesSections = data.rulesSections || [];
-  const offersList = data.offersList || [];
   const selectedAmenities = data.selectedAmenities || [];
   const manualRoomType = data.manualRoomType || false;
 
   return (
-    <div className="room-form-section" style={{ border: isEditMode ? '1px solid #2563EB' : 'none', boxSizing: 'border-box', overflowX: 'hidden' }}>
+    <div className="room-form-section" style={{ border: isEditMode ? '1px solid #2563EB' : '1px solid #E5E7EB', boxSizing: 'border-box', overflowX: 'hidden' }}>
       <div className="room-form-header">
         <h3 className="room-form-title">
           {isEditMode ? `Room ${idx + 1}: ${data.room_type || 'New Room'}` : 'Configure Room Pricing & Rules'}
@@ -160,28 +159,14 @@ function RoomForm({
         </div>
       </div>
 
-      <div className="offers-input-section" style={{ boxSizing: 'border-box' }}>
-        <label className="form-label">Multiple Offers/Discounts</label>
+      <div className="form-group" style={{ boxSizing: 'border-box', marginBottom: '16px' }}>
+        <label className="form-label">Offer / Discount</label>
         <input type="text" className="form-input" 
-          placeholder="e.g. 20% Off flat, Breakfast Included" 
-          onKeyDown={e => { 
-            if (e.key === 'Enter') { 
-              e.preventDefault(); 
-              if (e.target.value.trim()) { 
-                onUpdate({ ...data, offersList: [...offersList, e.target.value.trim()] });
-                e.target.value = '';
-              } 
-            } 
-          }} />
-        <div className="offers-pill-cloud">
-          {offersList.map((off, oIdx) => (
-            <div key={oIdx} className="offer-tag">
-              <span>{off}</span>
-              <button type="button" onClick={() => onUpdate({ ...data, offersList: offersList.filter((_, i) => i !== oIdx) })} className="btn-remove-tag">&times;</button>
-            </div>
-          ))}
-          {offersList.length === 0 && <span className="empty-msg">No offers added.</span>}
-        </div>
+          name="offer"
+          value={data.offer || ''}
+          onChange={handleInputChange}
+          placeholder="e.g. 20% Off flat" 
+        />
       </div>
 
       <div className="amenities-selection-section" style={{ boxSizing: 'border-box' }}>
@@ -236,7 +221,7 @@ export default function PropertyRequests() {
   const [editingRequestId, setEditingRequestId] = useState(null);
   const [viewingRequest, setViewingRequest] = useState(null);
   const [rulesSections, setRulesSections] = useState([{ title: '', text: '' }]);
-  const [offersList, setOffersList] = useState([]);
+
   const [manualRoomType, setManualRoomType] = useState(false);
   const fallbackRoomTypes = ['Standard Room', 'Deluxe Room', 'Super Deluxe Room', 'Executive Suite', 'Presidential Suite', 'Family Suite', 'Dormitory', 'Tent', 'Cottage', 'Villa'];
   const [selectedRoomImage, setSelectedRoomImage] = useState(null);
@@ -265,9 +250,11 @@ export default function PropertyRequests() {
   const fetchData = async () => {
     try {
       const propsRes = await propertyService.getMine();
-      setProperties(propsRes.data);
-      if (propsRes.data.length > 0) {
-        const first = propsRes.data[0];
+      const pData = propsRes.data || [];
+      pData.sort((a, b) => (b.createdAt && a.createdAt) ? new Date(b.createdAt) - new Date(a.createdAt) : (b._id || '').toString().localeCompare((a._id || '').toString()));
+      setProperties(pData);
+      if (pData.length > 0) {
+        const first = pData[0];
         if (!propertyId) {
           setPropertyId(first._id);
           fetchAmenities(first.type);
@@ -276,7 +263,9 @@ export default function PropertyRequests() {
         fetchAmenities('All');
       }
       const reqsRes = await propertyRequestService.getMine();
-      setRequests(reqsRes.data);
+      const rData = reqsRes.data || [];
+      rData.sort((a, b) => (b.createdAt && a.createdAt) ? new Date(b.createdAt) - new Date(a.createdAt) : (b._id || '').toString().localeCompare((a._id || '').toString()));
+      setRequests(rData);
     } catch {
       fetchAmenities('All');
     }
@@ -337,7 +326,7 @@ export default function PropertyRequests() {
         tax_amount: formData.tax_amount ? Number(formData.tax_amount) : undefined,
         room_image_url: roomImageUrl,
         amenities_types: [...selectedAmenities],
-        offers: [...offersList],
+        offer: formData.offer || '',
         rules: formattedRules,
         _preview_img: roomImageUrl || roomImagePreview,
       };
@@ -404,12 +393,12 @@ export default function PropertyRequests() {
           points: (typeof sec.text === 'string' ? sec.text : '').split('\n').filter(p => p.trim()).map(p => p.replace(/^[•\-\*]\s*/, '').trim())
         })) : room.rules;
 
-        const { _preview_img, _selectedFile, rulesSections, offersList, selectedAmenities, manualRoomType, roomImagePreview, ...rest } = room;
+        const { _preview_img, _selectedFile, rulesSections, selectedAmenities, manualRoomType, roomImagePreview, ...rest } = room;
         return {
           ...rest,
           room_image_url: roomImageUrl,
           rules,
-          offers: offersList || room.offers || [],
+          offer: room.offer || (room.offers && room.offers[0]) || '',
           amenities_types: selectedAmenities || room.amenities_types || []
         };
       }));
@@ -456,7 +445,7 @@ export default function PropertyRequests() {
         title: rule.title || '',
         text: Array.isArray(rule.points) ? rule.points.join('\n') : (rule.points || '')
       })) : [{ title: '', text: '' }],
-      offersList: room.offers || [],
+      offer: room.offer || (room.offers && room.offers[0]) || '',
       selectedAmenities: room.amenities_types || [],
       manualRoomType: !fallbackRoomTypes.includes(room.room_type) && !roomTypes.some(rt => rt.name === room.room_type)
     })));
@@ -484,7 +473,7 @@ export default function PropertyRequests() {
         </div>
       ) : (
         <>
-          <div className="property-request-config room-form-section" style={{ marginBottom: '24px' }}>
+          <div className="property-request-config room-form-section" style={{ marginBottom: '40px' }}>
             <div className="request-header">
               <h3 className="section-title">Configure Property Request</h3>
               <div className="header-actions">
@@ -516,11 +505,10 @@ export default function PropertyRequests() {
           {!editingRequestId ? (
             <>
               <RoomForm 
-                data={{ ...formData, rulesSections, offersList, selectedAmenities, manualRoomType, roomImagePreview }}
+                data={{ ...formData, rulesSections, selectedAmenities, manualRoomType, roomImagePreview }}
                 onUpdate={(d) => {
                   setFormData(d);
                   setRulesSections(d.rulesSections || []);
-                  setOffersList(d.offersList || []);
                   setSelectedAmenities(d.selectedAmenities || []);
                   setManualRoomType(d.manualRoomType || false);
                   setRoomImagePreview(d.roomImagePreview || '');
@@ -633,7 +621,7 @@ export default function PropertyRequests() {
                                 : formatCurrency(firstPresent(r.price_per_room, getRequestRooms(r)[0]?.price_per_room, r.priceByOwner))}
                             </td>
                             <td className="td-rules" style={{ whiteSpace: 'normal', maxWidth: '160px' }}><ReadMore lines={2}>{Array.isArray(r.rules) ? `${r.rules.length} sections` : 'None'}</ReadMore></td>
-                            <td className="td-offers" style={{ whiteSpace: 'normal', maxWidth: '160px' }}>{r.offers?.length > 0 ? r.offers.join(', ') : 'None'}</td>
+                            <td className="td-offers" style={{ whiteSpace: 'normal', maxWidth: '160px' }}>{r.offer || (r.offers && r.offers[0]) || 'None'}</td>
                             <td className="td-status">
                               <span className={`status-badge ${statusClass}`}>
                                 {statusLabel.toUpperCase()}
@@ -693,8 +681,11 @@ export default function PropertyRequests() {
                                           <div className="room-info-header">
                                             <div className="info-left">
                                               <h3 className="room-name">{room.room_type || r.room_type}</h3>
-                                              <div className="room-bed-info">
+                                              <div className="room-bed-info" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                                                 Bed: {room.bed_type || r.bed_type}
+                                                {(room.offer || r.offer || (r.offers && r.offers[0])) && (
+                                                  <span className="info-pill top-offer-tag" style={{ margin: 0 }}>{room.offer || r.offer || (r.offers && r.offers[0])}</span>
+                                                )}
                                               </div>
                                             </div>
                                             <div className="info-right">
@@ -710,9 +701,6 @@ export default function PropertyRequests() {
                                               <div className="tag-row">
                                                 {firstPresent(room.tax_amount, r.tax_amount) && (
                                                   <span className="info-pill tax-info">Tax {formatCurrency(firstPresent(room.tax_amount, r.tax_amount))}</span>
-                                                )}
-                                                {(room.offers || r.offers)?.length > 0 && (
-                                                  <span className="info-pill top-offer-tag">{(room.offers || r.offers)[0]}</span>
                                                 )}
                                               </div>
                                             </div>
@@ -733,17 +721,6 @@ export default function PropertyRequests() {
                                             </div>
                                           </div>
 
-                                          {/* Special Offers */}
-                                          {((room.offers || r.offers)?.length > 0) && (
-                                            <div className="room-section" style={{ marginTop: '4px' }}>
-                                              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#F0FDF4', border: '1px dashed #A7F3D0', borderRadius: '8px', padding: '10px 12px' }}>
-                                                <div style={{ background: '#16A34A', color: '#FFFFFF', padding: '4px 10px', borderRadius: '4px', fontSize: '12px', fontWeight: 'bold' }}>
-                                                  {(room.offers || r.offers)[0]}
-                                                </div>
-                                                <span style={{ fontSize: '12px', color: '#166534', fontWeight: 500 }}>Special offer applicable on rooms in this property.</span>
-                                              </div>
-                                            </div>
-                                          )}
 
                                           {/* House Rules & Policies */}
                                           <div className="room-section" style={{ borderBottom: 'none' }}>

@@ -176,6 +176,8 @@ export default function AllProperties() {
       if (dataActive?.properties) combinedProperties = [...dataActive.properties];
       if (dataInactive?.properties) combinedProperties = [...combinedProperties, ...dataInactive.properties];
 
+      combinedProperties.sort((a, b) => (b.createdAt && a.createdAt) ? new Date(b.createdAt) - new Date(a.createdAt) : (b._id || '').toString().localeCompare((a._id || '').toString()));
+
       setProperties(combinedProperties);
       setCurrentPage(1); // Reset page on new fetch
       if (dataActive?.stats) setStats(dataActive.stats);
