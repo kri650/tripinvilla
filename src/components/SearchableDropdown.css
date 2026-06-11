@@ -45,11 +45,21 @@
   overflow: hidden;
   text-overflow: ellipsis;
   padding-right: 12px;
+  display: block;
+  flex: 1;
+  min-width: 0;
 }
 
 .placeholder-text {
   color: #9CA3AF;
   font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 12px;
+  display: block;
+  flex: 1;
+  min-width: 0;
 }
 
 .dropdown-icon {
@@ -156,6 +166,9 @@
   overflow: hidden;
   text-overflow: ellipsis;
   padding-right: 8px;
+  display: block;
+  flex: 1;
+  min-width: 0;
 }
 
 .dropdown-option.selected .option-label {
