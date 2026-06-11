@@ -46,8 +46,17 @@ export default function DateRangeDropdown({
         const maxLeft = window.innerWidth - popupWidth - 16;
         leftPos = Math.max(minLeft, Math.min(leftPos, maxLeft));
 
+        const popupHeight = 380; // Approximate height of the dual calendar
+        const spaceBelow = window.innerHeight - rect.bottom;
+        let topPos = rect.bottom + 8;
+        
+        // If not enough space below but enough space above, flip it
+        if (spaceBelow < popupHeight && rect.top > popupHeight) {
+          topPos = rect.top - popupHeight - 8;
+        }
+
         setDropdownCoords({
-          top: rect.bottom + 8,
+          top: topPos,
           left: mobile ? (window.innerWidth - popupWidth) / 2 : leftPos,
         });
       }

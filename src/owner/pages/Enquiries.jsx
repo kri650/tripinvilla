@@ -123,7 +123,7 @@ export default function Enquiries() {
           </div>
 
           {/* Filters Row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', flex: 1, justifyContent: 'flex-start' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', flex: 1, justifyContent: 'flex-end' }}>
 
             <DateRangeDropdown
               startDate={dateFrom}
@@ -187,7 +187,7 @@ export default function Enquiries() {
             </button>
 
             {/* Search */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '6px', padding: '5px 10px', background: '#fff', minWidth: 120, marginLeft: 'auto' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '6px', padding: '5px 10px', background: '#fff', minWidth: 120 }}>
               <Search size={13} style={{ color: '#9CA3AF', flexShrink: 0 }} />
               <input
                 type="text"
