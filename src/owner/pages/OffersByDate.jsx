@@ -383,7 +383,7 @@ export default function OffersByDate() {
               </div>
             </div>
 
-            <div className="form-group">
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
               <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>Offer % (Discount)*</label>
               <input 
                 type="text" 
