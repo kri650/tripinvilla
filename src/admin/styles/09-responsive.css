@@ -281,8 +281,28 @@
   .hidden-mobile { display: none !important; }
   .visible-mobile { display: flex !important; }
   .enquiries-toolbar { flex-direction: column; align-items: stretch !important; }
-  .enquiries-filters-wrap { flex-direction: column; align-items: stretch !important; width: 100%; }
-  .enquiries-filters-wrap > div, .enquiries-filters-wrap > input, .enquiries-filters-wrap > button { width: 100%; }
+  .enquiries-filters-wrap { 
+    flex-direction: row !important; 
+    flex-wrap: wrap !important; 
+    align-items: center !important; 
+    width: 100%; 
+    gap: 8px !important;
+  }
+  
+  /* Row 1: Dates & Property Type (50/50) */
+  .enquiries-filters-wrap > :nth-child(1) { width: calc(50% - 4px) !important; order: 1; }
+  .enquiries-filters-wrap > :nth-child(2) { width: calc(50% - 4px) !important; order: 2; }
+  
+  /* Row 2: Location, Search, and Filter */
+  .enquiries-filters-wrap > :nth-child(3) { width: calc(35% - 6px) !important; order: 3; } /* Location */
+  .enquiries-filters-wrap > :nth-child(5) { width: calc(40% - 6px) !important; flex-grow: 1 !important; order: 4; } /* Search */
+  .enquiries-filters-wrap > :nth-child(4) { width: calc(25% - 6px) !important; order: 5; } /* Filter */
+  
+  .enquiries-filters-wrap > div, 
+  .enquiries-filters-wrap > input, 
+  .enquiries-filters-wrap > button { 
+    box-sizing: border-box !important; 
+  }
 }
 
 /* Force the second dash-section (table) to never collapse */
