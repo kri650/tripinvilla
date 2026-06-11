@@ -564,7 +564,7 @@ const {
       const minP = filterMinPrice !== '' ? Number(filterMinPrice) : 0;
       const maxP = filterMaxPrice !== '' ? Number(filterMaxPrice) : Infinity;
       displayList = displayList.filter(p => {
-        const priceNum = p.priceRaw !== undefined ? p.priceRaw : Number(String(p.price || 0).replace(/[^\d]/g, ''));
+        const priceNum = p.priceRaw !== undefined ? p.priceRaw : Number(String(p.price || p.bestRoomRate || 0).replace(/[^\d]/g, ''));
         return priceNum >= minP && priceNum <= maxP;
       });
     }
