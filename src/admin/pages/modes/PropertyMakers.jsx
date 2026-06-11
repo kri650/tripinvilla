@@ -125,8 +125,8 @@ export default function PropertyMakers() {
     },
     privatePool: false, gardenArea: false, chefAvailable: false, entirePropertyOnly: false, securityCCTV: false, numberOfFloors: "", plotSize: "",
     restaurantOnSite: false, spaWellness: false, conferenceRoom: false, roomService: false, receptionAllDay: false, liftElevator: false, starRating: "", totalRooms: "", totalFloors: "", activities: [],
-    floorNumber: "", totalFloorsBuilding: "", furnishedStatus: "Fully Furnished", washingMachine: false, societyAmenities: [],
-    bonfireArea: false, viewType: "Mountain", outdoorSeating: false, nearestHikingTrail: "", distanceFromCity: "",
+    floorNumber: "", totalFloorsBuilding: "", furnishedStatus: "", washingMachine: false, societyAmenities: [],
+    bonfireArea: false, viewType: "", outdoorSeating: false, nearestHikingTrail: "", distanceFromCity: "",
   });
   const currentType = (formData.propertyType || '').toLowerCase();
   const [isEditing, setIsEditing] = useState(false);
@@ -700,11 +700,11 @@ export default function PropertyMakers() {
       activities: p.activities || [],
       floorNumber: p.floorNumber || "",
       totalFloorsBuilding: p.totalFloorsBuilding || "",
-      furnishedStatus: p.furnishedStatus || "Fully Furnished",
+      furnishedStatus: p.furnishedStatus || "",
       washingMachine: p.washingMachine || false,
       societyAmenities: p.societyAmenities || [],
       bonfireArea: p.bonfireArea || false,
-      viewType: p.viewType || "Mountain",
+      viewType: p.viewType || "",
       outdoorSeating: p.outdoorSeating || false,
       nearestHikingTrail: p.nearestHikingTrail || "",
       distanceFromCity: p.distanceFromCity || "",
