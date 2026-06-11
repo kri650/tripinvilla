@@ -517,21 +517,6 @@
 
 /* 4 & 5 & 6) Mobile overrides (below 640px) */
 @media (max-width: 640px) {
-  /* 4) Collapse sidebar completely on mobile (only show hamburger in topbar) */
-  .sidebar {
-    display: none !important;
-  }
-  :root {
-    --sidebar-w: 0px !important;
-    --main-left: 0px !important;
-  }
-  
-  /* Make main content full width since sidebar is hidden */
-  .main-content {
-    margin-left: 0 !important;
-    width: 100% !important;
-  }
-
   /* 5) Topbar: hide other elements, show only title/logo + hamburger */
   .topbar-right {
     display: none !important;
