@@ -116,10 +116,13 @@ export default function useGuestSearch({ API_BASE, setActiveMenu }) {
         query.append('city', String(searchVal).trim());
       }
 
+      // We do NOT send `type` to the backend because the frontend sidebar 
+      // allows multiple types to be selected via checkboxes. 
+      // If we restrict the backend query to a single type, the user can never 
+      // reveal other types by clicking checkboxes. The frontend `getFilteredProperties` 
+      // will handle the type filtering correctly.
       const typeVal = normalizePropertyType(get('type', ''));
-      if (typeVal) {
-        query.append('type', typeVal);
-      }
+      // Intentionally bypassed: if (typeVal) query.append('type', typeVal);
 
       const guestsVal = get('guests', guests);
       if (guestsVal && guestsVal !== 'Any Guests') {
