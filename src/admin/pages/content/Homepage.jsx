@@ -333,7 +333,7 @@ export default function Homepage() {
 
       <div className="dash-section" style={{ marginBottom: 24 }}>
         <div className="master-form-card" style={{ margin: 0 }}>
-          <div className="master-form-header" style={{ marginBottom: 24 }}>
+          <div className="master-form-header" style={{ marginBottom: 0 }}>
             <div className="master-form-title">Homepage</div>
             <div className="master-form-actions">
               <button
@@ -346,13 +346,7 @@ export default function Homepage() {
             </div>
           </div>
 
-          <hr
-            style={{
-              border: "none",
-              borderBottom: "1px solid #E5E7EB",
-              margin: "0 -32px 24px -32px",
-            }}
-          />
+
 
           {/* Banner */}
           <SectionLabel text="Banner" />
@@ -385,13 +379,7 @@ export default function Homepage() {
             />
           </div>
 
-          <hr
-            style={{
-              border: "none",
-              borderBottom: "1px solid #E5E7EB",
-              margin: "0 -32px 24px -32px",
-            }}
-          />
+
 
           {/* Section 1 — Best Villas Around You */}
           <SectionLabel text="Section 1 — Best Villas Around You" />
@@ -427,13 +415,7 @@ export default function Homepage() {
             </div>
           </div>
 
-          <hr
-            style={{
-              border: "none",
-              borderBottom: "1px solid #E5E7EB",
-              margin: "0 -32px 24px -32px",
-            }}
-          />
+
 
           {/* Section 2 — Curated Propertie */}
           <SectionLabel text="Section 2 — Curated Properties" />
@@ -469,13 +451,7 @@ export default function Homepage() {
             </div>
           </div>
 
-          <hr
-            style={{
-              border: "none",
-              borderBottom: "1px solid #E5E7EB",
-              margin: "0 -32px 24px -32px",
-            }}
-          />
+
 
           {/* Section 4 — Popular Offers (homepage) */}
           <SectionLabel text="Section 3 — Popular Offers of Property" />
@@ -511,13 +487,7 @@ export default function Homepage() {
             </div>
           </div>
 
-          <hr
-            style={{
-              border: "none",
-              borderBottom: "1px solid #E5E7EB",
-              margin: "0 -32px 24px -32px",
-            }}
-          />
+
 
           {/* Section 5 — Why Choose Our Services */}
           <SectionLabel text="Section 4 — Why Choose Our Services" />
