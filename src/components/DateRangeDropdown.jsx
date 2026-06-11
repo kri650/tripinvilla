@@ -37,27 +37,28 @@ export default function DateRangeDropdown({
         const mobile = window.innerWidth <= 640;
         setIsMobile(mobile);
 
-        // Width for dual calendar is approx 740px (332x2 + 32 gap + 40 padding)
-        const popupWidth = mobile ? Math.min(window.innerWidth - 32, 320) : 740;
+        // Width for dual calendar is approx 680px with smaller fonts
+        const popupWidth = mobile ? Math.min(window.innerWidth - 32, 320) : 680;
 
-        let leftPos = rect.right - popupWidth;
+        let leftPos = rect.left + window.scrollX;
         const minLeft = 16;
-        if (leftPos < minLeft) leftPos = rect.left;
-        const maxLeft = window.innerWidth - popupWidth - 16;
-        leftPos = Math.max(minLeft, Math.min(leftPos, maxLeft));
+        if (leftPos + popupWidth > window.innerWidth + window.scrollX - 16) {
+          leftPos = window.innerWidth + window.scrollX - popupWidth - 16;
+        }
+        leftPos = Math.max(minLeft, leftPos);
 
-        const popupHeight = 380; // Approximate height of the dual calendar
+        const popupHeight = 340; // Approximate height of the smaller dual calendar
         const spaceBelow = window.innerHeight - rect.bottom;
-        let topPos = rect.bottom + 8;
+        let topPos = rect.bottom + window.scrollY + 8;
         
         // If not enough space below but enough space above, flip it
         if (spaceBelow < popupHeight && rect.top > popupHeight) {
-          topPos = rect.top - popupHeight - 8;
+          topPos = rect.top + window.scrollY - popupHeight - 8;
         }
 
         setDropdownCoords({
           top: topPos,
-          left: mobile ? (window.innerWidth - popupWidth) / 2 : leftPos,
+          left: mobile ? (window.innerWidth - popupWidth) / 2 + window.scrollX : leftPos,
         });
       }
     }
@@ -106,15 +107,15 @@ export default function DateRangeDropdown({
           overflow-y: auto;
         }
         .daterange-dropdown-popup .rdrCalendarWrapper {
-          font-size: 13px;
+          font-size: 11px;
           font-family: inherit;
           width: 100%;
         }
         .daterange-dropdown-popup .rdrMonthAndYearPickers select {
-          font-size: 14px;
+          font-size: 13px;
         }
         .daterange-dropdown-popup .rdrDayNumber span {
-          font-size: 13px;
+          font-size: 12px;
         }
       `}</style>
 
@@ -153,7 +154,7 @@ export default function DateRangeDropdown({
           ref={popupRef}
           className="daterange-dropdown-popup"
           style={{
-            position: 'fixed',
+            position: 'absolute',
             top: dropdownCoords?.top || 0,
             left: dropdownCoords?.left || 0,
             background: '#FFFFFF',
@@ -167,7 +168,7 @@ export default function DateRangeDropdown({
           }}
         >
           {/* Calendar — 2 independent calendars with From/To titles */}
-          <div style={{ padding: '24px 20px 16px', display: 'flex', gap: '32px', flexDirection: isMobile ? 'column' : 'row' }}>
+          <div style={{ padding: '16px 16px 12px', display: 'flex', gap: '24px', flexDirection: isMobile ? 'column' : 'row', maxHeight: 'calc(100vh - 120px)', overflowY: 'auto' }}>
             <div>
               <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>From</div>
               <ReactCalendar

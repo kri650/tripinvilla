@@ -30,8 +30,19 @@ export default function OffersByDate() {
   const [submitting, setSubmitting] = useState(false);
 
   const mapOffer = (o) => {
-    const od = o.offer_date ? new Date(o.offer_date) : (o.dateFrom ? new Date(o.dateFrom) : null);
-    const dateFormatted = od ? od.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : 'N/A';
+    const from = o.dateFrom || o.offer_date;
+    const to = o.dateTo || o.offer_date;
+    let dateFormatted = 'N/A';
+    if (from) {
+      const fromFormatted = new Date(from).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+      dateFormatted = fromFormatted;
+      if (to && new Date(to).getTime() !== new Date(from).getTime()) {
+        const toFormatted = new Date(to).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+        if (fromFormatted !== toFormatted) {
+          dateFormatted = `${fromFormatted} to ${toFormatted}`;
+        }
+      }
+    }
     const timeFormatted = o.offer_time || 'N/A';
 
     return {
@@ -47,6 +58,7 @@ export default function OffersByDate() {
       location: o.location || o.property_id?.location || 'N/A',
       category: o.category || o.property_id?.type || o.property_id?.category || 'N/A',
       room: o.room_type || o.room || o.property_id?.roomType || 'N/A',
+      price: o.price || o.price_per_room || o.property_id?.price || o.property_id?.bestRoomRate || '',
       foods: o.food_type || o.foods || 'N/A',
       amenities: (Array.isArray(o.amenities) && o.amenities.length > 0) ? o.amenities.join(', ') : (o.amenities?.length ? o.amenities : ((Array.isArray(o.property_id?.amenities) && o.property_id.amenities.length > 0) ? o.property_id.amenities.join(', ') : (o.property_id?.amenities || 'N/A'))),
       offer: (() => {
@@ -112,12 +124,21 @@ export default function OffersByDate() {
       const ams = req.amenities_types || req.property?.amenities || req.property?.amenityTypes || [];
       setAmenities(Array.isArray(ams) ? ams.join(', ') : ams);
       setPrice(req.price_per_room || req.property?.price || req.property?.bestRoomRate || 0);
+      
+      const fp = req.foodPreference || req.property?.foodPreference || 'both';
+      let formattedFood = 'Both';
+      if (fp === 'veg') formattedFood = 'Pure Veg';
+      if (fp === 'non-veg') formattedFood = 'Non-Veg';
+      if (fp === 'both') formattedFood = 'Both';
+      if (fp === 'none') formattedFood = 'None';
+      setFoods(formattedFood);
     } else {
       setPropertyId('');
       setCategory('');
       setRoomType('');
       setAmenities('');
       setPrice('');
+      setFoods('');
     }
   };
 
@@ -273,17 +294,32 @@ export default function OffersByDate() {
                 placeholder="Select property first"
               />
             </div>
+
+            <div className="form-group">
+              <label className="form-label">Price (Auto-filled)*</label>
+              <input 
+                type="text" 
+                className="form-input" 
+                value={price ? `₹${price} per night` : ''} 
+                readOnly 
+                disabled 
+                placeholder="Select property first"
+              />
+            </div>
           </div>
 
           {/* Form Fields Grid - Row 2 */}
           <div className="form-grid-2">
             <div className="form-group">
-              <label className="form-label">Foods*</label>
-              <select className="form-select" value={foods} onChange={(e) => setFoods(e.target.value)}>
-                <option value="Pure Veg">Pure Veg</option>
-                <option value="Non-Veg">Non-Veg</option>
-                <option value="Both">Both</option>
-              </select>
+              <label className="form-label">Foods (Auto-filled)*</label>
+              <input 
+                type="text" 
+                className="form-input" 
+                value={foods} 
+                readOnly 
+                disabled 
+                placeholder="Select property first"
+              />
             </div>
 
             <div className="form-group">
@@ -409,8 +445,8 @@ export default function OffersByDate() {
             <table className="data-table" style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left', whiteSpace: 'nowrap', minWidth: 1000 }}>
               <thead>
                 <tr>
-                  {['Offer ID', 'Dates & Time', 'Property Name', 'Location', 'Category', 'Foods', 'Amenities', 'Offer %', 'Description', 'Status', ''].map((h, i) => (
-                    <th key={i} style={{ minWidth: { 'Offer ID': 90, 'Dates & Time': 140, 'Property Name': 160, 'Location': 150, 'Category': 100, 'Foods': 90, 'Amenities': 150, 'Offer %': 90, 'Description': 150, 'Status': 90 }[h], color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
+                  {['Offer ID', 'Dates & Time', 'Property Name', 'Location', 'Category', 'Price', 'Foods', 'Amenities', 'Offer %', 'Description', 'Status', ''].map((h, i) => (
+                    <th key={i} style={{ minWidth: { 'Offer ID': 90, 'Dates & Time': 140, 'Property Name': 160, 'Location': 150, 'Category': 100, 'Price': 100, 'Foods': 90, 'Amenities': 150, 'Offer %': 90, 'Description': 150, 'Status': 90 }[h], color: '#9CA3AF', fontWeight: 500, padding: '14px 16px' }}>
                       <span className="th-inner">
                         {h}
                         {h && <ChevronDown size={10} style={{ color: '#CBD5E1', marginLeft: 4 }} />}
@@ -440,6 +476,9 @@ export default function OffersByDate() {
                       <span className="category-pill" style={{ background: '#F0FAF6', color: '#1d9e75', fontWeight: 500, padding: '3px 10px', borderRadius: '4px', fontSize: '11px' }}>
                         {o.category}
                       </span>
+                    </td>
+                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}>
+                      {o.price ? `₹${o.price}` : 'N/A'}
                     </td>
                     <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.foods}</td>
                     <td style={{ color: '#4B5563', padding: '14px 16px', whiteSpace: 'normal', maxWidth: '160px' }}><ReadMore lines={2}>{o.amenities}</ReadMore></td>

@@ -82,10 +82,18 @@ export default function AddOffer() {
                 const amenitiesArr = Array.isArray(prop.amenities) ? prop.amenities : (Array.isArray(prop.amenityTypes) ? prop.amenityTypes : []);
                 const priceVal = prop.price || prop.propertyPrice || prop.bestRoomRate || '';
                 
+                const fp = prop.foodPreference || 'both';
+                let formattedFood = 'Both';
+                if (fp === 'veg') formattedFood = 'Pure Veg';
+                if (fp === 'non-veg') formattedFood = 'Non-Veg';
+                if (fp === 'both') formattedFood = 'Both';
+                if (fp === 'none') formattedFood = 'None';
+                
                 setFormData(prev => ({
                   ...prev,
                   amenities: prev.amenities || amenitiesArr.join(', '),
-                  price: prev.price || (priceVal ? `₹${priceVal} per night` : '')
+                  price: prev.price || (priceVal ? `₹${priceVal} per night` : ''),
+                  foods: prev.foods && prev.foods !== 'Pure Veg' ? prev.foods : formattedFood
                 }));
               }
             }
@@ -125,6 +133,13 @@ export default function AddOffer() {
       const amenitiesArr = Array.isArray(prop.amenities) ? prop.amenities : (Array.isArray(prop.amenityTypes) ? prop.amenityTypes : []);
       const priceVal = prop.price || prop.propertyPrice || prop.bestRoomRate || '';
       
+      const fp = prop.foodPreference || 'both';
+      let formattedFood = 'Both';
+      if (fp === 'veg') formattedFood = 'Pure Veg';
+      if (fp === 'non-veg') formattedFood = 'Non-Veg';
+      if (fp === 'both') formattedFood = 'Both';
+      if (fp === 'none') formattedFood = 'None';
+      
       setFormData(prev => ({
         ...prev,
         propertyName: prop.name || prop.propertyName || '',
@@ -132,6 +147,7 @@ export default function AddOffer() {
         room: rooms[0]?.roomType || 'Deluxe Room',
         amenities: amenitiesArr.join(', '),
         price: priceVal ? `₹${priceVal} per night` : '',
+        foods: formattedFood,
       }));
     } catch (err) {
       console.error('Error fetching full property details:', err);
@@ -218,7 +234,7 @@ export default function AddOffer() {
           </div>
 
           {/* Row 1 */}
-          <div className="form-grid-2">
+          <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">Property Name*</label>
               <div style={{ position: 'relative' }}>
@@ -248,25 +264,31 @@ export default function AddOffer() {
                 placeholder="Select property first"
               />
             </div>
+            <div className="form-group">
+              <label className="form-label">Price (Auto-filled)*</label>
+              <input 
+                type="text" 
+                className="form-input" 
+                value={formData.price} 
+                readOnly 
+                disabled 
+                placeholder="Select property first"
+              />
+            </div>
           </div>
 
           {/* Row 2 */}
           <div className="form-grid-2">
             <div className="form-group">
-              <label className="form-label">Foods*</label>
-              <div style={{ position: 'relative' }}>
-                <select 
-                  className="form-select" 
-                  style={{ appearance: 'none' }}
-                  value={formData.foods}
-                  onChange={e => setFormData({...formData, foods: e.target.value})}
-                >
-                  <option value="Pure Veg">Pure Veg</option>
-                  <option value="Non-Veg">Non-Veg</option>
-                  <option value="Both">Both</option>
-                </select>
-                <ChevronDown size={16} style={{ position: 'absolute', right: 16, top: 14, color: '#6B7280', pointerEvents: 'none' }} />
-              </div>
+              <label className="form-label">Foods (Auto-filled)*</label>
+              <input 
+                type="text" 
+                className="form-input" 
+                value={formData.foods} 
+                readOnly 
+                disabled 
+                placeholder="Select property first"
+              />
             </div>
             <div className="form-group">
               <label className="form-label">Amenities Types (Auto-filled)*</label>
