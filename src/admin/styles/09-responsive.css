@@ -27,7 +27,7 @@
   .page-header   { padding: 18px 20px 0; }
   .props-page-container { margin: 0 20px 16px; }
   .admin-table-card { margin: 0 20px 24px; }
-  .props-breadcrumb { margin: 0 20px 12px !important; }
+  .props-breadcrumb { margin: 24px 20px 12px !important; }
 }
 
 /* ─── Tablet (1024px–1200px) ─── */
@@ -115,7 +115,7 @@
   }
 
   .dash-section  { margin: 0 16px 16px; padding: 16px; }
-  .props-breadcrumb { margin: 0 16px 12px !important; }
+  .props-breadcrumb { margin: 24px 16px 12px !important; }
   .table-section { margin: 0 16px 16px; }
   .content-card  { margin: 0 16px 16px; padding: 16px; }
   .page-header   { padding: 16px 16px 0; flex-wrap: wrap; gap: 8px; }

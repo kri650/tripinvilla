@@ -10,7 +10,7 @@
 .props-breadcrumb {
   font-size: 13px;
   color: #9CA3AF;
-  margin-bottom: 20px;
+  margin: 24px 24px 12px !important;
   font-weight: 400;
 }
 .props-breadcrumb span {
