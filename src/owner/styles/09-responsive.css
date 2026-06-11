@@ -124,7 +124,7 @@
   .props-table-toolbar,
   .admin-table-header { flex-direction: column; align-items: flex-start; gap: 12px; }
   .props-table-actions,
-  .admin-table-toolbar { flex-wrap: wrap; }
+  .admin-table-toolbar { flex-wrap: nowrap; overflow-x: auto; width: 100%; padding-bottom: 4px; }
 
   .topbar { padding: 12px 16px; }
   .topbar-date-btn { display: none; }
@@ -159,8 +159,8 @@
   .master-form-header { flex-direction: column; align-items: flex-start; gap: 12px; }
   .master-form-actions { width: 100%; justify-content: flex-end; }
 
-  .props-search-wrap input { width: 100%; }
-  .admin-toolbar-search input { width: 100%; }
+  .props-search-wrap input { width: auto; }
+  .admin-toolbar-search input { width: auto; }
 
   /* Dashboard responsive tweaks for mobile */
   .dash-section {
