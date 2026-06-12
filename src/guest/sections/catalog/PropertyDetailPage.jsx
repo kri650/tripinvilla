@@ -184,46 +184,48 @@ export default function PropertyDetailPage(props) {
     : null;
 
   return (
-    <div className="detail-page-wrapper fade-in">
+    <div className="w-[1440px] max-w-[calc(100%-158px)] mx-auto pt-[150px] overflow-x-hidden box-border fade-in max-[1100px]:max-w-[calc(100%-80px)] max-[900px]:max-w-[calc(100%-32px)] max-[900px]:pt-[100px] max-[640px]:!max-w-full max-[640px]:!px-3 max-[640px]:!pt-[60px] max-[480px]:!px-2 max-[480px]:!pt-[50px] max-[360px]:!pt-10">
       {/* Breadcrumb row */}
-      <div className="breadcrumb-row">
-        <span onClick={() => setActiveMenu('Home')}>Home</span>
-        <span className="bread-sep">/</span>
-        <span onClick={() => setActiveMenu('Properties')}>Properties</span>
-        <span className="bread-sep">/</span>
-        <span className="bread-active">Property Details</span>
+      <div className="flex items-center gap-2 font-['Lato'] text-sm font-medium text-[#6B7280] mb-6 flex-wrap max-[640px]:text-[11px] max-[640px]:mb-4 max-[640px]:gap-[6px] max-[480px]:text-[10px] max-[480px]:gap-1">
+        <span onClick={() => setActiveMenu('Home')} className="cursor-pointer transition-colors hover:text-[var(--primary-blue)]">Home</span>
+        <span className="text-[#CBD5E1] cursor-default">/</span>
+        <span onClick={() => setActiveMenu('Properties')} className="cursor-pointer transition-colors hover:text-[var(--primary-blue)]">Properties</span>
+        <span className="text-[#CBD5E1] cursor-default">/</span>
+        <span className="text-[#111827] font-semibold cursor-default">Property Details</span>
       </div>
 
       <div className="detail-white-container-card">
         {/* Triple Image and Info Box Main row */}
-        <div className="detail-primary-grid">
+        <div className="grid grid-cols-[1.55fr_1fr] gap-6 mb-10 max-[1100px]:grid-cols-[1fr_380px] max-[900px]:grid-cols-1 max-[900px]:gap-4">
           {/* Left Image grid */}
-          <div className="detail-image-gallery" style={{ gridTemplateColumns: propImages.length <= 1 ? '1fr' : '1.6fr 1fr' }}>
+          <div className="grid gap-2 h-[440px] min-h-[440px] max-h-[440px] overflow-hidden self-start max-[900px]:h-80 max-[900px]:max-h-80 max-[640px]:!h-[200px] max-[640px]:!max-h-[200px] max-[640px]:!min-h-[200px] max-[640px]:!gap-[6px] max-[480px]:!h-[180px] max-[480px]:!max-h-[180px] max-[480px]:!min-h-[180px] max-[360px]:!h-40 max-[360px]:!max-h-40 max-[360px]:!min-h-40" style={{ gridTemplateColumns: propImages.length <= 1 ? '1fr' : '1.6fr 1fr' }}>
             {/* Large main image */}
-            <div className="gallery-master-img" style={{ borderRadius: '12px 0 0 12px', overflow: 'hidden', cursor: 'pointer' }} onClick={() => { setCurrentImageIndex(0); setIsGalleryOpen(true); }}>
-              <img src={propImages[0]} alt={activeDetailProp.title} />
+            <div className="h-full max-h-full min-h-0 rounded-[20px] overflow-hidden relative shadow-[0_4px_20px_rgba(0,0,0,0.02)] cursor-pointer max-[640px]:!rounded-xl" style={{ borderRadius: '12px 0 0 12px' }} onClick={() => { setCurrentImageIndex(0); setIsGalleryOpen(true); }}>
+              <img src={propImages[0]} alt={activeDetailProp.title} className="w-full h-full object-cover block transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-[1.04]" />
             </div>
 
             {/* Right 2-row stack */}
             {propImages.length > 1 && (
-              <div className="gallery-sub-images">
+              <div className="flex flex-col gap-3 h-full max-h-full min-h-0 max-[640px]:!gap-2">
                 {/* Top thumbnail: image[1] */}
-                <div className="sub-img-wrap" onClick={() => { setCurrentImageIndex(1); setIsGalleryOpen(true); }}>
+                <div className="flex-1 rounded-2xl overflow-hidden relative shadow-[0_4px_20px_rgba(0,0,0,0.02)] cursor-pointer max-[640px]:!rounded-[10px]" onClick={() => { setCurrentImageIndex(1); setIsGalleryOpen(true); }}>
                   <img
                     src={propImages[1]}
                     alt={`${activeDetailProp.title} view 2`}
+                    className="w-full h-full object-cover block transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105"
                   />
                 </div>
 
                 {/* Bottom thumbnail: image[2] with "+X" overlay */}
                 {propImages[2] && (
-                  <div className="sub-img-wrap overlay" onClick={() => { setCurrentImageIndex(2); setIsGalleryOpen(true); }}>
+                  <div className="flex-1 rounded-2xl overflow-hidden relative shadow-[0_4px_20px_rgba(0,0,0,0.02)] cursor-pointer max-[640px]:!rounded-[10px]" onClick={() => { setCurrentImageIndex(2); setIsGalleryOpen(true); }}>
                     <img
                       src={propImages[2]}
                       alt={`${activeDetailProp.title} view 3`}
+                      className="w-full h-full object-cover block transition-transform duration-[600ms] ease-[cubic-bezier(0.16,1,0.3,1)] hover:scale-105"
                     />
                     {propImages.length > 3 && (
-                      <div className="gallery-count-layer">
+                      <div className="absolute inset-0 bg-[rgba(0,0,0,0.55)] backdrop-blur-[8px] flex items-center justify-center text-white font-['Lato'] text-[15px] font-bold transition-colors duration-300 cursor-pointer hover:bg-[rgba(0,0,0,0.4)] max-[640px]:!text-xs">
                         <span>View {propImages.length - 2} more</span>
                       </div>
                     )}
@@ -234,37 +236,37 @@ export default function PropertyDetailPage(props) {
           </div>
 
           {/* Right Information Reservation Box */}
-          <div className="detail-reservation-card">
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
-              <h2 className="reservation-title" style={{ margin: 0 }}>{activeDetailProp.title}</h2>
+          <div className="bg-white border border-[#E5E7EB] rounded-3xl p-6 shadow-[0_10px_30px_rgba(0,0,0,0.03)] flex flex-col transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:shadow-[0_15px_40px_rgba(0,0,0,0.07)] max-[640px]:!p-4 max-[640px]:!rounded-2xl max-[640px]:!mt-0 max-[360px]:!p-3">
+            <div className="flex justify-between items-start gap-3">
+              <h2 className="font-['Lato'] text-2xl font-bold text-[#111827] m-0 mb-[6px] leading-[1.25] overflow-hidden text-ellipsis whitespace-nowrap max-w-full max-[640px]:!text-lg max-[640px]:!leading-[1.2] max-[640px]:!mb-2 max-[640px]:!whitespace-normal max-[640px]:!break-words max-[480px]:!text-base max-[360px]:!text-sm">{activeDetailProp.title}</h2>
             </div>
             
 
-            <div className="reservation-location">
+            <div className="flex items-center gap-[6px] font-['Lato'] text-sm font-medium text-[#4B5563] mb-[18px] max-[640px]:!text-xs max-[640px]:!mb-3">
               <MapPin size={16} color="#58A429" />
-              <span style={{ color: '#58A429', fontWeight: 500 }}>{activeDetailProp.location}</span>
+              <span className="text-[#58A429] font-medium">{activeDetailProp.location}</span>
             </div>
 
-            <hr style={{ border: 'none', borderTop: '1px solid #E5E7EB', margin: '16px 0' }} />
+            <hr className="border-none border-t border-[#E5E7EB] my-4" />
 
-            <div className="reservation-timing-row" style={{ display: 'flex', justifyContent: 'space-between', gap: '20px' }}>
-              <div className="time-badge" style={{ background: 'transparent', border: 'none', padding: 0, justifyContent: 'flex-start', flex: '1' }}>
+            <div className="flex gap-3 mb-[18px] overflow-hidden box-border w-full max-[640px]:!flex-col max-[640px]:!gap-2 max-[640px]:!mb-3" style={{ justifyContent: 'space-between', gap: '20px' }}>
+              <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-[14px] py-[10px] font-['Lato'] text-[13px] font-semibold text-[#475569] flex items-center gap-2 flex-1 transition-all duration-200 hover:bg-[#F1F5F9] hover:border-[#CBD5E1] overflow-hidden box-border text-ellipsis whitespace-nowrap max-[640px]:!px-3 max-[640px]:!py-2 max-[640px]:!text-[11px] max-[640px]:!rounded-lg max-[640px]:!text-center max-[640px]:!justify-center max-[640px]:!whitespace-normal max-[640px]:!break-words" style={{ background: 'transparent', border: 'none', padding: 0, justifyContent: 'flex-start', flex: '1' }}>
                 <LogIn size={20} color="#58A429" strokeWidth={1.5} />
-                <span style={{ color: '#4B5563', fontSize: '14px' }}>Check in : {activeDetailProp.checkIn || '3:00 PM'}</span>
+                <span className="text-[#4B5563] text-sm">Check in : {activeDetailProp.checkIn || '3:00 PM'}</span>
               </div>
-              <div className="time-badge" style={{ background: 'transparent', border: 'none', padding: 0, justifyContent: 'flex-start', flex: '1' }}>
+              <div className="bg-[#F8FAFC] border border-[#E2E8F0] rounded-xl px-[14px] py-[10px] font-['Lato'] text-[13px] font-semibold text-[#475569] flex items-center gap-2 flex-1 transition-all duration-200 hover:bg-[#F1F5F9] hover:border-[#CBD5E1] overflow-hidden box-border text-ellipsis whitespace-nowrap max-[640px]:!px-3 max-[640px]:!py-2 max-[640px]:!text-[11px] max-[640px]:!rounded-lg max-[640px]:!text-center max-[640px]:!justify-center max-[640px]:!whitespace-normal max-[640px]:!break-words" style={{ background: 'transparent', border: 'none', padding: 0, justifyContent: 'flex-start', flex: '1' }}>
                 <LogOut size={20} color="#EF4444" strokeWidth={1.5} />
-                <span style={{ color: '#4B5563', fontSize: '14px' }}>Check Out : {activeDetailProp.checkOut || '12:00 PM'}</span>
+                <span className="text-[#4B5563] text-sm">Check Out : {activeDetailProp.checkOut || '12:00 PM'}</span>
               </div>
             </div>
 
-            <hr style={{ border: 'none', borderTop: '1px solid #E5E7EB', margin: '16px 0' }} />
+            <hr className="border-none border-t border-[#E5E7EB] my-4" />
 
-            <div className="reservation-checks-list">
+            <div className="flex flex-col gap-[10px] mb-[22px] overflow-hidden box-border w-full max-[640px]:!gap-2 max-[640px]:!mb-4">
               {(activeDetailProp.highlights && activeDetailProp.highlights.length > 0 ? activeDetailProp.highlights : []).map((highlight, idx) => (
-                <div key={idx} className="check-bullet">
-                  <CheckCircle size={15} color="var(--primary-blue)" fill="rgba(37,99,235,0.1)" />
-                  <span>{highlight}</span>
+                <div key={idx} className="flex items-center gap-[10px] font-['Lato'] text-sm font-medium text-[#374151] overflow-hidden box-border w-full items-start max-[640px]:!text-xs max-[640px]:!gap-2">
+                  <CheckCircle size={15} color="var(--primary-blue)" fill="rgba(37,99,235,0.1)" className="max-[640px]:!w-[14px] max-[640px]:!h-[14px] flex-shrink-0" />
+                  <span className="overflow-hidden break-words">{highlight}</span>
                 </div>
               ))}
             </div>

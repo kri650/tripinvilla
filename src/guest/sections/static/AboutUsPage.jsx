@@ -31,7 +31,6 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
   }, [activeMenu]);
 
   const s1 = aboutUsContent?.section1;
-  // Use section5 from homepage (synced/shared data)
   const s2 = homepageContent?.section5 || aboutUsContent?.section2;
   const s3 = aboutUsContent?.section3;
 
@@ -64,14 +63,29 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
             </div>
           </div>
           <div className="w-[17.45px] h-[210.18px] bg-[#0C6DC4] justify-self-center self-start mt-[10px] max-[900px]:hidden"></div>
+          
+          {/* RECONFIGURED IMAGE CONTAINER FOR TABLET RESPONSIVENESS */}
           <div className="relative w-full max-w-[525px] max-[900px]:max-w-full max-[900px]:order-[-1]">
-            <div className="w-full max-w-[525px] h-[672px] rounded-3xl overflow-hidden border border-[#E5E7EB] shadow-[0_15px_35px_rgba(0,0,0,0.04)] max-[1200px]:h-[500px] max-[900px]:h-[400px] max-[900px]:max-w-full max-[768px]:h-[350px] max-[768px]:rounded-[20px] max-[640px]:h-[300px] max-[640px]:rounded-[18px] max-[480px]:h-[260px] max-[360px]:h-[220px]">
+            <div className="w-full max-w-[525px] h-[672px] rounded-3xl overflow-hidden border border-[#E5E7EB] shadow-[0_15px_35px_rgba(0,0,0,0.04)] max-[1200px]:h-[500px] max-[900px]:h-[450px] max-[900px]:max-w-full max-[768px]:h-[380px] max-[768px]:rounded-[20px] max-[640px]:h-[300px] max-[640px]:rounded-[18px] max-[480px]:h-[260px] max-[360px]:h-[220px]">
               <img src={s1?.mainImage || "https://images.unsplash.com/photo-1510312305653-8ed496efae75?auto=format&fit=crop&w=800&q=80"} alt="Sunny alpine mountain chalet" className="w-full h-full object-cover" />
             </div>
-            <div className="absolute bottom-[50px] left-[-40px] w-[250px] h-[230px] bg-[var(--primary-blue)] p-8 text-white flex flex-col justify-center gap-3 z-[5] rounded-xl shadow-[0_15px_35px_rgba(12,109,196,0.35)] max-[1200px]:w-[220px] max-[1200px]:h-[200px] max-[1200px]:p-6 max-[900px]:static max-[900px]:w-full max-[900px]:max-w-[300px] max-[900px]:h-auto max-[900px]:mx-auto max-[900px]:mt-5 max-[768px]:max-w-[280px] max-[768px]:p-[18px] max-[640px]:p-4 max-[640px]:rounded-[14px] max-[480px]:p-[14px] max-[480px]:max-w-[250px] max-[360px]:p-3 max-[360px]:max-w-[220px]">
-              <span className="font-['Lato'] font-extrabold text-[52px] leading-none tracking-[-1.5px] m-0 max-[1200px]:text-[44px] max-[900px]:text-[40px] max-[768px]:text-4xl max-[640px]:text-[32px] max-[640px]:tracking-[-1px] max-[480px]:text-[28px] max-[360px]:text-2xl">{s1?.experience?.title || '40+'}</span>
-              <div className="about-badge-divider"></div>
-              <span className="font-['Lato'] font-semibold text-[14.5px] leading-[145%] text-white m-0 max-[900px]:text-[13px] max-[768px]:text-xs max-[768px]:leading-[1.4] max-[640px]:text-xs max-[480px]:text-[11px] max-[360px]:text-[10px]">{s1?.experience?.subText || 'Years of Experience That Drive Results'}</span>
+            
+            {/* UPDATED BLUE CARD CLEANED FOR MD/TABLET PIXEL PERFECTION */}
+            <div className="absolute bg-[rgba(12,109,196,0.95)] backdrop-blur-md text-white flex flex-col justify-center z-[5] rounded-xl shadow-[0_15px_35px_rgba(12,109,196,0.35)] 
+              bottom-[40px] left-[-40px] w-[250px] h-[230px] p-8 /* Desktop Defaults */
+              max-[1200px]:w-[220px] max-[1200px]:h-[200px] max-[1200px]:p-6 max-[1200px]:left-[-20px] max-[1200px]:bottom-[30px]
+              max-[900px]:left-5 max-[900px]:bottom-5 max-[900px]:w-[210px] max-[900px]:h-[180px] max-[900px]:p-5 /* Perfect Tablet Layout */
+              max-[640px]:w-[180px] max-[640px]:h-[140px] max-[640px]:p-4 max-[640px]:left-4 max-[640px]:bottom-4 max-[640px]:rounded-[14px]
+              max-[480px]:w-[150px] max-[480px]:h-[120px] max-[480px]:p-3 max-[480px]:left-3 max-[480px]:bottom-3 
+              max-[360px]:w-[130px] max-[360px]:h-[105px] max-[360px]:p-2.5 max-[360px]:left-2 max-[360px]:bottom-2">
+              
+              <span className="font-['Lato'] font-extrabold text-[52px] leading-none tracking-[-1.5px] m-0 max-[1200px]:text-[40px] max-[900px]:text-[36px] max-[640px]:text-[28px] max-[480px]:text-[22px] max-[360px]:text-[18px]">
+                {s1?.experience?.title || '40+'}
+              </span>
+              <div className="about-badge-divider my-2 opacity-50 border-t border-white max-[640px]:my-1.5 max-[480px]:my-1"></div>
+              <span className="font-['Lato'] font-semibold text-[14.5px] leading-[145%] text-white m-0 max-[1200px]:text-[12.5px] max-[900px]:text-[12px] max-[640px]:text-[10px] max-[480px]:text-[9px] max-[480px]:leading-tight max-[360px]:text-[8px]">
+                {s1?.experience?.subText || 'Years of Experience That Drive Results'}
+              </span>
             </div>
           </div>
         </div>
@@ -155,7 +169,7 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
                       <img src={mainT.image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80"} alt={mainT.name} className="w-full h-full object-cover" />
                     </div>
                     {mainT.video && <div className="w-14 h-14 rounded-full bg-[rgba(255,255,255,0.25)] backdrop-blur-[8px] flex items-center justify-center m-auto cursor-pointer transition-all duration-200 ease-in-out border border-[rgba(255,255,255,0.3)] hover:scale-110 hover:bg-[rgba(255,255,255,0.4)] max-[640px]:w-12 max-[640px]:h-12 max-[480px]:w-11 max-[480px]:h-11 max-[360px]:w-10 max-[360px]:h-10"><Play size={20} fill="#FFFFFF" color="#FFFFFF" className="ml-[3px]" /></div>}
-                    <div><h5 className="font-['Dancing_Script'] text-[28px] font-bold text-white m-0 tracking-[0.5px] max-[640px]:text-2xl max-[480px]:text-xl max-[360px]:text-lg">{mainT.name}</h5><span className="font-['Lato'] text-xs font-medium text-[rgba(255,255,255,0.8)] mt-1 mx-0 mb-0 leading-[1.3] max-[640px]:text-[11px] max-[480px]:text-[10px] max-[360px]:text-[9px]">{mainT.designation}</span></div>
+                    <div><h5 className="font-['Dancing_Script'] text-[28px] font-bold text-white m-0 tracking-[0.5px] max-[640px]:text-2xl max-[480px]:text-xl max-[360px]:text-[1lg]">{mainT.name}</h5><span className="font-['Lato'] text-xs font-medium text-[rgba(255,255,255,0.8)] mt-1 mx-0 mb-0 leading-[1.3] max-[640px]:text-[11px] max-[480px]:text-[10px] max-[360px]:text-[9px]">{mainT.designation}</span></div>
                   </div>
                 </div>
               );

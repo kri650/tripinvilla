@@ -329,6 +329,69 @@
   gap: 14px;
 }
 
+/* ENHANCED: amenities vertical layout */
+.amenities-horizontal-layout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+.amenity-vertical-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 16px;
+  min-width: 120px;
+  flex: 1 1 auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.015);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.amenity-vertical-item:hover {
+  transform: translateY(-3px);
+  border-color: #58A429;
+  box-shadow: 0 12px 24px rgba(88, 164, 41, 0.08);
+}
+
+.amenity-vertical-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(88, 164, 41, 0.08);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.amenity-vertical-icon svg,
+.amenity-vertical-icon img {
+  width: 30px;
+  height: 30px;
+  color: #58A429;
+}
+
+.amenity-vertical-lbl {
+  font-family: 'Lato', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: #6B7280;
+  text-transform: capitalize;
+}
+
+.amenity-vertical-val {
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
 .amenity-pill-item {
   display: flex;
   align-items: center;
@@ -1375,16 +1438,22 @@
   .breadcrumb-row {
     font-size: 10px !important;
     gap: 4px !important;
+    margin-bottom: 12px !important;
   }
 
   .detail-image-gallery {
     height: 180px !important;
     max-height: 180px !important;
     min-height: 180px !important;
+    border-radius: 10px !important;
   }
 
   .reservation-title {
     font-size: 16px !important;
+  }
+
+  .reservation-location {
+    font-size: 11px !important;
   }
 
   .highlight-green-detail {
@@ -1397,6 +1466,37 @@
 
   .about-property-text {
     font-size: 12px !important;
+  }
+
+  /* Better amenity layout for small screens */
+  .amenities-horizontal-layout {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  .amenity-vertical-item {
+    padding: 12px 8px !important;
+    min-height: 110px !important;
+  }
+
+  .amenity-vertical-icon {
+    width: 32px !important;
+    height: 32px !important;
+  }
+
+  .amenity-vertical-icon svg,
+  .amenity-vertical-icon img {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .amenity-vertical-lbl {
+    font-size: 10px !important;
+  }
+
+  .amenity-vertical-val {
+    font-size: 11px !important;
   }
 
   .amenity-pill-item {
@@ -1443,6 +1543,12 @@
     width: 40px !important;
     height: 40px !important;
     font-size: 16px !important;
+  }
+
+  /* Better button sizing */
+  .btn-view-contact-green {
+    padding: 10px 14px !important;
+    font-size: 12px !important;
   }
 }
 

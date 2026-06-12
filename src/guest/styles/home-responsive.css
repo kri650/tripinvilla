@@ -2273,7 +2273,7 @@
 }
 
 /* Show hamburger menu on small screens */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .mobile-menu-toggle {
     display: flex;
   }
@@ -2534,7 +2534,7 @@
 }
 
 /* ===== ENSURE MENU STAYS IN VIEWPORT ===== */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .mobile-nav-menu {
     right: 8px;
   }
@@ -2551,7 +2551,7 @@
 }
 
 /* ===== PREVENT MENU FROM GOING OFF SCREEN ===== */
-@media (max-width: 768px) and (max-height: 600px) {
+@media (max-width: 900px) and (max-height: 600px) {
   .mobile-nav-menu {
     padding: 10px;
     gap: 4px;
