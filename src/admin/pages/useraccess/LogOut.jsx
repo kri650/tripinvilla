@@ -13,8 +13,8 @@ export default function LogOut() {
         <h2 style={{ fontSize: 18, fontWeight: 700, marginBottom: 8 }}>Confirm Logout</h2>
         <p style={{ color: 'var(--text-muted)', fontSize: 13, marginBottom: 24 }}>Are you sure you want to log out of the admin panel?</p>
         <div style={{ display: 'flex', gap: 12, justifyContent: 'center' }}>
-                  <button className="btn btn-outline" onClick={() => navigate(-1)}>Cancel</button>
-          <button className="btn btn-primary" style={{ background: '#EF4444' }} onClick={() => {
+                  <button className="btn btn-outline" style={{ whiteSpace: 'nowrap' }} onClick={() => navigate(-1)}>Cancel</button>
+          <button className="btn btn-primary" style={{ background: '#EF4444', whiteSpace: 'nowrap' }} onClick={() => {
             localStorage.removeItem('admin_token');
             localStorage.removeItem('admin_user');
             localStorage.removeItem('user_token');
