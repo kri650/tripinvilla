@@ -116,10 +116,13 @@ export default function useGuestSearch({ API_BASE, setActiveMenu }) {
         query.append('city', String(searchVal).trim());
       }
 
+      // We do NOT send `type` to the backend because the frontend sidebar 
+      // allows multiple types to be selected via checkboxes. 
+      // If we restrict the backend query to a single type, the user can never 
+      // reveal other types by clicking checkboxes. The frontend `getFilteredProperties` 
+      // will handle the type filtering correctly.
       const typeVal = normalizePropertyType(get('type', ''));
-      if (typeVal) {
-        query.append('type', typeVal);
-      }
+      // Intentionally bypassed: if (typeVal) query.append('type', typeVal);
 
       const guestsVal = get('guests', guests);
       if (guestsVal && guestsVal !== 'Any Guests') {
@@ -127,12 +130,16 @@ export default function useGuestSearch({ API_BASE, setActiveMenu }) {
         if (match) query.append('guests', match[0]);
       }
 
+      // We do NOT send `minPrice` or `maxPrice` to the backend because the frontend 
+      // sidebar has a dual range slider that expects to filter the full dataset locally.
+      // If we restrict the backend query, the slider can never reveal properties outside that initial bound.
       const priceVal = get('price', price);
-      if (priceVal && priceVal !== 'Any') {
-        const { min, max } = parseHeroPrice(priceVal);
-        if (min !== '') query.append('minPrice', min);
-        if (max !== '') query.append('maxPrice', max);
-      }
+      // Intentionally bypassed backend price filters:
+      // if (priceVal && priceVal !== 'Any') {
+      //   const { min, max } = parseHeroPrice(priceVal);
+      //   if (min !== '') query.append('minPrice', min);
+      //   if (max !== '') query.append('maxPrice', max);
+      // }
 
       const datesVal = get('dates', dates);
       if (datesVal && datesVal !== 'Select dates' && String(datesVal).trim() !== '') {

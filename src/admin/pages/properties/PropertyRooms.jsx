@@ -241,7 +241,7 @@ export default function PropertyRooms() {
           flexDirection: 'column',
           gap: '24px'
         }}>
-          <div className="props-table-toolbar" style={{ margin: 0, borderBottom: 'none', padding: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+          <div className="props-table-toolbar" style={{ margin: 0, borderBottom: 'none', padding: 0, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '16px' }}>
             <div className="props-table-title" style={{ fontSize: '18px', fontWeight: 700, color: '#111827', margin: 0, fontFamily: '"Outfit", sans-serif', flexShrink: 0 }}>Property Requests</div>
             
             <div className="props-table-actions no-scrollbar" style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'nowrap', overflowX: 'auto', WebkitOverflowScrolling: 'touch', maxWidth: '100%' }}>
@@ -461,7 +461,7 @@ export default function PropertyRooms() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
               <div>
                 <h2 style={{ fontSize: 20, fontWeight: 700, color: '#111827', margin: 0 }}>{selectedRequest.propertyName || 'Property'}</h2>
-                <p style={{ fontSize: 13, color: '#58A429', margin: '4px 0 0 0', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+                <p style={{ fontSize: 13, color: '#58A429', margin: '4px 0 0 0', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px' }}>
                   <span style={{ display: 'inline-block', width: 6, height: 6, borderRadius: '50%', background: '#58A429' }}></span>
                   <span>{selectedRequest.location || 'Location N/A'}</span>
                   {selectedRequest.category && (

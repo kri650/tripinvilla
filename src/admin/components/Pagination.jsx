@@ -6,9 +6,9 @@ export default function Pagination({ currentPage, totalItems, itemsPerPage = 10,
   if (totalPages <= 1) return null;
 
   return (
-    <div style={{ position: 'sticky', bottom: 0, zIndex: 10, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '16px 24px', borderTop: '1px solid #F3F4F6', background: '#fff', borderBottomLeftRadius: 16, borderBottomRightRadius: 16, width: '100%', boxSizing: 'border-box' }}>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, alignItems: 'center', marginLeft: 'auto', justifyContent: 'flex-end' }}>
-        <span style={{ fontSize: 13, color: '#6B7280', marginRight: 4 }}>
+    <div className="pagination-wrapper" style={{ position: 'sticky', bottom: 0, zIndex: 10, display: 'flex', justifyContent: 'flex-end', alignItems: 'center', padding: '16px 24px', borderTop: '1px solid #F3F4F6', background: '#fff', borderBottomLeftRadius: 16, borderBottomRightRadius: 16, width: '100%', boxSizing: 'border-box', overflowX: 'auto' }}>
+      <div className="pagination-inner" style={{ display: 'flex', flexWrap: 'nowrap', gap: 8, alignItems: 'center', marginLeft: 'auto', justifyContent: 'flex-end', minWidth: 'min-content' }}>
+        <span style={{ fontSize: 13, color: '#6B7280', marginRight: 4, whiteSpace: 'nowrap' }}>
           Showing {Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)}–{Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems}
         </span>
         <button 

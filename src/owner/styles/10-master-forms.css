@@ -155,9 +155,7 @@
 
 @media (max-width: 768px) {
   .master-form-card { padding: 20px; border-radius: 16px; }
-  .master-form-header { flex-direction: column; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
   .master-form-title { font-size: 16px; }
-  .master-form-actions { width: 100%; justify-content: flex-end; }
   .form-grid-3 { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
   .form-grid-2 { grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
   .form-grid-1 { gap: 12px; margin-bottom: 16px; }

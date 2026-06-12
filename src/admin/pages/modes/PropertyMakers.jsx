@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { ChevronDown, Edit2, Trash2, MoreVertical, BedDouble } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import PropertyRoomManager from "../properties/PropertyRoomManager";
+import Pagination from "../../components/Pagination";
 
 const parseNumber = (val) => {
   if (typeof val === 'number') return val;
@@ -125,8 +126,8 @@ export default function PropertyMakers() {
     },
     privatePool: false, gardenArea: false, chefAvailable: false, entirePropertyOnly: false, securityCCTV: false, numberOfFloors: "", plotSize: "",
     restaurantOnSite: false, spaWellness: false, conferenceRoom: false, roomService: false, receptionAllDay: false, liftElevator: false, starRating: "", totalRooms: "", totalFloors: "", activities: [],
-    floorNumber: "", totalFloorsBuilding: "", furnishedStatus: "Fully Furnished", washingMachine: false, societyAmenities: [],
-    bonfireArea: false, viewType: "Mountain", outdoorSeating: false, nearestHikingTrail: "", distanceFromCity: "",
+    floorNumber: "", totalFloorsBuilding: "", furnishedStatus: "", washingMachine: false, societyAmenities: [],
+    bonfireArea: false, viewType: "", outdoorSeating: false, nearestHikingTrail: "", distanceFromCity: "",
   });
   const currentType = (formData.propertyType || '').toLowerCase();
   const [isEditing, setIsEditing] = useState(false);
@@ -141,6 +142,8 @@ export default function PropertyMakers() {
   // Upload/images state
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const [replaceTarget, setReplaceTarget] = useState(null);
+  const replaceInputRef = React.useRef(null);
   const [roomsList, setRoomsList] = useState([]);
   const [roomForm, setRoomForm] = useState({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', originalPrice: '', taxAmount: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], offer: '', rules: '' });
   const [customRoomType, setCustomRoomType] = useState('');
@@ -205,7 +208,10 @@ export default function PropertyMakers() {
     try {
       const res = await fetch(`${import.meta.env.VITE_API_BASE}/master/properties`);
       const data = await res.json();
-      if (Array.isArray(data)) setProperties(data);
+      if (Array.isArray(data)) {
+        data.sort((a, b) => (b.createdAt && a.createdAt) ? new Date(b.createdAt) - new Date(a.createdAt) : (b._id || '').toString().localeCompare((a._id || '').toString()));
+        setProperties(data);
+      }
     } catch (err) {
       console.error("Error fetching property masters:", err);
     } finally {
@@ -474,6 +480,29 @@ export default function PropertyMakers() {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== idx));
   };
 
+  const handleReplaceClick = (type, index) => {
+    setReplaceTarget({ type, index });
+    if (replaceInputRef.current) replaceInputRef.current.click();
+  };
+
+  const handleReplaceFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) {
+      setReplaceTarget(null);
+      return;
+    }
+
+    if (replaceTarget?.type === 'existing') {
+      setExistingImages(prev => prev.filter((_, i) => i !== replaceTarget.index));
+      setSelectedFiles(prev => [...prev, file]);
+    } else if (replaceTarget?.type === 'new') {
+      setSelectedFiles(prev => prev.map((f, i) => i === replaceTarget.index ? file : f));
+    }
+
+    if (replaceInputRef.current) replaceInputRef.current.value = '';
+    setReplaceTarget(null);
+  };
+
   const handleRemoveExistingImage = (idx) => {
     setExistingImages((prev) => prev.filter((_, i) => i !== idx));
   };
@@ -593,6 +622,7 @@ export default function PropertyMakers() {
         restaurantOnSite: formData.restaurantOnSite, spaWellness: formData.spaWellness, conferenceRoom: formData.conferenceRoom, roomService: formData.roomService, receptionAllDay: formData.receptionAllDay, liftElevator: formData.liftElevator, starRating: formData.starRating, totalRooms: formData.totalRooms, totalFloors: formData.totalFloors, activities: formData.activities,
         floorNumber: formData.floorNumber, totalFloorsBuilding: formData.totalFloorsBuilding, furnishedStatus: formData.furnishedStatus, washingMachine: formData.washingMachine, societyAmenities: formData.societyAmenities,
         bonfireArea: formData.bonfireArea, viewType: formData.viewType, outdoorSeating: formData.outdoorSeating, nearestHikingTrail: formData.nearestHikingTrail, distanceFromCity: formData.distanceFromCity,
+        foodPreference: formData.foodPreference,
         images: existingImages.filter(u => u && !u.startsWith('blob:')),
         rooms: roomsList,
         otherDetails: rulesSections,
@@ -700,11 +730,11 @@ export default function PropertyMakers() {
       activities: p.activities || [],
       floorNumber: p.floorNumber || "",
       totalFloorsBuilding: p.totalFloorsBuilding || "",
-      furnishedStatus: p.furnishedStatus || "Fully Furnished",
+      furnishedStatus: p.furnishedStatus || "",
       washingMachine: p.washingMachine || false,
       societyAmenities: p.societyAmenities || [],
       bonfireArea: p.bonfireArea || false,
-      viewType: p.viewType || "Mountain",
+      viewType: p.viewType || "",
       outdoorSeating: p.outdoorSeating || false,
       nearestHikingTrail: p.nearestHikingTrail || "",
       distanceFromCity: p.distanceFromCity || "",
@@ -1484,6 +1514,29 @@ export default function PropertyMakers() {
                       />
                       <button
                         type="button"
+                        onClick={() => handleReplaceClick('existing', idx)}
+                        style={{
+                          position: "absolute",
+                          bottom: "-6px",
+                          right: "-6px",
+                          background: "#3B82F6",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "18px",
+                          height: "18px",
+                          fontSize: "10px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        title="Replace image"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => handleRemoveExistingImage(idx)}
                         style={{
                           position: "absolute",
@@ -1523,6 +1576,29 @@ export default function PropertyMakers() {
                           border: "2px solid #58A429",
                         }}
                       />
+                      <button
+                        type="button"
+                        onClick={() => handleReplaceClick('new', idx)}
+                        style={{
+                          position: "absolute",
+                          bottom: "-6px",
+                          right: "-6px",
+                          background: "#3B82F6",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "18px",
+                          height: "18px",
+                          fontSize: "10px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        title="Replace image"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      </button>
                       <button
                         type="button"
                         onClick={() => handleRemoveNewFile(idx)}
@@ -1592,6 +1668,13 @@ export default function PropertyMakers() {
                     ref={fileInputRef}
                     onChange={handleFileChange}
                     multiple
+                    hidden
+                    accept="image/*"
+                  />
+                  <input
+                    type="file"
+                    ref={replaceInputRef}
+                    onChange={handleReplaceFileChange}
                     hidden
                     accept="image/*"
                   />
@@ -2684,37 +2767,14 @@ export default function PropertyMakers() {
   </div>
 
     {/* Pagination Controls */}
-    {totalPages > 1 && (
-      <div style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', gap: 8, justifyContent: 'flex-end', alignItems: 'center', padding: '14px 8px 4px', width: '100%', boxSizing: 'border-box' }}>
-        <span style={{ fontSize: '13px', color: '#6B7280', whiteSpace: 'nowrap', marginRight: 4 }}>
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-          disabled={currentPage === 1}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === 1 ? '#F9FAFB' : '#fff', color: currentPage === 1 ? '#D1D5DB' : '#374151', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', flexShrink: 0 }}
-        >
-          ‹
-        </button>
-        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => {
-          if (page === 1 || page === totalPages || (page >= currentPage - 1 && page <= currentPage + 1)) {
-            return (
-              <button key={page} onClick={() => setCurrentPage(page)}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === page ? '#58A429' : '#fff', color: currentPage === page ? '#fff' : '#374151', cursor: 'pointer', fontWeight: currentPage === page ? 600 : 400, flexShrink: 0 }}
-              >{page}</button>
-            );
-          }
-          if (page === 2 && currentPage > 3) return <span key={page} style={{ color: '#9CA3AF', padding: '0 2px', lineHeight: '32px' }}>...</span>;
-          if (page === totalPages - 1 && currentPage < totalPages - 2) return <span key={page} style={{ color: '#9CA3AF', padding: '0 2px', lineHeight: '32px' }}>...</span>;
-          return null;
-        })}
-        <button
-          onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-          disabled={currentPage === totalPages}
-          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, border: '1px solid #E5E7EB', background: currentPage === totalPages ? '#F9FAFB' : '#fff', color: currentPage === totalPages ? '#D1D5DB' : '#374151', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', flexShrink: 0 }}
-        >
-          ›
-        </button>
+    {properties.length > 0 && (
+      <div style={{ margin: '0 -24px -24px' }}>
+        <Pagination 
+          currentPage={currentPage} 
+          totalItems={properties.length} 
+          itemsPerPage={itemsPerPage} 
+          onPageChange={setCurrentPage} 
+        />
       </div>
     )}
   </div >

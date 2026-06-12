@@ -87,7 +87,7 @@ export default function Login() {
         {/* Logo Image */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '4px' }}>
           <img 
-            src="/tripinvilla_logo_white.png" 
+            src="/tripinvilla_logo.png" 
             alt="Tripinstays Logo" 
             style={{ height: '110px', width: 'auto', objectFit: 'contain' }} 
           />

@@ -59,45 +59,55 @@ export default function PropertyDetailPage(props) {
       }
     };
 
+    const pType = (p.type || '').toLowerCase();
+
     // Villa / House / Homestay
-    addSpec('Private Pool', p.privatePool, 'Waves');
-    addSpec('Garden Area', p.gardenArea, 'Flower2');
-    addSpec('Chef Available', p.chefAvailable, 'ChefHat');
-    addSpec('Entire Property Only', p.entirePropertyOnly, 'Home');
-    addSpec('Security CCTV', p.securityCCTV, 'Shield');
-    addSpec('Number of Floors', p.numberOfFloors, 'Home');
-    addSpec('Plot Size', p.plotSize, 'Maximize');
+    if (pType.includes('villa') || pType.includes('house') || pType.includes('homestay') || pType.includes('lodge')) {
+      addSpec('Private Pool', p.privatePool, 'Waves');
+      addSpec('Garden Area', p.gardenArea, 'Flower2');
+      addSpec('Chef Available', p.chefAvailable, 'ChefHat');
+      addSpec('Entire Property Only', p.entirePropertyOnly, 'Home');
+      addSpec('Security CCTV', p.securityCCTV, 'Shield');
+      addSpec('Number of Floors', p.numberOfFloors, 'Home');
+      addSpec('Plot Size', p.plotSize, 'Maximize');
+    }
 
     // Hotel / Resort
-    addSpec('Restaurant On Site', p.restaurantOnSite, 'Utensils');
-    addSpec('Spa & Wellness', p.spaWellness, 'Sparkles');
-    addSpec('Conference Room', p.conferenceRoom, 'Monitor');
-    addSpec('Room Service', p.roomService, 'Coffee');
-    addSpec('24/7 Reception', p.receptionAllDay, 'Clock');
-    addSpec('Lift / Elevator', p.liftElevator, 'Maximize');
-    addSpec('Star Rating', p.starRating, 'Star');
-    addSpec('Total Rooms', p.totalRooms, 'Home');
-    addSpec('Total Floors', p.totalFloors, 'Home');
-    if (p.activities && p.activities.length > 0) {
-      addSpec('Activities', Array.isArray(p.activities) ? p.activities.join(', ') : p.activities, 'Dumbbell');
+    if (pType.includes('hotel') || pType.includes('resort')) {
+      addSpec('Restaurant On Site', p.restaurantOnSite, 'Utensils');
+      addSpec('Spa & Wellness', p.spaWellness, 'Sparkles');
+      addSpec('Conference Room', p.conferenceRoom, 'Monitor');
+      addSpec('Room Service', p.roomService, 'Coffee');
+      addSpec('24/7 Reception', p.receptionAllDay, 'Clock');
+      addSpec('Lift / Elevator', p.liftElevator, 'Maximize');
+      addSpec('Star Rating', p.starRating, 'Star');
+      addSpec('Total Rooms', p.totalRooms, 'Home');
+      addSpec('Total Floors', p.totalFloors, 'Home');
+      if (p.activities && p.activities.length > 0) {
+        addSpec('Activities', Array.isArray(p.activities) ? p.activities.join(', ') : p.activities, 'Dumbbell');
+      }
     }
 
     // Apartment / Flat
-    addSpec('Floor Number', p.floorNumber, 'Home');
-    addSpec('Total Floors in Building', p.totalFloorsBuilding, 'Home');
-    addSpec('Furnished Status', p.furnishedStatus, 'Home');
-    addSpec('Washing Machine', p.washingMachine, 'Wind');
-    if (p.societyAmenities && p.societyAmenities.length > 0) {
-      addSpec('Society Amenities', Array.isArray(p.societyAmenities) ? p.societyAmenities.join(', ') : p.societyAmenities, 'Sparkles');
+    if (pType.includes('apartment') || pType.includes('flat')) {
+      addSpec('Floor Number', p.floorNumber, 'Home');
+      addSpec('Total Floors in Building', p.totalFloorsBuilding, 'Home');
+      addSpec('Furnished Status', p.furnishedStatus, 'Home');
+      addSpec('Washing Machine', p.washingMachine, 'Wind');
+      if (p.societyAmenities && p.societyAmenities.length > 0) {
+        addSpec('Society Amenities', Array.isArray(p.societyAmenities) ? p.societyAmenities.join(', ') : p.societyAmenities, 'Sparkles');
+      }
     }
 
-    // Cabin / Cottage / Camp
-    addSpec('Bonfire Area', p.bonfireArea, 'Flame');
-    addSpec('View Type', p.viewType, 'Waves');
-    addSpec('Outdoor Seating', p.outdoorSeating, 'Coffee');
-    addSpec('Nearest Hiking Trail', p.nearestHikingTrail, 'MapPin');
-    if (p.distanceFromCity) {
-      addSpec('Distance from City', `${p.distanceFromCity} km`, 'MapPin');
+    // Cabin / Cottage / Camp / Tent
+    if (pType.includes('cabin') || pType.includes('cottage') || pType.includes('camp') || pType.includes('tent')) {
+      addSpec('Bonfire Area', p.bonfireArea, 'Flame');
+      addSpec('View Type', p.viewType, 'Waves');
+      addSpec('Outdoor Seating', p.outdoorSeating, 'Coffee');
+      addSpec('Nearest Hiking Trail', p.nearestHikingTrail, 'MapPin');
+      if (p.distanceFromCity) {
+        addSpec('Distance from City', `${p.distanceFromCity} km`, 'MapPin');
+      }
     }
 
     if (specs.length === 0) return null;
@@ -171,7 +181,7 @@ export default function PropertyDetailPage(props) {
     : `₹${Number(rawVal).toLocaleString('en-IN')}`;
   const oldPriceString = activeDetailProp.originalPrice 
     ? `₹${Number(activeDetailProp.originalPrice).toLocaleString('en-IN')}`
-    : `₹${Math.round(rawVal * 1.2).toLocaleString('en-IN')}`;
+    : null;
 
   return (
     <div className="detail-page-wrapper fade-in">
@@ -262,9 +272,8 @@ export default function PropertyDetailPage(props) {
             {/* Offer Display Block */}
             {(() => {
               let currentOffer = popularOffers.find(o => 
-                (o.property_id && o.property_id._id === activeDetailProp._id) || 
-                o.property_id === activeDetailProp._id ||
-                o.propertyId === activeDetailProp._id
+                (o.property_id && String(o.property_id._id || o.property_id) === String(activeDetailProp._id)) || 
+                String(o.propertyId) === String(activeDetailProp._id)
               );
               
               if (!currentOffer && propertyRooms && propertyRooms.length > 0) {
@@ -479,11 +488,10 @@ export default function PropertyDetailPage(props) {
               const roomImg = room.room_image_url || room.img || room.image || 'https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=600&q=80';
               const roomTitle = room.room_type || room.title || room.name || room.type || 'Standard Room';
               const roomPrice = Number(String(room.price_per_room || room.price || room.rate || 1400).replace(/[^\d]/g, ''));
-              const roomOriginalPrice = room.original_price || room.originalPrice || room.original_rate || Math.round(roomPrice * 1.2);
+              const roomOriginalPrice = room.original_price || room.originalPrice || room.original_rate;
               const currentOfferForRoom = popularOffers.find(o => 
-                (o.property_id && o.property_id._id === activeDetailProp._id) || 
-                o.property_id === activeDetailProp._id ||
-                o.propertyId === activeDetailProp._id
+                (o.property_id && String(o.property_id._id || o.property_id) === String(activeDetailProp._id)) || 
+                String(o.propertyId) === String(activeDetailProp._id)
               );
               const roomFoodType = currentOfferForRoom ? (currentOfferForRoom.foods || currentOfferForRoom.food_type) : (activeDetailProp.foodPreference && activeDetailProp.foodPreference !== 'none' ? activeDetailProp.foodPreference : null);
 
@@ -535,13 +543,15 @@ export default function PropertyDetailPage(props) {
                           </div>
                         )}
                       </div>
+                      
+
                     </div>
 
                     <div className="room-card-pricing-col">
                       <div className="room-pricing-text-group">
                         <span className="room-taxes-label">+{room.tax_amount || room.taxAmount || activeDetailProp.taxAmount || 212} taxes & fees per<br />room per night</span>
-                        {roomOriginalPrice && (
-                          <span className="room-old-strike">₹{Number(roomOriginalPrice).toLocaleString('en-IN')}/night</span>
+                        {(room.original_price || room.originalPrice || room.original_rate) && (
+                          <span className="room-old-strike">₹{Number(room.original_price || room.originalPrice || room.original_rate).toLocaleString('en-IN')}/night</span>
                         )}
                         <span className="room-green-val">₹{Number(roomPrice).toLocaleString('en-IN')}/night</span>
                       </div>

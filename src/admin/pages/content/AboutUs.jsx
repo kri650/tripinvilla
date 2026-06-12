@@ -208,14 +208,14 @@ export default function AboutUs() {
       {/* Form Card */}
       <div className="dash-section" style={{ marginBottom: 24 }}>
         <div className="master-form-card" style={{ margin: 0 }}>
-          <div className="master-form-header" style={{ marginBottom: 24 }}>
+          <div className="master-form-header" style={{ marginBottom: 0 }}>
             <div className="master-form-title">About Us</div>
             <div className="master-form-actions">
               <button className="btn-solid-green" onClick={handleUpdate} disabled={loading}>{loading ? 'Updating...' : 'Update'}</button>
             </div>
           </div>
           
-          <hr style={{ border: 'none', borderBottom: '1px solid #E5E7EB', margin: '0 -32px 24px -32px' }} />
+
 
           {/* Banner */}
           <SectionLabel text="Banner" />
@@ -227,7 +227,7 @@ export default function AboutUs() {
             <FileUpload label="Banner Image*" name="banner.image" onChange={e => handleFileChange(e, 'banner.image')} fileData={getFileDisplay('banner.image')} />
           </div>
 
-          <hr style={{ border: 'none', borderBottom: '1px solid #E5E7EB', margin: '0 -32px 24px -32px' }} />
+
 
           {/* Section 1 — Intro block on About Us page */}
           <SectionLabel text="Section 1 — Intro (Mission, Vision & Experience)" />
@@ -287,7 +287,7 @@ export default function AboutUs() {
             <FileUpload label="Main Image*" name="section1.mainImage" onChange={e => handleFileChange(e, 'section1.mainImage')} fileData={getFileDisplay('section1.mainImage')} />
           </div>
 
-          <hr style={{ border: 'none', borderBottom: '1px solid #E5E7EB', margin: '0 -32px 24px -32px' }} />
+
 
           {/* Section 3: Testimonials */}
           <SectionLabel text="Section 3 — Testimonials (shown on About Us page)" />

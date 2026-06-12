@@ -85,7 +85,7 @@ export default function Bookings() {
       <div className="dashboard-card" style={{ padding: 24 }}>
         
         {/* Table Filters bar */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'wrap', marginBottom: 20 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16, flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', marginBottom: 20 }}>
           <div style={{ display: 'flex', gap: 10, flex: 1, minWidth: 260 }}>
             <DateRangeDropdown 
               startDate={filterDateFrom}

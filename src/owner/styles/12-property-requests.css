@@ -527,6 +527,7 @@
 .room-hero-img-wrap {
   position: relative;
   flex: 0 0 45%;
+  max-width: 420px;
   min-height: 100%;
   background: #f3f4f6;
 }

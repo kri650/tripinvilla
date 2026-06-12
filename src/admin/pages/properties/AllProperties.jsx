@@ -50,8 +50,8 @@ export default function AllProperties() {
     inactiveAdmin: 0,
   });
   const [searchQuery, setSearchQuery] = useState("");
-  const [dateFrom, setDateFrom] = useState(() => localStorage.getItem('dashboard_date_from') || "");
-  const [dateTo, setDateTo] = useState(() => localStorage.getItem('dashboard_date_to') || "");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
   const [propertyType, setPropertyType] = useState("");
   const [loading, setLoading] = useState(false); // Add Panel State
   const [showPanel, setShowPanel] = useState(false);
@@ -175,6 +175,8 @@ export default function AllProperties() {
       let combinedProperties = [];
       if (dataActive?.properties) combinedProperties = [...dataActive.properties];
       if (dataInactive?.properties) combinedProperties = [...combinedProperties, ...dataInactive.properties];
+
+      combinedProperties.sort((a, b) => (b.createdAt && a.createdAt) ? new Date(b.createdAt) - new Date(a.createdAt) : (b._id || '').toString().localeCompare((a._id || '').toString()));
 
       setProperties(combinedProperties);
       setCurrentPage(1); // Reset page on new fetch

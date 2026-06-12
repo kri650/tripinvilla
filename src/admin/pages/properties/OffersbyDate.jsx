@@ -91,7 +91,7 @@ export default function OffersbyDate() {
   return (
     <div className="fade-in">
       {/* Breadcrumb & Action */}
-      <div className="props-breadcrumb" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', margin: '0 39px 12px' }}>
+      <div className="props-breadcrumb" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '4px 39px 8px', margin: 0 }}>
         <div>
           Property Management &gt; <span>Offers by Date</span>
         </div>
@@ -226,13 +226,24 @@ export default function OffersbyDate() {
                       <td style={{ color: '#111827', fontWeight: 500, padding: '14px' }}>
                         {o.price || o.price_per_room || (o.property_id && (o.property_id.price || o.property_id.bestRoomRate)) ? `₹${o.price || o.price_per_room || (o.property_id && (o.property_id.price || o.property_id.bestRoomRate))}` : 'N/A'}
                       </td>
-                      <td style={{ color: '#6B7280', padding: '14px' }}>{o.foods || o.food_type || 'N/A'}</td>
+                      <td style={{ color: '#6B7280', padding: '14px' }}>
+                        {(() => {
+                          const fp = o.foods || o.food_type || o.property_id?.foodPreference;
+                          if (!fp || fp === 'none' || fp === 'None') return 'None';
+                          const fpLower = fp.toLowerCase();
+                          if (fpLower === 'veg' || fp === 'Pure Veg') return 'Pure Veg';
+                          if (fpLower === 'non-veg' || fp === 'Non-Veg') return 'Non-Veg';
+                          if (fpLower === 'both' || fp === 'Both') return 'Both';
+                          return fp;
+                        })()}
+                      </td>
                       <td style={{ color: '#6B7280', padding: '14px' }}><ReadMore>{Array.isArray(o.amenities) ? o.amenities.join(', ') : o.amenities}</ReadMore></td>
                       <td style={{ color: '#111827', fontWeight: 600, padding: '14px' }}>
                         {(() => {
-                          const val = o.offerPercent || o.offer || '20% Off';
+                          const val = o.offerPercent || o.offer || '';
                           const str = String(val).trim();
-                          if (/off/i.test(str)) return str;
+                          if (!str) return 'No Offer';
+                        if (/off/i.test(str)) return str;
                           if (str.endsWith('%')) return `${str} Off`;
                           return `${str}% Off`;
                         })()}

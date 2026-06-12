@@ -104,17 +104,17 @@ export default function SupportAbuse() {
       </div>
 
       <div className="admin-table-card">
-        <div className="admin-table-header" style={{ marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <h2 className="admin-table-title">Support Videos</h2>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <button style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 16px', border: '1px solid #58A429', borderRadius: '8px', color: '#58A429', background: 'none', cursor: 'pointer', fontSize: '13px', fontWeight: 500 }}>
+        <div className="props-table-toolbar">
+          <h2 className="props-table-title">Support Videos</h2>
+          <div className="props-table-actions">
+            <button className="props-btn-filter">
               <Filter size={14} /> Filter
             </button>
-            <div style={{ position: 'relative', display: 'flex', alignItems: 'center' }}>
-              <Search size={16} color="#9CA3AF" style={{ position: 'absolute', left: '12px' }} />
-              <input type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} style={{ padding: '8px 12px 8px 36px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none', fontSize: '13px', width: '200px' }} />
+            <div className="props-search-wrap">
+              <Search size={16} color="#9CA3AF" />
+              <input type="text" placeholder="Search" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} />
             </div>
-            <button onClick={() => setShowAddForm(!showAddForm)} className="btn-solid-green" style={{ padding: '8px 24px', cursor: 'pointer', borderRadius: '8px', border: 'none' }}>
+            <button onClick={() => setShowAddForm(!showAddForm)} className="props-btn-add">
               Add
             </button>
           </div>

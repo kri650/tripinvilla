@@ -18,8 +18,8 @@ export default function Dashboard() {
   const [recentEnquiries, setRecentEnquiries] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [dashboardDateFrom, setDashboardDateFrom] = useState(() => localStorage.getItem('dashboard_date_from') || '');
-  const [dashboardDateTo, setDashboardDateTo] = useState(() => localStorage.getItem('dashboard_date_to') || '');
+  const [dashboardDateFrom, setDashboardDateFrom] = useState('');
+  const [dashboardDateTo, setDashboardDateTo] = useState('');
 
   useEffect(() => {
     const handleDateChange = (e) => {

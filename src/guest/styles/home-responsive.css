@@ -3349,16 +3349,6 @@
 
 /* ===== TABLET RESPONSIVE (1024px and below) ===== */
 @media (max-width: 1024px) {
-  .props-table-toolbar {
-    flex-wrap: wrap !important;
-    gap: 12px !important;
-  }
-
-  .props-table-actions {
-    flex-wrap: wrap !important;
-    gap: 8px !important;
-  }
-
   .data-table {
     font-size: 13px !important;
   }
@@ -3366,11 +3356,6 @@
   .data-table th,
   .data-table td {
     padding: 8px 12px !important;
-  }
-
-  .admin-flex-search-wrap {
-    min-width: 100px !important;
-    max-width: 140px !important;
   }
 }
 
@@ -3389,33 +3374,13 @@
     margin: 0 !important;
   }
 
-  .props-table-toolbar {
-    flex-direction: column !important;
-    align-items: flex-start !important;
-    gap: 16px !important;
-  }
-
   .props-table-title {
     font-size: 16px !important;
     margin-bottom: 8px !important;
   }
 
-  .props-table-actions {
-    width: 100% !important;
-    flex-direction: column !important;
-    gap: 12px !important;
-  }
-
-  .admin-flex-search-wrap {
-    width: 100% !important;
-    max-width: none !important;
-    min-width: auto !important;
-  }
-
   /* Convert table to card layout on mobile */
-  /* .data-table {
-    display: none !important;
-  } */
+
 
   .mobile-cities-cards {
     display: block !important;
@@ -3545,18 +3510,6 @@
     padding: 8px 10px;
     font-size: 12px;
   }
-
-  .props-table-actions > div {
-    width: 100% !important;
-  }
-
-  .props-filter-select {
-    max-width: none !important;
-  }
-
-  .props-filter-select select {
-    max-width: none !important;
-  }
 }
 
 /* ===== MOBILE SMALL (480px and below) ===== */
@@ -3606,9 +3559,7 @@
 
 /* ===== HIDE TABLE ON MOBILE AND SHOW CARD LAYOUT ===== */
 @media (max-width: 768px) {
-  /* .data-table {
-    display: none !important;
-  } */
+
 
   .mobile-cities-container {
     display: block !important;
@@ -3640,22 +3591,6 @@
 
 /* ===== TOOLBAR IMPROVEMENTS FOR MOBILE ===== */
 @media (max-width: 640px) {
-  .props-table-toolbar {
-    padding: 12px 16px !important;
-  }
-
-  .props-table-actions {
-    gap: 8px !important;
-  }
-
-  .props-table-actions > div {
-    flex: 1 !important;
-    min-width: 0 !important;
-  }
-
-  .admin-flex-search-wrap input {
-    font-size: 11px !important;
-  }
 }
 
 /* ===== RESPONSIVE PROPERTY COUNT HIGHLIGHTS ===== */
@@ -3921,3 +3856,37 @@
     min-height: 32px !important;
   }
 }
+
+/* ===== SERVICES SECTION MOBILE REFLOW FIX ===== */
+@media (max-width: 900px) {
+  .service-tall-card,
+  .service-image-card {
+    height: auto !important;
+    min-height: 0 !important;
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    overflow: hidden !important;
+    background: transparent !important;
+  }
+
+  .service-tall-card img,
+  .service-image-card img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+  }
+
+  .service-text-card {
+    border-radius: 16px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+    background: #FFFFFF !important;
+    margin-bottom: 0 !important;
+  }
+
+  .services-col,
+  .services-grid-asym {
+    gap: 16px !important;
+  }
+}
+

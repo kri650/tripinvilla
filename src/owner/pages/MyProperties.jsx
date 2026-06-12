@@ -5,6 +5,7 @@ import { propertyService, dashboardService } from '../services/api';
 import PropertyViewModal from '../../admin/pages/properties/PropertyViewModal';
 import ReadMore from '../../admin/components/ReadMore';
 import DateRangeDropdown from '../../components/DateRangeDropdown';
+import Pagination from '../../admin/components/Pagination';
 
 const TIME_SLOTS = (() => {
   const slots = [];
@@ -111,6 +112,7 @@ export default function MyProperties({ autoOpenForm = false }) {
     restaurantOnSite: false, spaWellness: false, conferenceRoom: false, roomService: false, receptionAllDay: false, liftElevator: false, starRating: '', totalRooms: '', totalFloors: '', activities: [],
     floorNumber: '', totalFloorsBuilding: '', furnishedStatus: '', washingMachine: false, societyAmenities: [],
     bonfireArea: false, viewType: '', outdoorSeating: false, nearestHikingTrail: '', distanceFromCity: '',
+    foodPreference: 'both',
   });
 
   const currentType = (formData.type || '').toLowerCase();
@@ -126,6 +128,8 @@ export default function MyProperties({ autoOpenForm = false }) {
   // ─── Images ───────────────────────────────────────────────
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [existingImages, setExistingImages] = useState([]);
+  const replaceInputRef = useRef(null);
+  const [replaceTarget, setReplaceTarget] = useState(null);
 
   // ─── Rooms (for Hotel / Resort) ──────────────────────
   const [roomsList, setRoomsList] = useState([]);
@@ -187,8 +191,8 @@ export default function MyProperties({ autoOpenForm = false }) {
   // ─── Filters ──────────────────────────────────────────────
   const [filterType, setFilterType] = useState('');
   const [filterSearch, setFilterSearch] = useState('');
-  const [filterDateFrom, setFilterDateFrom] = useState(() => localStorage.getItem('dashboard_date_from') || '');
-  const [filterDateTo, setFilterDateTo] = useState(() => localStorage.getItem('dashboard_date_to') || '');
+  const [filterDateFrom, setFilterDateFrom] = useState('');
+  const [filterDateTo, setFilterDateTo] = useState('');
 
   useEffect(() => {
     const handleDateChange = (e) => {
@@ -483,6 +487,33 @@ export default function MyProperties({ autoOpenForm = false }) {
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
 
+  const handleReplaceClick = (type, index) => {
+    setReplaceTarget({ type, index });
+    if (replaceInputRef.current) replaceInputRef.current.click();
+  };
+
+  const handleReplaceFileChange = (e) => {
+    if (!e.target.files || e.target.files.length === 0) return;
+    const file = e.target.files[0];
+    if (file.size > 5 * 1024 * 1024) {
+      alert("File size exceeds 5MB limit");
+      return;
+    }
+    
+    if (replaceTarget) {
+      if (replaceTarget.type === 'new') {
+        setSelectedFiles(prev => prev.map((f, i) => i === replaceTarget.index ? file : f));
+      } else if (replaceTarget.type === 'existing') {
+        const removedImage = existingImages[replaceTarget.index];
+        setFormData(prev => ({ ...prev, removedImages: [...(prev.removedImages || []), removedImage] }));
+        setExistingImages(prev => prev.filter((_, i) => i !== replaceTarget.index));
+        setSelectedFiles(prev => [...prev, file]);
+      }
+    }
+    setReplaceTarget(null);
+    if (replaceInputRef.current) replaceInputRef.current.value = '';
+  };
+
   const handleRemoveNewFile = (idx) => setSelectedFiles(prev => prev.filter((_, i) => i !== idx));
   const handleRemoveExistingImage = (idx) => setExistingImages(prev => prev.filter((_, i) => i !== idx));
 
@@ -601,6 +632,7 @@ export default function MyProperties({ autoOpenForm = false }) {
       restaurantOnSite: fullP.restaurantOnSite || false, spaWellness: fullP.spaWellness || false, conferenceRoom: fullP.conferenceRoom || false, roomService: fullP.roomService || false, receptionAllDay: fullP.receptionAllDay || false, liftElevator: fullP.liftElevator || false, starRating: fullP.starRating || '', totalRooms: fullP.totalRooms || '', totalFloors: fullP.totalFloors || '', activities: fullP.activities || [],
       floorNumber: fullP.floorNumber || '', totalFloorsBuilding: fullP.totalFloorsBuilding || '', furnishedStatus: fullP.furnishedStatus || '', washingMachine: fullP.washingMachine || false, societyAmenities: fullP.societyAmenities || [],
       bonfireArea: fullP.bonfireArea || false, viewType: fullP.viewType || '', outdoorSeating: fullP.outdoorSeating || false, nearestHikingTrail: fullP.nearestHikingTrail || '', distanceFromCity: fullP.distanceFromCity || '',
+      foodPreference: fullP.foodPreference || 'none',
     });
     setManualLocation(manualLoc);
     setManualValues(manualVals);
@@ -697,6 +729,7 @@ export default function MyProperties({ autoOpenForm = false }) {
         restaurantOnSite: formData.restaurantOnSite, spaWellness: formData.spaWellness, conferenceRoom: formData.conferenceRoom, roomService: formData.roomService, receptionAllDay: formData.receptionAllDay, liftElevator: formData.liftElevator, starRating: formData.starRating, totalRooms: formData.totalRooms, totalFloors: formData.totalFloors, activities: formData.activities,
         floorNumber: formData.floorNumber, totalFloorsBuilding: formData.totalFloorsBuilding, furnishedStatus: formData.furnishedStatus, washingMachine: formData.washingMachine, societyAmenities: formData.societyAmenities,
         bonfireArea: formData.bonfireArea, viewType: formData.viewType, outdoorSeating: formData.outdoorSeating, nearestHikingTrail: formData.nearestHikingTrail, distanceFromCity: formData.distanceFromCity,
+        foodPreference: formData.foodPreference,
       };
 
       console.log('📤 Sending property data to backend:', propertyData);
@@ -1196,11 +1229,34 @@ export default function MyProperties({ autoOpenForm = false }) {
             {sectionWrap(<>
               {sectionHeader('4. Property Images', 'Upload minimum 4 images, maximum 10. First image becomes cover photo.')}
               {(existingImages.length > 0 || selectedFiles.length > 0) && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginBottom: '14px' }}>
+                <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '10px', marginBottom: '14px' }}>
                   {existingImages.map((url, idx) => (
                     <div key={`ex-${idx}`} style={{ position: 'relative', width: '80px', height: '80px' }}>
                       <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px', border: idx === 0 ? '2px solid #58A429' : '1px solid #D1D5DB' }} />
                       {idx === 0 && <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(88,164,41,0.85)', color: '#fff', fontSize: '9px', textAlign: 'center', borderRadius: '0 0 10px 10px', padding: '2px' }}>Cover</span>}
+                      <button
+                        type="button"
+                        onClick={() => handleReplaceClick('existing', idx)}
+                        style={{
+                          position: "absolute",
+                          bottom: "-6px",
+                          right: "-6px",
+                          background: "#3B82F6",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "18px",
+                          height: "18px",
+                          fontSize: "10px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        title="Replace image"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      </button>
                       <button type="button" onClick={() => handleRemoveExistingImage(idx)} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#EF4444', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
                     </div>
                   ))}
@@ -1208,6 +1264,29 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <div key={`new-${idx}`} style={{ position: 'relative', width: '80px', height: '80px' }}>
                       <img src={URL.createObjectURL(file)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: '10px', border: '2px solid #58A429' }} />
                       <span style={{ position: 'absolute', bottom: 0, left: 0, right: 0, background: 'rgba(0,0,0,0.5)', color: '#fff', fontSize: '9px', textAlign: 'center', borderRadius: '0 0 10px 10px', padding: '2px' }}>New</span>
+                      <button
+                        type="button"
+                        onClick={() => handleReplaceClick('new', idx)}
+                        style={{
+                          position: "absolute",
+                          bottom: "-6px",
+                          right: "-6px",
+                          background: "#3B82F6",
+                          color: "#fff",
+                          border: "none",
+                          borderRadius: "50%",
+                          width: "18px",
+                          height: "18px",
+                          fontSize: "10px",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                        title="Replace image"
+                      >
+                        <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+                      </button>
                       <button type="button" onClick={() => handleRemoveNewFile(idx)} style={{ position: 'absolute', top: '-6px', right: '-6px', background: '#EF4444', color: '#fff', border: 'none', borderRadius: '50%', width: '18px', height: '18px', fontSize: '11px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>×</button>
                     </div>
                   ))}
@@ -1217,8 +1296,8 @@ export default function MyProperties({ autoOpenForm = false }) {
                 <div onClick={() => fileInputRef.current.click()} style={{ border: '2px dashed #D1D5DB', borderRadius: '10px', padding: '24px', textAlign: 'center', cursor: 'pointer', background: '#FAFAFA' }}>
                   <Upload size={24} style={{ color: '#9CA3AF', marginBottom: '8px' }} />
                   <p style={{ margin: 0, fontSize: '13px', color: '#6B7280', fontFamily: '"Outfit", sans-serif' }}>Click to upload images (JPG, PNG — max 5MB each)</p>
-                  <p style={{ margin: '4px 0 0', fontSize: '11px', color: '#9CA3AF' }}>{existingImages.length + selectedFiles.length}/30 images added</p>
                   <input type="file" ref={fileInputRef} onChange={handleFileChange} multiple hidden accept="image/*" />
+                  <input type="file" ref={replaceInputRef} onChange={handleReplaceFileChange} hidden accept="image/*" />
                 </div>
               ) : (
                 <p style={{ color: '#EF4444', fontSize: '12px' }}>Maximum 30 images reached.</p>
@@ -1243,7 +1322,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                   </div>
                 ))}
               </div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px' }}>
                 <div>
                   <label style={labelStyle}>Area Size *</label>
                   <input style={inputStyle} type="text" name="area" value={formData.area} onChange={handleChange} placeholder="e.g. 31 sq. ft." required />
@@ -1258,6 +1337,15 @@ export default function MyProperties({ autoOpenForm = false }) {
                   <label style={labelStyle}>Check-Out Time *</label>
                   <select style={selectStyle} name="checkOut" value={formData.checkOut} onChange={handleChange} required>
                     {TIME_SLOTS.map(t => <option key={`out-${t}`} value={t}>{t}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label style={labelStyle}>Food Preference</label>
+                  <select style={selectStyle} name="foodPreference" value={formData.foodPreference || 'none'} onChange={handleChange}>
+                    <option value="none">None</option>
+                    <option value="veg">Pure Veg</option>
+                    <option value="non-veg">Non-Veg</option>
+                    <option value="both">Both</option>
                   </select>
                 </div>
               </div>
@@ -1324,7 +1412,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     {currentType === 'resort' && (
                       <div style={{ gridColumn: 'span 3' }}>
                         <label style={labelStyle}>Activities Offered</label>
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                        <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '8px' }}>
                           {['Swimming', 'Trekking', 'Cycling', 'Yoga', 'Bonfire', 'Wildlife Safari'].map(act => (
                             <button key={act} type="button" onClick={() => {
                               const curr = formData.activities || [];
@@ -1357,7 +1445,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <label style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><input type="checkbox" name="washingMachine" checked={formData.washingMachine} onChange={e => setFormData(p => ({...p, washingMachine: e.target.checked}))} style={{ accentColor: '#58A429' }} /> Washing Machine</label>
                     <div style={{ gridColumn: 'span 3' }}>
                       <label style={labelStyle}>Society Amenities</label>
-                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                      <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '8px' }}>
                         {['Gym', 'Pool', 'Security', 'Clubhouse', 'Power Backup'].map(act => (
                           <button key={act} type="button" onClick={() => {
                             const curr = formData.societyAmenities || [];
@@ -1496,7 +1584,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                   <input type="checkbox" checked={highlights.freeCancellation}
                     onChange={e => setHighlights(prev => ({ ...prev, freeCancellation: e.target.checked }))}
                     style={{ width: '18px', height: '18px', accentColor: '#58A429', cursor: 'pointer' }} />
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px' }}>
                     <span style={{ fontSize: '13px', fontWeight: 600, color: '#111827', fontFamily: '"Outfit", sans-serif' }}>❌ Free Cancellation till</span>
                     <input type="number" value={highlights.freeCancellationHours} disabled={!highlights.freeCancellation}
                       onChange={e => setHighlights(prev => ({ ...prev, freeCancellationHours: e.target.value }))}
@@ -1513,7 +1601,7 @@ export default function MyProperties({ autoOpenForm = false }) {
               {amenitiesLoading ? (
                 <p style={{ color: '#9CA3AF', fontSize: '13px' }}>Loading amenities...</p>
               ) : (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+                <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '8px' }}>
                   {availableAmenitiesList.map(am => {
                     const isSelected = selectedAmenitiesList.includes(am);
                     return (
@@ -1540,7 +1628,7 @@ export default function MyProperties({ autoOpenForm = false }) {
               {experiencesLoading ? (
                 <p style={{ color: '#9CA3AF', fontSize: '13px' }}>Loading experiences...</p>
               ) : (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
+                <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '10px' }}>
                   {availableExperiences.map(exp => {
                     const id = exp._id || exp.experienceName || exp.name;
                     const isSelected = selectedExperiences.includes(id);
@@ -1605,7 +1693,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                   </button>
                 </div>
               </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
+              <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '8px' }}>
                 {landmarksList.map((lm, idx) => (
                   <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '8px', background: '#F3F4F6', padding: '6px 10px 6px 6px', borderRadius: '16px', fontSize: '13px', border: '1px solid #E5E7EB' }}>
                     {lm.landmark_image_url ? <img src={lm.landmark_image_url} alt="" style={{ width: '32px', height: '32px', borderRadius: '8px', objectFit: 'cover' }} /> : <span>📍</span>}
@@ -1656,9 +1744,9 @@ export default function MyProperties({ autoOpenForm = false }) {
       {/* ── Property List Table ───────────────────────────────── */}
       <div style={{ margin: '0 24px 24px' }}>
         <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', width: '100%' }}>
-          <div className="table-header" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'wrap', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
-            <span className="table-title" style={{ whiteSpace: 'nowrap' }}>My Property List</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap', paddingBottom: '4px', maxWidth: '100%' }}>
+          <div className="props-table-toolbar" style={{ padding: '14px 20px', margin: 0, borderBottom: '1px solid #E5E7EB' }}>
+            <h2 className="props-table-title" style={{ margin: 0 }}>My Property List</h2>
+            <div className="props-table-actions">
               <DateRangeDropdown 
                 startDate={filterDateFrom}
                 endDate={filterDateTo}
@@ -1667,18 +1755,16 @@ export default function MyProperties({ autoOpenForm = false }) {
                   setFilterDateTo(end);
                 }}
               />
-              <select value={filterType} onChange={e => setFilterType(e.target.value)} style={{ padding: '5px 8px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '11px', color: '#374151', outline: 'none', background: '#ffffff', cursor: 'pointer', flexShrink: 0, maxWidth: '100px' }}>
+              <select value={filterType} onChange={e => setFilterType(e.target.value)} className="props-filter-select">
                 <option value="">Property Type</option>
                 {['Homestay','Villa','Apartment','Resort','Cottage','Hotel'].map(t => <option key={t} value={t}>{t}</option>)}
               </select>
-              <button onClick={() => { setFilterType(''); setFilterSearch(''); setFilterDateFrom(''); setFilterDateTo(''); }}
-                style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '5px 10px', border: '1px solid #58A429', color: '#58A429', borderRadius: '8px', fontWeight: 600, fontSize: '11px', background: '#FAFDF2', cursor: 'pointer', flexShrink: 0, whiteSpace: 'nowrap' }}>
+              <button onClick={() => { setFilterType(''); setFilterSearch(''); setFilterDateFrom(''); setFilterDateTo(''); }} className="props-btn-filter">
                 <Filter size={12} /> Clear
               </button>
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flexShrink: 1, minWidth: '80px', maxWidth: '140px' }}>
-                <Search size={14} style={{ position: 'absolute', left: '8px', color: '#9CA3AF' }} />
-                <input type="text" value={filterSearch} onChange={e => setFilterSearch(e.target.value)} placeholder="Search"
-                  style={{ padding: '6px 8px 6px 26px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '11px', width: '100%', outline: 'none', background: '#ffffff' }} />
+              <div className="props-search-wrap">
+                <Search size={14} />
+                <input type="text" value={filterSearch} onChange={e => setFilterSearch(e.target.value)} placeholder="Search" />
               </div>
             </div>
           </div>
@@ -1760,27 +1846,14 @@ export default function MyProperties({ autoOpenForm = false }) {
           </div>
 
           {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div style={{ position: 'sticky', bottom: 0, background: '#fff', padding: '16px 24px', borderTop: '1px solid #E5E7EB', zIndex: 10, margin: 0, borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: '16px' }}>
-                <button 
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
-                  disabled={currentPage === 1}
-                  style={{ background: '#F3F4F6', color: currentPage === 1 ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === 1 ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
-                >
-                  Previous
-                </button>
-                <span style={{ fontSize: '13px', color: '#6B7280', fontWeight: 500 }}>
-                  Page {currentPage} of {totalPages}
-                </span>
-                <button 
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
-                  disabled={currentPage === totalPages}
-                  style={{ background: '#F3F4F6', color: currentPage === totalPages ? '#9CA3AF' : '#374151', border: 'none', padding: '8px 16px', borderRadius: '8px', cursor: currentPage === totalPages ? 'not-allowed' : 'pointer', fontSize: '12px', fontWeight: 600 }}
-                >
-                  Next
-                </button>
-              </div>
+          {filteredProps.length > 0 && (
+            <div style={{ margin: '0 -24px -24px' }}>
+              <Pagination 
+                currentPage={currentPage} 
+                totalItems={filteredProps.length} 
+                itemsPerPage={itemsPerPage} 
+                onPageChange={setCurrentPage} 
+              />
             </div>
           )}
         </div>

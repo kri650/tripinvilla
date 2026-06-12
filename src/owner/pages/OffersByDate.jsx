@@ -3,6 +3,7 @@ import { Search, Filter, Calendar, ChevronDown, MoreVertical, Edit2, Trash2, Clo
 import { offerService, propertyRequestService } from '../services/api';
 import ReadMore from '../../admin/components/ReadMore';
 import DateRangeDropdown from '../../components/DateRangeDropdown';
+import SearchableDropdown from '../../components/SearchableDropdown';
 
 export default function OffersByDate() {
   // Form State
@@ -10,15 +11,16 @@ export default function OffersByDate() {
   const [propertyId, setPropertyId] = useState('');
   const [category, setCategory] = useState('');
   const [roomType, setRoomType] = useState('');
-  const [foods, setFoods] = useState('Pure Veg');
+  const [foods, setFoods] = useState('');
   const [amenities, setAmenities] = useState('');
   const [price, setPrice] = useState('');
   const [dateFrom, setDateFrom] = useState(new Date().toISOString().split('T')[0]);
   const [dateTo, setDateTo] = useState(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
-  const [timeFrom, setTimeFrom] = useState('12:00');
-  const [timeTo, setTimeTo] = useState('11:00');
-  const [offerPercent, setOfferPercent] = useState('20% Off');
-  const [description, setDescription] = useState('Offer will applicable on first book');
+  const [timeFrom, setTimeFrom] = useState('');
+  const [timeTo, setTimeTo] = useState('');
+  const [offerPercent, setOfferPercent] = useState('');
+  const [description, setDescription] = useState('');
+  const [editId, setEditId] = useState(null);
 
   // State lists
   const [approvedRequests, setApprovedRequests] = useState([]);
@@ -48,6 +50,7 @@ export default function OffersByDate() {
     return {
       _id: o._id || o.id,
       id: o.offerId || 'N/A',
+      raw: o, // Keep original object for editing
       dates: (
         <div style={{ whiteSpace: 'nowrap', lineHeight: '1.4' }}>
           <div>{dateFormatted}</div>
@@ -59,11 +62,20 @@ export default function OffersByDate() {
       category: o.category || o.property_id?.type || o.property_id?.category || 'N/A',
       room: o.room_type || o.room || o.property_id?.roomType || 'N/A',
       price: o.price || o.price_per_room || o.property_id?.price || o.property_id?.bestRoomRate || '',
-      foods: o.food_type || o.foods || 'N/A',
+      foods: (() => {
+        const fp = o.food_type || o.foods || o.property_id?.foodPreference;
+        if (!fp || fp === 'none' || fp === 'None') return 'None';
+        const fpLower = fp.toLowerCase();
+        if (fpLower === 'veg' || fp === 'Pure Veg') return 'Pure Veg';
+        if (fpLower === 'non-veg' || fp === 'Non-Veg') return 'Non-Veg';
+        if (fpLower === 'both' || fp === 'Both') return 'Both';
+        return fp;
+      })(),
       amenities: (Array.isArray(o.amenities) && o.amenities.length > 0) ? o.amenities.join(', ') : (o.amenities?.length ? o.amenities : ((Array.isArray(o.property_id?.amenities) && o.property_id.amenities.length > 0) ? o.property_id.amenities.join(', ') : (o.property_id?.amenities || 'N/A'))),
       offer: (() => {
-        const val = o.offer_percent || o.offerPercent || o.offer || '20% Off';
+        const val = o.offer_percent || o.offerPercent || o.offer || '';
         const str = String(val).trim();
+        if (!str) return 'No Offer';
         if (/off/i.test(str)) return str;
         if (str.endsWith('%')) return `${str} Off`;
         return `${str}% Off`;
@@ -87,19 +99,17 @@ export default function OffersByDate() {
       setLoading(true);
       const reqsRes = await propertyRequestService.getMine();
       const approved = (reqsRes.data || []).filter(r => r.admin_status === 'approved');
+      
+      // Sort alphabetically by property name
+      approved.sort((a, b) => {
+        const nameA = a.propertyName || a.property?.name || '';
+        const nameB = b.propertyName || b.property?.name || '';
+        return nameA.localeCompare(nameB);
+      });
+      
       setApprovedRequests(approved);
 
-      // Auto-select first request if available
-      if (approved.length > 0) {
-        const first = approved[0];
-        setSelectedRequestId(first._id || first.id);
-        setPropertyId(first.property_id || first.property?._id || '');
-        setCategory(first.category || first.property?.type || 'Homestay');
-        setRoomType(first.room_type || 'Deluxe Room');
-        const ams = first.amenities_types || first.property?.amenities || first.property?.amenityTypes || [];
-        setAmenities(Array.isArray(ams) ? ams.join(', ') : ams);
-        setPrice(first.price_per_room || first.property?.price || first.property?.bestRoomRate || 0);
-      }
+      // Removed auto-select of the first request on mount
 
       await refreshOffers();
     } catch (err) {
@@ -125,12 +135,13 @@ export default function OffersByDate() {
       setAmenities(Array.isArray(ams) ? ams.join(', ') : ams);
       setPrice(req.price_per_room || req.property?.price || req.property?.bestRoomRate || 0);
       
-      const fp = req.foodPreference || req.property?.foodPreference || 'both';
-      let formattedFood = 'Both';
-      if (fp === 'veg') formattedFood = 'Pure Veg';
-      if (fp === 'non-veg') formattedFood = 'Non-Veg';
-      if (fp === 'both') formattedFood = 'Both';
-      if (fp === 'none') formattedFood = 'None';
+      const fp = req.foodPreference || req.property?.foodPreference || 'none';
+      let formattedFood = 'None';
+      const fpLower = fp.toLowerCase();
+      if (fpLower === 'veg' || fp === 'Pure Veg') formattedFood = 'Pure Veg';
+      else if (fpLower === 'non-veg' || fp === 'Non-Veg') formattedFood = 'Non-Veg';
+      else if (fpLower === 'both' || fp === 'Both') formattedFood = 'Both';
+      else formattedFood = 'None';
       setFoods(formattedFood);
     } else {
       setPropertyId('');
@@ -140,6 +151,58 @@ export default function OffersByDate() {
       setPrice('');
       setFoods('');
     }
+  };
+
+  const handleEditOffer = (offer) => {
+    setEditId(offer._id);
+    const raw = offer.raw;
+    
+    // Find the matching request to populate fields
+    const reqId = raw.property_id?._id || raw.property_id;
+    const req = approvedRequests.find(r => (r.property_id?._id || r.property_id || r.property?._id) === reqId);
+    
+    if (req) {
+      setSelectedRequestId(req._id || req.id);
+    }
+    
+    setPropertyId(reqId);
+    setCategory(raw.category || '');
+    setRoomType(raw.room_type || '');
+    setAmenities(Array.isArray(raw.amenities) ? raw.amenities.join(', ') : (raw.amenities || ''));
+    setFoods(raw.food_type || '');
+    setPrice(raw.price || '');
+    
+    if (raw.dateFrom) setDateFrom(new Date(raw.dateFrom).toISOString().split('T')[0]);
+    if (raw.dateTo) setDateTo(new Date(raw.dateTo).toISOString().split('T')[0]);
+    
+    if (raw.offer_time && raw.offer_time.includes(' to ')) {
+      const [f, t] = raw.offer_time.split(' to ');
+      setTimeFrom(f);
+      setTimeTo(t);
+    }
+    
+    setOfferPercent(raw.offer_percent || raw.offerPercent || '');
+    setDescription(raw.description || '');
+    
+    // Scroll to form
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const resetForm = () => {
+    setEditId(null);
+    setSelectedRequestId('');
+    setPropertyId('');
+    setCategory('');
+    setRoomType('');
+    setAmenities('');
+    setFoods('');
+    setPrice('');
+    setDateFrom(new Date().toISOString().split('T')[0]);
+    setDateTo(new Date(Date.now() + 86400000).toISOString().split('T')[0]);
+    setTimeFrom('');
+    setTimeTo('');
+    setOfferPercent('');
+    setDescription('');
   };
 
   const handleCreateOffer = async (e) => {
@@ -168,12 +231,19 @@ export default function OffersByDate() {
         description: description
       };
 
-      await offerService.create(payload);
+      if (editId) {
+        await offerService.update(editId, payload);
+        alert('Promotional offer updated successfully!');
+      } else {
+        await offerService.create(payload);
+        alert('Promotional offer created successfully and is live instantly!');
+      }
+      
+      resetForm();
       await refreshOffers();
-      alert('Promotional offer created successfully and is live instantly!');
     } catch (err) {
-      console.error('Error creating offer:', err);
-      alert(err.response?.data?.message || 'Failed to create offer.');
+      console.error('Error saving offer:', err);
+      alert(err.response?.data?.message || 'Failed to save offer.');
     } finally {
       setSubmitting(false);
     }
@@ -241,7 +311,7 @@ export default function OffersByDate() {
       <div style={{ height: '16px' }} />
 
       {/* Breadcrumb */}
-      <div className="props-breadcrumb" style={{ margin: '0 24px 12px' }}>
+      <div className="props-breadcrumb" style={{ padding: '24px 24px 24px', margin: 0 }}>
         Property Management &gt; <span>Offers by Date</span>
       </div>
 
@@ -252,35 +322,43 @@ export default function OffersByDate() {
           {/* Form Header */}
           <div className="master-form-header" style={{ marginBottom: '24px' }}>
             <h3 className="master-form-title" style={{ fontSize: '15px', fontWeight: 700, color: '#111827', fontFamily: '"Outfit", sans-serif' }}>
-              Create Promotional Offer
+              {editId ? 'Edit Promotional Offer' : 'Create Promotional Offer'}
             </h3>
-            <button 
-              type="submit" 
-              className="btn-solid-green" 
-              disabled={submitting}
-              style={{ cursor: 'pointer', padding: '8px 24px', fontSize: '12.5px', background: '#58A429', color: '#ffffff', border: 'none', borderRadius: '8px', fontWeight: 600, opacity: submitting ? 0.7 : 1 }}
-            >
-              {submitting ? 'Adding...' : 'Add Offer'}
-            </button>
+            <div style={{ display: 'flex', gap: '10px' }}>
+              {editId && (
+                <button 
+                  type="button" 
+                  onClick={resetForm}
+                  className="btn-outline" 
+                  style={{ cursor: 'pointer', padding: '8px 24px', fontSize: '12.5px', borderRadius: '8px', fontWeight: 600 }}
+                >
+                  Cancel
+                </button>
+              )}
+              <button 
+                type="submit" 
+                className="btn-solid-green" 
+                disabled={submitting}
+                style={{ cursor: 'pointer', padding: '8px 24px', fontSize: '12.5px', background: '#58A429', color: '#ffffff', border: 'none', borderRadius: '8px', fontWeight: 600, opacity: submitting ? 0.7 : 1 }}
+              >
+                {submitting ? 'Saving...' : (editId ? 'Update Offer' : 'Add Offer')}
+              </button>
+            </div>
           </div>
 
           {/* Form Fields Grid - Row 1 */}
           <div className="form-grid-3">
             <div className="form-group">
               <label className="form-label">Property Name (Only Approved Properties)*</label>
-              <select 
-                className="form-select" 
-                value={selectedRequestId} 
-                onChange={(e) => handleRequestChange(e.target.value)}
-                required
-              >
-                <option value="">Select approved configuration...</option>
-                {approvedRequests.map(r => (
-                  <option key={r._id || r.id} value={r._id || r.id}>
-                    {r.propertyName || r.property?.name}
-                  </option>
-                ))}
-              </select>
+              <div style={{ position: 'relative' }}>
+                <SearchableDropdown
+                  options={approvedRequests.map(r => ({ value: r._id || r.id, label: r.propertyName || r.property?.name }))}
+                  value={selectedRequestId}
+                  onChange={handleRequestChange}
+                  placeholder="Select approved configuration..."
+                  searchPlaceholder="Search properties..."
+                />
+              </div>
             </div>
 
             <div className="form-group">
@@ -383,8 +461,8 @@ export default function OffersByDate() {
               </div>
             </div>
 
-            <div className="form-group">
-              <label className="form-label">Offer % (Discount)*</label>
+            <div style={{ display: 'flex', flexDirection: 'column' }}>
+              <label className="form-label" style={{ fontSize: '11px', color: '#6B7280', marginBottom: '4px' }}>Offer % (Discount)*</label>
               <input 
                 type="text" 
                 className="form-input" 
@@ -496,6 +574,7 @@ export default function OffersByDate() {
                     </td>
                     <td style={{ padding: '14px 16px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <button onClick={() => handleEditOffer(o)} style={{ color: '#58A429', background: 'none', border: 'none', cursor: 'pointer' }}><Edit2 size={14} /></button>
                         <button onClick={() => handleDeleteOffer(o._id)} style={{ color: '#EF4444', background: 'none', border: 'none', cursor: 'pointer' }}><Trash2 size={14} /></button>
                       </div>
                     </td>

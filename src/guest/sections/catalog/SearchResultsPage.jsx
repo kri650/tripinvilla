@@ -183,7 +183,7 @@ export default function SearchResultsPage(props) {
             </div>
 
             {/* Clear filters */}
-            <button onClick={() => { setFilterSelectedTypes([]); setFilterSelectedAmenities([]); setFilterMinPrice(''); setFilterMaxPrice(''); setFilterPriceSlider(50000); setSidebarSearchText(''); setFilterMinRating(0); setFilterInstantBook(false); setFilterCancellationPolicy(false); setFilterHomestays(false); setSearchSortBy('popularity'); fetchProperties(buildSearchParams ? buildSearchParams({ search: where, type: '' }) : { search: where }); }} style={{ width: '100%', marginTop: '16px', padding: '10px', background: '#F3F4F6', border: '1px solid #E5E7EB', borderRadius: '10px', fontSize: '13px', fontWeight: 600, color: '#374151', cursor: 'pointer', fontFamily: '"Outfit", sans-serif', transition: 'all 0.2s' }} onMouseOver={e => e.currentTarget.style.background = '#E5E7EB'} onMouseOut={e => e.currentTarget.style.background = '#F3F4F6'}>
+            <button onClick={handleClearAll} style={{ width: '100%', marginTop: '16px', padding: '10px', background: '#F3F4F6', border: '1px solid #E5E7EB', borderRadius: '10px', fontSize: '13px', fontWeight: 600, color: '#374151', cursor: 'pointer', fontFamily: '"Outfit", sans-serif', transition: 'all 0.2s' }} onMouseOver={e => e.currentTarget.style.background = '#E5E7EB'} onMouseOut={e => e.currentTarget.style.background = '#F3F4F6'}>
               Clear All Filters
             </button>
           </div>

@@ -217,7 +217,7 @@ export default function Contacts() {
           </div>
 
           {/* Address Row */}
-          <div className="form-grid-3">
+          <div className="form-grid-3" style={{ alignItems: 'flex-end' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Highlight 1*</label>
               <input type="text" className="form-input" value={formData.section1.address.highlight} onChange={e => handleChange(e, 'section1.address.highlight')} />
@@ -230,7 +230,7 @@ export default function Contacts() {
           </div>
 
           {/* Email Row */}
-          <div className="form-grid-3">
+          <div className="form-grid-3" style={{ alignItems: 'flex-end' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Highlight 2*</label>
               <input type="text" className="form-input" value={formData.section1.email.highlight} onChange={e => handleChange(e, 'section1.email.highlight')} />
@@ -243,7 +243,7 @@ export default function Contacts() {
           </div>
 
           {/* Call Row */}
-          <div className="form-grid-3" style={{ marginBottom: 0 }}>
+          <div className="form-grid-3" style={{ marginBottom: 0, alignItems: 'flex-end' }}>
             <div className="form-group" style={{ marginBottom: 0 }}>
               <label className="form-label">Highlight 3*</label>
               <input type="text" className="form-input" value={formData.section1.call.highlight} onChange={e => handleChange(e, 'section1.call.highlight')} />

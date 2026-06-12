@@ -22,6 +22,7 @@ import {
   Compass,
   Sparkles,
   BedDouble,
+  LayoutDashboard,
 } from 'lucide-react';
 
 /* ─── Navigation Config (matches Figma exactly) ─────────────── */
@@ -29,7 +30,7 @@ const NAV_SECTIONS = [
   {
     label: 'Dashboard',
     items: [
-      { label: 'Dashboard Analytics', icon: LayoutGrid, to: '/admin/dashboard' },
+      { label: 'Dashboard Analytics', icon: LayoutDashboard, to: '/admin/dashboard' },
     ],
   },
   {
@@ -92,7 +93,7 @@ export default function Sidebar({ className = '' }) {
       </div>
 
       {/* ── Divider under Logo ── */}
-      <div className="sidebar-divider" />
+      <hr className="sidebar-divider" style={{ border: 'none', borderBottom: '1px solid #DDDDDD', margin: '8px 22px', width: '253px' }} />
 
       {/* ── Navigation List ─────────────────────────────────── */}
       <nav className="sidebar-nav">
