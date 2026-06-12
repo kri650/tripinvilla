@@ -131,9 +131,9 @@ export default function Profile() {
           </button>
         </div>
 
-        <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start', flexWrap: 'wrap-reverse' }}>
+        <div className="profile-container">
           
-          <form style={{ flex: '1 1 300px', minWidth: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
+          <form className="profile-form" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
             <div>
               <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>Owner Name*</label>
               <input type="text" name="name" value={formData.name} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
@@ -191,7 +191,7 @@ export default function Profile() {
           </form>
 
           {/* Right Side Avatar Display */}
-          <div style={{ flex: '1 1 250px', maxWidth: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#F9FAFB', padding: '32px 20px', borderRadius: '12px', border: '1px solid #F3F4F6', margin: '0 auto' }}>
+          <div className="profile-avatar-box">
             <div style={{
               width: 100,
               height: 100,

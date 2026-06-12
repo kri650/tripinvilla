@@ -116,8 +116,8 @@ export default function Account() {
           </button>
         </div>
 
-        <div style={{ display: 'flex', gap: '32px', alignItems: 'flex-start', flexWrap: 'wrap-reverse' }}>
-          <form className="form-grid-3" style={{ flex: '1 1 300px', minWidth: 0 }}>
+        <div className="profile-container">
+          <form className="form-grid-3 profile-form">
             <div>
               <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px' }}>First Name*</label>
               <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px' }} />
@@ -164,7 +164,7 @@ export default function Account() {
             const displayImage = file ? URL.createObjectURL(file) : getAvatarUrl(formData.image);
             const adminName = `${formData.firstName} ${formData.lastName}`.trim() || 'Admin';
             return (
-              <div style={{ flex: '1 1 250px', maxWidth: '250px', display: 'flex', flexDirection: 'column', alignItems: 'center', background: '#F9FAFB', padding: '32px 20px', borderRadius: '12px', border: '1px solid #F3F4F6', margin: '0 auto' }}>
+              <div className="profile-avatar-box">
                 <div style={{
                   width: 100,
                   height: 100,

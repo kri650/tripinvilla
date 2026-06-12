@@ -138,4 +138,7 @@
   font-size: 12px;
   width: 100%;
   color: #374151;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
 }

@@ -133,6 +133,7 @@
 
   /* Collapse form grids */
   .form-grid-3, .form-grid-2, .form-grid-5 { grid-template-columns: 1fr; }
+  .testimonial-form-row { flex-direction: column !important; align-items: stretch !important; }
 
   /* Masters page form grids & layouts */
   .amenities-form-grid,
@@ -200,8 +201,7 @@
 
 
 
-  .props-search-wrap input { width: auto; }
-  .admin-toolbar-search input { width: auto; }
+
 
   .admin-table-header { gap: 8px; }
 
@@ -304,5 +304,49 @@
     display: table !important;
     width: max-content !important;
     min-width: 100% !important;
+  }
+}
+
+/* Profile Layout Classes */
+.profile-container {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+}
+
+.profile-form {
+  flex: 1;
+  min-width: 0;
+}
+
+.profile-avatar-box {
+  width: min(250px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #F9FAFB;
+  padding: 32px 20px;
+  border-radius: 12px;
+  border: 1px solid #F3F4F6;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .profile-container {
+    flex-direction: column-reverse;
+    align-items: stretch;
+    gap: 24px;
+  }
+  .profile-avatar-box {
+    width: 100%;
+    max-width: 100%;
+    padding: 20px 16px;
+    margin: 0;
+  }
+  .profile-avatar-box > div:first-child {
+    width: 72px !important;
+    height: 72px !important;
+    font-size: 24px !important;
+    margin-bottom: 12px !important;
   }
 }
