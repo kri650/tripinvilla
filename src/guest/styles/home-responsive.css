@@ -2609,18 +2609,112 @@
 
   /* Services section tablet optimization */
   .services-grid-asym {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 0.8fr 2fr;
     gap: 24px;
+    align-items: start;
+  }
+
+  .services-col-center {
+    width: 100%;
+    display: block;
+    height: auto;
   }
 
   .service-tall-card {
-    height: 350px;
-    min-height: 350px;
+    height: auto;
+    min-height: unset;
+    aspect-ratio: unset;
+    overflow: visible;
+    display: block;
+    width: 100%;
   }
 
   .service-image-card {
-    height: 250px;
-    min-height: 250px;
+    height: auto;
+    min-height: 280px;
+    aspect-ratio: 1.2;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .service-image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain !important;
+    object-position: center center !important;
+    transition: transform 0.3s ease;
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .service-tall-card img {
+    width: 100%;
+    height: auto !important;
+    object-fit: unset !important;
+    object-position: center center !important;
+    transition: transform 0.3s ease;
+    display: block !important;
+  }
+
+  /* TABLET SPECIFIC - Ensure full image visibility */
+  .service-image-card {
+    height: auto !important;
+    min-height: 280px !important;
+    aspect-ratio: 1.2 !important;
+    overflow: hidden !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    border-radius: 23.49px !important;
+  }
+  
+  .service-image-card img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    transition: transform 0.3s ease !important;
+    display: block !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+  }
+
+  .service-tall-card {
+    height: auto !important;
+    min-height: unset !important;
+    aspect-ratio: unset !important;
+    overflow: visible !important;
+    display: block !important;
+    width: 100% !important;
+    max-width: none !important;
+    border-radius: 23.49px !important;
+  }
+  
+  .services-col-center {
+    width: 100% !important;
+    display: block !important;
+    height: auto !important;
+  }
+  
+  .service-tall-card img {
+    width: 100% !important;
+    height: auto !important;
+    object-fit: unset !important;
+    object-position: center center !important;
+    transition: transform 0.3s ease !important;
+    display: block !important;
+    max-height: unset !important;
+  }
+  
+  .service-tall-card img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+    object-position: center center !important;
+    transition: transform 0.3s ease !important;
   }
 
   /* Rating and common elements */
@@ -2657,6 +2751,19 @@
     padding: 10px 24px;
     font-size: 14px;
     height: 44px;
+  }
+
+  /* Dashboard hero banner tablet optimization */
+  .dashboard-hero-banner {
+    height: 360px !important;
+    background-size: cover !important;
+    background-position: center !important;
+    padding: 24px 48px !important;
+  }
+
+  .dashboard-hero-title {
+    font-size: 42px !important;
+    margin-top: 120px !important;
   }
 }
 
