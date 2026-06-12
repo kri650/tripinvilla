@@ -1744,9 +1744,9 @@ export default function MyProperties({ autoOpenForm = false }) {
       {/* ── Property List Table ───────────────────────────────── */}
       <div style={{ margin: '0 24px 24px' }}>
         <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', boxShadow: '0 1px 4px rgba(0,0,0,0.04)', width: '100%' }}>
-          <div className="table-header" style={{ padding: '14px 20px', display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
-            <span className="table-title" style={{ whiteSpace: 'nowrap' }}>My Property List</span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', paddingBottom: '4px', maxWidth: '100%' }}>
+          <div className="props-table-toolbar" style={{ padding: '14px 20px', margin: 0, borderBottom: '1px solid #E5E7EB' }}>
+            <h2 className="props-table-title" style={{ margin: 0 }}>My Property List</h2>
+            <div className="props-table-actions">
               <DateRangeDropdown 
                 startDate={filterDateFrom}
                 endDate={filterDateTo}
@@ -1755,18 +1755,16 @@ export default function MyProperties({ autoOpenForm = false }) {
                   setFilterDateTo(end);
                 }}
               />
-              <select value={filterType} onChange={e => setFilterType(e.target.value)} style={{ padding: '5px 8px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '11px', color: '#374151', outline: 'none', background: '#ffffff', cursor: 'pointer', flexShrink: 0, maxWidth: '100px' }}>
+              <select value={filterType} onChange={e => setFilterType(e.target.value)} className="props-filter-select">
                 <option value="">Property Type</option>
                 {['Homestay','Villa','Apartment','Resort','Cottage','Hotel'].map(t => <option key={t} value={t}>{t}</option>)}
               </select>
-              <button onClick={() => { setFilterType(''); setFilterSearch(''); setFilterDateFrom(''); setFilterDateTo(''); }}
-                style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '5px 10px', border: '1px solid #58A429', color: '#58A429', borderRadius: '8px', fontWeight: 600, fontSize: '11px', background: '#FAFDF2', cursor: 'pointer', flexShrink: 0, whiteSpace: 'nowrap' }}>
+              <button onClick={() => { setFilterType(''); setFilterSearch(''); setFilterDateFrom(''); setFilterDateTo(''); }} className="props-btn-filter">
                 <Filter size={12} /> Clear
               </button>
-              <div style={{ position: 'relative', display: 'flex', alignItems: 'center', flexShrink: 1, minWidth: '80px', maxWidth: '140px' }}>
-                <Search size={14} style={{ position: 'absolute', left: '8px', color: '#9CA3AF' }} />
-                <input type="text" value={filterSearch} onChange={e => setFilterSearch(e.target.value)} placeholder="Search"
-                  style={{ padding: '6px 8px 6px 26px', border: '1px solid #E5E7EB', borderRadius: '8px', fontSize: '11px', width: '100%', outline: 'none', background: '#ffffff' }} />
+              <div className="props-search-wrap">
+                <Search size={14} />
+                <input type="text" value={filterSearch} onChange={e => setFilterSearch(e.target.value)} placeholder="Search" />
               </div>
             </div>
           </div>

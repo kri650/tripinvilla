@@ -114,13 +114,12 @@ export default function Enquiries() {
           marginBottom: 0
         }}>
           {/* Title */}
-          <div className="props-table-title" style={{ fontSize: '15px' }}>
+          <h2 className="props-table-title" style={{ margin: 0 }}>
             Enquiries
-          </div>
+          </h2>
 
           {/* Filters Row */}
-          <div className="props-table-actions" style={{ flex: 1, justifyContent: 'flex-end' }}>
-
+          <div className="props-table-actions">
             <DateRangeDropdown
               startDate={dateFrom}
               endDate={dateTo}
@@ -133,7 +132,7 @@ export default function Enquiries() {
             <select
               value={propertyType}
               onChange={(e) => setPropertyType(e.target.value)}
-              style={{ border: '1px solid #E5E7EB', outline: 'none', fontSize: '12px', padding: '6px 10px', borderRadius: '6px', cursor: 'pointer', background: '#ffffff', color: '#374151' }}
+              className="props-filter-select"
             >
               <option value="All">Property Type</option>
               <option value="Homestay">Homestay</option>
@@ -144,56 +143,31 @@ export default function Enquiries() {
             </select>
 
             {/* Location */}
-            <input
-              type="text"
-              placeholder="Location"
-              value={location}
-              onChange={(e) => setLocation(e.target.value)}
-              style={{
-                padding: '6px 10px',
-                fontSize: '12px',
-                border: '1px solid #E5E7EB',
-                borderRadius: '6px',
-                background: '#ffffff',
-                outline: 'none',
-                color: '#374151',
-                minWidth: 80,
-                maxWidth: 130
-              }}
-            />
+            <div className="props-search-wrap" style={{ minWidth: '100px', maxWidth: '140px' }}>
+              <input
+                type="text"
+                placeholder="Location"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                style={{ paddingLeft: '12px' }}
+              />
+            </div>
 
             {/* Filter Button */}
-            <button
-              onClick={() => fetchEnquiries()}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 6,
-                padding: '6px 14px',
-                border: '1.5px solid #58A429',
-                borderRadius: '6px',
-                background: '#fff',
-                color: '#58A429',
-                fontSize: '12px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                whiteSpace: 'nowrap',
-                flexShrink: 0
-              }}
-            >
-              <FilterIcon size={13} /> Filter
+            <button onClick={() => fetchEnquiries()} className="props-btn-filter">
+              <FilterIcon size={12} /> Filter
             </button>
 
             {/* Search */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 6, border: '1px solid #E5E7EB', borderRadius: '6px', padding: '5px 10px', background: '#fff', minWidth: 120 }}>
-              <Search size={13} style={{ color: '#9CA3AF', flexShrink: 0 }} />
+            <div className="props-search-wrap">
+              <Search size={14} />
               <input
                 type="text"
                 placeholder="Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                style={{ border: 'none', outline: 'none', fontSize: '12px', width: '100%', minWidth: 0, background: 'transparent', color: '#374151' }}
               />
             </div>
-
           </div>
         </div>
 
