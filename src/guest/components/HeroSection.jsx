@@ -6,6 +6,101 @@ import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { format, parse } from 'date-fns';
 import { heroBgImg } from '../../assets';
+import Select from 'react-select';
+
+// Custom styles for react-select
+const customSelectStyles = {
+  control: (base, state) => ({
+    ...base,
+    minHeight: '48px',
+    borderRadius: '12px',
+    borderColor: state.isFocused ? 'var(--primary-blue)' : '#D1D5DB',
+    boxShadow: state.isFocused ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : 'none',
+    '&:hover': {
+      borderColor: 'var(--primary-blue)'
+    }
+  }),
+  menu: (base) => ({
+    ...base,
+    borderRadius: '12px',
+    overflow: 'hidden',
+    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+    zIndex: 9999
+  }),
+  menuList: (base) => ({
+    ...base,
+    maxHeight: '200px',
+    padding: '4px',
+    '::-webkit-scrollbar': {
+      width: '8px'
+    },
+    '::-webkit-scrollbar-track': {
+      background: '#F3F4F6',
+      borderRadius: '4px'
+    },
+    '::-webkit-scrollbar-thumb': {
+      background: '#CBD5E1',
+      borderRadius: '4px'
+    },
+    '::-webkit-scrollbar-thumb:hover': {
+      background: '#94A3B8'
+    }
+  }),
+  option: (base, state) => ({
+    ...base,
+    backgroundColor: state.isSelected 
+      ? 'var(--primary-blue)' 
+      : state.isFocused 
+      ? 'rgba(59, 130, 246, 0.1)' 
+      : 'white',
+    color: state.isSelected ? 'white' : '#374151',
+    cursor: 'pointer',
+    padding: '10px 12px',
+    borderRadius: '8px',
+    margin: '2px 0',
+    fontSize: '14px',
+    fontFamily: "'Lato', sans-serif"
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: '#374151',
+    fontSize: '14px',
+    fontFamily: "'Lato', sans-serif"
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: '#9CA3AF',
+    fontSize: '14px',
+    fontFamily: "'Lato', sans-serif"
+  })
+};
+
+// Desktop select styles (slightly smaller)
+const desktopSelectStyles = {
+  ...customSelectStyles,
+  control: (base, state) => ({
+    ...base,
+    minHeight: '44px',
+    borderRadius: '8px',
+    borderColor: state.isFocused ? 'var(--primary-blue)' : '#E5E7EB',
+    boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.1)' : 'none',
+    '&:hover': {
+      borderColor: 'var(--primary-blue)'
+    }
+  }),
+  singleValue: (base) => ({
+    ...base,
+    color: '#111827',
+    fontSize: '13.5px',
+    fontFamily: "'Lato', sans-serif"
+  }),
+  placeholder: (base) => ({
+    ...base,
+    color: '#9CA3AF',
+    fontSize: '13.5px',
+    fontFamily: "'Lato', sans-serif"
+  })
+};
 
 export default function HeroSection(props) {
   const {
@@ -256,49 +351,54 @@ export default function HeroSection(props) {
                         borderRadius: '12px',
                         boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
                         zIndex: 30000,
-                        padding: '16px',
+                        padding: '10px',
                         border: '1px solid #E5E7EB',
-                        width: '90vw',
-                        maxWidth: '600px',
-                        maxHeight: '80vh',
-                        overflow: 'auto'
+                        width: 'calc(100vw - 24px)',
+                        maxWidth: '380px',
+                        maxHeight: '85vh',
+                        overflow: 'auto',
+                        boxSizing: 'border-box'
                       }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-                          <div>
-                            <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>From</div>
-                            <Calendar
-                              date={getSelectionRange().startDate}
-                              onChange={(date) => {
-                                const start = format(date, 'yyyy-MM-dd');
-                                const { endDate } = getSelectionRange();
-                                setDates(`${start} to ${format(endDate, 'yyyy-MM-dd')}`);
-                              }}
-                              minDate={new Date()}
-                              color="#2563EB"
-                            />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
+                          <div style={{ width: '100%', boxSizing: 'border-box' }}>
+                            <div style={{ fontWeight: 600, fontSize: '13px', color: '#111827', marginBottom: '6px', paddingLeft: '2px' }}>From</div>
+                            <div style={{ width: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
+                              <Calendar
+                                date={getSelectionRange().startDate}
+                                onChange={(date) => {
+                                  const start = format(date, 'yyyy-MM-dd');
+                                  const { endDate } = getSelectionRange();
+                                  setDates(`${start} to ${format(endDate, 'yyyy-MM-dd')}`);
+                                }}
+                                minDate={new Date()}
+                                color="#2563EB"
+                              />
+                            </div>
                           </div>
                           
-                          <div>
-                            <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>To</div>
-                            <Calendar
-                              date={getSelectionRange().endDate}
-                              onChange={(date) => {
-                                const { startDate } = getSelectionRange();
-                                const end = format(date, 'yyyy-MM-dd');
-                                if (date < startDate) {
-                                    setDates(`${format(date, 'yyyy-MM-dd')} to ${format(date, 'yyyy-MM-dd')}`);
-                                } else {
-                                    setDates(`${format(startDate, 'yyyy-MM-dd')} to ${end}`);
-                                }
-                              }}
-                              minDate={getSelectionRange().startDate}
-                              color="#2563EB"
-                            />
+                          <div style={{ width: '100%', boxSizing: 'border-box' }}>
+                            <div style={{ fontWeight: 600, fontSize: '13px', color: '#111827', marginBottom: '6px', paddingLeft: '2px' }}>To</div>
+                            <div style={{ width: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
+                              <Calendar
+                                date={getSelectionRange().endDate}
+                                onChange={(date) => {
+                                  const { startDate } = getSelectionRange();
+                                  const end = format(date, 'yyyy-MM-dd');
+                                  if (date < startDate) {
+                                      setDates(`${format(date, 'yyyy-MM-dd')} to ${format(date, 'yyyy-MM-dd')}`);
+                                  } else {
+                                      setDates(`${format(startDate, 'yyyy-MM-dd')} to ${end}`);
+                                  }
+                                }}
+                                minDate={getSelectionRange().startDate}
+                                color="#2563EB"
+                              />
+                            </div>
                           </div>
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '16px', borderTop: '1px solid #F3F4F6', paddingTop: '16px' }}>
-                          <button type="button" onClick={() => { setDates(''); setShowDatePicker(false); }} style={{ padding: '8px 16px', background: '#fff', border: '1px solid #D1D5DB', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500, color: '#374151' }}>Cancel</button>
-                          <button type="button" onClick={() => setShowDatePicker(false)} style={{ padding: '8px 16px', background: '#2563EB', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#fff' }}>Done</button>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px', marginTop: '10px', borderTop: '1px solid #F3F4F6', paddingTop: '10px' }}>
+                          <button type="button" onClick={() => { setDates(''); setShowDatePicker(false); }} style={{ flex: 1, padding: '9px 10px', background: '#fff', border: '1px solid #D1D5DB', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 500, color: '#374151' }}>Cancel</button>
+                          <button type="button" onClick={() => setShowDatePicker(false)} style={{ flex: 1, padding: '9px 10px', background: '#2563EB', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#fff' }}>Done</button>
                         </div>
                       </div>
                     )}
@@ -306,17 +406,78 @@ export default function HeroSection(props) {
 
                   <div className="mobile-form-group">
                     <label className="mobile-field-label">Who</label>
-                    <select 
-                      className="mobile-form-select" 
-                      value={guests} 
-                      onChange={(e) => setGuests(e.target.value)}
-                    >
-                      <option value="Any Guests">Any Guests</option>
-                      <option value="1 Guest">1 Guest</option>
-                      <option value="2 Guests">2 Guests</option>
-                      <option value="3 Guests">3 Guests</option>
-                      <option value="4+ Guests">4+ Guests</option>
-                    </select>
+                    <Select
+                      value={{ value: guests, label: guests }}
+                      onChange={(option) => setGuests(option.value)}
+                      options={[
+                        { value: 'Any Guests', label: 'Any Guests' },
+                        { value: '1 Guest', label: '1 Guest' },
+                        { value: '2 Guests', label: '2 Guests' },
+                        { value: '3 Guests', label: '3 Guests' },
+                        { value: '4+ Guests', label: '4+ Guests' },
+                      ]}
+                      styles={{
+                        control: (base, state) => ({
+                          ...base,
+                          minHeight: '48px',
+                          borderRadius: '12px',
+                          borderColor: state.isFocused ? 'var(--primary-blue)' : '#D1D5DB',
+                          boxShadow: state.isFocused ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : 'none',
+                          '&:hover': {
+                            borderColor: 'var(--primary-blue)'
+                          }
+                        }),
+                        menu: (base) => ({
+                          ...base,
+                          borderRadius: '12px',
+                          overflow: 'hidden',
+                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                          zIndex: 9999
+                        }),
+                        menuList: (base) => ({
+                          ...base,
+                          maxHeight: '200px',
+                          padding: '4px',
+                          '::-webkit-scrollbar': {
+                            width: '8px'
+                          },
+                          '::-webkit-scrollbar-track': {
+                            background: '#F3F4F6',
+                            borderRadius: '4px'
+                          },
+                          '::-webkit-scrollbar-thumb': {
+                            background: '#CBD5E1',
+                            borderRadius: '4px'
+                          },
+                          '::-webkit-scrollbar-thumb:hover': {
+                            background: '#94A3B8'
+                          }
+                        }),
+                        option: (base, state) => ({
+                          ...base,
+                          backgroundColor: state.isSelected 
+                            ? 'var(--primary-blue)' 
+                            : state.isFocused 
+                            ? 'rgba(59, 130, 246, 0.1)' 
+                            : 'white',
+                          color: state.isSelected ? 'white' : '#374151',
+                          cursor: 'pointer',
+                          padding: '10px 12px',
+                          borderRadius: '8px',
+                          margin: '2px 0',
+                          fontSize: '14px',
+                          fontFamily: "'Lato', sans-serif"
+                        }),
+                        singleValue: (base) => ({
+                          ...base,
+                          color: '#374151',
+                          fontSize: '14px',
+                          fontFamily: "'Lato', sans-serif"
+                        })
+                      }}
+                      isSearchable={false}
+                      placeholder="Select guests"
+                    />
                   </div>
                 </div>
 
@@ -324,54 +485,61 @@ export default function HeroSection(props) {
                 <div className="mobile-form-row">
                   <div className="mobile-form-group">
                     <label className="mobile-field-label">Price per Night</label>
-                    <select 
-                      className="mobile-form-select" 
-                      value={price} 
-                      onChange={(e) => setPrice(e.target.value)}
-                    >
-                      <option value="Any">Any</option>
-                      <option value="₹2,000 - ₹5,000">₹2,000 - ₹5,000</option>
-                      <option value="₹5,000 - ₹10,000">₹5,000 - ₹10,000</option>
-                      <option value="₹10,000 - ₹20,000">₹10,000 - ₹20,000</option>
-                      <option value="₹20,000+">₹20,000+</option>
-                    </select>
+                    <Select
+                      value={{ value: price, label: price }}
+                      onChange={(option) => setPrice(option.value)}
+                      options={[
+                        { value: 'Any', label: 'Any' },
+                        { value: '₹2,000 - ₹5,000', label: '₹2,000 - ₹5,000' },
+                        { value: '₹5,000 - ₹10,000', label: '₹5,000 - ₹10,000' },
+                        { value: '₹10,000 - ₹20,000', label: '₹10,000 - ₹20,000' },
+                        { value: '₹20,000+', label: '₹20,000+' },
+                      ]}
+                      styles={customSelectStyles}
+                      isSearchable={false}
+                      placeholder="Select price"
+                    />
                   </div>
 
                   <div className="mobile-form-group">
                     <label className="mobile-field-label">Room/Stay Type</label>
-                    <select 
-                      className="mobile-form-select" 
-                      value={stayType} 
-                      onChange={(e) => setStayType(e.target.value)}
-                    >
-                      <option value="Any">Any</option>
-                      {roomTypes.map(rt => (
-                        <option key={rt._id} value={rt.name}>{rt.name}</option>
-                      ))}
-                      {roomTypes.length === 0 && (
-                        <>
-                          <option value="1 Deluxe Room">1 Deluxe Room</option>
-                          <option value="2 Deluxe Rooms">2 Deluxe Rooms</option>
-                          <option value="Entire Villa">Entire Villa</option>
-                        </>
-                      )}
-                    </select>
+                    <Select
+                      value={{ value: stayType, label: stayType }}
+                      onChange={(option) => setStayType(option.value)}
+                      options={[
+                        { value: 'Any', label: 'Any' },
+                        ...(roomTypes.length > 0 
+                          ? roomTypes.map(rt => ({ value: rt.name, label: rt.name }))
+                          : [
+                              { value: '1 Deluxe Room', label: '1 Deluxe Room' },
+                              { value: '2 Deluxe Rooms', label: '2 Deluxe Rooms' },
+                              { value: 'Entire Villa', label: 'Entire Villa' }
+                            ]
+                        )
+                      ]}
+                      styles={customSelectStyles}
+                      isSearchable={false}
+                      placeholder="Select stay type"
+                    />
                   </div>
                 </div>
 
                 {/* Food Preference */}
                 <div className="mobile-form-group">
                   <label className="mobile-field-label">Food Preference</label>
-                  <select 
-                    className="mobile-form-select" 
-                    value={foodPref} 
-                    onChange={(e) => setFoodPref(e.target.value)}
-                  >
-                    <option value="Any">Any</option>
-                    <option value="Pure Veg">Pure Veg</option>
-                    <option value="Non-Veg">Non-Veg</option>
-                    <option value="Buffet Available">Buffet Available</option>
-                  </select>
+                  <Select
+                    value={{ value: foodPref, label: foodPref }}
+                    onChange={(option) => setFoodPref(option.value)}
+                    options={[
+                      { value: 'Any', label: 'Any' },
+                      { value: 'Pure Veg', label: 'Pure Veg' },
+                      { value: 'Non-Veg', label: 'Non-Veg' },
+                      { value: 'Buffet Available', label: 'Buffet Available' },
+                    ]}
+                    styles={customSelectStyles}
+                    isSearchable={false}
+                    placeholder="Select food preference"
+                  />
                 </div>
 
                 {/* Mobile Checkbox Row */}
@@ -470,58 +638,70 @@ export default function HeroSection(props) {
                 </div>
 
                 {showDatePicker && window.innerWidth > 640 && (() => {
+                  const isSmallScreen = window.innerWidth < 900;
                   const picker = (
                     <div ref={portalRef} style={{ 
                       position: 'fixed', 
-                      top: pickerCoords.top, 
-                      left: pickerCoords.left, 
+                      top: isSmallScreen ? '50%' : pickerCoords.top,
+                      left: isSmallScreen ? '50%' : pickerCoords.left,
+                      transform: isSmallScreen ? 'translate(-50%, -50%)' : 'none',
                       background: '#fff', 
                       borderRadius: '12px', 
                       boxShadow: '0 10px 25px rgba(0,0,0,0.1)', 
                       zIndex: 30000, 
                       padding: '16px', 
                       border: '1px solid #E5E7EB', 
-                      width: 'max-content',
+                      width: isSmallScreen ? 'calc(100vw - 32px)' : 'max-content',
+                      maxWidth: isSmallScreen ? '420px' : 'none',
                       maxHeight: 'calc(100vh - 40px)',
                       overflowY: 'auto'
                     }}>
-                      <div style={{ display: 'flex', gap: '24px' }}>
-                        <div>
+                      <div style={{ 
+                        display: 'flex', 
+                        flexDirection: isSmallScreen ? 'column' : 'row',
+                        gap: isSmallScreen ? '20px' : '24px',
+                        overflowX: 'auto'
+                      }}>
+                        <div style={{ minWidth: isSmallScreen ? '100%' : 'auto' }}>
                           <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>From</div>
-                          <Calendar
-                            date={getSelectionRange().startDate}
-                            onChange={(date) => {
-                              const start = format(date, 'yyyy-MM-dd');
-                              const { endDate } = getSelectionRange();
-                              setDates(`${start} to ${format(endDate, 'yyyy-MM-dd')}`);
-                            }}
-                            minDate={new Date()}
-                            color="#2563EB"
-                          />
+                          <div style={{ overflowX: 'auto' }}>
+                            <Calendar
+                              date={getSelectionRange().startDate}
+                              onChange={(date) => {
+                                const start = format(date, 'yyyy-MM-dd');
+                                const { endDate } = getSelectionRange();
+                                setDates(`${start} to ${format(endDate, 'yyyy-MM-dd')}`);
+                              }}
+                              minDate={new Date()}
+                              color="#2563EB"
+                            />
+                          </div>
                         </div>
                         
-                        <div>
+                        <div style={{ minWidth: isSmallScreen ? '100%' : 'auto' }}>
                           <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>To</div>
-                          <Calendar
-                            date={getSelectionRange().endDate}
-                            onChange={(date) => {
-                              const { startDate } = getSelectionRange();
-                              const end = format(date, 'yyyy-MM-dd');
-                              // Ensure endDate is not before startDate
-                              if (date < startDate) {
-                                  setDates(`${format(date, 'yyyy-MM-dd')} to ${format(date, 'yyyy-MM-dd')}`);
-                              } else {
-                                  setDates(`${format(startDate, 'yyyy-MM-dd')} to ${end}`);
-                              }
-                            }}
-                            minDate={getSelectionRange().startDate}
-                            color="#2563EB"
-                          />
+                          <div style={{ overflowX: 'auto' }}>
+                            <Calendar
+                              date={getSelectionRange().endDate}
+                              onChange={(date) => {
+                                const { startDate } = getSelectionRange();
+                                const end = format(date, 'yyyy-MM-dd');
+                                // Ensure endDate is not before startDate
+                                if (date < startDate) {
+                                    setDates(`${format(date, 'yyyy-MM-dd')} to ${format(date, 'yyyy-MM-dd')}`);
+                                } else {
+                                    setDates(`${format(startDate, 'yyyy-MM-dd')} to ${end}`);
+                                }
+                              }}
+                              minDate={getSelectionRange().startDate}
+                              color="#2563EB"
+                            />
+                          </div>
                         </div>
                       </div>
-                      <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '16px', borderTop: '1px solid #F3F4F6', paddingTop: '16px' }}>
-                        <button type="button" onClick={() => { setDates(''); setShowDatePicker(false); }} style={{ padding: '8px 16px', background: '#fff', border: '1px solid #D1D5DB', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500, color: '#374151' }}>Cancel</button>
-                        <button type="button" onClick={() => setShowDatePicker(false)} style={{ padding: '8px 16px', background: '#2563EB', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#fff' }}>Filter</button>
+                      <div style={{ display: 'flex', justifyContent: isSmallScreen ? 'space-between' : 'flex-end', gap: '12px', marginTop: '16px', borderTop: '1px solid #F3F4F6', paddingTop: '16px' }}>
+                        <button type="button" onClick={() => { setDates(''); setShowDatePicker(false); }} style={{ flex: isSmallScreen ? 1 : 'none', padding: '8px 16px', background: '#fff', border: '1px solid #D1D5DB', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500, color: '#374151' }}>Cancel</button>
+                        <button type="button" onClick={() => setShowDatePicker(false)} style={{ flex: isSmallScreen ? 1 : 'none', padding: '8px 16px', background: '#2563EB', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#fff' }}>Filter</button>
                       </div>
                     </div>
                   );
@@ -532,82 +712,80 @@ export default function HeroSection(props) {
               {/* Field 3: Who */}
               <div className="field-group">
                 <span className="field-label">Who</span>
-                <div className="field-control-wrap">
-                  <select 
-                    className="field-select" 
-                    value={guests} 
-                    onChange={(e) => setGuests(e.target.value)}
-                  >
-                    <option value="Any Guests">Any Guests</option>
-                    <option value="1 Guest">1 Guest</option>
-                    <option value="2 Guests">2 Guests</option>
-                    <option value="3 Guests">3 Guests</option>
-                    <option value="4+ Guests">4+ Guests</option>
-                  </select>
-                  <ChevronDown size={14} className="field-select-arrow" />
-                </div>
+                <Select
+                  value={{ value: guests, label: guests }}
+                  onChange={(option) => setGuests(option.value)}
+                  options={[
+                    { value: 'Any Guests', label: 'Any Guests' },
+                    { value: '1 Guest', label: '1 Guest' },
+                    { value: '2 Guests', label: '2 Guests' },
+                    { value: '3 Guests', label: '3 Guests' },
+                    { value: '4+ Guests', label: '4+ Guests' },
+                  ]}
+                  styles={desktopSelectStyles}
+                  isSearchable={false}
+                  placeholder="Select guests"
+                />
               </div>
 
               {/* Field 4: Price per Night */}
               <div className="field-group">
                 <span className="field-label">Price per Night</span>
-                <div className="field-control-wrap">
-                  <select 
-                    className="field-select" 
-                    value={price} 
-                    onChange={(e) => setPrice(e.target.value)}
-                  >
-                    <option value="Any">Any</option>
-                    <option value="₹2,000 - ₹5,000">₹2,000 - ₹5,000</option>
-                    <option value="₹5,000 - ₹10,000">₹5,000 - ₹10,000</option>
-                    <option value="₹10,000 - ₹20,000">₹10,000 - ₹20,000</option>
-                    <option value="₹20,000+">₹20,000+</option>
-                  </select>
-                  <ChevronDown size={14} className="field-select-arrow" />
-                </div>
+                <Select
+                  value={{ value: price, label: price }}
+                  onChange={(option) => setPrice(option.value)}
+                  options={[
+                    { value: 'Any', label: 'Any' },
+                    { value: '₹2,000 - ₹5,000', label: '₹2,000 - ₹5,000' },
+                    { value: '₹5,000 - ₹10,000', label: '₹5,000 - ₹10,000' },
+                    { value: '₹10,000 - ₹20,000', label: '₹10,000 - ₹20,000' },
+                    { value: '₹20,000+', label: '₹20,000+' },
+                  ]}
+                  styles={desktopSelectStyles}
+                  isSearchable={false}
+                  placeholder="Select price"
+                />
               </div>
 
               {/* Field 5: Room/Stay Type */}
               <div className="field-group">
                 <span className="field-label">Room/Stay Type</span>
-                <div className="field-control-wrap">
-                  <select 
-                    className="field-select" 
-                    value={stayType} 
-                    onChange={(e) => setStayType(e.target.value)}
-                  >
-                    <option value="Any">Any</option>
-                    {roomTypes.map(rt => (
-                      <option key={rt._id} value={rt.name}>{rt.name}</option>
-                    ))}
-                    {roomTypes.length === 0 && (
-                      <>
-                        <option value="1 Deluxe Room">1 Deluxe Room</option>
-                        <option value="2 Deluxe Rooms">2 Deluxe Rooms</option>
-                        <option value="Entire Villa">Entire Villa</option>
-                      </>
-                    )}
-                  </select>
-                  <ChevronDown size={14} className="field-select-arrow" />
-                </div>
+                <Select
+                  value={{ value: stayType, label: stayType }}
+                  onChange={(option) => setStayType(option.value)}
+                  options={[
+                    { value: 'Any', label: 'Any' },
+                    ...(roomTypes.length > 0 
+                      ? roomTypes.map(rt => ({ value: rt.name, label: rt.name }))
+                      : [
+                          { value: '1 Deluxe Room', label: '1 Deluxe Room' },
+                          { value: '2 Deluxe Rooms', label: '2 Deluxe Rooms' },
+                          { value: 'Entire Villa', label: 'Entire Villa' }
+                        ]
+                    )
+                  ]}
+                  styles={desktopSelectStyles}
+                  isSearchable={false}
+                  placeholder="Select stay type"
+                />
               </div>
 
               {/* Field 6: Food Preference */}
               <div className="field-group">
                 <span className="field-label">Food Preference</span>
-                <div className="field-control-wrap">
-                  <select 
-                    className="field-select" 
-                    value={foodPref} 
-                    onChange={(e) => setFoodPref(e.target.value)}
-                  >
-                    <option value="Any">Any</option>
-                    <option value="Pure Veg">Pure Veg</option>
-                    <option value="Non-Veg">Non-Veg</option>
-                    <option value="Buffet Available">Buffet Available</option>
-                  </select>
-                  <ChevronDown size={14} className="field-select-arrow" />
-                </div>
+                <Select
+                  value={{ value: foodPref, label: foodPref }}
+                  onChange={(option) => setFoodPref(option.value)}
+                  options={[
+                    { value: 'Any', label: 'Any' },
+                    { value: 'Pure Veg', label: 'Pure Veg' },
+                    { value: 'Non-Veg', label: 'Non-Veg' },
+                    { value: 'Buffet Available', label: 'Buffet Available' },
+                  ]}
+                  styles={desktopSelectStyles}
+                  isSearchable={false}
+                  placeholder="Select food preference"
+                />
               </div>
 
             </div>

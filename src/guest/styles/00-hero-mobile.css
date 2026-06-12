@@ -190,11 +190,39 @@
     background-repeat: no-repeat;
     background-size: 16px;
     transition: border-color 0.2s ease;
+    /* Enable scrolling for long dropdown lists */
+    overflow-y: auto;
+    max-height: 48px;
   }
 
   .mobile-form-select:focus {
     border-color: var(--primary-blue);
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  /* Dropdown options scrollbar styling */
+  .mobile-form-select option {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  /* Custom scrollbar for dropdown */
+  .mobile-form-select::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .mobile-form-select::-webkit-scrollbar-track {
+    background: #F3F4F6;
+    border-radius: 4px;
+  }
+
+  .mobile-form-select::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 4px;
+  }
+
+  .mobile-form-select::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
   }
 
   /* Mobile Checkbox Row */
@@ -501,5 +529,198 @@
   .mobile-checkbox-row {
     flex-direction: column;
     gap: 12px;
+  }
+}
+
+
+/* ===== CALENDAR OVERFLOW FIX FOR SMALL SCREENS ===== */
+/* Prevent calendar from overflowing on mobile devices */
+@media (max-width: 900px) {
+  .rdrCalendarWrapper {
+    max-width: 100%;
+    width: 100% !important;
+    overflow-x: hidden;
+    font-size: 12px !important;
+  }
+
+  .rdrMonth {
+    width: 100% !important;
+    max-width: 100%;
+    padding: 0 4px;
+  }
+
+  .rdrMonthAndYearWrapper {
+    padding: 6px 2px;
+    height: auto;
+  }
+
+  .rdrMonthPicker select,
+  .rdrYearPicker select {
+    font-size: 12px !important;
+    padding: 3px 6px;
+    max-width: 90px;
+  }
+
+  .rdrWeekDays {
+    display: flex;
+    justify-content: space-around;
+  }
+
+  .rdrWeekDay {
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    flex: 1;
+    text-align: center;
+    padding: 4px 1px;
+    line-height: 1.2;
+  }
+
+  .rdrDays {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .rdrDay {
+    font-size: 12px !important;
+    height: 34px !important;
+    line-height: 34px !important;
+    width: calc(100% / 7) !important;
+  }
+
+  .rdrDay span {
+    font-size: 12px !important;
+  }
+
+  .rdrMonthName {
+    font-size: 13px !important;
+    padding: 6px 4px;
+  }
+
+  /* Adjust navigation buttons */
+  .rdrNextPrevButton {
+    width: 24px !important;
+    height: 24px !important;
+  }
+
+  .rdrPprevButton i,
+  .rdrNextButton i {
+    border-width: 4px 4px 0 0 !important;
+  }
+
+  /* Scrollbar styling for calendar */
+  .rdrCalendarWrapper::-webkit-scrollbar {
+    height: 5px;
+    width: 5px;
+  }
+
+  .rdrCalendarWrapper::-webkit-scrollbar-track {
+    background: #F3F4F6;
+    border-radius: 3px;
+  }
+
+  .rdrCalendarWrapper::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 3px;
+  }
+
+  .rdrCalendarWrapper::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+  }
+}
+
+/* Medium-small screens */
+@media (max-width: 768px) {
+  .rdrCalendarWrapper {
+    font-size: 11px !important;
+  }
+
+  .rdrMonthPicker select,
+  .rdrYearPicker select {
+    font-size: 11px !important;
+    max-width: 80px;
+  }
+
+  .rdrDay {
+    font-size: 11px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+  }
+
+  .rdrDay span {
+    font-size: 11px !important;
+  }
+
+  .rdrWeekDay {
+    font-size: 9px !important;
+  }
+}
+
+/* Small screens */
+@media (max-width: 640px) {
+  .rdrCalendarWrapper {
+    font-size: 10px !important;
+  }
+
+  .rdrMonth {
+    padding: 0 2px;
+  }
+
+  .rdrMonthPicker select,
+  .rdrYearPicker select {
+    font-size: 10px !important;
+    padding: 2px 4px;
+    max-width: 70px;
+  }
+
+  .rdrDay {
+    font-size: 10px !important;
+    height: 30px !important;
+    line-height: 30px !important;
+  }
+
+  .rdrDay span {
+    font-size: 10px !important;
+  }
+
+  .rdrWeekDay {
+    font-size: 8px !important;
+    padding: 3px 0px;
+  }
+
+  .rdrMonthName {
+    font-size: 11px !important;
+  }
+
+  .rdrNextPrevButton {
+    width: 20px !important;
+    height: 20px !important;
+  }
+}
+
+/* ===== EXTRA SMALL SCREENS ===== */
+@media (max-width: 380px) {
+  .rdrCalendarWrapper {
+    font-size: 11px !important;
+  }
+
+  .rdrDay {
+    font-size: 11px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+  }
+
+  .rdrDay span {
+    font-size: 11px !important;
+  }
+
+  .rdrWeekDay {
+    font-size: 10px !important;
+    padding: 3px 1px;
+  }
+
+  .rdrMonthPicker select,
+  .rdrYearPicker select {
+    font-size: 12px !important;
+    padding: 3px 6px;
   }
 }
