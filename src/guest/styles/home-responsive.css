@@ -3751,7 +3751,7 @@
 }
 
 /* ===== SERVICES SECTION MOBILE REFLOW FIX ===== */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .service-tall-card,
   .service-image-card {
     height: auto !important;
