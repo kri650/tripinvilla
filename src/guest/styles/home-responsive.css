@@ -3749,3 +3749,44 @@
     min-height: 32px !important;
   }
 }
+/* ===== SERVICES SECTION MOBILE REFLOW FIX ===== */
+@media (max-width: 768px) {
+  .services-inner-container {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px;
+  }
+
+  .services-grid-asym {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .services-col-center {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .service-tall-card img,
+  .service-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 16px 16px 0 0;
+  }
+
+  .services-col-center .service-card img {
+    height: 140px;
+  }
+
+  .service-tall-card,
+  .service-card {
+    border-radius: 16px;
+    overflow: hidden;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+}
