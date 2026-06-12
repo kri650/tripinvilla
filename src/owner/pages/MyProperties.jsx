@@ -1846,11 +1846,11 @@ export default function MyProperties({ autoOpenForm = false }) {
           </div>
 
           {/* Pagination Controls */}
-          {properties.length > 0 && (
+          {filteredProps.length > 0 && (
             <div style={{ margin: '0 -24px -24px' }}>
               <Pagination 
                 currentPage={currentPage} 
-                totalItems={properties.length} 
+                totalItems={filteredProps.length} 
                 itemsPerPage={itemsPerPage} 
                 onPageChange={setCurrentPage} 
               />
