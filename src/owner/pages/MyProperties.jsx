@@ -1787,11 +1787,11 @@ export default function MyProperties({ autoOpenForm = false }) {
                         <img src={p.images?.[0] || 'https://via.placeholder.com/44x34'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
                       </div>
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'normal', maxWidth: '200px' }}>
+                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'normal', maxWidth: '200px', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
                       <ReadMore lines={2}>{p.name}</ReadMore>
                     </td>
-                    <td style={{ padding: '14px', whiteSpace: 'normal', maxWidth: '180px' }}>
-                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <td style={{ padding: '14px', whiteSpace: 'normal', maxWidth: '180px', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
                         <ReadMore lines={2}>
                           <span style={{ fontWeight: 400, color: '#4B5563', fontSize: '13px' }}>
                             {p.full_address || p.location || (p.cityName || p.city)}
@@ -1846,8 +1846,8 @@ export default function MyProperties({ autoOpenForm = false }) {
           </div>
 
           {/* Pagination Controls */}
-          {filteredProps.length > 0 && (
-            <div style={{ margin: '0 -24px -24px' }}>
+          {filteredProps.length > itemsPerPage && (
+            <div>
               <Pagination 
                 currentPage={currentPage} 
                 totalItems={filteredProps.length} 

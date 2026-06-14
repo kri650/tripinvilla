@@ -361,35 +361,37 @@ export default function AdminList() {
              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
                 <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 600, color: '#111827' }}>Access List</h3>
              </div>
-             <table className="admin-table" style={{ border: 'none' }}>
-               <thead>
-                 <tr>
-                   <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px' }}>Access</th>
-                   <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px', width: '120px' }}>View</th>
-                   <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px', width: '120px' }}>Add</th>
-                   <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px', width: '120px' }}>Edit</th>
-                   <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px', width: '120px' }}>Delete</th>
-                 </tr>
-               </thead>
-               <tbody>
-                 {Object.keys(permissions).map((moduleName, idx) => (
-                   <tr key={idx} style={{ borderBottom: '1px solid #F3F4F6' }}>
-                     <td style={{ color: moduleName === 'User Access' ? '#9CA3AF' : '#4B5563', fontSize: '13px', padding: '16px 24px', fontWeight: 500 }}>{moduleName}</td>
-                     {['view', 'add', 'edit', 'delete'].map(action => (
-                       <td key={action} style={{ padding: '16px 24px' }}>
-                         <input 
-                           type="checkbox" 
-                           checked={permissions[moduleName][action]}
-                           onChange={(e) => handlePermissionChange(moduleName, action, e.target.checked)}
-                           disabled={moduleName === 'User Access'}
-                           style={{ accentColor: '#0C6DC4', cursor: moduleName === 'User Access' ? 'not-allowed' : 'pointer', width: '16px', height: '16px', opacity: moduleName === 'User Access' ? 0.3 : 1 }} 
-                         />
-                       </td>
-                     ))}
+             <div style={{ overflowX: 'auto', width: '100%' }}>
+               <table className="admin-table" style={{ border: 'none', width: '100%', minWidth: '600px' }}>
+                 <thead>
+                   <tr>
+                     <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px' }}>Access</th>
+                     <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px', width: '120px' }}>View</th>
+                     <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px', width: '120px' }}>Add</th>
+                     <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px', width: '120px' }}>Edit</th>
+                     <th style={{ color: '#6B7280', fontWeight: 500, padding: '16px 24px', borderBottom: '1px solid #F3F4F6', fontSize: '12px', width: '120px' }}>Delete</th>
                    </tr>
-                 ))}
-               </tbody>
-             </table>
+                 </thead>
+                 <tbody>
+                   {Object.keys(permissions).map((moduleName, idx) => (
+                     <tr key={idx} style={{ borderBottom: '1px solid #F3F4F6' }}>
+                       <td style={{ color: moduleName === 'User Access' ? '#9CA3AF' : '#4B5563', fontSize: '13px', padding: '16px 24px', fontWeight: 500 }}>{moduleName}</td>
+                       {['view', 'add', 'edit', 'delete'].map(action => (
+                         <td key={action} style={{ padding: '16px 24px' }}>
+                           <input 
+                             type="checkbox" 
+                             checked={permissions[moduleName][action]}
+                             onChange={(e) => handlePermissionChange(moduleName, action, e.target.checked)}
+                             disabled={moduleName === 'User Access'}
+                             style={{ accentColor: '#0C6DC4', cursor: moduleName === 'User Access' ? 'not-allowed' : 'pointer', width: '16px', height: '16px', opacity: moduleName === 'User Access' ? 0.3 : 1 }} 
+                           />
+                         </td>
+                       ))}
+                     </tr>
+                   ))}
+                 </tbody>
+               </table>
+             </div>
           </div>
         </div>
       )}

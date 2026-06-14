@@ -866,7 +866,7 @@ export default function PropertyMakers() {
             className="master-form-card"
             style={{ margin: 0 }}
           >
-          <div className="master-form-header">
+          <div className="master-form-header" style={{ marginBottom: 16 }}>
             <div className="master-form-title">
               {isEditing ? "Modify Property Master" : "Add New Property Master"}
               <span style={{ fontSize: 14, fontWeight: 500, color: '#6B7280', marginLeft: 16 }}>Step {formStep} of 4</span>
@@ -1182,7 +1182,6 @@ export default function PropertyMakers() {
             <>
           {/* Location */}
           <div
-            className="form-group"
             style={{
               border: "1px solid #E5E7EB",
               padding: "16px",
@@ -1214,16 +1213,12 @@ export default function PropertyMakers() {
 
 
             <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: "16px",
-                marginBottom: "16px",
-              }}
+              className="form-grid-4"
+              style={{ marginBottom: "16px" }}
             >
               {/* Country */}
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <div className="form-group">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'auto', gap: '4px' }}>
                   <label className="form-label" style={{ fontSize: "12px", color: "#4B5563", margin: 0 }}>Country*</label>
                   <button type="button" onClick={() => setManualLocation(p => ({ ...p, country: !p.country }))}
                     style={{ fontSize: '10px', color: '#2563EB', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
@@ -1254,8 +1249,8 @@ export default function PropertyMakers() {
               </div>
 
               {/* State */}
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <div className="form-group">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'auto', gap: '4px' }}>
                   <label className="form-label" style={{ fontSize: "12px", color: "#4B5563", margin: 0 }}>State*</label>
                   <button type="button" onClick={() => setManualLocation(p => ({ ...p, state: !p.state }))}
                     style={{ fontSize: '10px', color: '#2563EB', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
@@ -1286,8 +1281,8 @@ export default function PropertyMakers() {
               </div>
 
               {/* City */}
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <div className="form-group">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'auto', gap: '4px' }}>
                   <label className="form-label" style={{ fontSize: "12px", color: "#4B5563", margin: 0 }}>City*</label>
                   <button type="button" onClick={() => setManualLocation(p => ({ ...p, city: !p.city }))}
                     style={{ fontSize: '10px', color: '#2563EB', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', padding: 0 }}>
@@ -1317,8 +1312,8 @@ export default function PropertyMakers() {
               </div>
 
               {/* Area / Location */}
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+              <div className="form-group">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'auto', gap: '4px' }}>
                   <label className="form-label" style={{ fontSize: "12px", color: "#4B5563", margin: 0 }}>
                     Area/Location*
                     {!manualLocation.area && areas.length === 0 && allLocations.length > 0 && (
@@ -1363,11 +1358,8 @@ export default function PropertyMakers() {
               </div>
             </div>
             <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(4, 1fr)",
-                gap: "16px",
-              }}
+              className="form-grid-4"
+              style={{ marginBottom: 0 }}
             >
               <div style={{ gridColumn: "span 2" }}>
                 <label
@@ -1831,7 +1823,7 @@ export default function PropertyMakers() {
             </div>
           </div>
 
-          <div className="form-group" style={{ gridColumn: "span 3", marginTop: "16px", marginBottom: "16px", padding: "16px", border: "1px solid #E5E7EB", borderRadius: "8px", background: "#F9FAFB" }}>
+          <div style={{ gridColumn: "span 3", marginTop: "16px", marginBottom: "16px", padding: "16px", border: "1px solid #E5E7EB", borderRadius: "8px", background: "#F9FAFB" }}>
             <label className="form-label" style={{ fontSize: "15px", color: "#111827", display: "block", marginBottom: "12px" }}>
               Type-Specific Details ({formData.propertyType || "Select a type"})
             </label>
@@ -2240,7 +2232,6 @@ export default function PropertyMakers() {
             <>
         {/* Dynamic Rules Sections */}
         <div
-          className="form-group"
           style={{
             border: "1px solid #E5E7EB",
             padding: "16px",

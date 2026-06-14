@@ -515,11 +515,6 @@
 
 /* 4 & 5 & 6) Mobile overrides (below 640px) */
 @media (max-width: 640px) {
-  /* 5) Topbar: hide other elements, show only title/logo + hamburger */
-  .topbar-right {
-    display: none !important;
-  }
-
   /* Ensure hamburger is visible */
   .mobile-menu-btn {
     display: flex !important;
