@@ -2364,6 +2364,7 @@ export default function AllProperties() {
                   display: "grid",
                   gridTemplateColumns: "repeat(4, 1fr)",
                   gap: "16px",
+                  alignItems: "end",
                 }}
               >
                 <div className="form-group">

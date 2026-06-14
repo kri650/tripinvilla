@@ -1366,7 +1366,7 @@ export default function PropertyMakers() {
                   className="form-label"
                   style={{ fontSize: "12px", color: "#4B5563" }}
                 >
-                  Full Address / Location String*
+                  Full Address*
                 </label>
                 <input
                   type="text"
@@ -1736,6 +1736,7 @@ export default function PropertyMakers() {
               gridTemplateColumns: "repeat(4, 1fr)",
               gap: "16px",
               marginBottom: 16,
+              alignItems: "end",
             }}
           >
             <div className="form-group">

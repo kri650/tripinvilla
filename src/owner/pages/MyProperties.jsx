@@ -1667,7 +1667,7 @@ export default function MyProperties({ autoOpenForm = false }) {
             {sectionWrap(<>
               {sectionHeader('9. Nearby Landmarks', 'Add nearby tourist spots, beaches, markets etc — shown on the Location tab of your property')}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '14px' }}>
-                <div style={{ display: 'flex', gap: '8px' }}>
+                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
                   <input type="text" style={{ ...inputStyle, flex: 1 }} value={landmarkName} onChange={e => setLandmarkName(e.target.value)}
                     onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddLandmark(); } }}
                     placeholder="e.g. Anjuna Flea Market, Candolim Beach" />
@@ -1675,7 +1675,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     {['Tourist Popular','Beach','Market','Temple','Airport','Railway Station','Bus Stand','Restaurant','Waterfall','Forest'].map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexWrap: 'wrap' }}>
                   <label style={{ fontSize: '12px', color: '#4B5563', fontWeight: 500, whiteSpace: 'nowrap' }}>Landmark Photo:</label>
                   <input type="file" ref={landmarkImageRef} accept="image/jpg,image/jpeg,image/png"
                     onChange={e => {

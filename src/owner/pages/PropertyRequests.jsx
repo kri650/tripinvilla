@@ -578,11 +578,11 @@ export default function PropertyRequests() {
           <div className="dash-section requests-table-section">
             <div className="chart-card table-container">
               <div className="table-responsive" style={{ overflowX: 'auto', width: '100%' }}>
-                <table className="data-table" style={{ minWidth: 900 }}>
+                <table className="data-table" style={{ minWidth: 800 }}>
                   <thead>
                     <tr style={{ borderBottom: '1px solid #F3F4F6' }}>
                       {['Property', 'Category', 'Room Type', 'Bed', 'Amenities', 'Price', 'Rules', 'Offers', 'Status', 'Actions'].map((h, i) => (
-                        <th key={i} style={{ minWidth: { 'Property': 200, 'Category': 100, 'Room Type': 100, 'Bed': 80, 'Amenities': 120, 'Price': 90, 'Rules': 80, 'Offers': 80, 'Status': 90, 'Actions': 80 }[h], color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap' }}>{h}</th>
+                        <th key={i} style={{ minWidth: { 'Property': 150, 'Category': 90, 'Room Type': 90, 'Bed': 70, 'Amenities': 100, 'Price': 80, 'Rules': 70, 'Offers': 70, 'Status': 80, 'Actions': 80 }[h], color: '#9CA3AF', fontWeight: 500, fontSize: '12px', padding: '12px 14px', fontFamily: '"Outfit", sans-serif', whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
                     </tr>
                   </thead>
@@ -593,7 +593,7 @@ export default function PropertyRequests() {
                       return (
                         <React.Fragment key={i}>
                           <tr className="request-row" style={{ borderBottom: '1px solid #F3F4F6' }}>
-                            <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'normal', minWidth: '200px', maxWidth: '250px' }}><ReadMore lines={2}>{r.propertyName}</ReadMore></td>
+                            <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'normal', minWidth: '150px', maxWidth: '200px' }}><ReadMore lines={2}>{r.propertyName}</ReadMore></td>
                             <td style={{ padding: '14px' }}>
                               <span className="category-pill" style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 500, background: '#DCFCE7', color: '#58A429' }}>{r.category}</span>
                             </td>

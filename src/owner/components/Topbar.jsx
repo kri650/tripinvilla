@@ -85,6 +85,7 @@ export default function Topbar({ onToggleSidebar }) {
             gap: '6px',
             boxShadow: '0 2px 8px rgba(88, 164, 41, 0.2)'
           }}
+          className="manage-listings-btn"
         >
           Manage Listings <ArrowUpRight size={14} />
         </button>
