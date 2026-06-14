@@ -32,8 +32,16 @@ export default function CustomDropdown({ options, value, onChange, name, classNa
           userSelect: 'none'
         }}
       >
-        <span>{selectedOption ? selectedOption.label : (placeholder || 'Select...')}</span>
-        <ChevronDown size={16} color="#6B7280" style={{ transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
+        <span style={{ 
+          display: 'block',
+          overflow: 'hidden', 
+          textOverflow: 'ellipsis', 
+          whiteSpace: 'nowrap',
+          marginRight: '8px'
+        }}>
+          {selectedOption ? selectedOption.label : (placeholder || 'Select...')}
+        </span>
+        <ChevronDown size={16} color="#6B7280" style={{ flexShrink: 0, transform: isOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }} />
       </div>
 
       {isOpen && (

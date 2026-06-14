@@ -520,7 +520,8 @@
   box-shadow: none;
   display: flex;
   flex-direction: row;
-  height: 350px; /* Fixed height so images are uniform */
+  min-height: 220px;
+  height: auto;
 }
 
 /* ── LEFT: Room image ~45% ── */
@@ -562,7 +563,6 @@
   padding: 24px;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
 }
 
 /* Header row */

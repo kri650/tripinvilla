@@ -70,7 +70,7 @@ td:last-child, th:last-child, td:has(.action-dots) {
   th, td {
     display: table-cell !important;
     min-width: unset !important;
-    white-space: nowrap !important;
+    white-space: nowrap;
     font-size: 12px !important;
     padding: 8px !important;
   }

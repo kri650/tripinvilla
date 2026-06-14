@@ -133,59 +133,70 @@ export default function Profile() {
 
         <div className="profile-container">
           
-          <form className="profile-form" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '24px' }}>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>Owner Name*</label>
-              <input type="text" name="name" value={formData.name} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>Company Name</label>
-              <input type="text" name="company" value={formData.company} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
-            </div>
-            <div style={{ gridRow: 'span 2' }}>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>Profile Image</label>
-              <div style={{ display: 'flex', border: '1px solid #E5E7EB', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
-                 <input type="text" value={file ? file.name : (formData.avatar ? 'Image Uploaded' : 'Choose an image...')} readOnly style={{ flex: 1, padding: '10px 14px', border: 'none', outline: 'none', fontSize: '13px' }} />
-                 <input type="file" accept="image/*" onChange={e => {
-                   if (e.target.files[0]) setCropFile(e.target.files[0]);
-                   e.target.value = null;
-                 }} style={{ position: 'absolute', opacity: 0, top: 0, left: 0, right: 0, bottom: 0, cursor: 'pointer' }} />
-                 <button type="button" style={{ padding: '0 20px', background: '#F3F4F6', border: 'none', borderLeft: '1px solid #E5E7EB', color: '#374151', fontSize: '13px', cursor: 'pointer' }}>Browse</button>
+          <form className="profile-form">
+            <div className="form-grid-2">
+              <div className="form-group">
+                <label className="form-label">Owner Name*</label>
+                <input type="text" className="form-input" name="name" value={formData.name} onChange={handleChange} />
               </div>
-              <p style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '6px' }}>Supported File: .jpg, .png / max. 5mb</p>
+              <div className="form-group">
+                <label className="form-label">Company Name</label>
+                <input type="text" className="form-input" name="company" value={formData.company} onChange={handleChange} />
+              </div>
+            </div>
+
+            <div className="form-grid-1">
+              <div className="form-group">
+                <label className="form-label">Profile Image</label>
+                <div style={{ display: 'flex', border: '1px solid #E5E7EB', borderRadius: '8px', overflow: 'hidden', position: 'relative' }}>
+                   <input type="text" value={file ? file.name : (formData.avatar ? 'Image Uploaded' : 'Choose an image...')} readOnly style={{ flex: 1, padding: '10px 14px', border: 'none', outline: 'none', fontSize: '13px' }} />
+                   <input type="file" accept="image/*" onChange={e => {
+                     if (e.target.files[0]) setCropFile(e.target.files[0]);
+                     e.target.value = null;
+                   }} style={{ position: 'absolute', opacity: 0, top: 0, left: 0, right: 0, bottom: 0, cursor: 'pointer' }} />
+                   <button type="button" style={{ padding: '0 20px', background: '#F3F4F6', border: 'none', borderLeft: '1px solid #E5E7EB', color: '#374151', fontSize: '13px', cursor: 'pointer' }}>Browse</button>
+                </div>
+                <p style={{ fontSize: '11px', color: '#9CA3AF', marginTop: '6px' }}>Supported File: .jpg, .png / max. 5mb</p>
+              </div>
             </div>
             
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>Contact Number*</label>
-              <input type="text" name="phone" value={formData.phone} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>Email Address*</label>
-              <input type="email" name="email" value={formData.email} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
-            </div>
-
-            <div style={{ gridColumn: 'span 3', height: '1px', background: '#E5E7EB', margin: '8px 0' }} />
-
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>PAN Number</label>
-              <input type="text" name="pan" value={formData.pan} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
-            </div>
-            <div style={{ gridColumn: 'span 2' }}>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>Street Address</label>
-              <input type="text" name="address" value={formData.address} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
+            <div className="form-grid-2">
+              <div className="form-group">
+                <label className="form-label">Contact Number*</label>
+                <input type="text" className="form-input" name="phone" value={formData.phone} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Email Address*</label>
+                <input type="email" className="form-input" name="email" value={formData.email} onChange={handleChange} />
+              </div>
             </div>
 
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>City</label>
-              <input type="text" name="city" value={formData.city} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
+            <hr style={{ border: 'none', borderBottom: '1px solid #E5E7EB', margin: '24px 0' }} />
+
+            <div className="form-grid-2">
+              <div className="form-group">
+                <label className="form-label">PAN Number</label>
+                <input type="text" className="form-input" name="pan" value={formData.pan} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Street Address</label>
+                <input type="text" className="form-input" name="address" value={formData.address} onChange={handleChange} />
+              </div>
             </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>State</label>
-              <input type="text" name="state" value={formData.state} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
-            </div>
-            <div>
-              <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px', fontWeight: 500 }}>Pincode</label>
-              <input type="text" name="pincode" value={formData.pincode} onChange={handleChange} style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none' }} />
+
+            <div className="form-grid-3">
+              <div className="form-group">
+                <label className="form-label">City</label>
+                <input type="text" className="form-input" name="city" value={formData.city} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">State</label>
+                <input type="text" className="form-input" name="state" value={formData.state} onChange={handleChange} />
+              </div>
+              <div className="form-group">
+                <label className="form-label">Pincode</label>
+                <input type="text" className="form-input" name="pincode" value={formData.pincode} onChange={handleChange} />
+              </div>
             </div>
 
           </form>

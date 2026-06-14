@@ -132,7 +132,7 @@
   }
 
   /* Collapse form grids */
-  .form-grid-3, .form-grid-2, .form-grid-5 { grid-template-columns: 1fr; }
+  .form-grid-4, .form-grid-3, .form-grid-2, .form-grid-5 { grid-template-columns: 1fr; }
   .testimonial-form-row { flex-direction: column !important; align-items: stretch !important; }
 
   /* Masters page form grids & layouts */

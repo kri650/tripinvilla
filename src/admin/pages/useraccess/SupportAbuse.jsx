@@ -121,7 +121,7 @@ export default function SupportAbuse() {
         </div>
 
         {showAddForm && (
-          <form onSubmit={handleAddVideo} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '24px', alignItems: 'end', marginBottom: '24px', paddingBottom: '24px', borderBottom: '1px solid #E5E7EB' }}>
+          <form onSubmit={handleAddVideo} style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '24px', alignItems: 'end', marginBottom: '24px', paddingBottom: '24px', borderBottom: '1px solid #E5E7EB' }}>
             <div>
               <label style={{ display: 'block', fontSize: '13px', color: '#4B5563', marginBottom: '8px' }}>Title*</label>
               <input type="text" required value={title} onChange={e => setTitle(e.target.value)} placeholder="Video Title" style={{ width: '100%', padding: '10px 14px', border: '1px solid #E5E7EB', borderRadius: '8px', boxSizing: 'border-box' }} />
