@@ -25,8 +25,10 @@ export default function DestinationInfoModal(props) {
   if (isExperience) {
     // Basic match by experience tag or name if available
     matchedProps = allProperties.filter(p => 
-      (p.experiences || []).includes(title) || 
-      (p.description || '').toLowerCase().includes(title.toLowerCase())
+      (p.experiences || []).some(exp => 
+        (typeof exp === 'string' && exp.toLowerCase() === title.toLowerCase()) || 
+        (exp.experienceName && exp.experienceName.toLowerCase() === title.toLowerCase())
+      )
     );
   } else {
     matchedProps = allProperties.filter(p => 

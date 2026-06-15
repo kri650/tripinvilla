@@ -296,6 +296,7 @@ export default function SearchResultsPage(props) {
                               </span>
                             )}
                           </div>
+
                           <div className="horiz-card-inclusions">
                             {(property.highlights && property.highlights.length > 0) ? property.highlights.slice(0, 3).map((hl, i) => (
                               <span key={i} className="inclusion-item"><CheckCircle size={16} fill="#0C6DC4" color="white" /> {hl}</span>

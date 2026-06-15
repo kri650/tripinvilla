@@ -145,7 +145,7 @@ export default function PropertyMakers() {
   const [replaceTarget, setReplaceTarget] = useState(null);
   const replaceInputRef = React.useRef(null);
   const [roomsList, setRoomsList] = useState([]);
-  const [roomForm, setRoomForm] = useState({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', originalPrice: '', taxAmount: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], offer: '', rules: '' });
+  const [roomForm, setRoomForm] = useState({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', originalPrice: '', taxAmount: '', maxGuests: 2, bedType: 'Double', amenities: [], offer: '', rules: '' });
   const [customRoomType, setCustomRoomType] = useState('');
   const [roomTypes, setRoomTypes] = useState([]);
   const [isEditingRoom, setIsEditingRoom] = useState(false);
@@ -161,6 +161,8 @@ export default function PropertyMakers() {
   const [availableExperiences, setAvailableExperiences] = useState([]);
   const [experiencesLoading, setExperiencesLoading] = useState(false);
   const [newCustomExp, setNewCustomExp] = useState("");
+  const [newCustomExpDesc, setNewCustomExpDesc] = useState("");
+  const [newCustomExpImage, setNewCustomExpImage] = useState(null);
 
   // Dynamic Rules Sections
   const [rulesSections, setRulesSections] = useState([
@@ -280,16 +282,18 @@ export default function PropertyMakers() {
   const handleAddCustomExperience = async () => {
     if (!newCustomExp.trim()) return;
     try {
-      const API_ENDPOINT =
-        typeof API !== "undefined" ? API : `${import.meta.env.VITE_API_BASE}`;
+      const API_ENDPOINT = typeof API !== "undefined" ? API : `${import.meta.env.VITE_API_BASE}`;
+      const formData = new FormData();
+      formData.append('experienceName', newCustomExp.trim());
+      formData.append('description', newCustomExpDesc.trim() || 'No description available.');
+      formData.append('status', 'Active');
+      if (newCustomExpImage) {
+        formData.append('themeCoverImage', newCustomExpImage);
+      }
+
       const res = await fetch(`${API_ENDPOINT}/master/experiences`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          experienceName: newCustomExp.trim(),
-          representingIcon: "",
-          status: "Active",
-        }),
+        body: formData
       });
       const data = await res.json();
       setAvailableExperiences((prev) => [...prev, data]);
@@ -298,6 +302,8 @@ export default function PropertyMakers() {
         data._id || data.experienceName || data.name,
       ]);
       setNewCustomExp("");
+      setNewCustomExpDesc("");
+      setNewCustomExpImage(null);
     } catch (err) {
       console.error(err);
     }
@@ -569,7 +575,7 @@ export default function PropertyMakers() {
     setManualLocation({ country: false, state: false, city: false, area: false });
     setManualValues({ country: '', state: '', city: '', area: '' });
     setExistingImages([]); setRoomsList([]);
-    setRoomForm({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], offer: '', rules: '' });
+    setRoomForm({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', amenities: [], offer: '', rules: '' });
     setSelectedFiles([]); setLandmarksList([]);
     setRulesSections([{ title: 'Must Read Rules', text: '' }]);
     if (fileInputRef.current) fileInputRef.current.value = "";
@@ -1084,6 +1090,7 @@ export default function PropertyMakers() {
                   Loading experiences...
                 </div>
               ) : (
+                <>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {availableExperiences.map((exp) => {
                     const id = exp._id || exp.experienceName || exp.name;
@@ -1123,51 +1130,70 @@ export default function PropertyMakers() {
                       </button>
                     );
                   })}
-                  <div
-                    style={{
-                      display: "flex",
-                      gap: 8,
-                      marginTop: 12,
-                      alignItems: "center",
-                    }}
-                  >
-                    <input
-                      type="text"
-                      value={newCustomExp}
-                      onChange={(e) => setNewCustomExp(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          handleAddCustomExperience();
-                        }
-                      }}
-                      placeholder="Add custom experience"
-                      style={{
-                        padding: "6px 12px",
-                        fontSize: 13,
-                        border: "1px solid #D1D5DB",
-                        borderRadius: 6,
-                        flex: 1,
-                        maxWidth: 200,
-                      }}
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16, background: '#F9FAFB', padding: 16, borderRadius: 8, border: '1px solid #E5E7EB', maxWidth: '600px' }}>
+                  <h4 style={{ margin: 0, fontSize: 14, color: '#374151', fontWeight: 600 }}>Add New Unique Experience</h4>
+                  <div className="form-grid-2" style={{ gap: 12, marginBottom: 0 }}>
+                      <input
+                        type="text"
+                        value={newCustomExp}
+                        onChange={(e) => setNewCustomExp(e.target.value)}
+                        placeholder="Experience Name (e.g. Treehouse)"
+                        style={{
+                          padding: "8px 12px",
+                          fontSize: 13,
+                          border: "1px solid #D1D5DB",
+                          borderRadius: 6,
+                          width: "100%",
+                        }}
+                      />
+                      <input 
+                        type="file" 
+                        onChange={e => setNewCustomExpImage(e.target.files[0])} 
+                        accept="image/*" 
+                        style={{ 
+                          padding: '6px 12px', 
+                          fontSize: 13, 
+                          border: '1px solid #D1D5DB', 
+                          borderRadius: 6, 
+                          width: '100%', 
+                          background: '#fff' 
+                        }} 
+                      />
+                    </div>
+                    <textarea 
+                      value={newCustomExpDesc} 
+                      onChange={e => setNewCustomExpDesc(e.target.value)} 
+                      placeholder="Experience Description" 
+                      rows="2" 
+                      style={{ 
+                        padding: '8px 12px', 
+                        fontSize: 13, 
+                        border: '1px solid #D1D5DB', 
+                        borderRadius: 6, 
+                        width: '100%', 
+                        resize: 'vertical' 
+                      }} 
                     />
                     <button
                       type="button"
                       onClick={handleAddCustomExperience}
                       style={{
-                        padding: "6px 12px",
+                        padding: "8px 16px",
                         background: "#58A429",
                         color: "#fff",
                         border: "none",
                         borderRadius: 6,
                         fontSize: 13,
                         cursor: "pointer",
+                        fontWeight: 500,
+                        alignSelf: "flex-start"
                       }}
                     >
-                      Add
+                      Create & Tag Experience
                     </button>
                   </div>
-                </div>
+                </>
               )}
             </div>
           </div>
@@ -1314,7 +1340,7 @@ export default function PropertyMakers() {
               {/* Area / Location */}
               <div className="form-group">
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 'auto', gap: '4px' }}>
-                  <label className="form-label" style={{ fontSize: "12px", color: "#4B5563", margin: 0 }}>
+                  <label className="form-label" style={{ fontSize: "12px", color: "#4B5563", margin: 0, whiteSpace: 'nowrap' }}>
                     Area/Location*
                     {!manualLocation.area && areas.length === 0 && allLocations.length > 0 && (
                       <span style={{ color: '#F59E0B', fontSize: 11, marginLeft: 6 }}>Showing all locations</span>
@@ -1811,17 +1837,6 @@ export default function PropertyMakers() {
                 )}
               </select>
             </div>
-            <div className="form-group">
-              <label className="form-label">Bath Rooms*</label>
-              <input
-                type="number"
-                name="bathRooms"
-                value={formData.bathRooms}
-                onChange={handleChange}
-                className="form-input"
-                required
-              />
-            </div>
           </div>
 
           <div style={{ gridColumn: "span 3", marginTop: "16px", marginBottom: "16px", padding: "16px", border: "1px solid #E5E7EB", borderRadius: "8px", background: "#F9FAFB" }}>
@@ -2079,16 +2094,7 @@ export default function PropertyMakers() {
               </div>
             </div>
 
-            {/* Row 3 */}
-            <div className="form-grid-3" style={{ marginBottom: 12 }}>
-              <div className="form-group">
-                <label className="form-label">Max Guests &amp; Count</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                  <input type="number" className="form-input" min={1} value={roomForm.maxGuests} onChange={e => setRoomForm(p => ({ ...p, maxGuests: e.target.value }))} placeholder="Guests" />
-                  <input type="number" className="form-input" min={1} value={roomForm.count} onChange={e => setRoomForm(p => ({ ...p, count: e.target.value }))} placeholder="Count" />
-                </div>
-              </div>
-            </div>
+
 
             {/* Rules removed as requested */}
 
@@ -2137,11 +2143,9 @@ export default function PropertyMakers() {
                     amenities: amenArr,
                     pricePerNight: Number(roomForm.pricePerNight),
                     original_price: Number(roomForm.originalPrice),
-                    tax_amount: Number(roomForm.taxAmount),
-                    maxGuests: Number(roomForm.maxGuests),
-                    count: Number(roomForm.count)
+                    tax_amount: Number(roomForm.taxAmount)
                   }]);
-                  setRoomForm({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', originalPrice: '', taxAmount: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], amenitiesText: '', checkIn: '3:00 PM', checkOut: '12:00 PM', offer: '', rules: '' });
+                  setRoomForm({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', originalPrice: '', taxAmount: '', bedType: 'Double', amenities: [], amenitiesText: '', checkIn: '3:00 PM', checkOut: '12:00 PM', offer: '', rules: '' });
                   setRoomImageFile(null);
                   setRoomImagePreview("");
                   setIsEditingRoom(false);
@@ -2159,7 +2163,7 @@ export default function PropertyMakers() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                   <thead>
                     <tr style={{ background: '#F3F4F6' }}>
-                      {['Room Image', 'Room Name', 'Type', 'Bed', 'Amenities', 'Price/Night', 'Offer', 'Guests', 'Count', ''].map(h => (
+                      {['Room Image', 'Room Name', 'Type', 'Bed', 'Amenities', 'Price/Night', 'Offer', ''].map(h => (
                         <th key={h} style={{ padding: '8px 12px', textAlign: 'left', color: '#6B7280', fontWeight: 500, whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
                     </tr>
@@ -2180,8 +2184,6 @@ export default function PropertyMakers() {
                         <td style={{ padding: '8px 12px', color: '#6B7280' }}>{Array.isArray(room.amenities) ? room.amenities.join(', ') : room.amenitiesText || '—'}</td>
                         <td style={{ padding: '8px 12px', color: '#111827', fontWeight: 600 }}>₹{room.pricePerNight}/night</td>
                         <td style={{ padding: '8px 12px', color: '#6B7280' }}>{room.offer || '—'}</td>
-                        <td style={{ padding: '8px 12px', color: '#6B7280' }}>{room.maxGuests}</td>
-                        <td style={{ padding: '8px 12px', color: '#6B7280' }}>{room.count}</td>
                         <td style={{ padding: '8px 12px' }}>
                           <div style={{ display: 'flex', gap: '12px' }}>
                             <button type="button" onClick={() => {

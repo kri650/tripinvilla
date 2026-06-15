@@ -133,7 +133,7 @@ export default function MyProperties({ autoOpenForm = false }) {
 
   // ─── Rooms (for Hotel / Resort) ──────────────────────
   const [roomsList, setRoomsList] = useState([]);
-  const [roomForm, setRoomForm] = useState({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [], checkIn: '3:00 PM', checkOut: '12:00 PM' });
+  const [roomForm, setRoomForm] = useState({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', amenities: [], checkIn: '3:00 PM', checkOut: '12:00 PM' });
   const [customRoomType, setCustomRoomType] = useState('');
   const [roomTypes, setRoomTypes] = useState([]);
 
@@ -147,6 +147,8 @@ export default function MyProperties({ autoOpenForm = false }) {
   const [availableExperiences, setAvailableExperiences] = useState([]);
   const [experiencesLoading, setExperiencesLoading] = useState(false);
   const [newCustomExp, setNewCustomExp] = useState("");
+  const [newCustomExpDesc, setNewCustomExpDesc] = useState("");
+  const [newCustomExpImage, setNewCustomExpImage] = useState(null);
 
   // ─── Location Masters (cascading dropdowns) ───────────────
   const [countries, setCountries] = useState([]);
@@ -291,15 +293,24 @@ export default function MyProperties({ autoOpenForm = false }) {
     if (!newCustomExp.trim()) return;
     try {
       const API_ENDPOINT = typeof API !== 'undefined' ? API : `${import.meta.env.VITE_API_BASE}`;
+      const formData = new FormData();
+      formData.append('experienceName', newCustomExp.trim());
+      formData.append('description', newCustomExpDesc.trim() || 'No description available.');
+      formData.append('status', 'Active');
+      if (newCustomExpImage) {
+        formData.append('themeCoverImage', newCustomExpImage);
+      }
+
       const res = await fetch(`${API_ENDPOINT}/master/experiences`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ experienceName: newCustomExp.trim(), representingIcon: '', status: 'Active' })
+        body: formData
       });
       const data = await res.json();
       setAvailableExperiences(prev => [...prev, data]);
       setSelectedExperiences(prev => [...prev, data._id || data.experienceName || data.name]);
       setNewCustomExp('');
+      setNewCustomExpDesc('');
+      setNewCustomExpImage(null);
     } catch (err) {
       console.error(err);
     }
@@ -838,7 +849,7 @@ export default function MyProperties({ autoOpenForm = false }) {
     setSelectedFiles([]);
     setExistingImages([]);
     setRoomsList([]);
-    setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
+    setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', amenities: [] });
     setStates([]); setCities([]); setLocations([]);
     setManualLocation({ country: false, state: false, city: false, area: false });
     setManualValues({ country: '', state: '', city: '', area: '' });
@@ -1057,7 +1068,7 @@ export default function MyProperties({ autoOpenForm = false }) {
 
 
               {/* Cascading dropdowns */}
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '16px', marginBottom: '16px', alignItems: 'flex-end' }}>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
                     <label style={labelStyle}>Country *</label>
@@ -1128,7 +1139,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                 </div>
                 <div>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
-                    <label style={labelStyle}>
+                    <label style={{ ...labelStyle, whiteSpace: 'nowrap' }}>
                       Area / Location
                       {!manualLocation.area && locations.length === 0 && allLocations.length > 0 && formData.cityId && (
                         <span style={{ color: '#F59E0B', fontSize: 11, marginLeft: 6 }}>Showing all locations</span>
@@ -1182,7 +1193,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                           () => alert('Location access denied. Please enter manually.')
                         );
                       }
-                    }} style={{ padding: '9px 16px', background: '#fff', color: '#374151', border: '1px solid #D1D5DB', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', width: '100%' }}>
+                    }} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px', height: '39px', padding: '0 16px', background: '#fff', color: '#374151', border: '1px solid #D1D5DB', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', width: '100%', boxSizing: 'border-box' }}>
                       📍 Use My Location
                     </button>
                   </div>
@@ -1309,12 +1320,11 @@ export default function MyProperties({ autoOpenForm = false }) {
             {/* ── SECTION 5: Property Details ───────────────── */}
             {sectionWrap(<>
               {sectionHeader('5. Property Details', 'Size, capacity and timing information')}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '16px', marginBottom: '16px' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px', marginBottom: '16px' }}>
                 {[
                   { label: 'Bedrooms *', name: 'bedRooms', placeholder: '1' },
                   { label: 'Beds Count *', name: 'beds', placeholder: '2' },
                   { label: 'Max Guests *', name: 'capacity', placeholder: '3' },
-                  { label: 'Bathrooms *', name: 'bathRooms', placeholder: '1' },
                 ].map(f => (
                   <div key={f.name}>
                     <label style={labelStyle}>{f.label}</label>
@@ -1517,16 +1527,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     {['Single', 'Double', 'Queen', 'King', 'Twin', 'Bunk'].map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
-                  <div>
-                    <label style={labelStyle}>Max Guests</label>
-                    <input style={inputStyle} type="number" min={1} value={roomForm.maxGuests} onChange={e => setRoomForm(p => ({ ...p, maxGuests: e.target.value }))} />
-                  </div>
-                  <div>
-                    <label style={labelStyle}>Count</label>
-                    <input style={inputStyle} type="number" min={1} value={roomForm.count} onChange={e => setRoomForm(p => ({ ...p, count: e.target.value }))} />
-                  </div>
-                </div>
+
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', Math: 'flex-end', marginBottom: '12px', width: '40%' }}>
               </div>
@@ -1535,8 +1536,8 @@ export default function MyProperties({ autoOpenForm = false }) {
                   if (!roomForm.roomName.trim() || !roomForm.pricePerNight) { alert('Please fill Room Name and Price.'); return; }
                   const finalRoomType = roomForm.roomType === 'Other' ? customRoomType : roomForm.roomType;
                   if (roomForm.roomType === 'Other' && !finalRoomType.trim()) { alert('Please enter custom room type.'); return; }
-                  setRoomsList(prev => [...prev, { ...roomForm, roomType: finalRoomType, pricePerNight: Number(roomForm.pricePerNight), maxGuests: Number(roomForm.maxGuests), count: Number(roomForm.count) }]);
-                  setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', count: 1, amenities: [] });
+                  setRoomsList(prev => [...prev, { ...roomForm, roomType: finalRoomType, pricePerNight: Number(roomForm.pricePerNight) }]);
+                  setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', bedType: 'Double', amenities: [] });
                   setCustomRoomType('');
                 }}
                 style={{ padding: '8px 20px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: 600, marginBottom: 12 }}>
@@ -1549,8 +1550,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 8, padding: '10px 14px' }}>
                       <div style={{ flex: 1 }}>
                         <span style={{ fontWeight: 700, color: '#111827', fontSize: 13 }}>{room.roomName || room.roomType}</span>
-                        <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed · {room.maxGuests} guests · {room.count} rooms</span>
-                        <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed · {room.maxGuests} guests · {room.count} rooms</span>
+                        <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed</span>
                         <span style={{ color: '#58A429', fontWeight: 600, fontSize: 13, marginTop: 4, display: 'block' }}>₹{room.pricePerNight}/night</span>
                       </div>
                       <button type="button" onClick={() => setRoomsList(prev => prev.filter((_, i) => i !== idx))}
@@ -1628,6 +1628,7 @@ export default function MyProperties({ autoOpenForm = false }) {
               {experiencesLoading ? (
                 <p style={{ color: '#9CA3AF', fontSize: '13px' }}>Loading experiences...</p>
               ) : (
+                <>
                 <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '10px' }}>
                   {availableExperiences.map(exp => {
                     const id = exp._id || exp.experienceName || exp.name;
@@ -1655,11 +1656,17 @@ export default function MyProperties({ autoOpenForm = false }) {
                   {availableExperiences.length === 0 && (
                     <p style={{ fontSize: '12px', color: '#9CA3AF' }}>No experiences available. Ask admin to add them in Unique Experience Master.</p>
                   )}
-                      <div style={{ display: 'flex', gap: 8, marginTop: 12, alignItems: 'center' }}>
-                        <input type="text" value={newCustomExp} onChange={e => setNewCustomExp(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); handleAddCustomExperience(); } }} placeholder="Add custom experience" style={{ padding: '6px 12px', fontSize: 13, border: '1px solid #D1D5DB', borderRadius: 6, flex: 1, maxWidth: 200 }} />
-                        <button type="button" onClick={handleAddCustomExperience} style={{ padding: '6px 12px', background: '#58A429', color: '#fff', border: 'none', borderRadius: 6, fontSize: 13, cursor: 'pointer' }}>Add</button>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16, background: '#F9FAFB', padding: 16, borderRadius: 8, border: '1px solid #E5E7EB', maxWidth: '600px' }}>
+                        <h4 style={{ margin: 0, fontSize: 14, color: '#374151', fontWeight: 600 }}>Add New Unique Experience</h4>
+                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                          <input type="text" value={newCustomExp} onChange={e => setNewCustomExp(e.target.value)} placeholder="Experience Name (e.g. Treehouse)" style={{ padding: '8px 12px', fontSize: 13, border: '1px solid #D1D5DB', borderRadius: 6, width: '100%' }} />
+                          <input type="file" onChange={e => setNewCustomExpImage(e.target.files[0])} accept="image/*" style={{ padding: '6px 12px', fontSize: 13, border: '1px solid #D1D5DB', borderRadius: 6, width: '100%', background: '#fff' }} />
+                        </div>
+                        <textarea value={newCustomExpDesc} onChange={e => setNewCustomExpDesc(e.target.value)} placeholder="Experience Description" rows="2" style={{ padding: '8px 12px', fontSize: 13, border: '1px solid #D1D5DB', borderRadius: 6, width: '100%', resize: 'vertical' }} />
+                        <button type="button" onClick={handleAddCustomExperience} style={{ padding: '8px 16px', background: '#58A429', color: '#fff', border: 'none', borderRadius: 6, fontSize: 13, cursor: 'pointer', fontWeight: 500, alignSelf: 'flex-start' }}>Create & Tag Experience</button>
                       </div>
-                    </div>
+                      </>
                   )}
             </>)}
 
@@ -1787,19 +1794,16 @@ export default function MyProperties({ autoOpenForm = false }) {
                         <img src={p.images?.[0] || 'https://via.placeholder.com/44x34'} style={{ width: '100%', height: '100%', objectFit: 'cover' }} alt="" />
                       </div>
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'normal', maxWidth: '200px', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                    <td style={{ color: '#111827', fontWeight: 500, padding: '14px', fontSize: '13px', whiteSpace: 'normal', width: '200px', minWidth: '200px', maxWidth: '200px', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
                       <ReadMore lines={2}>{p.name}</ReadMore>
                     </td>
-                    <td style={{ padding: '14px', whiteSpace: 'normal', maxWidth: '180px', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
+                    <td style={{ padding: '14px', whiteSpace: 'normal', width: '180px', minWidth: '180px', maxWidth: '180px', wordBreak: 'break-word', overflowWrap: 'anywhere' }}>
                       <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
-                        <ReadMore lines={2}>
-                          <span style={{ fontWeight: 400, color: '#4B5563', fontSize: '13px' }}>
-                            {p.full_address || p.location || (p.cityName || p.city)}
-                          </span>
-                          <span style={{ fontSize: '11px', color: '#9CA3AF', marginLeft: '4px' }}>
-                            {!p.full_address && !p.location ? (p.stateName || p.state) : ''}
-                          </span>
-                        </ReadMore>
+                        <span style={{ fontWeight: 400, color: '#4B5563', fontSize: '13px' }}>
+                          <ReadMore lines={2}>
+                            {`${p.full_address || p.location || p.cityName || p.city || ''}${(!p.full_address && !p.location && (p.stateName || p.state)) ? ', ' + (p.stateName || p.state) : ''}`}
+                          </ReadMore>
+                        </span>
                       </div>
                     </td>
                     <td style={{ padding: '14px' }}>

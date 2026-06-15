@@ -170,6 +170,7 @@ export default function PropertiesGridPage(props) {
                       <div className="recommend-spec-pill"><img src={roomIcon} alt="Rooms" style={{ width: '14px', height: '14px', objectFit: 'contain' }} /><span>Rooms: {propData.roomCountString}</span></div>
                       <div className="recommend-spec-pill"><img src={guestIcon} alt="Guests" style={{ width: '14px', height: '14px', objectFit: 'contain' }} /><span>Guests: {propData.guests}</span></div>
                     </div>
+
                     <div className="recommend-price-tag-row">
                       <span className="price-label">Starting from</span>
                       <span className="price-green-bold">{String(propData.price).startsWith('₹') ? propData.price : '₹' + propData.price}/night</span>
