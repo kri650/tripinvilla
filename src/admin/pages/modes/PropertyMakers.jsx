@@ -1090,6 +1090,7 @@ export default function PropertyMakers() {
                   Loading experiences...
                 </div>
               ) : (
+                <>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
                   {availableExperiences.map((exp) => {
                     const id = exp._id || exp.experienceName || exp.name;
@@ -1192,6 +1193,7 @@ export default function PropertyMakers() {
                       Create & Tag Experience
                     </button>
                   </div>
+                </>
               )}
             </div>
           </div>

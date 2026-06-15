@@ -1628,6 +1628,7 @@ export default function MyProperties({ autoOpenForm = false }) {
               {experiencesLoading ? (
                 <p style={{ color: '#9CA3AF', fontSize: '13px' }}>Loading experiences...</p>
               ) : (
+                <>
                 <div style={{ display: 'flex', flexWrap: 'nowrap', overflowX: 'auto', paddingBottom: '4px', gap: '10px' }}>
                   {availableExperiences.map(exp => {
                     const id = exp._id || exp.experienceName || exp.name;
@@ -1664,7 +1665,8 @@ export default function MyProperties({ autoOpenForm = false }) {
                         <textarea value={newCustomExpDesc} onChange={e => setNewCustomExpDesc(e.target.value)} placeholder="Experience Description" rows="2" style={{ padding: '8px 12px', fontSize: 13, border: '1px solid #D1D5DB', borderRadius: 6, width: '100%', resize: 'vertical' }} />
                         <button type="button" onClick={handleAddCustomExperience} style={{ padding: '8px 16px', background: '#58A429', color: '#fff', border: 'none', borderRadius: 6, fontSize: 13, cursor: 'pointer', fontWeight: 500, alignSelf: 'flex-start' }}>Create & Tag Experience</button>
                       </div>
-                    </div>
+                      </div>
+                      </>
                   )}
             </>)}
 
