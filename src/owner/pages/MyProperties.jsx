@@ -1656,7 +1656,8 @@ export default function MyProperties({ autoOpenForm = false }) {
                   {availableExperiences.length === 0 && (
                     <p style={{ fontSize: '12px', color: '#9CA3AF' }}>No experiences available. Ask admin to add them in Unique Experience Master.</p>
                   )}
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16, background: '#F9FAFB', padding: 16, borderRadius: 8, border: '1px solid #E5E7EB', maxWidth: '600px' }}>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16, background: '#F9FAFB', padding: 16, borderRadius: 8, border: '1px solid #E5E7EB', maxWidth: '600px' }}>
                         <h4 style={{ margin: 0, fontSize: 14, color: '#374151', fontWeight: 600 }}>Add New Unique Experience</h4>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                           <input type="text" value={newCustomExp} onChange={e => setNewCustomExp(e.target.value)} placeholder="Experience Name (e.g. Treehouse)" style={{ padding: '8px 12px', fontSize: 13, border: '1px solid #D1D5DB', borderRadius: 6, width: '100%' }} />
@@ -1664,7 +1665,6 @@ export default function MyProperties({ autoOpenForm = false }) {
                         </div>
                         <textarea value={newCustomExpDesc} onChange={e => setNewCustomExpDesc(e.target.value)} placeholder="Experience Description" rows="2" style={{ padding: '8px 12px', fontSize: 13, border: '1px solid #D1D5DB', borderRadius: 6, width: '100%', resize: 'vertical' }} />
                         <button type="button" onClick={handleAddCustomExperience} style={{ padding: '8px 16px', background: '#58A429', color: '#fff', border: 'none', borderRadius: 6, fontSize: 13, cursor: 'pointer', fontWeight: 500, alignSelf: 'flex-start' }}>Create & Tag Experience</button>
-                      </div>
                       </div>
                       </>
                   )}
