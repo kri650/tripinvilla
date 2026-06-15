@@ -1527,12 +1527,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     {['Single', 'Double', 'Queen', 'King', 'Twin', 'Bunk'].map(t => <option key={t} value={t}>{t}</option>)}
                   </select>
                 </div>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 8 }}>
-                  <div>
-                    <label style={labelStyle}>Max Guests in Room</label>
-                    <input style={inputStyle} type="number" min={1} value={roomForm.maxGuests} onChange={e => setRoomForm(p => ({ ...p, maxGuests: e.target.value }))} />
-                  </div>
-                </div>
+
               </div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', Math: 'flex-end', marginBottom: '12px', width: '40%' }}>
               </div>
@@ -1541,8 +1536,8 @@ export default function MyProperties({ autoOpenForm = false }) {
                   if (!roomForm.roomName.trim() || !roomForm.pricePerNight) { alert('Please fill Room Name and Price.'); return; }
                   const finalRoomType = roomForm.roomType === 'Other' ? customRoomType : roomForm.roomType;
                   if (roomForm.roomType === 'Other' && !finalRoomType.trim()) { alert('Please enter custom room type.'); return; }
-                  setRoomsList(prev => [...prev, { ...roomForm, roomType: finalRoomType, pricePerNight: Number(roomForm.pricePerNight), maxGuests: Number(roomForm.maxGuests) }]);
-                  setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', maxGuests: 2, bedType: 'Double', amenities: [] });
+                  setRoomsList(prev => [...prev, { ...roomForm, roomType: finalRoomType, pricePerNight: Number(roomForm.pricePerNight) }]);
+                  setRoomForm({ roomType: 'Deluxe', roomName: '', pricePerNight: '', bedType: 'Double', amenities: [] });
                   setCustomRoomType('');
                 }}
                 style={{ padding: '8px 20px', background: '#58A429', color: '#fff', border: 'none', borderRadius: '8px', fontSize: '13px', cursor: 'pointer', fontWeight: 600, marginBottom: 12 }}>
@@ -1555,7 +1550,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: 12, background: '#F0FDF4', border: '1px solid #BBF7D0', borderRadius: 8, padding: '10px 14px' }}>
                       <div style={{ flex: 1 }}>
                         <span style={{ fontWeight: 700, color: '#111827', fontSize: 13 }}>{room.roomName || room.roomType}</span>
-                        <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed · {room.maxGuests} guests</span>
+                        <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed</span>
                         <span style={{ color: '#58A429', fontWeight: 600, fontSize: 13, marginTop: 4, display: 'block' }}>₹{room.pricePerNight}/night</span>
                       </div>
                       <button type="button" onClick={() => setRoomsList(prev => prev.filter((_, i) => i !== idx))}
@@ -1660,7 +1655,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                   {availableExperiences.length === 0 && (
                     <p style={{ fontSize: '12px', color: '#9CA3AF' }}>No experiences available. Ask admin to add them in Unique Experience Master.</p>
                   )}
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16, background: '#F9FAFB', padding: 16, borderRadius: 8, border: '1px solid #E5E7EB' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16, background: '#F9FAFB', padding: 16, borderRadius: 8, border: '1px solid #E5E7EB', maxWidth: '600px' }}>
                         <h4 style={{ margin: 0, fontSize: 14, color: '#374151', fontWeight: 600 }}>Add New Unique Experience</h4>
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                           <input type="text" value={newCustomExp} onChange={e => setNewCustomExp(e.target.value)} placeholder="Experience Name (e.g. Treehouse)" style={{ padding: '8px 12px', fontSize: 13, border: '1px solid #D1D5DB', borderRadius: 6, width: '100%' }} />

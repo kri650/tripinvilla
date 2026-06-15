@@ -1129,9 +1129,10 @@ export default function PropertyMakers() {
                       </button>
                     );
                   })}
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16, background: '#F9FAFB', padding: 16, borderRadius: 8, border: '1px solid #E5E7EB' }}>
-                    <h4 style={{ margin: 0, fontSize: 14, color: '#374151', fontWeight: 600 }}>Add New Unique Experience</h4>
-                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 16, background: '#F9FAFB', padding: 16, borderRadius: 8, border: '1px solid #E5E7EB', maxWidth: '600px' }}>
+                  <h4 style={{ margin: 0, fontSize: 14, color: '#374151', fontWeight: 600 }}>Add New Unique Experience</h4>
+                  <div className="form-grid-2" style={{ gap: 12, marginBottom: 0 }}>
                       <input
                         type="text"
                         value={newCustomExp}
@@ -1191,7 +1192,6 @@ export default function PropertyMakers() {
                       Create & Tag Experience
                     </button>
                   </div>
-                </div>
               )}
             </div>
           </div>
@@ -2092,15 +2092,7 @@ export default function PropertyMakers() {
               </div>
             </div>
 
-            {/* Row 3 */}
-            <div className="form-grid-3" style={{ marginBottom: 12 }}>
-              <div className="form-group">
-                <label className="form-label">Max Guests in Room</label>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 8 }}>
-                  <input type="number" className="form-input" min={1} value={roomForm.maxGuests} onChange={e => setRoomForm(p => ({ ...p, maxGuests: e.target.value }))} placeholder="Guests" />
-                </div>
-              </div>
-            </div>
+
 
             {/* Rules removed as requested */}
 
@@ -2149,10 +2141,9 @@ export default function PropertyMakers() {
                     amenities: amenArr,
                     pricePerNight: Number(roomForm.pricePerNight),
                     original_price: Number(roomForm.originalPrice),
-                    tax_amount: Number(roomForm.taxAmount),
-                    maxGuests: Number(roomForm.maxGuests)
+                    tax_amount: Number(roomForm.taxAmount)
                   }]);
-                  setRoomForm({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', originalPrice: '', taxAmount: '', maxGuests: 2, bedType: 'Double', amenities: [], amenitiesText: '', checkIn: '3:00 PM', checkOut: '12:00 PM', offer: '', rules: '' });
+                  setRoomForm({ roomType: 'Deluxe', roomName: '', imageUrl: '', pricePerNight: '', originalPrice: '', taxAmount: '', bedType: 'Double', amenities: [], amenitiesText: '', checkIn: '3:00 PM', checkOut: '12:00 PM', offer: '', rules: '' });
                   setRoomImageFile(null);
                   setRoomImagePreview("");
                   setIsEditingRoom(false);
@@ -2170,7 +2161,7 @@ export default function PropertyMakers() {
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                   <thead>
                     <tr style={{ background: '#F3F4F6' }}>
-                      {['Room Image', 'Room Name', 'Type', 'Bed', 'Amenities', 'Price/Night', 'Offer', 'Guests', 'Count', ''].map(h => (
+                      {['Room Image', 'Room Name', 'Type', 'Bed', 'Amenities', 'Price/Night', 'Offer', ''].map(h => (
                         <th key={h} style={{ padding: '8px 12px', textAlign: 'left', color: '#6B7280', fontWeight: 500, whiteSpace: 'nowrap' }}>{h}</th>
                       ))}
                     </tr>
@@ -2191,7 +2182,6 @@ export default function PropertyMakers() {
                         <td style={{ padding: '8px 12px', color: '#6B7280' }}>{Array.isArray(room.amenities) ? room.amenities.join(', ') : room.amenitiesText || '—'}</td>
                         <td style={{ padding: '8px 12px', color: '#111827', fontWeight: 600 }}>₹{room.pricePerNight}/night</td>
                         <td style={{ padding: '8px 12px', color: '#6B7280' }}>{room.offer || '—'}</td>
-                        <td style={{ padding: '8px 12px', color: '#6B7280' }}>{room.maxGuests}</td>
                         <td style={{ padding: '8px 12px' }}>
                           <div style={{ display: 'flex', gap: '12px' }}>
                             <button type="button" onClick={() => {

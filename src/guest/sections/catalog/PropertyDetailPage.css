@@ -452,8 +452,7 @@
 
 .room-card-img-wrap {
   width: clamp(150px, 18vw, 210px);
-  height: auto;
-  min-height: 132px;
+  height: 180px;
   flex-shrink: 0;
 }
 

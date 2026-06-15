@@ -296,15 +296,7 @@ export default function SearchResultsPage(props) {
                               </span>
                             )}
                           </div>
-                          {property.firstLandmark && (
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '6px 0', borderTop: '1px dashed #E5E7EB', borderBottom: '1px dashed #E5E7EB', margin: '4px 0' }}>
-                              <img src={property.firstLandmark.landmark_image_url || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=150&q=80'} alt={property.firstLandmark.landmark_name} style={{ width: '24px', height: '24px', borderRadius: '50%', objectFit: 'cover' }} />
-                              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span style={{ fontSize: '12px', fontWeight: '600', color: '#111827', lineHeight: '1.2' }}>{property.firstLandmark.landmark_name}</span>
-                                <span style={{ fontSize: '10px', color: '#6B7280' }}>Near by {property.firstLandmark.distance || 'location'}</span>
-                              </div>
-                            </div>
-                          )}
+
                           <div className="horiz-card-inclusions">
                             {(property.highlights && property.highlights.length > 0) ? property.highlights.slice(0, 3).map((hl, i) => (
                               <span key={i} className="inclusion-item"><CheckCircle size={16} fill="#0C6DC4" color="white" /> {hl}</span>

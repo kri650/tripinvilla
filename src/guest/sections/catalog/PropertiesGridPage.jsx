@@ -146,15 +146,7 @@ export default function PropertiesGridPage(props) {
                       <div className="recommend-spec-pill"><img src={roomIcon} alt="Rooms" style={{ width: '14px', height: '14px', objectFit: 'contain' }} /><span>Rooms: {propData.roomCountString}</span></div>
                       <div className="recommend-spec-pill"><img src={guestIcon} alt="Guests" style={{ width: '14px', height: '14px', objectFit: 'contain' }} /><span>Guests: {propData.guests}</span></div>
                     </div>
-                    {propData.firstLandmark && (
-                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 0', borderTop: '1px solid #E5E7EB', borderBottom: '1px solid #E5E7EB', marginBottom: '12px' }}>
-                        <img src={propData.firstLandmark.landmark_image_url || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=150&q=80'} alt={propData.firstLandmark.landmark_name} style={{ width: '28px', height: '28px', borderRadius: '50%', objectFit: 'cover' }} />
-                        <div style={{ display: 'flex', flexDirection: 'column' }}>
-                          <span style={{ fontSize: '12px', fontWeight: '600', color: '#111827', lineHeight: '1.2' }}>{propData.firstLandmark.landmark_name}</span>
-                          <span style={{ fontSize: '10px', color: '#6B7280' }}>Near by {propData.firstLandmark.distance || 'location'}</span>
-                        </div>
-                      </div>
-                    )}
+
                     <div className="recommend-price-tag-row">
                       <span className="price-label">Starting from</span>
                       <span className="price-green-bold">{String(propData.price).startsWith('₹') ? propData.price : '₹' + propData.price}/night</span>
