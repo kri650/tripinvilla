@@ -9,10 +9,11 @@
 @media (min-width: 769px) and (max-width: 1024px) {
   .properties-categories-scroller {
     max-width: calc(100% - 40px);
-    margin: 0 auto 24px auto;
-    padding: 12px 0;
+    margin: 0 auto 32px auto;
+    padding: 16px 0 24px 0;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
+    min-height: 80px;
   }
 
   .properties-categories-inner {
@@ -20,17 +21,18 @@
     flex-wrap: nowrap;
     width: max-content;
     min-width: 100%;
+    padding: 0 20px;
   }
 
   .prop-cat-outline-btn {
-    padding: 10px 18px;
+    padding: 12px 20px;
     font-size: 14px;
     gap: 8px;
     border-radius: 12px;
-    min-height: 44px;
+    min-height: 48px;
     flex-shrink: 0;
     white-space: nowrap;
-  }
+  } 
 
   .prop-cat-icon {
     width: 20px;
@@ -52,12 +54,13 @@
 
   .properties-categories-scroller {
     max-width: calc(100% - 20px);
-    margin: 0 auto 20px auto;
-    padding: 16px 0 20px 0;
+    margin: 0 auto 24px auto;
+    padding: 20px 0 28px 0;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    min-height: 85px;
   }
 
   .properties-categories-inner {
@@ -65,15 +68,15 @@
     flex-wrap: nowrap;
     width: max-content;
     min-width: 100%;
-    padding: 0 10px;
+    padding: 0 16px;
   }
 
   .prop-cat-outline-btn {
-    padding: 12px 16px;
+    padding: 14px 18px;
     font-size: 13px;
     gap: 8px;
     border-radius: 12px;
-    min-height: 48px;
+    min-height: 50px;
     flex-shrink: 0;
     white-space: nowrap;
     min-width: 120px;
@@ -106,12 +109,13 @@
 
   .properties-categories-scroller {
     max-width: calc(100% - 16px);
-    margin: 0 auto 16px auto;
-    padding: 12px 0 18px 0;
+    margin: 0 auto 20px auto;
+    padding: 16px 0 24px 0;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    min-height: 80px;
   }
 
   .properties-categories-inner {
@@ -119,15 +123,15 @@
     flex-wrap: nowrap;
     width: max-content;
     min-width: 100%;
-    padding: 0 8px;
+    padding: 0 12px;
   }
 
   .prop-cat-outline-btn {
-    padding: 10px 14px;
+    padding: 12px 16px;
     font-size: 12px;
     gap: 6px;
     border-radius: 10px;
-    min-height: 44px;
+    min-height: 46px;
     flex-shrink: 0;
     white-space: nowrap;
     min-width: 100px;
@@ -159,12 +163,13 @@
 
   .properties-categories-scroller {
     max-width: calc(100% - 12px);
-    margin: 0 auto 12px auto;
-    padding: 10px 0 16px 0;
+    margin: 0 auto 16px auto;
+    padding: 14px 0 22px 0;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    min-height: 75px;
   }
 
   .properties-categories-inner {
@@ -172,15 +177,15 @@
     flex-wrap: nowrap;
     width: max-content;
     min-width: 100%;
-    padding: 0 6px;
+    padding: 0 10px;
   }
 
   .prop-cat-outline-btn {
-    padding: 8px 12px;
+    padding: 10px 14px;
     font-size: 11px;
     gap: 5px;
     border-radius: 8px;
-    min-height: 40px;
+    min-height: 42px;
     flex-shrink: 0;
     white-space: nowrap;
     min-width: 85px;
@@ -212,12 +217,13 @@
 
   .properties-categories-scroller {
     max-width: calc(100% - 8px);
-    margin: 0 auto 10px auto;
-    padding: 8px 0 14px 0;
+    margin: 0 auto 14px auto;
+    padding: 12px 0 20px 0;
     overflow-x: auto;
-    overflow-y: hidden;
+    overflow-y: visible;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: smooth;
+    min-height: 70px;
   }
 
   .properties-categories-inner {
@@ -225,15 +231,15 @@
     flex-wrap: nowrap;
     width: max-content;
     min-width: 100%;
-    padding: 0 4px;
+    padding: 0 8px;
   }
 
   .prop-cat-outline-btn {
-    padding: 6px 10px;
+    padding: 8px 12px;
     font-size: 10px;
     gap: 4px;
     border-radius: 6px;
-    min-height: 36px;
+    min-height: 38px;
     flex-shrink: 0;
     white-space: nowrap;
     min-width: 70px;
@@ -286,12 +292,13 @@
 }
 
 /* ===== CUSTOM SCROLLBAR STYLING FOR MOBILE - ALWAYS VISIBLE ===== */
-@media (max-width: 768px) {
+@media (max-width: 1024px) {
   .properties-categories-scroller {
     scrollbar-width: thin;
     scrollbar-color: rgba(88, 164, 41, 0.6) rgba(0, 0, 0, 0.1);
     /* Force scrollbar to always be visible */
     overflow-x: scroll !important;
+    overflow-y: visible !important;
   }
 
   /* Webkit scrollbar styling - Always visible */
@@ -326,8 +333,8 @@
   }
 
   .properties-categories-scroller::-webkit-scrollbar-thumb:active {
-    background: #58A429;
-    border-color: #58A429;
+    background: #58a429;
+    border-color: #58a429;
   }
 
   /* Force scrollbar corner to be visible */
@@ -384,8 +391,8 @@
 @media (max-width: 768px) {
   .prop-cat-outline-btn.active {
     background: rgba(88, 164, 41, 0.15) !important;
-    border: 2px solid #58A429 !important;
-    color: #58A429 !important;
+    border: 2px solid #58a429 !important;
+    color: #58a429 !important;
     box-shadow: 0 4px 12px rgba(88, 164, 41, 0.2) !important;
     transform: translateY(-1px) !important;
   }
@@ -418,7 +425,7 @@
 /* ===== ACCESSIBILITY IMPROVEMENTS ===== */
 @media (max-width: 768px) {
   .prop-cat-outline-btn:focus-visible {
-    outline: 3px solid #58A429 !important;
+    outline: 3px solid #58a429 !important;
     outline-offset: 2px !important;
     z-index: 10 !important;
   }
@@ -435,11 +442,11 @@
 /* ===== LOADING STATE IMPROVEMENTS ===== */
 @media (max-width: 768px) {
   .properties-categories-scroller {
-    min-height: 70px;
+    min-height: 80px;
   }
 
   .properties-categories-inner {
-    min-height: 50px;
+    min-height: 55px;
   }
 }
 
@@ -468,12 +475,12 @@
   }
 
   .prop-cat-outline-btn.active {
-    background: #58A429 !important;
-    color: #FFFFFF !important;
+    background: #58a429 !important;
+    color: #ffffff !important;
   }
 
   .properties-categories-scroller::-webkit-scrollbar-thumb {
-    background: #58A429 !important;
+    background: #58a429 !important;
   }
 }
 
@@ -501,5 +508,129 @@
 
   .properties-categories-inner {
     contain: layout;
+  }
+}
+
+/* ===== ENHANCED VISIBILITY FIXES FOR SMALL SCREENS ===== */
+
+/* Ensure full tab visibility on tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .properties-categories-scroller {
+    /* Add shadow to indicate scrollable content */
+    box-shadow: inset -10px 0 10px -10px rgba(0, 0, 0, 0.1),
+                inset 10px 0 10px -10px rgba(0, 0, 0, 0.1);
+  }
+}
+
+/* Mobile specific enhancements */
+@media (max-width: 768px) {
+  .properties-categories-scroller {
+    /* Ensure bottom space for scrollbar */
+    margin-bottom: 8px !important;
+    /* Add subtle shadow indicators for scroll */
+    box-shadow: inset -8px 0 8px -8px rgba(0, 0, 0, 0.1),
+                inset 8px 0 8px -8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Add scroll indicators for better UX */
+  .properties-categories-scroller::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 8px;
+    width: 20px;
+    background: linear-gradient(to right, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    z-index: 2;
+  }
+  
+  .properties-categories-scroller::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 8px;
+    width: 20px;
+    background: linear-gradient(to left, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+    pointer-events: none;
+    z-index: 2;
+  }
+}
+
+/* Small screen specific improvements */
+@media (max-width: 480px) {
+  .properties-categories-scroller {
+    margin-bottom: 6px !important;
+  }
+  
+  .properties-categories-scroller::before,
+  .properties-categories-scroller::after {
+    width: 15px;
+    bottom: 6px;
+  }
+}
+
+@media (max-width: 350px) {
+  .properties-categories-scroller {
+    margin-bottom: 4px !important;
+  }
+  
+  .properties-categories-scroller::before,
+  .properties-categories-scroller::after {
+    width: 12px;
+    bottom: 4px;
+  }
+}
+
+/* Prevent content from being hidden behind scroll indicators */
+@media (max-width: 768px) {
+  .properties-categories-inner {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .properties-categories-inner {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+@media (max-width: 350px) {
+  .properties-categories-inner {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+}
+
+/* Enhanced active state visibility */
+@media (max-width: 768px) {
+  .prop-cat-outline-btn.active {
+    /* Make active tab more prominent */
+    z-index: 3 !important;
+    position: relative !important;
+  }
+}
+
+/* Fix for very small viewports */
+@media (max-width: 320px) {
+  .properties-categories-scroller {
+    max-width: calc(100% - 4px);
+    margin-left: 2px;
+    margin-right: 2px;
+  }
+}
+
+/* Touch scroll improvements */
+@media (max-width: 768px) and (hover: none) {
+  .properties-categories-scroller {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x proximity;
+  }
+  
+  .prop-cat-outline-btn {
+    scroll-snap-align: start;
   }
 }

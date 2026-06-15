@@ -4,7 +4,7 @@
 .villas-around-section {
   width: 100%;
   max-width: 1360px;
-  margin: 40px auto 80px auto;
+  margin: 24px auto 40px auto;
   padding: 0 16px;
   box-sizing: border-box;
 }
@@ -12,7 +12,7 @@
 .villas-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 30px;
+  gap: 24px;
   justify-content: start;
 }
 
@@ -20,12 +20,12 @@
   width: 100%;
   max-width: 100%;
   /* Let the grid track control card width */
-  height: 560px;
+  height: 520px;
   background: #FFFFFF;
-  border-radius: 25px;
+  border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.03);
   border: 1px solid #F3F4F6;
-  padding: 16px;
+  padding: 14px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -40,12 +40,11 @@
 .villa-card-img-wrap {
   position: relative;
   width: 100%;
-  height: 250px;
-  /* Increased from 210px to scale image sizes up beautifully */
-  border-radius: 18px;
+  height: 230px;
+  border-radius: 16px;
   /* Inset rounded corners */
   overflow: hidden;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .villa-card-img-wrap img {
@@ -61,10 +60,10 @@
 
 .wishlist-btn-circle {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 36px;
-  height: 36px;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   background: #FFFFFF;
   border: none;
@@ -86,42 +85,43 @@
   flex-direction: column;
   flex-grow: 1;
   justify-content: space-between;
+  gap: 8px;
   /* Spreads content to fill card height gracefully */
 }
 
 .villa-card-title {
   font-family: 'Lato', sans-serif;
-  font-size: 20px;
-  /* Scaled down title size */
+  font-size: 19px;
   font-weight: 700;
   color: #111827;
-  margin: 0 0 2px 0;
+  margin: 0;
+  line-height: 1.3;
 }
 
 .villa-card-location {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-family: 'Lato', sans-serif;
-  font-size: 14px;
-  /* Scaled down location size */
+  font-size: 13px;
   color: #8A99AD;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .villa-card-rating-row {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
+  margin-bottom: 4px;
 }
 
 .rating-pill {
   background: #58A429;
   color: #FFFFFF;
   font-family: 'Lato', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  padding: 6px 10px;
+  padding: 5px 9px;
   border-radius: 6px;
   display: flex;
   align-items: center;
@@ -131,93 +131,86 @@
 .rating-text-stack {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 
 .rating-desc-excellent {
   font-family: 'Lato', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 400;
   /* Regular weight from Figma */
   color: #8A99AD;
   /* Gray color to match design */
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .rating-reviews-count {
   font-family: 'Lato', sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 400;
   color: #8A99AD;
-  line-height: 1;
+  line-height: 1.2;
 }
 
 .villa-card-price-row {
   display: flex;
   align-items: baseline;
-  gap: 6px;
+  gap: 5px;
   font-family: 'Lato', sans-serif;
   margin-top: auto;
+  padding-top: 4px;
 }
 
 .villa-card-price-row .price-label {
   font-size: 14px;
-  line-height: 24px;
+  line-height: 1.5;
 }
 
 .villa-card-price-row .price-value-highlight {
-  font-size: 20px;
-  line-height: 24px;
+  font-size: 19px;
+  line-height: 1.5;
 }
 
 .villa-card-actions {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  /* Scaled down gap */
-  margin-top: 10px;
+  gap: 8px;
+  margin-top: 8px;
 }
 
 .villa-card-actions .btn-villa-action {
-  height: 40px;
+  height: 38px;
   /* Compact height */
   font-size: 14px;
   /* Compact font size */
-  border-radius: 20px;
+  border-radius: 19px;
   /* Compact pill shape */
 }
 
 .price-label {
   font-family: 'Lato', sans-serif;
-  font-size: 16px;
-  /* Exact Figma size */
+  font-size: 14px;
   font-weight: 500;
-  /* Exact Figma weight */
-  line-height: 32px;
-  /* Exact Figma line height */
+  line-height: 1.5;
   color: #8A99AD;
 }
 
 .price-value-highlight {
   font-family: 'Lato', sans-serif;
-  font-size: 23px;
-  /* Exact Figma size */
+  font-size: 21px;
   font-weight: 500;
-  /* Exact Figma weight */
-  line-height: 32px;
-  /* Exact Figma line height */
+  line-height: 1.5;
   color: #58A429;
   /* Cohesive Brand Green */
 }
 
 .btn-villa-action {
   width: 100%;
-  height: 48px;
-  /* Taller, more prominent buttons */
-  border-radius: 24px;
+  height: 44px;
+  border-radius: 22px;
   /* Fully rounded pill shape */
   font-family: 'Lato', sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s ease;

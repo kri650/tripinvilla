@@ -5,8 +5,8 @@
   width: 100%;
   background-color: #EBFADE;
   /* Beautiful soft pale green background */
-  padding: 60px 0 100px 0;
-  /* Expanded bottom padding to connect seamlessly with footer */
+  padding: 40px 0 70px 0;
+  /* Reduced padding */
   box-sizing: border-box;
   overflow: hidden;
 }
@@ -21,10 +21,11 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 24px;
-  margin-top: 40px;
+  margin-top: 28px;
   min-height: 696.27px;
   /* Exact Figma height */
   height: auto;
+  align-items: start;
 }
 
 .services-col {
@@ -32,10 +33,14 @@
   flex-direction: column;
   gap: 24.6px;
   height: 100%;
+  align-self: stretch;
 }
 
 .services-col-center {
   height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .service-text-card {
@@ -143,16 +148,18 @@
   border-radius: 23.49px;
   /* Exact Figma border radius */
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .service-tall-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  object-position: top center;
-  /* Preserves the traveler's face and hat perfectly */
+  object-position: center center;
+  display: block;
 }
-
 
 .service-overlay-badge-bottom {
   position: absolute;

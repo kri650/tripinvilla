@@ -4,26 +4,26 @@
 .recommend-page-wrapper {
   background-color: #FCF9EA;
   padding-top: 0;
-  padding-bottom: 80px;
+  padding-bottom: 60px;
 }
 
 .recommend-main-container {
   width: 1280px;
   max-width: calc(100% - 160px);
-  margin: 80px auto 0 auto;
+  margin: 60px auto 0 auto;
 }
 
 .recommend-header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .recommend-header-left {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
 }
 
 .recommend-header-title {
@@ -76,17 +76,17 @@
 .recommend-cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-gap: 30px;
+  grid-gap: 24px;
 }
 
 .recommend-property-card {
   background: #FFFFFF;
   border: 1px solid #E5E7EB;
-  border-radius: 25px;
-  padding: 20px;
+  border-radius: 20px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   transition: all 0.25s ease-in-out;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.005);
   box-sizing: border-box;
@@ -100,8 +100,8 @@
 
 .recommend-card-img-wrap {
   width: 100%;
-  height: 250px;
-  border-radius: 18px;
+  height: 220px;
+  border-radius: 16px;
   overflow: hidden;
   position: relative;
 }
@@ -115,10 +115,10 @@
 
 .recommend-heart-circle {
   position: absolute;
-  top: 16px;
-  right: 16px;
-  width: 38px;
-  height: 38px;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: rgba(0, 0, 0, 0.22);
   backdrop-filter: blur(4px);
@@ -144,13 +144,13 @@
 .recommend-card-info-col {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   flex-grow: 1;
 }
 
 .recommend-card-name-text {
   font-family: 'Lato', sans-serif;
-  font-size: 21px;
+  font-size: 19px;
   font-weight: 700;
   color: #111827;
   margin: 0;
@@ -160,9 +160,9 @@
 .recommend-card-location-row {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
   font-family: 'Lato', sans-serif;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 500;
   color: #9CA3AF;
 }
@@ -170,19 +170,19 @@
 .recommend-specs-2x2-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 12px 14px;
+  grid-gap: 10px 12px;
   border-top: 1px solid #F3F4F6;
   border-bottom: 1px solid #F3F4F6;
-  padding: 14px 0;
-  margin: 4px 0;
+  padding: 12px 0;
+  margin: 2px 0;
 }
 
 .recommend-spec-pill {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   font-family: 'Lato', sans-serif;
-  font-size: 12.5px;
+  font-size: 12px;
   color: #4B5563;
   font-weight: 500;
 }
@@ -190,23 +190,23 @@
 .recommend-card-rating-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-top: 2px;
+  gap: 8px;
+  margin-top: 0;
 }
 
 .rating-badge-green {
   background: #58A429;
   color: #FFFFFF;
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 700;
-  padding: 4px 8px;
+  padding: 3px 7px;
   border-radius: 6px;
   line-height: 1;
   display: inline-block;
 }
 
 .rating-text-label {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 600;
   color: #1F2937;
   line-height: 1.2;
@@ -223,14 +223,14 @@
   align-items: baseline;
   gap: 4px;
   font-family: 'Lato', sans-serif;
-  font-size: 13.5px;
+  font-size: 13px;
   color: #6B7280;
   margin-top: auto;
-  padding-top: 8px;
+  padding-top: 6px;
 }
 
 .price-green-bold {
-  font-size: 19px;
+  font-size: 18px;
   font-weight: 700;
   color: #58A429;
 }
@@ -238,8 +238,8 @@
 .recommend-actions-row {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 8px;
+  gap: 8px;
+  margin-top: 6px;
 }
 
 .recommend-details-btn-blue {
@@ -250,7 +250,7 @@
   background: #FFFFFF;
   border: 1px solid var(--primary-blue);
   border-radius: 12px;
-  height: 42px;
+  height: 40px;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   display: flex;
@@ -273,7 +273,7 @@
   background: #FFFFFF;
   border: 1px solid #58A429;
   border-radius: 12px;
-  height: 42px;
+  height: 40px;
   cursor: pointer;
   transition: all 0.15s ease-in-out;
   display: flex;
@@ -298,19 +298,28 @@
 @media (max-width: 1200px) {
   .recommend-main-container {
     max-width: calc(100% - 80px);
+    margin-top: 50px;
   }
 
   .dashboard-hero-banner {
     padding: 30px 40px;
-    height: 360px;
+    height: 340px;
   }
 
   .dashboard-hero-title {
-    font-size: 44px;
+    font-size: 42px;
+  }
+
+  .recommend-header-row {
+    margin-bottom: 28px;
   }
 
   .recommend-cards-grid {
-    grid-gap: 24px;
+    grid-gap: 20px;
+  }
+
+  .recommend-property-card {
+    padding: 15px;
   }
 }
 
@@ -318,24 +327,24 @@
 @media (max-width: 900px) {
   .recommend-main-container {
     max-width: calc(100% - 40px);
-    margin-top: 40px;
+    margin-top: 36px;
   }
 
   .dashboard-hero-banner {
-    height: 300px;
+    height: 280px;
     padding: 20px 20px;
   }
 
   .dashboard-hero-title {
-    font-size: 36px;
+    font-size: 34px;
   }
 
   .recommend-header-row {
-    margin-bottom: 32px;
+    margin-bottom: 24px;
   }
 
   .recommend-header-title {
-    font-size: 28px;
+    font-size: 26px;
   }
 
   .recommend-header-sub {
@@ -344,27 +353,34 @@
 
   .recommend-cards-grid {
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 20px;
+    grid-gap: 18px;
   }
 
   .recommend-property-card {
-    padding: 18px;
+    padding: 14px;
+    gap: 10px;
   }
 
   .recommend-card-img-wrap {
-    height: 200px;
+    height: 190px;
   }
 
   .recommend-card-name-text {
-    font-size: 18px;
+    font-size: 17px;
+  }
+
+  .recommend-card-info-col {
+    gap: 7px;
   }
 
   .recommend-specs-2x2-grid {
-    grid-gap: 10px 12px;
+    grid-gap: 8px 10px;
+    padding: 10px 0;
   }
 
   .recommend-spec-pill {
     font-size: 11px;
+    gap: 5px;
   }
 }
 

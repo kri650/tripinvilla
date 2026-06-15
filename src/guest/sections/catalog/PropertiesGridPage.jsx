@@ -1,8 +1,7 @@
 import { Heart, MapPin } from 'lucide-react';
 import { areaIcon, bedIcon, guestIcon, roomIcon } from '../../../assets';
-import { propertyCategories, propertiesVillasList, propertiesHomestaysList } from '../../../data/mockData';
+import { propertyCategories } from '../../../data/mockData';
 import './PropertiesGridPage.css';
-import '../../../guest/styles/property-categories-mobile.css';
 import { useEffect, useRef } from 'react';
 
 export default function PropertiesGridPage(props) {
@@ -14,7 +13,7 @@ export default function PropertiesGridPage(props) {
     setActiveMenu,
     setSelectedProperty,
     setContactStep, setContactModalOpen,
-    toggleWishlist, user, token,
+    toggleWishlist, user,
     homepageContent, renderTitle,
     mapDbProperties,
     allProperties,
@@ -60,18 +59,27 @@ export default function PropertiesGridPage(props) {
 
       {/* Category Scroller */}
       <div 
-        className="properties-categories-scroller"
+        className="w-full max-w-[1280px] mx-auto mb-6 md:mb-8 px-4 md:px-5 lg:px-20  scrollbar-thin scrollbar-thumb-green-600/70 scrollbar-track-black/10 scroll-smooth min-h-[70px] sm:min-h-[75px] md:min-h-[80px] lg:min-h-[85px] pb-4 md:pb-6 pt-3 md:pt-4 relative"
         ref={scrollerRef}
         role="tablist"
         aria-label="Property categories"
+        style={{
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'rgba(88, 164, 41, 0.6) rgba(0, 0, 0, 0.1)',
+          WebkitOverflowScrolling: 'touch'
+        }}
       >
-        <div className="properties-categories-inner">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 w-max min-w-full px-3 sm:px-4 md:px-5">
           {propertyCategories.map((cat) => {
             const isSelected = activePropCategory === cat.name;
             return (
               <button
                 key={cat.name}
-                className={`prop-cat-outline-btn ${isSelected ? 'active' : ''}`}
+                className={`flex items-center justify-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 lg:px-6 py-2 sm:py-3 md:py-3 lg:py-3 border-2 rounded-xl sm:rounded-xl md:rounded-2xl font-lato font-semibold whitespace-nowrap flex-shrink-0 transition-all duration-200 ease-out min-h-[38px] sm:min-h-[42px] md:min-h-[46px] lg:min-h-[48px] text-xs sm:text-sm md:text-sm lg:text-base min-w-[70px] sm:min-w-[85px] md:min-w-[100px] lg:min-w-[120px] touch-manipulation select-none relative z-10 ${
+                  isSelected
+                    ? 'border border-gray-600 text-green-600 shadow-lg shadow-green-600/20 -translate-y-0.5 z-30'
+                    : 'bg-transparent border-gray-300 text-gray-600 hover:bg-green-600/5 hover:border-green-600/30 hover:-translate-y-0.5'
+                } active:scale-95`}
                 onClick={() => {
                   setActivePropCategory(cat.name);
                   setFilterSelectedTypes([typeMap[cat.name] || cat.name]);
@@ -83,27 +91,43 @@ export default function PropertiesGridPage(props) {
                 aria-selected={isSelected}
                 data-category={cat.name}
               >
-                <span className="prop-cat-icon">
+                <span className="flex items-center justify-center flex-shrink-0 w-[18px] h-[18px] sm:w-[20px] sm:h-[20px] md:w-[22px] md:h-[22px] lg:w-[24px] lg:h-[24px]">
                   {cat.iconImg
                     ? <img 
                         src={cat.iconImg} 
                         alt={cat.name} 
-                        style={{ 
-                          width: '22px', 
-                          height: '22px', 
-                          objectFit: 'contain',
-                          // Responsive icon sizing
-                          maxWidth: '100%',
-                          maxHeight: '100%'
-                        }} 
+                        className="w-full h-full object-contain block max-w-full max-h-full"
                       />
                     : cat.icon}
                 </span>
-                <span className="prop-cat-text">{cat.name}</span>
+                <span className={`font-medium leading-tight ${
+                  // Hide text and show abbreviated version on very small screens for long names
+                  cat.name === 'Apartments' ? 'hidden sm:inline' : 
+                  cat.name === 'Homestays' ? 'hidden sm:inline' : 
+                  cat.name === 'Bungalows' ? 'hidden sm:inline' : ''
+                }`}>
+                  {cat.name}
+                </span>
+                {/* Abbreviated text for very small screens */}
+                {cat.name === 'Apartments' && (
+                  <span className="sm:hidden font-medium leading-tight">Apt</span>
+                )}
+                {cat.name === 'Homestays' && (
+                  <span className="sm:hidden font-medium leading-tight">Home</span>
+                )}
+                {cat.name === 'Bungalows' && (
+                  <span className="sm:hidden font-medium leading-tight">Bung</span>
+                )}
               </button>
             );
           })}
         </div>
+        
+        {/* Left fade gradient indicator */}
+        <div className="absolute left-0 top-0 bottom-4 md:bottom-6 w-5 md:w-6 bg-gradient-to-r from-white to-transparent pointer-events-none z-20 md:hidden"></div>
+        
+        {/* Right fade gradient indicator */}
+        <div className="absolute right-0 top-0 bottom-4 md:bottom-6 w-5 md:w-6 bg-gradient-to-l from-white to-transparent pointer-events-none z-20 md:hidden"></div>
       </div>
 
       {/* Dynamic Properties Section */}

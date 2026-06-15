@@ -5,7 +5,7 @@
   width: 1440px;
   /* Standardizes container width with other page sections */
   max-width: calc(100% - 158px);
-  margin: 60px auto 120px auto;
+  margin: 40px auto 80px auto;
   box-sizing: border-box;
 }
 
