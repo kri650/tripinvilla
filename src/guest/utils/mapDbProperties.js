@@ -115,6 +115,8 @@ export function mapDbProperties(dbProps, defaultList, where) {
       furnishedStatus: p.furnishedStatus || '',
       washingMachine: p.washingMachine || false,
       societyAmenities: p.societyAmenities || [],
+      landmarks: p.landmarks || [],
+      firstLandmark: p.landmarks && p.landmarks.length > 0 ? p.landmarks[0] : null,
       bonfireArea: p.bonfireArea || false,
       viewType: p.viewType || '',
       outdoorSeating: p.outdoorSeating || false,

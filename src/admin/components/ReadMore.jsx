@@ -36,7 +36,15 @@ export default function ReadMore({ children, lines = 3 }) {
       <span 
         ref={textRef}
         className={`cell-text ${expanded ? 'expanded' : ''}`}
-        style={!expanded ? { WebkitLineClamp: lines } : {}}
+        style={!expanded ? { 
+          display: '-webkit-box', 
+          WebkitLineClamp: lines, 
+          WebkitBoxOrient: 'vertical', 
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+          whiteSpace: 'normal',
+          wordBreak: 'break-word'
+        } : { whiteSpace: 'normal', wordBreak: 'break-word' }}
       >
         {text}
       </span>

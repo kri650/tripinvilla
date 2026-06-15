@@ -525,7 +525,7 @@ export default function PropertyDetailPage(props) {
                         <div className="trait-lbl-item">
                           <Users size={16} color="#58A429" />
                           <span className="trait-name">Guests:</span>
-                          <span className="trait-value" style={{ color: '#58A429', fontWeight: 600 }}>{room.guests || '3 Person'}</span>
+                          <span className="trait-value" style={{ color: '#58A429', fontWeight: 600 }}>{room.maxGuests || room.guests || '2 Guests'}</span>
                         </div>
                         {roomFoodType && (
                           <div className="trait-lbl-item">
