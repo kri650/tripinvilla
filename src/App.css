@@ -2,8 +2,7 @@
    Each section/page maps 1:1 to its CSS file.            */
 
 /* ── Core Pages ─────────────────────────────────────── */
-@import "./guest/styles/00-home-hero-section.css";
-@import "./guest/styles/00-hero-mobile.css";
+@import "./guest/styles/00-home-hero-section.css"; /* Contains all hero styles: desktop + mobile */
 @import "./guest/styles/00-hero-navbar-search.css";
 @import "./guest/styles/01-home-destinations-carousel.css";
 @import "./guest/styles/02-home-section-titles.css";

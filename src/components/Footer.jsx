@@ -7,7 +7,7 @@ export default function Footer({ token, onNavigate, onRequireAuth }) {
       style={{ backgroundImage: `url("${footerBgImg}")` }}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.5)] to-[rgba(0,0,0,0.7)]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[rgba(0,0,0,0.3)] to-[rgba(0,0,0,0.5)]" />
       
       {/* Content */}
       <div className="relative z-10 w-full max-w-[1280px] mx-auto px-8 py-10 flex flex-col items-center text-center box-border max-[1200px]:px-8 max-[1024px]:px-7 max-[900px]:px-6 max-[768px]:px-5 max-[640px]:px-4 max-[480px]:px-3">

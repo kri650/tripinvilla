@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Home, MapPin, Heart, Inbox, Info, ThumbsUp, PlusCircle } from 'lucide-react';
+import { Home, MapPin, Heart, Inbox, Info, ThumbsUp, PlusCircle, Menu, X } from 'lucide-react';
 import {
   aboutIcon,
   darkLogoImg,
@@ -45,7 +45,8 @@ export default function Navbar({
     };
   }, [isMobileMenuOpen]);
 
-  const toggleMobileMenu = () => {
+  const toggleMobileMenu = (e) => {
+    e.stopPropagation();
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
@@ -219,9 +220,11 @@ export default function Navbar({
           onClick={toggleMobileMenu}
           aria-label="Toggle mobile menu"
         >
-          <div className="hamburger-line"></div>
-          <div className="hamburger-line"></div>
-          <div className="hamburger-line"></div>
+          {isMobileMenuOpen ? (
+            <X size={20} strokeWidth={2.5} color="#374151" />
+          ) : (
+            <Menu size={20} strokeWidth={2.5} color="#374151" />
+          )}
         </button>
       </div>
 
