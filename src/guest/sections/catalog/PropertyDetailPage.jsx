@@ -320,7 +320,7 @@ export default function PropertyDetailPage(props) {
                 <span className="font-bold">{activeDetailProp.ownerContact || '+91 98765 43210'}</span>
               </button>
             ) : (
-              <button className="bg-[#38A169] text-white font-semibold text-base py-3.5 px-6 rounded-xl flex items-center justify-center gap-2.5 border-none cursor-pointer shadow-[0_4px_12px_rgba(56,161,105,0.3)] transition-all duration-200 hover:bg-[#2F855A] hover:shadow-[0_6px_16px_rgba(56,161,105,0.4)] max-[640px]:!py-3 max-[640px]:!text-sm max-[640px]:!gap-2" onClick={() => { setSelectedProperty(activeDetailProp); setContactStep(1); setContactModalOpen(true); }}>
+              <button className="bg-[#5EA731] text-white font-semibold text-base py-3.5 px-6 rounded-xl flex items-center justify-center gap-2.5 border-none cursor-pointer shadow-[0_4px_12px_rgba(56,161,105,0.3)] transition-all duration-200 hover:bg-[#2F855A] hover:shadow-[0_6px_16px_rgba(56,161,105,0.4)] max-[640px]:!py-3 max-[640px]:!text-sm max-[640px]:!gap-2" onClick={() => { setSelectedProperty(activeDetailProp); setContactStep(1); setContactModalOpen(true); }}>
                 <Phone size={16} fill="#FFFFFF" className="max-[640px]:!w-[14px] max-[640px]:!h-[14px]" />
                 <span>View Contact Number</span>
               </button>
@@ -555,7 +555,7 @@ export default function PropertyDetailPage(props) {
                         </button>
                       ) : (
                         <button className="btn-view-contact-green" style={{ width: '100%', marginTop: '10px' }} onClick={() => { setSelectedProperty(activeDetailProp); setContactStep(1); setContactModalOpen(true); }}>
-                          <Phone size={14} fill="#FFFFFF" />
+                          <Phone size={14} fill="#5EA731" />
                           <span>View Contact Number</span>
                         </button>
                       )}

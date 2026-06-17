@@ -59,17 +59,15 @@ export default function PropertiesGridPage(props) {
 
       {/* Category Scroller */}
       <div 
-        className="w-full max-w-[1280px] mx-auto mb-6 md:mb-8 px-4 md:px-5 lg:px-20  scrollbar-thin scrollbar-thumb-green-600/70 scrollbar-track-black/10 scroll-smooth min-h-[70px] sm:min-h-[75px] md:min-h-[80px] lg:min-h-[85px] pb-4 md:pb-6 pt-3 md:pt-4 relative"
+        className="w-full max-w-[1280px] mx-auto mb-6 md:mb-8 px-0 md:px-5 lg:px-20 overflow-x-auto overflow-y-hidden scroll-smooth min-h-[70px] sm:min-h-[75px] md:min-h-[80px] lg:min-h-[85px] pb-4 md:pb-6 pt-3 md:pt-4 relative scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400"
         ref={scrollerRef}
         role="tablist"
         aria-label="Property categories"
         style={{
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'rgba(88, 164, 41, 0.6) rgba(0, 0, 0, 0.1)',
           WebkitOverflowScrolling: 'touch'
         }}
       >
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 w-max min-w-full px-3 sm:px-4 md:px-5">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 w-max px-4 sm:px-4 md:px-5">
           {propertyCategories.map((cat) => {
             const isSelected = activePropCategory === cat.name;
             return (
@@ -123,11 +121,11 @@ export default function PropertiesGridPage(props) {
           })}
         </div>
         
-        {/* Left fade gradient indicator */}
-        <div className="absolute left-0 top-0 bottom-4 md:bottom-6 w-5 md:w-6 bg-gradient-to-r from-white to-transparent pointer-events-none z-20 md:hidden"></div>
+        {/* Left fade gradient indicator - only visible on mobile when scrollable */}
+        <div className="absolute left-0 top-0 bottom-4 md:bottom-6 w-8 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none z-20 md:hidden"></div>
         
-        {/* Right fade gradient indicator */}
-        <div className="absolute right-0 top-0 bottom-4 md:bottom-6 w-5 md:w-6 bg-gradient-to-l from-white to-transparent pointer-events-none z-20 md:hidden"></div>
+        {/* Right fade gradient indicator - only visible on mobile when scrollable */}
+        <div className="absolute right-0 top-0 bottom-4 md:bottom-6 w-8 bg-gradient-to-l from-white via-white/80 to-transparent pointer-events-none z-20 md:hidden"></div>
       </div>
 
       {/* Dynamic Properties Section */}

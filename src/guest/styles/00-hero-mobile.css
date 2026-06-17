@@ -335,6 +335,36 @@
   .mobile-hero-content {
     display: none !important;
   }
+
+  .mobile-search-card {
+    display: none !important;
+  }
+
+  .mobile-hero-title {
+    display: none !important;
+  }
+
+  .mobile-tabs-row {
+    display: none !important;
+  }
+
+  .mobile-form-group {
+    display: none !important;
+  }
+
+  .mobile-form-row {
+    display: none !important;
+  }
+
+  /* Ensure desktop search card is visible */
+  .search-card-wrapper {
+    display: flex !important;
+    flex-direction: column;
+  }
+
+  .hero-headline-container {
+    display: flex !important;
+  }
 }
 
 /* ===== TABLET MOBILE SEARCH CARD OVERRIDE ===== */

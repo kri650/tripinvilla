@@ -692,6 +692,7 @@
 
   .footer-nav-row {
     gap: 32px;
+    flex-wrap: wrap;
   }
 
   .footer-intro-desc {
@@ -710,6 +711,7 @@
 
   .footer-nav-row {
     gap: 28px;
+    flex-wrap: wrap;
   }
 
   .footer-intro-desc {
@@ -746,6 +748,7 @@
     gap: 20px;
     justify-content: center;
     max-width: 100%;
+    flex-wrap: wrap;
   }
 
   .footer-nav-row a {
@@ -1014,20 +1017,25 @@
   /* Tablet Search Card Positioning */
   .search-card-wrapper {
     position: absolute;
-    top: 280px;
+    top: 240px;
     left: 50%;
     transform: translateX(-50%);
-    max-width: 900px;
-    width: calc(100% - 60px);
-    padding: 24px 28px;
-    border-radius: 24px;
+    max-width: 750px;
+    width: calc(100% - 48px);
+    padding: 20px 24px;
+    border-radius: 20px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    background: white;
+    z-index: 100;
   }
 
   .tabs-row {
     justify-content: center;
     gap: 12px;
     margin-bottom: 20px;
+    display: flex;
   }
 
   .tab-btn {
@@ -1039,45 +1047,52 @@
   }
 
   .search-fields-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 20px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    display: grid;
   }
 
   .field-group {
-    min-height: 70px;
+    min-height: 65px;
+    display: flex;
+    flex-direction: column;
   }
 
   .field-label {
-    font-size: 13px;
-    margin-bottom: 8px;
+    font-size: 12px;
+    margin-bottom: 6px;
+    display: block;
+    font-weight: 600;
+    color: #111827;
   }
 
   .field-input,
   .field-select {
-    height: 48px;
-    font-size: 14px;
-    border-radius: 10px;
-    padding: 0 16px;
+    height: 44px;
+    font-size: 13px;
+    border-radius: 8px;
+    padding: 0 14px;
   }
 
   .action-buttons-row {
-    margin-top: 20px;
-    gap: 16px;
+    margin-top: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
   }
 
   .btn-search {
-    height: 52px;
-    font-size: 16px;
-    padding: 0 28px;
-    border-radius: 26px;
+    height: 44px;
+    font-size: 14px;
+    padding: 0 24px;
+    border-radius: 22px;
   }
 
   .btn-search-ai,
   .btn-outline {
-    height: 52px;
-    font-size: 14px;
-    padding: 0 20px;
-    border-radius: 26px;
+    height: 44px;
+    font-size: 13px;
+    padding: 0 18px;
+    border-radius: 22px;
   }
 
   .checkbox-row {
@@ -1854,6 +1869,17 @@
     max-width: calc(100% - 40px);
     box-sizing: border-box;
   }
+
+  .field-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .field-group {
+    min-height: 75px;
+  }
 }
 
 @media (max-width: 768px) {
@@ -2113,8 +2139,8 @@
   top: 70px;
   right: 16px;
   width: 240px;
-  max-height: 80vh;
-  min-height: 500px;
+  max-height: none;
+  height: auto;
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -2123,7 +2149,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   z-index: 10000;
   flex-direction: column;
-  padding: 16px;
+  /* padding: 10px; */
   gap: 8px;
   opacity: 0;
   visibility: hidden;
@@ -2188,8 +2214,8 @@
 }
 
 .mobile-auth-section {
-  margin-top: 12px;
-  padding-top: 16px;
+  margin-top: 8px;
+  padding-top: 10px;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
   flex-shrink: 0;
 }
@@ -2218,25 +2244,28 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 10px;
-  padding-top: 16px;
+  gap: 8px;
+  padding: 10px 12px 10px 12px;
   border-top: 1px solid rgba(0, 0, 0, 0.08);
-  margin-top: 12px;
+  margin-top: 8px;
   flex-shrink: 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .mobile-profile-avatar {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
   background: var(--brand-green);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #FFFFFF;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .mobile-profile-avatar img {
@@ -2252,6 +2281,13 @@
   color: #4B5563;
   margin: 0;
   text-align: center;
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding: 0 8px;
+  box-sizing: border-box;
 }
 
 .mobile-logout-btn {
@@ -2261,10 +2297,10 @@
   font-weight: 500;
   font-size: 12px;
   border-radius: 8px;
-  padding: 10px 16px;
+  padding: 8px 14px;
   cursor: pointer;
   transition: all 0.15s ease;
-  min-height: 36px;
+  min-height: 32px;
 }
 
 .mobile-logout-btn:hover {
@@ -2306,6 +2342,30 @@
   }
 }
 
+/* Tablet specific adjustments */
+@media (max-width: 900px) and (min-width: 641px) {
+  .mobile-nav-menu {
+    width: 260px;
+    top: 70px;
+    right: 16px;
+    padding: 16px;
+    gap: 8px;
+  }
+
+  .mobile-nav-item {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+
+  .mobile-profile-section {
+    padding: 16px 12px 12px 12px;
+  }
+
+  .mobile-profile-name {
+    font-size: 14px;
+  }
+}
+
 @media (max-width: 640px) {
   .mobile-menu-toggle {
     width: 36px;
@@ -2320,15 +2380,16 @@
     top: 60px;
     right: 12px;
     width: 220px;
-    max-height: 75vh;
-    min-height: 450px;
-    padding: 14px;
-    gap: 7px;
+    max-height: none;
+    height: auto;
+    padding: 12px;
+    gap: 4px;
   }
 
   .mobile-nav-item {
-    padding: 12px 14px;
+    padding: 10px 12px;
     font-size: 13px;
+    gap: 10px;
   }
 
   .mobile-nav-icon {
@@ -2338,18 +2399,35 @@
 
   .mobile-login-btn {
     font-size: 13px;
-    padding: 12px 18px;
-    min-height: 44px;
+    padding: 10px 16px;
+    min-height: 40px;
   }
 
   .mobile-auth-section {
-    padding-top: 14px;
-    margin-top: 10px;
+    padding-top: 10px;
+    margin-top: 8px;
   }
 
   .mobile-profile-section {
-    padding-top: 14px;
-    margin-top: 10px;
+    padding: 10px 10px 8px 10px;
+    margin-top: 8px;
+    gap: 8px;
+  }
+
+  .mobile-profile-avatar {
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+  }
+
+  .mobile-profile-name {
+    font-size: 13px;
+  }
+
+  .mobile-logout-btn {
+    font-size: 11px;
+    padding: 8px 14px;
+    min-height: 34px;
   }
 }
 
@@ -2367,41 +2445,54 @@
     top: 55px;
     right: 8px;
     width: 200px;
-    max-height: 70vh;
-    min-height: 420px;
-    padding: 12px;
+    max-height: none;
+    height: auto;
+    padding: 10px;
+    gap: 3px;
   }
 
   .mobile-nav-item {
-    padding: 11px 12px;
+    padding: 9px 10px;
     font-size: 12px;
+    gap: 8px;
   }
 
   .mobile-nav-icon {
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
   }
 
   .mobile-login-btn {
     font-size: 12px;
-    padding: 11px 16px;
-    min-height: 42px;
+    padding: 9px 14px;
+    min-height: 38px;
+  }
+
+  .mobile-auth-section {
+    padding-top: 8px;
+    margin-top: 6px;
+  }
+
+  .mobile-profile-section {
+    padding: 8px 8px 6px 8px;
+    margin-top: 6px;
+    gap: 6px;
   }
 
   .mobile-profile-avatar {
-    width: 36px;
-    height: 36px;
+    width: 34px;
+    height: 34px;
     font-size: 14px;
   }
 
   .mobile-profile-name {
-    font-size: 13px;
+    font-size: 12px;
   }
 
   .mobile-logout-btn {
     font-size: 11px;
-    padding: 8px 12px;
-    min-height: 32px;
+    padding: 7px 12px;
+    min-height: 30px;
   }
 }
 
@@ -2419,24 +2510,56 @@
     top: 50px;
     right: 6px;
     width: 180px;
-    max-height: 65vh;
-    min-height: 380px;
+    max-height: none;
+    height: auto;
+    padding: 8px;
+    gap: 2px;
   }
 
   .mobile-nav-item {
-    padding: 10px 10px;
+    padding: 8px 9px;
     font-size: 11px;
+    gap: 7px;
+    border-radius: 8px;
   }
 
   .mobile-nav-icon {
-    width: 14px;
-    height: 14px;
+    width: 13px;
+    height: 13px;
   }
 
   .mobile-login-btn {
     font-size: 11px;
-    padding: 10px 14px;
-    min-height: 40px;
+    padding: 8px 12px;
+    min-height: 36px;
+  }
+
+  .mobile-auth-section {
+    padding-top: 6px;
+    margin-top: 4px;
+  }
+
+  .mobile-profile-section {
+    padding: 6px 6px 5px 6px;
+    margin-top: 4px;
+    gap: 5px;
+  }
+
+  .mobile-profile-avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+
+  .mobile-profile-name {
+    font-size: 11px;
+  }
+
+  .mobile-logout-btn {
+    font-size: 10px;
+    padding: 6px 10px;
+    min-height: 28px;
+    border-radius: 6px;
   }
 }
 /* ===== MOBILE MENU ANIMATIONS (MINIMAL) ===== */
