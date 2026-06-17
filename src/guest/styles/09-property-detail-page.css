@@ -506,15 +506,24 @@
 
 .room-vertical-card {
   display: flex;
+  flex-direction: row;
   border: 1px solid #E5E7EB;
   border-radius: 18px;
   overflow: hidden;
   background: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.3s ease;
+}
+
+.room-vertical-card:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
 }
 
 .room-card-img-wrap {
-  width: 250px;
-  height: 180px;
+  width: 280px;
+  min-width: 280px;
+  height: auto;
   flex-shrink: 0;
 }
 
@@ -528,28 +537,33 @@
 .room-card-info-wrap {
   display: flex;
   justify-content: space-between;
+  align-items: stretch;
   width: 100%;
-  padding: 20px;
+  padding: 24px;
+  gap: 24px;
 }
 
 .room-card-mid-col {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
+  flex: 1;
+  min-width: 0;
 }
 
 .room-card-title {
   font-family: 'Lato', sans-serif;
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 700;
   color: #111827;
   margin: 0;
+  line-height: 1.3;
 }
 
 .room-card-bullets-list {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 8px;
 }
 
 .bullet-check {
@@ -563,8 +577,9 @@
 }
 
 .room-card-traits-grid {
-  display: flex;
-  gap: 16px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px 16px;
   margin-top: 4px;
 }
 
@@ -917,6 +932,21 @@
 @media (max-width: 1100px) {
   .detail-page-wrapper { max-width: calc(100% - 80px); }
   .detail-primary-grid { grid-template-columns: 1fr 380px; }
+  
+  /* Adjust room card for tablet */
+  .room-card-img-wrap {
+    width: 240px;
+    min-width: 240px;
+  }
+  
+  .room-card-info-wrap {
+    padding: 20px;
+    gap: 20px;
+  }
+  
+  .room-card-title {
+    font-size: 18px;
+  }
 }
 
 @media (max-width: 900px) {
@@ -932,17 +962,92 @@
   /* Reviews: stack vertically */
   .reviews-layout-split { grid-template-columns: 1fr; gap: 24px; }
 
-  /* Room card: stack image and info */
-  .room-vertical-card { flex-direction: column; }
-  .room-card-img-wrap { width: 100%; height: 200px; }
-  .room-card-info-wrap { flex-direction: column; gap: 16px; }
-  .room-card-pricing-col { width: 100%; border-left: none; border-top: 1px solid #F3F4F6; padding-left: 0; padding-top: 16px; align-items: flex-start; }
+  /* Room card: stack image and info vertically on mobile */
+  .room-vertical-card { 
+    flex-direction: column; 
+    border-radius: 16px;
+  }
+  
+  .room-card-img-wrap { 
+    width: 100%; 
+    min-width: 100%;
+    height: 220px; 
+  }
+  
+  .room-card-info-wrap { 
+    flex-direction: column; 
+    gap: 18px;
+    padding: 20px 16px;
+  }
+  
+  .room-card-mid-col {
+    gap: 12px;
+  }
+  
+  .room-card-title {
+    font-size: 18px;
+  }
+  
+  .room-card-traits-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 12px;
+  }
+  
+  .room-card-pricing-col { 
+    width: 100%; 
+    border-left: none; 
+    border-top: 1px solid #F3F4F6; 
+    padding-left: 0; 
+    padding-top: 16px; 
+    align-items: flex-start; 
+  }
 
   /* Detail sub-nav: allow scroll */
   .detail-sub-navigation-tabs { overflow-x: auto; white-space: nowrap; flex-wrap: nowrap; }
   .detail-sub-nav-btn { padding: 10px 16px; font-size: 14px; }
 }
 
+@media (max-width: 640px) {
+  .room-card-img-wrap {
+    height: 200px;
+  }
+  
+  .room-card-info-wrap {
+    padding: 16px;
+    gap: 16px;
+  }
+  
+  .room-card-title {
+    font-size: 17px;
+  }
+  
+  .room-card-traits-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .bullet-check {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .room-vertical-card {
+    border-radius: 14px;
+  }
+  
+  .room-card-img-wrap {
+    height: 180px;
+  }
+  
+  .room-card-info-wrap {
+    padding: 14px 12px;
+  }
+  
+  .room-card-title {
+    font-size: 16px;
+  }
+}
 @media (max-width: 640px) {
   .detail-page-wrapper { max-width: 100%; padding: 80px 16px 0; }
   .detail-image-gallery { height: 240px; max-height: 240px; }
@@ -1754,21 +1859,23 @@
   display: block !important;
 }
 
-/* ─── Navigation Overflow Fixes ─── */
-.detail-sub-navigation-tabs {
-  overflow-x: auto !important;
-  overflow-y: hidden !important;
-  white-space: nowrap !important;
-  width: 100% !important;
-  box-sizing: border-box !important;
-  -webkit-overflow-scrolling: touch !important;
-}
+/* ─── Navigation Overflow Fixes (Mobile Only) ─── */
+@media (max-width: 900px) {
+  .detail-sub-navigation-tabs {
+    overflow-x: auto !important;
+    overflow-y: hidden !important;
+    white-space: nowrap !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    -webkit-overflow-scrolling: touch !important;
+  }
 
-.detail-sub-nav-btn {
-  flex-shrink: 0 !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+  .detail-sub-nav-btn {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
 }
 
 /* ─── Breadcrumb Overflow Fixes ─── */

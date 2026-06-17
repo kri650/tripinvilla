@@ -59,7 +59,7 @@ export default function PropertiesGridPage(props) {
 
       {/* Category Scroller */}
       <div 
-        className="w-full max-w-[1280px] mx-auto mb-6 md:mb-8 px-0 md:px-5 lg:px-20 overflow-x-auto overflow-y-hidden scroll-smooth min-h-[70px] sm:min-h-[75px] md:min-h-[80px] lg:min-h-[85px] pb-4 md:pb-6 pt-3 md:pt-4 relative scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400"
+        className="w-full max-w-[1280px] mx-auto mb-6 md:mb-8 px-0 md:px-5 lg:px-10 max-[900px]:overflow-x-auto lg:overflow-x-visible overflow-y-hidden scroll-smooth min-h-[70px] sm:min-h-[75px] md:min-h-[80px] lg:min-h-[85px] pb-4 md:pb-6 pt-3 md:pt-4 relative scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400"
         ref={scrollerRef}
         role="tablist"
         aria-label="Property categories"
@@ -67,13 +67,13 @@ export default function PropertiesGridPage(props) {
           WebkitOverflowScrolling: 'touch'
         }}
       >
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 w-max px-4 sm:px-4 md:px-5">
+        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-4 max-[900px]:w-max px-4 sm:px-4 md:px-5 lg:px-0 lg:justify-center">
           {propertyCategories.map((cat) => {
             const isSelected = activePropCategory === cat.name;
             return (
               <button
                 key={cat.name}
-                className={`flex items-center justify-center gap-2 sm:gap-3 px-3 sm:px-4 md:px-5 lg:px-6 py-2 sm:py-3 md:py-3 lg:py-3 border-2 rounded-xl sm:rounded-xl md:rounded-2xl font-lato font-semibold whitespace-nowrap flex-shrink-0 transition-all duration-200 ease-out min-h-[38px] sm:min-h-[42px] md:min-h-[46px] lg:min-h-[48px] text-xs sm:text-sm md:text-sm lg:text-base min-w-[70px] sm:min-w-[85px] md:min-w-[100px] lg:min-w-[120px] touch-manipulation select-none relative z-10 ${
+                className={`flex items-center justify-center gap-2 sm:gap-3 lg:gap-2 xl:gap-2.5 px-3 sm:px-4 md:px-5 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-3 lg:py-3 border-2 rounded-xl sm:rounded-xl md:rounded-2xl lg:rounded-xl font-lato font-semibold whitespace-nowrap flex-shrink-0 transition-all duration-200 ease-out min-h-[38px] sm:min-h-[42px] md:min-h-[46px] lg:min-h-[48px] text-xs sm:text-sm md:text-sm lg:text-[14px] xl:text-[15px] min-w-[70px] sm:min-w-[85px] md:min-w-[100px] lg:min-w-0 touch-manipulation select-none relative z-10 ${
                   isSelected
                     ? 'border border-gray-600 text-green-600 shadow-lg shadow-green-600/20 -translate-y-0.5 z-30'
                     : 'bg-transparent border-gray-300 text-gray-600 hover:bg-green-600/5 hover:border-green-600/30 hover:-translate-y-0.5'
@@ -89,7 +89,7 @@ export default function PropertiesGridPage(props) {
                 aria-selected={isSelected}
                 data-category={cat.name}
               >
-                <span className="flex items-center justify-center flex-shrink-0 w-[18px] h-[18px] sm:w-[20px] sm:h-[20px] md:w-[22px] md:h-[22px] lg:w-[24px] lg:h-[24px]">
+                <span className="flex items-center justify-center flex-shrink-0 w-[18px] h-[18px] sm:w-[20px] sm:h-[20px] md:w-[22px] md:h-[22px] lg:w-[22px] lg:h-[22px] xl:w-6 xl:h-6">
                   {cat.iconImg
                     ? <img 
                         src={cat.iconImg} 

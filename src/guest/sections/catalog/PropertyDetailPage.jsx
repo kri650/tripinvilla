@@ -307,7 +307,7 @@ export default function PropertyDetailPage(props) {
                 {oldPriceString && (
                   <div className="text-[15px] text-[#9CA3AF] line-through mb-1 max-[640px]:!text-sm">{oldPriceString}/night</div>
                 )}
-                <div className="text-[28px] font-bold text-[#38A169] leading-none max-[640px]:!text-2xl">{priceString}/night</div>
+                <div className="text-[28px] font-bold text-[#66AB3B] leading-none max-[640px]:!text-2xl">{priceString}/night</div>
               </div>
               <div className="text-left text-[13px] text-[#6B7280] leading-[1.4] max-[640px]:!text-xs max-[640px]:!text-left max-[640px]:!ml-0">
                 +{activeDetailProp.taxAmount || 212} taxes & fees per<br />room per night
