@@ -174,12 +174,14 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
     </div>
     
     {/* Horizontal Scrollable Container with Navigation Arrows */}
-    <div className="relative mt-10 px-12 max-[640px]:px-8 max-[480px]:px-6">
+    <div className="relative mt-10 px-12 max-[640px]:px-8 max-[480px]:px-6 overflow-hidden">
       {/* Left Arrow - Always Visible */}
       <button
         onClick={() => {
           const container = document.getElementById('testimonials-scroll-container');
-          container.scrollBy({ left: -350, behavior: 'smooth' });
+          const cardWidth = 340; // width of one card
+          const gap = 24; // gap between cards (6 * 4px)
+          container.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
         }}
         className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-200 hover:bg-gray-50 hover:shadow-[0_6px_16px_rgba(0,0,0,0.2)] active:scale-95 max-[640px]:w-8 max-[640px]:h-8 max-[480px]:w-7 max-[480px]:h-7"
         aria-label="Previous testimonials"
@@ -190,7 +192,7 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
       {/* Scrollable Content - Single Row */}
       <div
         id="testimonials-scroll-container"
-        className="flex gap-6 overflow-x-auto scroll-smooth max-[1200px]:gap-5 max-[768px]:gap-4 max-[640px]:gap-4 max-[480px]:gap-[14px] max-[360px]:gap-3"
+        className="flex gap-6 overflow-x-auto scroll-smooth max-w-[1068px] mx-auto max-[1200px]:gap-5 max-[1200px]:max-w-[980px] max-[900px]:gap-5 max-[900px]:max-w-[620px] max-[768px]:gap-4 max-[768px]:max-w-[576px] max-[640px]:gap-4 max-[640px]:max-w-[536px] max-[480px]:gap-[14px] max-[480px]:max-w-[494px] max-[360px]:gap-3 max-[360px]:max-w-[452px]"
         style={{ 
           scrollbarWidth: 'none', 
           msOverflowStyle: 'none',
@@ -291,7 +293,9 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
       <button
         onClick={() => {
           const container = document.getElementById('testimonials-scroll-container');
-          container.scrollBy({ left: 350, behavior: 'smooth' });
+          const cardWidth = 340; // width of one card
+          const gap = 24; // gap between cards (6 * 4px)
+          container.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
         }}
         className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-200 hover:bg-gray-50 hover:shadow-[0_6px_16px_rgba(0,0,0,0.2)] active:scale-95 max-[640px]:w-8 max-[640px]:h-8 max-[480px]:w-7 max-[480px]:h-7"
         aria-label="Next testimonials"

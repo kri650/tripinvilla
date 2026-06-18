@@ -1,162 +1,255 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ArrowRight, CheckCircle, Filter, Heart, MapPin, Phone, Search, Sparkles, Star, Map as MapIcon, List } from 'lucide-react';
-import './SearchResultsPage.css';
 import MapResultsView from './MapResultsView';
 
 export default function SearchResultsPage(props) {
   const {
-    token, user,
-    where, setActiveMenu,
-    sidebarSearchText, setSidebarSearchText,
-    filterMinPrice, setFilterMinPrice,
-    filterMaxPrice, setFilterMaxPrice,
-    setFilterPriceSlider,
+    user, where, setActiveMenu, sidebarSearchText, setSidebarSearchText,
+    filterMinPrice, setFilterMinPrice, filterMaxPrice, setFilterMaxPrice,
     filterSelectedTypes, setFilterSelectedTypes,
     filterSelectedAmenities, setFilterSelectedAmenities,
-    filterMinRating, setFilterMinRating,
-    searchSortBy, setSearchSortBy,
+    filterMinRating, setFilterMinRating, searchSortBy, setSearchSortBy,
     filterInstantBook, setFilterInstantBook,
     filterCancellationPolicy, setFilterCancellationPolicy,
-    filterHomestays, setFilterHomestays,
-    searchCurrentPage, setSearchCurrentPage,
-    allProperties,
-    getFilteredProperties,
-    handleClearAll,
-    API_BASE,
-    toggleWishlist,
-    fetchProfileAndEnquiries,
-    setSelectedProperty,
-    setContactStep, setContactModalOpen,
-    setAuthMode, setAuthModalOpen,
-    aiSummary, aiTags,
-    fetchProperties,
-    buildSearchParams,
+    filterHomestays, setFilterHomestays, searchCurrentPage, setSearchCurrentPage,
+    allProperties, getFilteredProperties, handleClearAll,
+    toggleWishlist, setSelectedProperty, setContactStep, setContactModalOpen,
+    aiSummary, aiTags, fetchProperties, buildSearchParams,
   } = props;
 
   const [showMap, setShowMap] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   return (
-    <div className="search-results-page fade-in">
+    <div className="w-full animate-[fadeIn_0.3s_ease-in-out]">
+      {/* Mobile Filter Toggle */}
       <button
         type="button"
-        className="mobile-filter-toggle"
+        className="hidden max-[640px]:inline-flex items-center justify-center gap-2 w-full mb-4 px-4 py-3 border border-gray-300 rounded-xl bg-white text-gray-900 font-['Outfit'] text-sm font-bold shadow-[0_4px_12px_rgba(15,23,42,0.06)] cursor-pointer transition-all hover:bg-gray-50 hover:border-gray-400 active:scale-[0.98]"
         onClick={() => setShowMobileFilters(prev => !prev)}
       >
         <Filter size={18} />
         {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
       </button>
-      <div className="search-results-layout">
 
-        {/* ── LEFT SIDEBAR FILTERS ── */}
-        <div className={`search-sidebar ${showMobileFilters ? 'mobile-open' : ''}`}>
-          <div className="filter-container-card">
-
+      <div className="grid grid-cols-[minmax(280px,320px)_1fr] gap-8 max-w-[1320px] w-full mx-auto my-10 mb-20 px-6 box-border max-[1100px]:grid-cols-[minmax(240px,280px)_1fr] max-[1100px]:gap-6 max-[1100px]:px-5 max-[900px]:grid-cols-1 max-[900px]:gap-[18px] max-[900px]:px-4 max-[900px]:my-[30px] max-[900px]:mb-[60px] max-[900px]:max-w-full max-[640px]:my-5 max-[640px]:mb-10 max-[640px]:px-3 max-[640px]:gap-4 max-[480px]:px-[10px] max-[480px]:gap-[14px] max-[480px]:my-4 max-[480px]:mb-8 max-[360px]:px-2 max-[360px]:gap-3 max-[360px]:my-3 max-[360px]:mb-7">
+        
+        {/* LEFT SIDEBAR FILTERS */}
+        <div className={`flex flex-col gap-6 sticky top-[100px] h-[calc(100vh-120px)] overflow-y-auto max-[900px]:static max-[900px]:h-auto max-[900px]:overflow-visible max-[640px]:${showMobileFilters ? 'flex' : 'hidden'} max-[640px]:mb-5`}>
+          <div className="bg-white rounded-2xl border border-gray-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] py-2 px-6 max-[640px]:max-h-[70vh] max-[640px]:overflow-y-auto max-[640px]:py-[6px] max-[640px]:px-[18px]">
+            
             {/* Map Preview */}
-            <div className="map-preview-box" style={{ position: 'relative', borderRadius: '24px', overflow: 'hidden', height: '180px', marginBottom: '20px' }}>
-              <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&w=400&q=80" alt="Map Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-              <button className="btn-explore-map" style={{ zIndex: 10 }} onClick={() => setShowMap(true)}>Explore on Map</button>
+            <div className="relative rounded-3xl overflow-hidden h-[180px] mb-5 max-[640px]:h-40 max-[640px]:mb-4">
+              <img 
+                src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?auto=format&fit=crop&w=400&q=80" 
+                alt="Map Preview" 
+                className="w-full h-full object-cover"
+              />
+              <button 
+                className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 bg-[#58A429] text-white border-none py-[10px] px-6 rounded-3xl font-semibold text-sm cursor-pointer shadow-[0_4px_12px_rgba(88,164,41,0.3)] transition-all hover:bg-[#4A8E20] hover:scale-105 whitespace-nowrap"
+                onClick={() => setShowMap(true)}
+              >
+                Explore on Map
+              </button>
             </div>
 
-            {/* Sidebar search */}
-            <div style={{ paddingBottom: '20px', borderBottom: '1px solid #EFF6E6', marginBottom: '20px' }}>
-              <div style={{ position: 'relative' }}>
-                <Search size={18} color="#9CA3AF" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none' }} />
+            {/* Sidebar Search */}
+            <div className="pb-5 border-b border-[#EFF6E6] mb-5">
+              <div className="relative">
+                <Search size={18} color="#9CA3AF" className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   placeholder="Search for hotel, locality"
                   value={sidebarSearchText}
                   onChange={e => setSidebarSearchText(e.target.value)}
-                  style={{ width: '100%', padding: '12px 16px 12px 46px', fontSize: '14px', fontFamily: '"Outfit", sans-serif', border: '1px solid #E5E7EB', borderRadius: '24px', outline: 'none', color: '#111827', boxSizing: 'border-box', background: '#ffffff', transition: 'border-color 0.2s' }}
+                  className="w-full py-3 px-4 pl-[46px] text-sm font-['Outfit'] border border-gray-200 rounded-3xl outline-none text-gray-900 box-border bg-white transition-colors focus:border-gray-300"
                 />
               </div>
             </div>
 
-            {/* Property Type filter */}
-            <div className="sidebar-filter-block">
-              <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Property Type</h4>
-              <div className="filter-checkbox-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* Property Type Filter */}
+            <div className="py-6 border-b border-[#EFF6E6] max-[640px]:py-4">
+              <h4 className="font-['Outfit'] text-[15px] font-bold text-gray-900 mb-[14px] max-[640px]:text-sm">Property Type</h4>
+              <div className="flex flex-col gap-[10px]">
                 {['Villa', 'Hotel', 'Resort', 'Homestay', 'Apartment', 'Cottage', 'Bungalow', 'Motel'].map((type, i) => {
                   const isChecked = filterSelectedTypes.includes(type);
-                  const count = (allProperties || []).filter(p => (p.type || '').toLowerCase() === type.toLowerCase() || (p.category || '').toLowerCase() === type.toLowerCase()).length;
+                  const count = (allProperties || []).filter(p => 
+                    (p.type || '').toLowerCase() === type.toLowerCase() || 
+                    (p.category || '').toLowerCase() === type.toLowerCase()
+                  ).length;
                   const displayCount = allProperties.length > 0 ? count : (type === 'Villa' ? 122 : 12);
+                  
                   return (
-                    <div key={i} className="filter-checkbox-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#4B5563', fontFamily: '"Outfit", sans-serif' }}>
-                        <input type="checkbox" checked={isChecked} onChange={() => setFilterSelectedTypes(isChecked ? filterSelectedTypes.filter(t => t !== type) : [...filterSelectedTypes, type])} style={{ accentColor: '#58A429', cursor: 'pointer' }} />
+                    <div key={i} className="flex justify-between items-center">
+                      <label className="flex items-center gap-2 cursor-pointer text-[13px] text-gray-600 font-['Outfit'] max-[640px]:text-[13px]">
+                        <input 
+                          type="checkbox" 
+                          checked={isChecked}
+                          onChange={() => setFilterSelectedTypes(
+                            isChecked 
+                              ? filterSelectedTypes.filter(t => t !== type) 
+                              : [...filterSelectedTypes, type]
+                          )}
+                          className="w-4 h-4 accent-[#58A429] cursor-pointer"
+                        />
                         {type}
                       </label>
-                      <span style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: '"Outfit", sans-serif' }}>({displayCount})</span>
+                      <span className="text-xs text-gray-400 font-['Outfit']">({displayCount})</span>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            {/* Price slider */}
-            <div className="sidebar-filter-block">
-              <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Price Per Night</h4>
+            {/* Price Slider */}
+            <div className="py-6 border-b border-[#EFF6E6] max-[640px]:py-4">
+              <h4 className="font-['Outfit'] text-[15px] font-bold text-gray-900 mb-[14px] max-[640px]:text-sm">Price Per Night</h4>
               {(() => {
                 const sliderMin = filterMinPrice === '' ? 100 : Number(filterMinPrice);
                 const sliderMax = filterMaxPrice === '' ? 100000 : Number(filterMaxPrice);
+                
                 return (
-                  <div className="dual-slider-container" style={{ position: 'relative', width: '100%', height: '40px', marginTop: '24px', marginBottom: '12px' }}>
-                    <div style={{ position: 'absolute', top: '16px', left: '0', right: '0', height: '4px', background: '#E5E7EB', borderRadius: '2px', zIndex: '1' }} />
-                    <div style={{ position: 'absolute', top: '16px', left: `${((sliderMin - 100) / 99900) * 100}%`, right: `${100 - ((sliderMax - 100) / 99900) * 100}%`, height: '4px', background: '#111827', zIndex: '2' }} />
-                    <div style={{ position: 'absolute', left: `${((sliderMin - 100) / 99900) * 100}%`, top: '-18px', background: '#111827', color: '#ffffff', fontSize: '9.5px', fontWeight: '700', padding: '2px 6px', borderRadius: '4px', transform: 'translateX(-50%)', whiteSpace: 'nowrap', fontFamily: '"Outfit", sans-serif', zIndex: '5' }}>₹ {sliderMin}</div>
-                    <div style={{ position: 'absolute', left: `${((sliderMax - 100) / 99900) * 100}%`, top: '-18px', background: '#111827', color: '#ffffff', fontSize: '9.5px', fontWeight: '700', padding: '2px 6px', borderRadius: '4px', transform: 'translateX(-50%)', whiteSpace: 'nowrap', fontFamily: '"Outfit", sans-serif', zIndex: '5' }}>₹ {sliderMax}</div>
-                    <input type="range" min="100" max="100000" step="100" value={sliderMin} onChange={e => { const val = Math.min(Number(e.target.value), sliderMax - 1000); setFilterMinPrice(val); }} style={{ position: 'absolute', width: '100%', pointerEvents: 'none', background: 'none', appearance: 'none', WebkitAppearance: 'none', height: '4px', top: '16px', zIndex: '3', margin: 0, outline: 'none' }} />
-                    <input type="range" min="100" max="100000" step="100" value={sliderMax} onChange={e => { const val = Math.max(Number(e.target.value), sliderMin + 1000); setFilterMaxPrice(val); }} style={{ position: 'absolute', width: '100%', pointerEvents: 'none', background: 'none', appearance: 'none', WebkitAppearance: 'none', height: '4px', top: '16px', zIndex: '4', margin: 0, outline: 'none' }} />
+                  <div className="relative w-full h-10 mt-6 mb-3">
+                    <div className="absolute top-4 left-0 right-0 h-1 bg-gray-200 rounded-sm z-[1]" />
+                    <div 
+                      className="absolute top-4 h-1 bg-gray-900 z-[2]"
+                      style={{ 
+                        left: `${((sliderMin - 100) / 99900) * 100}%`, 
+                        right: `${100 - ((sliderMax - 100) / 99900) * 100}%` 
+                      }}
+                    />
+                    <div 
+                      className="absolute -top-[18px] bg-gray-900 text-white text-[9.5px] font-bold py-[2px] px-[6px] rounded whitespace-nowrap font-['Outfit'] z-[5]"
+                      style={{ left: `${((sliderMin - 100) / 99900) * 100}%`, transform: 'translateX(-50%)' }}
+                    >
+                      ₹ {sliderMin}
+                    </div>
+                    <div 
+                      className="absolute -top-[18px] bg-gray-900 text-white text-[9.5px] font-bold py-[2px] px-[6px] rounded whitespace-nowrap font-['Outfit'] z-[5]"
+                      style={{ left: `${((sliderMax - 100) / 99900) * 100}%`, transform: 'translateX(-50%)' }}
+                    >
+                      ₹ {sliderMax}
+                    </div>
+                    <input 
+                      type="range" 
+                      min="100" 
+                      max="100000" 
+                      step="100"
+                      value={sliderMin}
+                      onChange={e => {
+                        const val = Math.min(Number(e.target.value), sliderMax - 1000);
+                        setFilterMinPrice(val);
+                      }}
+                      className="absolute w-full pointer-events-none bg-none appearance-none h-1 top-4 z-[3] m-0 outline-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-gray-900 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)] [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:bg-gray-900 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)]"
+                    />
+                    <input 
+                      type="range" 
+                      min="100" 
+                      max="100000" 
+                      step="100"
+                      value={sliderMax}
+                      onChange={e => {
+                        const val = Math.max(Number(e.target.value), sliderMin + 1000);
+                        setFilterMaxPrice(val);
+                      }}
+                      className="absolute w-full pointer-events-none bg-none appearance-none h-1 top-4 z-[4] m-0 outline-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-gray-900 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)] [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:bg-gray-900 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)]"
+                    />
                   </div>
                 );
               })()}
-              <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '13px', fontWeight: '700', color: '#111827', marginTop: '16px', marginBottom: '10px' }}>Your Budget</h4>
-              <div className="budget-inputs" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <input type="number" placeholder="Min" value={filterMinPrice} onChange={e => setFilterMinPrice(e.target.value === '' ? '' : Number(e.target.value))} style={{ flex: 1, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', fontSize: '13px', fontFamily: '"Outfit", sans-serif', color: '#374151', outline: 'none' }} />
-                <span style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: '"Outfit", sans-serif' }}>To</span>
-                <input type="number" placeholder="Max" value={filterMaxPrice} onChange={e => setFilterMaxPrice(e.target.value === '' ? '' : Number(e.target.value))} style={{ flex: 1, border: '1px solid #E5E7EB', borderRadius: '8px', padding: '6px 12px', fontSize: '13px', fontFamily: '"Outfit", sans-serif', color: '#374151', outline: 'none' }} />
-                <button type="button" title="Apply budget" style={{ background: '#ffffff', border: '1px solid #E5E7EB', borderRadius: '8px', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', transition: 'all 0.2s' }} onClick={() => fetchProperties(buildSearchParams ? buildSearchParams() : { search: where })} onMouseOver={e => e.currentTarget.style.borderColor = '#58A429'} onMouseOut={e => e.currentTarget.style.borderColor = '#E5E7EB'}><ArrowRight size={14} color="#111827" /></button>
+              
+              <h4 className="font-['Outfit'] text-[13px] font-bold text-gray-900 mt-4 mb-[10px]">Your Budget</h4>
+              <div className="flex items-center gap-2">
+                <input 
+                  type="number" 
+                  placeholder="Min"
+                  value={filterMinPrice}
+                  onChange={e => setFilterMinPrice(e.target.value === '' ? '' : Number(e.target.value))}
+                  className="flex-1 border border-gray-200 rounded-lg py-[6px] px-3 text-[13px] font-['Outfit'] text-gray-700 outline-none"
+                />
+                <span className="text-xs text-gray-400 font-['Outfit']">To</span>
+                <input 
+                  type="number" 
+                  placeholder="Max"
+                  value={filterMaxPrice}
+                  onChange={e => setFilterMaxPrice(e.target.value === '' ? '' : Number(e.target.value))}
+                  className="flex-1 border border-gray-200 rounded-lg py-[6px] px-3 text-[13px] font-['Outfit'] text-gray-700 outline-none"
+                />
+                <button 
+                  type="button"
+                  title="Apply budget"
+                  className="bg-white border border-gray-200 rounded-lg w-8 h-8 flex items-center justify-center cursor-pointer transition-all hover:border-[#58A429]"
+                  onClick={() => fetchProperties(buildSearchParams ? buildSearchParams() : { search: where })}
+                >
+                  <ArrowRight size={14} color="#111827" />
+                </button>
               </div>
             </div>
 
-            {/* Star Rating filter */}
-            <div className="sidebar-filter-block">
-              <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Star Category</h4>
-              <div className="filter-checkbox-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* Star Rating Filter */}
+            <div className="py-6 border-b border-[#EFF6E6] max-[640px]:py-4">
+              <h4 className="font-['Outfit'] text-[15px] font-bold text-gray-900 mb-[14px] max-[640px]:text-sm">Star Category</h4>
+              <div className="flex flex-col gap-[10px]">
                 {[5, 4, 3, 2].map((stars, i) => {
                   const count = (allProperties || []).filter(p => Math.round(Number(p.rating || 0)) === stars).length;
                   const displayCount = allProperties.length > 0 ? count : (stars === 5 ? 122 : 12);
+                  
                   return (
-                    <div key={i} className="filter-checkbox-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#4B5563', fontFamily: '"Outfit", sans-serif' }}>
-                        <input type="checkbox" checked={filterMinRating === stars} onChange={() => setFilterMinRating(filterMinRating === stars ? 0 : stars)} style={{ accentColor: '#58A429', cursor: 'pointer' }} />
+                    <div key={i} className="flex justify-between items-center">
+                      <label className="flex items-center gap-2 cursor-pointer text-[13px] text-gray-600 font-['Outfit'] max-[640px]:text-[13px]">
+                        <input 
+                          type="checkbox"
+                          checked={filterMinRating === stars}
+                          onChange={() => setFilterMinRating(filterMinRating === stars ? 0 : stars)}
+                          className="w-4 h-4 accent-[#58A429] cursor-pointer"
+                        />
                         {stars} Star
-                        <div style={{ display: 'flex', gap: '2px', marginLeft: '4px' }}>
-                          {Array(5).fill(0).map((_, idx) => <Star key={idx} size={12} fill={idx < stars ? '#0C6DC4' : 'none'} color={idx < stars ? '#0C6DC4' : '#D1D5DB'} style={{ strokeWidth: 1.5 }} />)}
+                        <div className="flex gap-[2px] ml-1">
+                          {Array(5).fill(0).map((_, idx) => (
+                            <Star 
+                              key={idx} 
+                              size={12} 
+                              fill={idx < stars ? '#0C6DC4' : 'none'} 
+                              color={idx < stars ? '#0C6DC4' : '#D1D5DB'}
+                              strokeWidth={1.5}
+                            />
+                          ))}
                         </div>
                       </label>
-                      <span style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: '"Outfit", sans-serif' }}>({displayCount})</span>
+                      <span className="text-xs text-gray-400 font-['Outfit']">({displayCount})</span>
                     </div>
                   );
                 })}
               </div>
             </div>
 
-            {/* Amenities filter */}
-            <div className="sidebar-filter-block">
-              <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Amenities</h4>
-              <div className="filter-checkbox-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            {/* Amenities Filter */}
+            <div className="py-6 border-b border-[#EFF6E6] max-[640px]:py-4">
+              <h4 className="font-['Outfit'] text-[15px] font-bold text-gray-900 mb-[14px] max-[640px]:text-sm">Amenities</h4>
+              <div className="flex flex-col gap-[10px]">
                 {['Swimming Pool', 'WiFi', 'Parking', 'Spa', 'Barbeque', 'Lifts/Elevator', 'Bonfire'].map((checkVal, i) => {
                   const isChecked = filterSelectedAmenities.includes(checkVal);
-                  const count = (allProperties || []).filter(p => (p.amenities || []).some(a => String(a).toLowerCase().includes(checkVal.toLowerCase()))).length;
+                  const count = (allProperties || []).filter(p => 
+                    (p.amenities || []).some(a => String(a).toLowerCase().includes(checkVal.toLowerCase()))
+                  ).length;
                   const displayCount = allProperties.length > 0 ? count : (checkVal === 'Swimming Pool' ? 122 : 12);
+                  
                   return (
-                    <div key={i} className="filter-checkbox-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#4B5563', fontFamily: '"Outfit", sans-serif' }}>
-                        <input type="checkbox" checked={isChecked} onChange={() => setFilterSelectedAmenities(isChecked ? filterSelectedAmenities.filter(a => a !== checkVal) : [...filterSelectedAmenities, checkVal])} style={{ accentColor: '#58A429', cursor: 'pointer' }} />
+                    <div key={i} className="flex justify-between items-center">
+                      <label className="flex items-center gap-2 cursor-pointer text-[13px] text-gray-600 font-['Outfit'] max-[640px]:text-[13px]">
+                        <input 
+                          type="checkbox"
+                          checked={isChecked}
+                          onChange={() => setFilterSelectedAmenities(
+                            isChecked 
+                              ? filterSelectedAmenities.filter(a => a !== checkVal) 
+                              : [...filterSelectedAmenities, checkVal]
+                          )}
+                          className="w-4 h-4 accent-[#58A429] cursor-pointer"
+                        />
                         {checkVal}
                       </label>
-                      <span style={{ fontSize: '12px', color: '#9CA3AF', fontFamily: '"Outfit", sans-serif' }}>({displayCount})</span>
+                      <span className="text-xs text-gray-400 font-['Outfit']">({displayCount})</span>
                     </div>
                   );
                 })}
@@ -164,17 +257,22 @@ export default function SearchResultsPage(props) {
             </div>
 
             {/* Booking Preferences */}
-            <div className="sidebar-filter-block" style={{ borderBottom: '1px solid #EFF6E6', paddingBottom: '20px', marginBottom: '20px' }}>
-              <h4 className="filter-block-title" style={{ fontFamily: '"Outfit", sans-serif', fontSize: '15px', fontWeight: '700', color: '#111827', marginBottom: '14px' }}>Booking Preferences</h4>
-              <div className="filter-checkbox-list" style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+            <div className="py-6 border-b border-[#EFF6E6] pb-5 mb-5 max-[640px]:py-4">
+              <h4 className="font-['Outfit'] text-[15px] font-bold text-gray-900 mb-[14px] max-[640px]:text-sm">Booking Preferences</h4>
+              <div className="flex flex-col gap-[10px]">
                 {[
                   { label: 'Instant Book', checked: filterInstantBook, setter: setFilterInstantBook },
                   { label: 'Cancellation Policy', checked: filterCancellationPolicy, setter: setFilterCancellationPolicy },
                   { label: 'Homestays', checked: filterHomestays, setter: setFilterHomestays },
                 ].map((item, i) => (
-                  <div key={i} className="filter-checkbox-item" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontSize: '13px', color: '#4B5563', fontFamily: '"Outfit", sans-serif' }}>
-                      <input type="checkbox" checked={item.checked} onChange={() => item.setter(!item.checked)} style={{ accentColor: '#58A429', cursor: 'pointer' }} />
+                  <div key={i} className="flex justify-between items-center">
+                    <label className="flex items-center gap-2 cursor-pointer text-[13px] text-gray-600 font-['Outfit'] max-[640px]:text-[13px]">
+                      <input 
+                        type="checkbox"
+                        checked={item.checked}
+                        onChange={() => item.setter(!item.checked)}
+                        className="w-4 h-4 accent-[#58A429] cursor-pointer"
+                      />
                       {item.label}
                     </label>
                   </div>
@@ -182,156 +280,305 @@ export default function SearchResultsPage(props) {
               </div>
             </div>
 
-            {/* Clear filters */}
-            <button onClick={handleClearAll} style={{ width: '100%', marginTop: '16px', padding: '10px', background: '#F3F4F6', border: '1px solid #E5E7EB', borderRadius: '10px', fontSize: '13px', fontWeight: 600, color: '#374151', cursor: 'pointer', fontFamily: '"Outfit", sans-serif', transition: 'all 0.2s' }} onMouseOver={e => e.currentTarget.style.background = '#E5E7EB'} onMouseOut={e => e.currentTarget.style.background = '#F3F4F6'}>
+            {/* Clear Filters */}
+            <button 
+              onClick={handleClearAll}
+              className="w-full mt-4 py-[10px] bg-gray-100 border border-gray-200 rounded-[10px] text-[13px] font-semibold text-gray-700 cursor-pointer font-['Outfit'] transition-all hover:bg-gray-200"
+            >
               Clear All Filters
             </button>
           </div>
         </div>
 
-        {/* ── MAIN RESULTS COLUMN ── */}
-        <div className="search-main-content">
+        {/* MAIN RESULTS COLUMN */}
+        <div className="flex flex-col gap-5 min-w-0 w-full max-[640px]:gap-4">
+          
           {/* AI Summary Banner */}
           {aiSummary && (
-            <div style={{ background: 'linear-gradient(to right, rgba(14,165,233,0.1), rgba(168,85,247,0.1))', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '16px', padding: '20px', marginBottom: '24px', boxShadow: '0 4px 15px rgba(0,0,0,0.03)' }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '12px' }}>
+            <div className="bg-gradient-to-r from-[rgba(14,165,233,0.1)] to-[rgba(168,85,247,0.1)] border border-[rgba(14,165,233,0.2)] rounded-2xl p-5 mb-6 shadow-[0_4px_15px_rgba(0,0,0,0.03)] max-[640px]:p-4 max-[640px]:rounded-[14px] max-[640px]:mb-[18px] max-[640px]:w-full max-[640px]:box-border">
+              <div className="flex items-center gap-2 mb-3">
                 <Sparkles size={20} color="#0ea5e9" />
-                <span style={{ fontWeight: 700, fontSize: '15px', color: '#0ea5e9', fontFamily: '"Outfit", sans-serif' }}>AI Search Summary</span>
+                <span className="font-bold text-[15px] text-[#0ea5e9] font-['Outfit'] max-[640px]:text-sm">AI Search Summary</span>
               </div>
-              <p style={{ color: '#374151', fontSize: '15px', lineHeight: '1.5', marginBottom: '16px' }}>{aiSummary}</p>
+              <p className="text-gray-700 text-[15px] leading-relaxed mb-4 max-[640px]:text-sm max-[640px]:leading-normal">{aiSummary}</p>
               {aiTags && aiTags.length > 0 && (
-                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
-                  {aiTags.map((tag, i) => <span key={i} style={{ background: '#fff', padding: '6px 12px', borderRadius: '100px', fontSize: '13px', fontWeight: 500, color: '#4b5563', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 2px 4px rgba(0,0,0,0.02)' }}>{tag}</span>)}
+                <div className="flex flex-wrap gap-2">
+                  {aiTags.map((tag, i) => (
+                    <span 
+                      key={i}
+                      className="bg-white py-[6px] px-3 rounded-full text-[13px] font-medium text-gray-600 border border-black/5 shadow-[0_2px_4px_rgba(0,0,0,0.02)] max-[640px]:text-sm"
+                    >
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               )}
             </div>
           )}
 
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-            <h2 className="search-results-count" style={{ margin: 0 }}>
+          {/* Results Count and List/Map Toggle */}
+          <div className="flex justify-between items-center mb-5 max-[640px]:flex-col-reverse max-[640px]:items-start max-[640px]:gap-3 max-[640px]:w-full">
+            <h2 className="font-['Outfit'] text-[28px] font-bold text-gray-900 m-0 max-[900px]:text-[22px] max-[640px]:text-xl max-[640px]:leading-tight max-[640px]:w-full max-[480px]:text-lg max-[360px]:text-base">
               {`${getFilteredProperties().length} Properties In ${where || 'India'}`}
             </h2>
-            <div style={{ display: 'flex', background: '#F3F4F6', borderRadius: '8px', padding: '4px' }}>
+            <div className="flex bg-gray-100 rounded-lg p-1 max-[640px]:w-full">
               <button 
                 onClick={() => setShowMap(false)}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: !showMap ? '#ffffff' : 'transparent', border: 'none', borderRadius: '6px', boxShadow: !showMap ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: !showMap ? '#111827' : '#6B7280', fontSize: '13px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}
+                className={`flex items-center gap-[6px] py-[6px] px-3 ${!showMap ? 'bg-white shadow-[0_1px_3px_rgba(0,0,0,0.1)]' : 'bg-transparent'} border-none rounded-md text-[13px] font-semibold ${!showMap ? 'text-gray-900' : 'text-gray-500'} cursor-pointer transition-all max-[640px]:flex-1 max-[640px]:justify-center max-[640px]:text-xs max-[640px]:py-2 max-[640px]:px-[10px]`}
               >
                 <List size={14} /> List
               </button>
               <button 
                 onClick={() => setShowMap(true)}
-                style={{ display: 'flex', alignItems: 'center', gap: '6px', padding: '6px 12px', background: showMap ? '#ffffff' : 'transparent', border: 'none', borderRadius: '6px', boxShadow: showMap ? '0 1px 3px rgba(0,0,0,0.1)' : 'none', color: showMap ? '#111827' : '#6B7280', fontSize: '13px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s' }}
+                className={`flex items-center gap-[6px] py-[6px] px-3 ${showMap ? 'bg-white shadow-[0_1px_3px_rgba(0,0,0,0.1)]' : 'bg-transparent'} border-none rounded-md text-[13px] font-semibold ${showMap ? 'text-gray-900' : 'text-gray-500'} cursor-pointer transition-all max-[640px]:flex-1 max-[640px]:justify-center max-[640px]:text-xs max-[640px]:py-2 max-[640px]:px-[10px]`}
               >
                 <MapIcon size={14} /> Map
               </button>
             </div>
           </div>
 
-          {/* Sort tabs */}
-          <div className="search-sort-tabs">
-            {[['popularity', 'Popularity'], ['price_low', 'Price (Low to High)'], ['price_high', 'Price (High to Low)'], ['offer', 'Offer Included'], ['rating', 'User Rating (Highest)']].map(([key, label]) => (
-              <button key={key} className={`sort-tab ${searchSortBy === key ? 'active' : ''}`} onClick={() => setSearchSortBy(key)}>{label}</button>
+          {/* Sort Tabs */}
+          <div className="flex bg-white rounded-xl p-[6px] border border-gray-200 shadow-[0_4px_15px_rgba(0,0,0,0.02)] overflow-x-auto scrollbar-none max-[900px]:overflow-x-auto max-[900px]:-webkit-overflow-scrolling-touch max-[640px]:p-1 max-[640px]:rounded-[10px] max-[640px]:w-full max-[480px]:p-[3px]">
+            {[
+              ['popularity', 'Popularity'], 
+              ['price_low', 'Price (Low to High)'], 
+              ['price_high', 'Price (High to Low)'], 
+              ['offer', 'Offer Included'], 
+              ['rating', 'User Rating (Highest)']
+            ].map(([key, label]) => (
+              <button 
+                key={key}
+                className={`flex-1 py-3 px-4 bg-transparent border-none border-r border-gray-200 text-sm font-semibold ${searchSortBy === key ? 'text-[#0C6DC4]' : 'text-gray-500'} cursor-pointer transition-all whitespace-nowrap last:border-r-0 hover:text-gray-900 hover:bg-gray-50 max-[900px]:flex-[0_0_auto] max-[900px]:min-w-max max-[640px]:py-[10px] max-[640px]:px-[14px] max-[640px]:text-xs max-[480px]:py-2 max-[480px]:px-3 max-[480px]:text-[11px] max-[360px]:py-[7px] max-[360px]:px-[10px] max-[360px]:text-[10px]`}
+                onClick={() => setSearchSortBy(key)}
+              >
+                {label}
+              </button>
             ))}
           </div>
 
-          {/* Results list or Map */}
+          {/* Results List or Map */}
           {showMap ? (
             <MapResultsView 
               properties={getFilteredProperties()} 
-              onPropertyClick={(prop) => { setSelectedProperty(prop); setActiveMenu('Detail'); }} 
+              onPropertyClick={(prop) => { 
+                setSelectedProperty(prop); 
+                setActiveMenu('Detail'); 
+              }} 
             />
           ) : (
-            <div className="search-horizontal-list">
+            <div className="flex flex-col gap-5 max-[640px]:gap-4">
               {(() => {
-              let displayList = getFilteredProperties();
-              if (searchSortBy === 'price_low') displayList.sort((a, b) => Number(String(a.price || a.bestRoomRate || 0).replace(/[^\d]/g, '')) - Number(String(b.price || b.bestRoomRate || 0).replace(/[^\d]/g, '')));
-              else if (searchSortBy === 'price_high') displayList.sort((a, b) => Number(String(b.price || b.bestRoomRate || 0).replace(/[^\d]/g, '')) - Number(String(a.price || a.bestRoomRate || 0).replace(/[^\d]/g, '')));
-              else if (searchSortBy === 'rating') displayList.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-              else if (searchSortBy === 'offer') displayList.sort((a, b) => (b.hasActiveOffer ? 1 : 0) - (a.hasActiveOffer ? 1 : 0));
+                let displayList = getFilteredProperties();
+                
+                // Sorting logic
+                if (searchSortBy === 'price_low') {
+                  displayList.sort((a, b) => 
+                    Number(String(a.price || a.bestRoomRate || 0).replace(/[^\d]/g, '')) - 
+                    Number(String(b.price || b.bestRoomRate || 0).replace(/[^\d]/g, ''))
+                  );
+                } else if (searchSortBy === 'price_high') {
+                  displayList.sort((a, b) => 
+                    Number(String(b.price || b.bestRoomRate || 0).replace(/[^\d]/g, '')) - 
+                    Number(String(a.price || a.bestRoomRate || 0).replace(/[^\d]/g, ''))
+                  );
+                } else if (searchSortBy === 'rating') {
+                  displayList.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+                } else if (searchSortBy === 'offer') {
+                  displayList.sort((a, b) => (b.hasActiveOffer ? 1 : 0) - (a.hasActiveOffer ? 1 : 0));
+                }
 
-              if (displayList.length === 0) return (
-                <div style={{ textAlign: 'center', padding: '60px', background: 'white', borderRadius: '20px', border: '1px solid #E5E7EB' }}>
-                  <Search size={40} color="#0C6DC4" style={{ marginBottom: '16px' }} />
-                  <h3 style={{ fontSize: '20px', color: '#111827', marginBottom: '8px' }}>No properties found</h3>
-                  <p style={{ color: '#6B7280', marginBottom: '20px' }}>Try adjusting your filters or search criteria.</p>
-                  <button className="btn-view-details" onClick={handleClearAll}>Clear Filters</button>
-                </div>
-              );
+                // No results
+                if (displayList.length === 0) {
+                  return (
+                    <div className="text-center py-[60px] bg-white rounded-[20px] border border-gray-200 max-[640px]:py-10 max-[640px]:px-5 max-[640px]:rounded-2xl">
+                      <Search size={40} color="#0C6DC4" className="mb-4 mx-auto" />
+                      <h3 className="text-xl text-gray-900 mb-2 max-[640px]:text-lg">No properties found</h3>
+                      <p className="text-gray-500 mb-5 max-[640px]:text-sm">Try adjusting your filters or search criteria.</p>
+                      <button 
+                        className="bg-transparent text-[#0C6DC4] border border-[#0C6DC4] py-[10px] px-6 rounded-3xl font-semibold text-sm cursor-pointer transition-all hover:bg-[#EFF6FF]"
+                        onClick={handleClearAll}
+                      >
+                        Clear Filters
+                      </button>
+                    </div>
+                  );
+                }
 
-              const itemsPerPage = 12; // Increased from 5 to 12 items per page
-              const totalPages = Math.ceil(displayList.length / itemsPerPage) || 1;
-              const safeCurrentPage = Math.min(searchCurrentPage, totalPages);
-              const paginatedList = displayList.slice((safeCurrentPage - 1) * itemsPerPage, safeCurrentPage * itemsPerPage);
+                // Pagination
+                const itemsPerPage = 12;
+                const totalPages = Math.ceil(displayList.length / itemsPerPage) || 1;
+                const safeCurrentPage = Math.min(searchCurrentPage, totalPages);
+                const paginatedList = displayList.slice(
+                  (safeCurrentPage - 1) * itemsPerPage, 
+                  safeCurrentPage * itemsPerPage
+                );
 
-              return (
-                <>
-                  {paginatedList.map((property, idx) => {
-                    const isWishlisted = user && user.wishlist && user.wishlist.some(w => w._id === property._id || w === property._id);
-                    return (
-                      <div key={idx} className="horizontal-property-card">
-                        <div className="horiz-card-img"><img src={property.img || property.image} alt={property.title || property.propertyName} /></div>
-                        <div className="horiz-card-info">
-                          <div className="horiz-card-header">
-                            <div>
-                              <h3>{property.title || property.propertyName} {idx === 0 && <span className="premium-badge"><Star size={10} fill="white" /> Premium</span>}</h3>
-                              <p><MapPin size={14} color="#9CA3AF" /> {property.location}</p>
-                            </div>
-                            <button className={`fav-btn ${isWishlisted ? 'active' : ''}`} onClick={(e) => toggleWishlist(property._id, e)}>
-                              <Heart size={18} fill={isWishlisted ? '#EF4444' : 'none'} color={isWishlisted ? '#EF4444' : '#6B7280'} />
-                            </button>
+                return (
+                  <>
+                    {paginatedList.map((property, idx) => {
+                      const isWishlisted = user && user.wishlist && user.wishlist.some(
+                        w => w._id === property._id || w === property._id
+                      );
+                      
+                      return (
+                        <div 
+                          key={idx}
+                          className="flex bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-[0_4px_15px_rgba(0,0,0,0.03)] transition-all min-h-[300px] hover:-translate-y-[2px] hover:shadow-[0_12px_25px_rgba(0,0,0,0.06)] hover:border-[#93C5FD] max-[900px]:flex-col max-[900px]:min-h-auto max-[900px]:w-full max-[640px]:rounded-2xl max-[480px]:rounded-[14px]"
+                        >
+                          {/* Property Image */}
+                          <div className="w-80 flex-shrink-0 relative overflow-hidden max-[900px]:w-full max-[900px]:h-60 max-[640px]:h-[200px] max-[480px]:h-[180px] max-[360px]:h-40">
+                            <img 
+                              src={property.img || property.image} 
+                              alt={property.title || property.propertyName}
+                              className="w-full h-full object-cover absolute top-0 left-0"
+                            />
                           </div>
-                          <div className="horiz-card-rating">
-                            {property.reviewsCount > 0 ? (
-                              <>
-                                <span className="rating-badge">{property.rating}</span>
-                                <span style={{ display: 'flex', flexDirection: 'column' }}>
-                                  <span style={{ color: '#4B5563', fontWeight: '500' }}>{property.ratingLabel}</span>
-                                  <span style={{ color: '#9CA3AF', fontSize: '13px' }}>{property.reviews}</span>
+
+                          {/* Property Info */}
+                          <div className="flex-1 p-6 flex flex-col max-[900px]:p-[18px] max-[900px]:w-full max-[900px]:box-border max-[640px]:p-4 max-[480px]:p-[14px] max-[360px]:p-3">
+                            
+                            {/* Header - Title and Wishlist */}
+                            <div className="flex justify-between items-start mb-3 max-[640px]:mb-[10px]">
+                              <div>
+                                <h3 className="font-['Lato'] text-[22px] font-bold text-gray-900 m-0 mb-[6px] flex items-center gap-[10px] max-[900px]:text-[19px] max-[640px]:text-[17px] max-[640px]:leading-tight max-[480px]:text-base max-[360px]:text-[15px]">
+                                  {property.title || property.propertyName}
+                                  {idx === 0 && (
+                                    <span className="bg-[#58A429] text-white text-[11px] font-bold py-1 px-[10px] rounded-xl inline-flex items-center gap-1 max-[640px]:text-[10px] max-[640px]:py-[3px] max-[640px]:px-2 max-[360px]:text-[9px] max-[360px]:py-[2px] max-[360px]:px-[6px]">
+                                      <Star size={10} fill="white" /> Premium
+                                    </span>
+                                  )}
+                                </h3>
+                                <p className="text-gray-500 text-sm m-0 flex items-center gap-1 max-[640px]:text-[13px] max-[480px]:text-xs max-[360px]:text-[11px]">
+                                  <MapPin size={14} color="#9CA3AF" /> {property.location}
+                                </p>
+                              </div>
+                              <button 
+                                className="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center cursor-pointer transition-all hover:bg-gray-100 hover:border-gray-300 max-[640px]:w-9 max-[640px]:h-9 max-[480px]:w-[34px] max-[480px]:h-[34px] max-[360px]:w-8 max-[360px]:h-8"
+                                onClick={(e) => toggleWishlist(property._id, e)}
+                              >
+                                <Heart 
+                                  size={18} 
+                                  fill={isWishlisted ? '#EF4444' : 'none'} 
+                                  color={isWishlisted ? '#EF4444' : '#6B7280'} 
+                                />
+                              </button>
+                            </div>
+
+                            {/* Rating */}
+                            <div className="flex items-center gap-3 mb-4 text-sm text-gray-600 max-[640px]:mb-3 max-[640px]:gap-[10px] max-[640px]:text-[13px] max-[480px]:gap-2 max-[480px]:text-xs max-[360px]:text-[11px]">
+                              {property.reviewsCount > 0 ? (
+                                <>
+                                  <span className="bg-[#58A429] text-white text-sm font-bold py-1 px-2 rounded-md max-[640px]:text-[13px] max-[640px]:py-[3px] max-[640px]:px-[7px] max-[480px]:text-xs max-[480px]:py-[2px] max-[480px]:px-[6px] max-[360px]:text-[11px] max-[360px]:py-[2px] max-[360px]:px-[5px]">
+                                    {property.rating}
+                                  </span>
+                                  <span className="flex flex-col">
+                                    <span className="text-gray-600 font-medium">{property.ratingLabel}</span>
+                                    <span className="text-gray-400 text-[13px] max-[640px]:text-xs">{property.reviews}</span>
+                                  </span>
+                                </>
+                              ) : (
+                                <span className="flex flex-col">
+                                  <span className="text-gray-400 font-medium italic">Not Rated Yet</span>
+                                  <span className="text-gray-400 text-[13px] max-[640px]:text-xs">0 Genuine Reviews</span>
                                 </span>
-                              </>
-                            ) : (
-                              <span style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span style={{ color: '#9CA3AF', fontWeight: '500', fontStyle: 'italic' }}>Not Rated Yet</span>
-                                <span style={{ color: '#9CA3AF', fontSize: '13px' }}>0 Genuine Reviews</span>
-                              </span>
-                            )}
-                          </div>
-
-                          <div className="horiz-card-inclusions">
-                            {(property.highlights && property.highlights.length > 0) ? property.highlights.slice(0, 3).map((hl, i) => (
-                              <span key={i} className="inclusion-item"><CheckCircle size={16} fill="#0C6DC4" color="white" /> {hl}</span>
-                            )) : (
-                              <span className="inclusion-item" style={{ color: '#9CA3AF', fontStyle: 'italic' }}>No special highlights listed</span>
-                            )}
-                          </div>
-                          <div className="horiz-card-footer">
-                            <div className="horiz-card-price">
-                              <p>₹{(Number(String(property.price || property.bestRoomRate || 0).replace(/[^\d]/g, '')) + 500).toLocaleString('en-IN')}/night</p>
-                              <h4>₹{Number(String(property.price || property.bestRoomRate || 0).replace(/[^\d]/g, '')).toLocaleString('en-IN')}/night</h4>
+                              )}
                             </div>
-                            <div className="horiz-card-actions">
-                              <button className="btn-view-details" onClick={() => { setSelectedProperty(property); setActiveMenu('Detail'); }}>View Details</button>
-                              <button className="btn-call-icon" onClick={() => { setSelectedProperty(property); setContactStep(1); setContactModalOpen(true); }}><Phone size={18} /></button>
+
+                            {/* Highlights */}
+                            <div className="flex flex-col gap-2 flex-1">
+                              {(property.highlights && property.highlights.length > 0) ? (
+                                property.highlights.slice(0, 3).map((hl, i) => (
+                                  <span 
+                                    key={i}
+                                    className="flex items-center gap-2 text-[13.5px] text-gray-600 font-medium max-[640px]:text-xs max-[640px]:gap-[6px] max-[480px]:text-[11px] max-[360px]:text-[10px]"
+                                  >
+                                    <CheckCircle size={16} fill="#0C6DC4" color="white" /> {hl}
+                                  </span>
+                                ))
+                              ) : (
+                                <span className="flex items-center gap-2 text-[13.5px] text-gray-400 font-medium italic max-[640px]:text-xs max-[480px]:text-[11px] max-[360px]:text-[10px]">
+                                  No special highlights listed
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Footer - Price and Actions */}
+                            <div className="flex justify-between items-end mt-auto pt-4 border-t border-dashed border-gray-200 max-[900px]:flex-col max-[900px]:items-start max-[900px]:gap-[14px] max-[900px]:w-full max-[640px]:pt-3 max-[640px]:gap-3">
+                              <div>
+                                <p className="text-[13px] text-gray-400 m-0 mb-1 line-through max-[640px]:text-xs max-[480px]:text-[11px]">
+                                  ₹{(Number(String(property.price || property.bestRoomRate || 0).replace(/[^\d]/g, '')) + 500).toLocaleString('en-IN')}/night
+                                </p>
+                                <h4 className="text-[22px] font-bold text-[#58A429] m-0 max-[640px]:text-xl max-[480px]:text-lg max-[360px]:text-[17px]">
+                                  ₹{Number(String(property.price || property.bestRoomRate || 0).replace(/[^\d]/g, '')).toLocaleString('en-IN')}/night
+                                </h4>
+                              </div>
+                              <div className="flex items-center gap-3 max-[900px]:w-full max-[640px]:gap-[10px] max-[360px]:gap-2">
+                                <button 
+                                  className="bg-white text-[#0C6DC4] border-[3px] border-[#0C6DC4] py-[10px] px-6 rounded-full font-semibold text-sm cursor-pointer transition-all hover:bg-[#EFF6FF] shadow-sm max-[900px]:flex-1 max-[900px]:text-center max-[640px]:py-[10px] max-[640px]:px-[18px] max-[640px]:text-[13px] max-[480px]:py-[9px] max-[480px]:px-4 max-[480px]:text-xs max-[360px]:py-2 max-[360px]:px-3 max-[360px]:text-[11px]"
+                                  onClick={() => { 
+                                    setSelectedProperty(property); 
+                                    setActiveMenu('Detail'); 
+                                  }}
+                                >
+                                  View Details
+                                </button>
+                                <button 
+                                  className="w-10 h-10 rounded-full border-[3px] border-[#58A429] text-[#58A429] bg-white flex items-center justify-center cursor-pointer transition-all hover:bg-[#F0FDF4] shadow-sm max-[640px]:w-[38px] max-[640px]:h-[38px] max-[480px]:w-9 max-[480px]:h-9 max-[360px]:w-[34px] max-[360px]:h-[34px]"
+                                  onClick={() => { 
+                                    setSelectedProperty(property); 
+                                    setContactStep(1); 
+                                    setContactModalOpen(true); 
+                                  }}
+                                >
+                                  <Phone size={18} />
+                                </button>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    );
-                  })}
+                      );
+                    })}
 
-                  {/* Pagination */}
-                  {totalPages > 1 && (
-                    <div className="search-pagination">
-                      <button disabled={safeCurrentPage === 1} onClick={() => { setSearchCurrentPage(p => Math.max(p - 1, 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>&larr;</button>
-                      {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                        <button key={page} className={page === safeCurrentPage ? 'active' : ''} onClick={() => { setSearchCurrentPage(page); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>{page}</button>
-                      ))}
-                      <button disabled={safeCurrentPage === totalPages} onClick={() => { setSearchCurrentPage(p => Math.min(p + 1, totalPages)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>&rarr;</button>
-                    </div>
-                  )}
-                </>
-              );
-            })()}
+                    {/* Pagination */}
+                    {totalPages > 1 && (
+                      <div className="flex items-center justify-center gap-2 mt-8 max-[640px]:gap-[6px]">
+                        <button 
+                          disabled={safeCurrentPage === 1}
+                          onClick={() => { 
+                            setSearchCurrentPage(p => Math.max(p - 1, 1)); 
+                            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                          }}
+                          className="py-2 px-4 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 cursor-pointer transition-all hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed max-[640px]:py-2 max-[640px]:px-3 max-[640px]:text-[13px] max-[360px]:py-[6px] max-[360px]:px-[10px] max-[360px]:text-xs"
+                        >
+                          &larr;
+                        </button>
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
+                          <button 
+                            key={page}
+                            className={`py-2 px-4 ${page === safeCurrentPage ? 'bg-[#0C6DC4] text-white' : 'bg-white text-gray-700'} border border-gray-200 rounded-lg text-sm font-semibold cursor-pointer transition-all hover:bg-gray-50 max-[640px]:py-2 max-[640px]:px-3 max-[640px]:text-[13px] max-[360px]:py-[6px] max-[360px]:px-[10px] max-[360px]:text-xs`}
+                            onClick={() => { 
+                              setSearchCurrentPage(page); 
+                              window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                            }}
+                          >
+                            {page}
+                          </button>
+                        ))}
+                        <button 
+                          disabled={safeCurrentPage === totalPages}
+                          onClick={() => { 
+                            setSearchCurrentPage(p => Math.min(p + 1, totalPages)); 
+                            window.scrollTo({ top: 0, behavior: 'smooth' }); 
+                          }}
+                          className="py-2 px-4 bg-white border border-gray-200 rounded-lg text-sm font-semibold text-gray-700 cursor-pointer transition-all hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed max-[640px]:py-2 max-[640px]:px-3 max-[640px]:text-[13px] max-[360px]:py-[6px] max-[360px]:px-[10px] max-[360px]:text-xs"
+                        >
+                          &rarr;
+                        </button>
+                      </div>
+                    )}
+                  </>
+                );
+              })()}
             </div>
           )}
         </div>

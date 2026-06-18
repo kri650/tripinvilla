@@ -58,76 +58,72 @@ export default function PropertiesGridPage(props) {
     <div className="properties-page-layout fade-in">
 
       {/* Category Scroller */}
-      <div 
-        className="w-full max-w-[1280px] mx-auto mb-6 md:mb-8 px-0 md:px-5 lg:px-10 max-[900px]:overflow-x-auto lg:overflow-x-visible overflow-y-hidden scroll-smooth min-h-[70px] sm:min-h-[75px] md:min-h-[80px] lg:min-h-[85px] pb-4 md:pb-6 pt-3 md:pt-4 relative scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400"
-        ref={scrollerRef}
-        role="tablist"
-        aria-label="Property categories"
-        style={{
-          WebkitOverflowScrolling: 'touch'
-        }}
-      >
-        <div className="flex items-center gap-2 sm:gap-3 md:gap-4 lg:gap-3 xl:gap-4 max-[900px]:w-max px-4 sm:px-4 md:px-5 lg:px-0 lg:justify-center">
-          {propertyCategories.map((cat) => {
-            const isSelected = activePropCategory === cat.name;
-            return (
-              <button
-                key={cat.name}
-                className={`flex items-center justify-center gap-2 sm:gap-3 lg:gap-2 xl:gap-2.5 px-3 sm:px-4 md:px-5 lg:px-4 xl:px-5 py-2 sm:py-3 md:py-3 lg:py-3 border-2 rounded-xl sm:rounded-xl md:rounded-2xl lg:rounded-xl font-lato font-semibold whitespace-nowrap flex-shrink-0 transition-all duration-200 ease-out min-h-[38px] sm:min-h-[42px] md:min-h-[46px] lg:min-h-[48px] text-xs sm:text-sm md:text-sm lg:text-[14px] xl:text-[15px] min-w-[70px] sm:min-w-[85px] md:min-w-[100px] lg:min-w-0 touch-manipulation select-none relative z-10 ${
-                  isSelected
-                    ? 'border border-gray-600 text-green-600 shadow-lg shadow-green-600/20 -translate-y-0.5 z-30'
-                    : 'bg-transparent border-gray-300 text-gray-600 hover:bg-green-600/5 hover:border-green-600/30 hover:-translate-y-0.5'
-                } active:scale-95`}
-                onClick={() => {
-                  setActivePropCategory(cat.name);
-                  setFilterSelectedTypes([typeMap[cat.name] || cat.name]);
-                  setWhere('');
-                  fetchProperties({ type: cat.name, search: '' });
-                }}
-                aria-label={`Filter by ${cat.name}`}
-                role="tab"
-                aria-selected={isSelected}
-                data-category={cat.name}
-              >
-                <span className="flex items-center justify-center flex-shrink-0 w-[18px] h-[18px] sm:w-[20px] sm:h-[20px] md:w-[22px] md:h-[22px] lg:w-[22px] lg:h-[22px] xl:w-6 xl:h-6">
-                  {cat.iconImg
-                    ? <img 
-                        src={cat.iconImg} 
-                        alt={cat.name} 
-                        className="w-full h-full object-contain block max-w-full max-h-full"
-                      />
-                    : cat.icon}
-                </span>
-                <span className={`font-medium leading-tight ${
-                  // Hide text and show abbreviated version on very small screens for long names
-                  cat.name === 'Apartments' ? 'hidden sm:inline' : 
-                  cat.name === 'Homestays' ? 'hidden sm:inline' : 
-                  cat.name === 'Bungalows' ? 'hidden sm:inline' : ''
-                }`}>
-                  {cat.name}
-                </span>
-                {/* Abbreviated text for very small screens */}
-                {cat.name === 'Apartments' && (
-                  <span className="sm:hidden font-medium leading-tight">Apt</span>
-                )}
-                {cat.name === 'Homestays' && (
-                  <span className="sm:hidden font-medium leading-tight">Home</span>
-                )}
-                {cat.name === 'Bungalows' && (
-                  <span className="sm:hidden font-medium leading-tight">Bung</span>
-                )}
-              </button>
-            );
-          })}
-        </div>
-        
-        {/* Left fade gradient indicator - only visible on mobile when scrollable */}
-        <div className="absolute left-0 top-0 bottom-4 md:bottom-6 w-8 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none z-20 md:hidden"></div>
-        
-        {/* Right fade gradient indicator - only visible on mobile when scrollable */}
-        <div className="absolute right-0 top-0 bottom-4 md:bottom-6 w-8 bg-gradient-to-l from-white via-white/80 to-transparent pointer-events-none z-20 md:hidden"></div>
-      </div>
+     <div 
+  className="w-full max-w-[1280px] mx-auto mb-3 md:mb-4 px-0 md:px-4 max-[900px]:overflow-x-auto lg:overflow-x-visible overflow-y-hidden scroll-smooth relative scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 select-none touch-manipulation"
+  ref={scrollerRef}
+  role="tablist"
+  aria-label="Property categories"
+  style={{ WebkitOverflowScrolling: 'touch' }}
+>
+  <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3 lg:justify-center max-[900px]:w-max px-4 md:px-0 py-1.5">
+    {propertyCategories.map((cat) => {
+      const isSelected = activePropCategory === cat.name;
+      return (
+        <button
+          key={cat.name}
+          className={`flex items-center justify-center gap-2 px-3.5 sm:px-4 md:px-5 py-2 md:py-2.5 border-2 rounded-xl font-lato font-semibold whitespace-nowrap flex-shrink-0 transition-all duration-200 ease-out text-sm md:text-base lg:text-lg min-w-[65px] sm:min-w-[80px] md:min-w-0 relative z-10 ${
+            isSelected
+              ? 'border-gray-600 text-green-600 shadow-md shadow-green-600/10 -translate-y-0.5 z-30'
+              : 'bg-transparent border-gray-300 text-gray-600 hover:bg-green-600/5 hover:border-green-600/20 hover:-translate-y-0.5'
+          } active:scale-95`}
+          onClick={() => {
+            setActivePropCategory(cat.name);
+            setFilterSelectedTypes([typeMap[cat.name] || cat.name]);
+            setWhere('');
+            fetchProperties({ type: cat.name, search: '' });
+          }}
+          aria-label={`Filter by ${cat.name}`}
+          role="tab"
+          aria-selected={isSelected}
+          data-category={cat.name}
+        >
+          {/* Enhanced Responsive Icon Container */}
+          <span className="flex items-center justify-center flex-shrink-0 w-5 h-5 sm:w-5.5 md:w-6 lg:w-6.5">
+            {cat.iconImg ? (
+              <img 
+                src={cat.iconImg} 
+                alt={cat.name} 
+                className="w-full h-full object-contain block"
+              />
+            ) : (
+              cat.icon
+            )}
+          </span>
 
+          {/* Text Labels */}
+          <span className={`leading-none ${
+            cat.name === 'Apartments' || cat.name === 'Homestays' || cat.name === 'Bungalows' 
+              ? 'hidden sm:inline' 
+              : ''
+          }`}>
+            {cat.name}
+          </span>
+
+          {/* Micro-responsive Abbreviated Labels */}
+          {cat.name === 'Apartments' && <span className="sm:hidden leading-none">Apt</span>}
+          {cat.name === 'Homestays' && <span className="sm:hidden leading-none">Home</span>}
+          {cat.name === 'Bungalows' && <span className="sm:hidden leading-none">Bung</span>}
+        </button>
+      );
+    })}
+  </div>
+  
+  {/* Left fade gradient indicator - adjusted to match tighter vertical padding */}
+  <div className="absolute left-0 top-0 bottom-0 w-6 bg-gradient-to-r from-white via-white/80 to-transparent pointer-events-none z-20 md:hidden" />
+  
+  {/* Right fade gradient indicator - adjusted to match tighter vertical padding */}
+  <div className="absolute right-0 top-0 bottom-0 w-6 bg-gradient-to-l from-white via-white/80 to-transparent pointer-events-none z-20 md:hidden" />
+</div>
       {/* Dynamic Properties Section */}
       <div className="villas-around-section" style={{ marginTop: '40px' }}>
         <div className="section-title-wrap">

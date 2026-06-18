@@ -184,6 +184,8 @@ input:focus, select:focus {
   max-width: 1320px;
   margin: 40px auto 80px;
   padding: 0 24px;
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .mobile-filter-toggle {
@@ -193,21 +195,25 @@ input:focus, select:focus {
 @media (max-width: 1100px) {
   .search-results-layout {
     grid-template-columns: minmax(240px, 280px) 1fr;
-    gap: 20px;
+    gap: 24px;
+    padding: 0 20px;
   }
 }
 
 @media (max-width: 900px) {
   .search-results-layout {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: 18px;
     padding: 0 16px;
+    margin: 30px auto 60px;
+    max-width: 100%;
   }
 
   .search-sidebar {
     position: static;
     height: auto;
     overflow-y: visible;
+    max-height: none;
   }
 
   .horiz-card-img {
@@ -216,13 +222,15 @@ input:focus, select:focus {
   
   .search-main-content {
     min-width: 0;
+    width: 100%;
   }
 }
 
 @media (max-width: 640px) {
   .search-results-layout {
-    margin: 18px auto 48px;
+    margin: 20px auto 40px;
     padding: 0 12px;
+    gap: 16px;
   }
 
   .mobile-filter-toggle {
@@ -230,17 +238,28 @@ input:focus, select:focus {
     align-items: center;
     justify-content: center;
     gap: 8px;
-    width: calc(100% - 24px);
-    margin: 16px 12px 0;
+    width: 100%;
+    margin: 0 0 16px 0;
     padding: 12px 16px;
     border: 1px solid #D1D5DB;
-    border-radius: 14px;
+    border-radius: 12px;
     background: #FFFFFF;
     color: #111827;
     font-family: 'Outfit', sans-serif;
     font-size: 14px;
     font-weight: 700;
-    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.08);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .mobile-filter-toggle:hover {
+    background: #F9FAFB;
+    border-color: #9CA3AF;
+  }
+  
+  .mobile-filter-toggle:active {
+    transform: scale(0.98);
   }
 
   .search-sidebar {
