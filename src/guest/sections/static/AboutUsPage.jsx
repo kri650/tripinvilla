@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
-import { CheckCircle, CreditCard, Percent, Play } from 'lucide-react';
-import { aboutHeroImg, missionIcon, rect32Img, rect33Img, rect35Img, visionIcon } from '../../../assets';
+import { CheckCircle, Play, ChevronLeft, ChevronRight } from 'lucide-react';
+import { aboutHeroImg, missionIcon, visionIcon } from '../../../assets';
 import './AboutUsPage.css';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import WhyChooseUs from '../../components/WhyChooseUs';
 
 export default function AboutUsPage({ renderTitle, activeMenu }) {
   const [aboutUsContent, setAboutUsContent] = useState(null);
@@ -121,45 +121,7 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
       </div>
 
       {/* Why Choose Our Services */}
-      <div className="bg-[#EBFDF2] py-[60px] mt-20 m-0 max-[768px]:py-10 max-[768px]:mt-[60px] max-[640px]:py-8 max-[640px]:mt-10 max-[480px]:py-6">
-        <div className="services-inner-container max-[768px]:px-5 max-[640px]:px-4 max-[480px]:px-3 max-[360px]:px-2">
-          <div className="section-title-wrap max-[640px]:text-center max-[640px]:mb-[30px]">
-            <h2 className="section-main-headline max-[640px]:text-2xl max-[480px]:text-xl max-[360px]:text-lg">
-              {renderTitle(s2?.title, <span>Why Choose Our <span className="highlight-sharp-blue-box">Services</span></span>, "Services")}
-            </h2>
-            <p className="section-sub-headline text-[#4B5563] max-[640px]:text-sm max-[480px]:text-[13px] max-[360px]:text-xs">{s2?.subText || 'Choose the next destination for you'}</p>
-          </div>
-          <div className="services-grid-asym max-[900px]:grid-cols-1 max-[900px]:gap-6 max-[640px]:gap-5">
-            <div className="services-col max-[900px]:order-0">
-              <div className="service-text-card white-bg max-[768px]:p-5 max-[640px]:p-[18px] max-[640px]:rounded-2xl max-[480px]:p-4">
-                <p className="service-card-desc max-[640px]:text-[13px] max-[480px]:text-xs max-[360px]:text-[11px]">{s2?.row1Desc || 'Every property is carefully verified.'}</p>
-                <h3 className="service-card-accent-title max-[640px]:text-lg max-[480px]:text-base max-[360px]:text-[15px]">{s2?.row1?.title || 'Verified & Trusted Stays'}</h3>
-                <p className="service-card-subtext max-[640px]:text-[13px] max-[480px]:text-xs max-[360px]:text-[11px]">{s2?.row1?.subText || 'Get genuine and good stays'}</p>
-              </div>
-              <div className="service-image-card max-[768px]:h-[200px] max-[640px]:h-[180px] max-[640px]:rounded-2xl max-[480px]:h-[160px] max-[360px]:h-[140px]">
-                <img src={s2?.features?.[0]?.image || rect35Img} alt="Secure Payments" />
-                <div className="service-overlay-badge-bottom max-[640px]:p-3 max-[640px]:text-xs max-[480px]:p-[10px] max-[480px]:text-[11px]"><div className="service-icon-circle-overlay max-[640px]:w-8 max-[640px]:h-8"><CreditCard size={18} color="#FFFFFF" /></div><span>{s2?.features?.[0]?.title || 'Secure Payments'}</span></div>
-              </div>
-            </div>
-            <div className="services-col-center max-[900px]:order-1">
-              <div className="service-tall-card max-[900px]:h-[300px] max-[768px]:h-[250px] max-[640px]:h-[220px] max-[640px]:rounded-2xl max-[480px]:h-[200px] max-[360px]:h-[180px]"><img src={s2?.imageCenter || s2?.image3 || rect32Img} alt="Traveler center image" /></div>
-            </div>
-            <div className="services-col max-[900px]:order-2">
-              <div className="service-image-card max-[768px]:h-[200px] max-[640px]:h-[180px] max-[640px]:rounded-2xl max-[480px]:h-[160px] max-[360px]:h-[140px]">
-                <img src={s2?.features?.[1]?.image || rect33Img} alt="Best Price" />
-                <div className="service-overlay-badge-bottom max-[640px]:p-3 max-[640px]:text-xs max-[480px]:p-[10px] max-[480px]:text-[11px]"><div className="service-icon-circle-overlay max-[640px]:w-8 max-[640px]:h-8"><Percent size={18} color="#FFFFFF" /></div><span>{s2?.features?.[1]?.title || 'Best Price Guarantee'}</span></div>
-              </div>
-              <div className="service-text-card transparent-bg max-[768px]:p-5 max-[640px]:p-[18px] max-[640px]:rounded-2xl max-[480px]:p-4">
-                <div className="service-card-top-group">
-                  <h3 className="service-card-accent-title max-[640px]:text-lg max-[480px]:text-base max-[360px]:text-[15px]">{s2?.row2?.title || '24/7 Support, Always There'}</h3>
-                  <p className="service-card-bold-sub max-[640px]:text-[13px] max-[480px]:text-xs max-[360px]:text-[11px]">{s2?.row2?.subText || 'All type of support'}</p>
-                </div>
-                <p className="service-card-desc-light max-[640px]:text-[13px] max-[480px]:text-xs max-[360px]:text-[11px]">{s2?.row2Desc || 'From booking to checkout, our support team is available anytime to help you.'}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      <WhyChooseUs homepageContent={homepageContent} />
 
       {/* Testimonials */}
       <div className="w-[1280px] max-w-[calc(100%-160px)] mx-auto mt-0 max-[1200px]:max-w-[calc(100%-80px)] max-[900px]:max-w-[calc(100%-40px)] max-[900px]:mt-10 max-[640px]:max-w-[calc(100%-32px)] max-[640px]:mt-8 max-[480px]:max-w-[calc(100%-24px)] max-[480px]:mt-6 max-[360px]:max-w-[calc(100%-16px)]">

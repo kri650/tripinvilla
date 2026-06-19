@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
-import { ChevronLeft, ChevronRight, CreditCard, Heart, MapPin, Percent } from 'lucide-react';
-import { rect32Img, rect33Img, rect35Img } from '../../assets';
+import { ChevronLeft, ChevronRight, Heart, MapPin } from 'lucide-react';
 import { popularOffersList } from '../../data/mockData';
+import WhyChooseUs from '../components/WhyChooseUs';
 
 export default function HomePage(props) {
   const {
@@ -452,95 +452,7 @@ export default function HomePage(props) {
           </div>
 
           {/* ══ SECTION 5: WHY CHOOSE OUR SERVICES ══ */}
-          <div className="services-section" style={{ marginBottom: 0 }}>
-            <div className="services-inner-container">
-              
-              <div className="section-title-wrap">
-                <h2 className="section-main-headline">
-                  {renderTitle(homepageContent?.section5?.title, <span>Why Choose Our <span className="highlight-sharp-blue-box">Services</span></span>, "Services")}
-                </h2>
-                <p className="section-sub-headline" style={{ color: '#4B5563' }}>
-                  {homepageContent?.section5?.subText || 'Choose the next destination for you'}
-                </p>
-              </div>
-
-              {/* Asymmetric custom grid row */}
-              <div className="services-grid-asym">
-                
-                {/* Column 1 */}
-                <div className="services-col">
-                  
-                  {/* White card top */}
-                  <div className="service-text-card white-bg">
-                    <p className="service-card-desc">
-                      {homepageContent?.section5?.row1Desc || 'Every property is carefully verified to ensure quality, safety, and comfort you can rely on.'}
-                    </p>
-                    <div className="service-card-bottom-group">
-                      <h3 className="service-card-accent-title">{homepageContent?.section5?.row1?.title || 'Verified & Trusted Stays'}</h3>
-                      <p className="service-card-subtext">{homepageContent?.section5?.row1?.subText || 'Get genuine and good stays'}</p>
-                    </div>
-                  </div>
-
-                  {/* {homepageContent?.section5?.features?.[0]?.title || 'Secure Payments'} bottom image */}
-                  <div className="service-image-card">
-                    <img 
-                      src={homepageContent?.section5?.features?.[0]?.image || rect35Img} 
-                      alt={homepageContent?.section5?.features?.[0]?.title || "Secure Payments"} 
-                    />
-                    <div className="service-overlay-badge-bottom">
-                      <div className="service-icon-circle-overlay">
-                        <CreditCard size={18} color="#FFFFFF" />
-                      </div>
-                      <span>{homepageContent?.section5?.features?.[0]?.title || 'Secure Payments'}</span>
-                    </div>
-                  </div>
-
-                </div>
-
-                {/* Column 2 (Full Height Traveler center image) */}
-                <div className="services-col-center">
-                  <div className="service-tall-card">
-                    <img 
-                      src={homepageContent?.section5?.image3 || rect32Img} 
-                      alt="Traveler with suitcase" 
-                    />
-                  </div>
-                </div>
-
-                {/* Column 3 */}
-                <div className="services-col">
-                  
-                  {/* Pool Resort top image */}
-                  <div className="service-image-card">
-                    <img 
-                      src={homepageContent?.section5?.features?.[1]?.image || rect33Img} 
-                      alt={homepageContent?.section5?.features?.[1]?.title || 'Best Price Guarantee'} 
-                    />
-                    <div className="service-overlay-badge-bottom">
-                      <div className="service-icon-circle-overlay">
-                        <Percent size={18} color="#FFFFFF" />
-                      </div>
-                      <span>{homepageContent?.section5?.features?.[1]?.title || 'Best Price Guarantee'}</span>
-                    </div>
-                  </div>
-
-                  {/* 24/7 Support text card bottom */}
-                  <div className="service-text-card transparent-bg">
-                    <div className="service-card-top-group">
-                      <h3 className="service-card-accent-title">{homepageContent?.section5?.row2?.title || '24/7 Support, Always There'}</h3>
-                      <p className="service-card-bold-sub">{homepageContent?.section5?.row2?.subText || 'All type of support'}</p>
-                    </div>
-                    <p className="service-card-desc-light">
-                      {homepageContent?.section5?.row2Desc || 'From booking to checkout, our support team is available anytime to help you.'}
-                    </p>
-                  </div>
-
-                </div>
-
-              </div>
-
-            </div>
-          </div>
+          <WhyChooseUs homepageContent={homepageContent} />
         </>
       )}
 

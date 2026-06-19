@@ -4020,3 +4020,19 @@
   }
 }
 
+/* ===== TABLET SEARCH CARD CONFLICT RESOLUTION (768px - 900px) ===== */
+@media (min-width: 768px) and (max-width: 900px) {
+  /* Hide the mobile search card in this range, keep desktop visible */
+  .hero-wrapper:not(.desktop-search) .mobile-hero-content {
+    display: none !important;
+  }
+
+  /* Let the desktop search card render normally with correct margin push */
+  .search-card-wrapper {
+    position: static !important;
+    transform: none !important;
+    margin: 200px auto 0 !important;
+  }
+}
+
+
