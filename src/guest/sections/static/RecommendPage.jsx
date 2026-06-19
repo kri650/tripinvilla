@@ -7,6 +7,7 @@ export default function RecommendPage(props) {
   const { setSelectedProperty, setActiveMenu, isRecommendFilterOpen, setIsRecommendFilterOpen, recommendSearchQuery, setRecommendSearchQuery, toggleWishlist, user, API_BASE } = props;
 
   const [recommendedItems, setRecommendedItems] = useState([]);
+  const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE || 'http://13.127.196.228:8000/api'}/properties/recommended`)
@@ -17,11 +18,21 @@ export default function RecommendPage(props) {
       .catch(err => console.error('Error fetching recommended properties:', err));
   }, [API_BASE]);
 
-  const filtered = recommendedItems.filter(item =>
-    !recommendSearchQuery ||
-    item.name.toLowerCase().includes(recommendSearchQuery.toLowerCase()) ||
-    item.location.toLowerCase().includes(recommendSearchQuery.toLowerCase())
-  );
+  const filtered = recommendedItems
+    .filter(item => {
+      const owner = item.owner;
+      if (owner) {
+        return owner.isPremium === true || owner.subscription?.isActive === true;
+      }
+      return true; // fallback for mock/test data with no owner info
+    })
+    .filter(item =>
+      !recommendSearchQuery ||
+      item.name.toLowerCase().includes(recommendSearchQuery.toLowerCase()) ||
+      item.location.toLowerCase().includes(recommendSearchQuery.toLowerCase())
+    );
+
+  const displayedItems = showAll ? filtered : filtered.slice(0, 3);
 
   return (
     <div className="recommend-page-wrapper fade-in">
@@ -51,7 +62,7 @@ export default function RecommendPage(props) {
         )}
 
         <div className="recommend-cards-grid">
-          {filtered.map((item) => {
+          {displayedItems.map((item) => {
             const propertyId = item._id || item.id;
             const isLiked = user && user.wishlist && user.wishlist.some(w => w._id === propertyId || w === propertyId);
             return (
@@ -84,6 +95,32 @@ export default function RecommendPage(props) {
             );
           })}
         </div>
+
+        {filtered.length > 3 && (
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '32px' }}>
+            <button
+              onClick={() => setShowAll(!showAll)}
+              style={{
+                padding: '12px 32px',
+                backgroundColor: '#58A429',
+                border: 'none',
+                borderRadius: '8px',
+                color: '#FFFFFF',
+                fontFamily: 'sans-serif',
+                fontSize: '15px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease-in-out'
+              }}
+              onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#38A169'}
+              onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#58A429'}
+              onMouseDown={(e) => e.currentTarget.style.transform = 'scale(0.98)'}
+              onMouseUp={(e) => e.currentTarget.style.transform = 'scale(1)'}
+            >
+              {showAll ? 'Show Less' : 'View All'}
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
