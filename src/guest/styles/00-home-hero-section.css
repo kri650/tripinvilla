@@ -1,18 +1,14 @@
 /* ==========================================================================
-   UNIFIED HERO SECTION - RESPONSIVE FOR ALL SCREEN SIZES
-   Single consistent approach for desktop, tablet, and mobile
+   HERO SECTION - UNIFIED CSS GRID RESPONSIVE DESIGN
+   Single HTML structure with CSS Grid handling all breakpoints
    ========================================================================== */
 
-/* ===== BASE HERO WRAPPER (All Screens) ===== */
+/* ===== BASE HERO STRUCTURE ===== */
 .hero-wrapper {
   position: relative;
   width: 100%;
-  max-width: 100vw;
-  height: 712px;
-  margin: 0;
-  border-radius: 0;
+  min-height: 100vh;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
   box-sizing: border-box;
 }
 
@@ -34,958 +30,442 @@
   height: 100%;
   background: linear-gradient(180deg, rgba(0, 0, 0, 0.45) 0%, rgba(0, 0, 0, 0.2) 50%, rgba(0, 0, 0, 0.6) 100%);
   display: flex;
-  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   z-index: 2;
 }
 
-/* ===== HERO HEADLINE (Desktop & Large Screens) ===== */
-.hero-headline-container {
-  position: absolute;
-  top: 150px;
-  left: 50%;
-  transform: translateX(-50%);
+.hero-content {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  z-index: 5;
+  gap: 40px;
   width: 100%;
-  max-width: calc(100vw - 40px);
-  padding: 0 20px;
+  max-width: 1200px;
+  padding: 20px;
   box-sizing: border-box;
 }
 
-.hero-headline {
+/* ===== HERO TITLE ===== */
+.hero-title {
+  text-align: center;
+}
+
+.hero-title h1 {
   font-family: 'Lato', sans-serif;
-  font-size: 74px;
+  font-size: 72px;
   font-weight: 500;
   color: #FFFFFF;
-  line-height: 100%;
-  letter-spacing: 0%;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  gap: 16px;
+  line-height: 1.1;
   margin: 0;
-  white-space: nowrap;
-  max-width: 100%;
-  overflow: hidden;
 }
 
-.hero-headline-span,
-.mobile-hero-highlight {
-  font-family: 'Lato', sans-serif;
-  font-size: 74px;
+.hero-title-highlight {
   font-weight: 700;
-  color: #FFFFFF;
   background: var(--primary-blue);
-  width: 439px;
-  max-width: 100%;
-  height: 105px;
-  border-radius: 0;
+  padding: 8px 24px;
+  border-radius: 8px;
   box-shadow: 0 8px 30px rgba(37, 99, 235, 0.4);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  line-height: 100%;
+}
+
+/* ===== HERO SEARCH CARD ===== */
+.hero-search-card {
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 32px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  border: 1px solid #E5E7EB;
+  width: 100%;
+  max-width: 1000px;
   box-sizing: border-box;
 }
 
-/* ===== MOBILE HERO CONTENT (Hidden on Desktop) ===== */
-.mobile-hero-content {
+/* ===== HERO TABS ===== */
+.hero-tabs {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 32px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.hero-tabs::-webkit-scrollbar {
   display: none;
 }
 
-.mobile-hero-title {
-  display: none;
+.hero-tab {
+  padding: 12px 24px;
+  border-radius: 20px;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  background: #F3F4F6;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
-.mobile-search-card {
-  display: none;
+.hero-tab.active {
+  background: var(--primary-blue);
+  color: #FFFFFF;
+  font-weight: 600;
+}
+
+.hero-tab:hover:not(.active) {
+  background: #E5E7EB;
+}
+
+/* ===== HERO FIELDS GRID ===== */
+.hero-fields {
+  display: grid;
+  gap: 24px;
+  margin-bottom: 32px;
+  grid-template-columns: repeat(6, 1fr);
+}
+
+.hero-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-field-label {
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.hero-field-input {
+  height: 48px;
+  background: #FFFFFF;
+  border: 1px solid #D1D5DB;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  color: #374151;
+  outline: none;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+.hero-field-input::placeholder {
+  color: #9CA3AF;
+}
+
+.hero-field-input:focus {
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.hero-field-clickable {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.hero-field-text {
+  flex: 1;
+}
+
+.hero-field-icon {
+  color: #6B7280;
+  flex-shrink: 0;
+}
+
+/* ===== HERO BOTTOM ROW ===== */
+.hero-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+}
+
+.hero-checkboxes {
+  display: flex;
+  gap: 24px;
+}
+
+.hero-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.hero-checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--primary-blue);
+  cursor: pointer;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.hero-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-family: 'Lato', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.hero-btn-outline {
+  background: #FFFFFF;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+}
+
+.hero-btn-outline:hover {
+  background: #F9FAFB;
+  border-color: #9CA3AF;
+}
+
+.hero-btn-search {
+  background: var(--brand-green);
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(88, 164, 41, 0.3);
+}
+
+.hero-btn-search:hover {
+  background: var(--brand-green-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(88, 164, 41, 0.4);
+}
+
+.hero-btn-ai {
+  background: #FFFFFF;
+  color: var(--primary-blue);
+  border: 1px solid var(--primary-blue);
+}
+
+.hero-btn-ai:hover {
+  background: rgba(59, 130, 246, 0.05);
+}
+
+/* ===== DATE PICKER ===== */
+.hero-date-picker {
+  background: #FFFFFF;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  border: 1px solid #E5E7EB;
+  padding: 16px;
+  width: max-content;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
+}
+
+.hero-date-picker-content {
+  display: flex;
+  gap: 24px;
+}
+
+.hero-date-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hero-date-section-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #111827;
+  padding-left: 8px;
+}
+
+.hero-date-picker-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 16px;
+  border-top: 1px solid #F3F4F6;
+  padding-top: 16px;
+}
+
+.hero-date-btn {
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.hero-date-btn-cancel {
+  background: #FFFFFF;
+  border: 1px solid #D1D5DB;
+  color: #374151;
+}
+
+.hero-date-btn-done {
+  background: #2563EB;
+  border: none;
+  color: #FFFFFF;
+  font-weight: 600;
 }
 
 /* ==========================================================================
-   RESPONSIVE BREAKPOINTS - UNIFIED APPROACH
+   RESPONSIVE BREAKPOINTS - CSS GRID ONLY
    ========================================================================== */
 
-/* ===== LARGE DESKTOP (1400px and below) ===== */
-@media (max-width: 1400px) {
-  .hero-headline {
-    font-size: 68px;
+/* Desktop ≥1280px - 6 columns, title 72px */
+@media (min-width: 1280px) {
+  .hero-fields {
+    grid-template-columns: repeat(6, 1fr);
   }
-
-  .hero-headline-span,
-  .mobile-hero-highlight {
-    font-size: 68px;
-    width: 410px;
-    height: 100px;
+  .hero-title h1 {
+    font-size: 72px;
   }
 }
 
-/* ===== DESKTOP (1200px and below) ===== */
-@media (max-width: 1200px) {
-  .hero-headline {
+/* Desktop 1024-1279px - 3 columns, title 58px */
+@media (max-width: 1279px) {
+  .hero-fields {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .hero-title h1 {
     font-size: 58px;
   }
-
-  .hero-headline-span,
-  .mobile-hero-highlight {
-    font-size: 58px;
-    width: 360px;
-    height: 90px;
-  }
-
-  .hero-headline-container {
-    top: 130px;
+  .hero-content {
+    gap: 32px;
   }
 }
 
-/* ===== TABLET LANDSCAPE (1024px and below) ===== */
-/* =====================================================
-   SEARCH CARD RESPONSIVE FIXES
-   ===================================================== */
-
-/* Large Laptop */
-@media (max-width: 1200px) {
-  .search-card-wrapper {
-    width: calc(100% - 40px);
-    max-width: 1100px;
-    padding: 20px;
-    box-sizing: border-box;
-  }
-
-  .search-fields-grid {
-    grid-template-columns: repeat(3, minmax(180px, 1fr));
-    gap: 14px;
-  }
-
-  .field-label {
-    font-size: 13px;
-  }
-
-  .field-input {
-    font-size: 13px;
-  }
-
-  .action-buttons-row {
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-}
-
-/* Tablet Landscape */
-@media (max-width: 1024px) {
-  .hero-wrapper {
-    min-height: 900px;
-    height: auto;
-    overflow: visible;
-  }
-
-  .search-card-wrapper {
-    width: calc(100% - 32px);
-    max-width: 950px;
-    padding: 18px;
-    left: 50%;
-    transform: translateX(-50%);
-  }
-
-  .search-fields-grid {
+/* Tablet 641-1023px - 2 columns, title 44px */
+@media (max-width: 1023px) {
+  .hero-fields {
     grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
   }
-
-  .action-buttons-row {
+  .hero-title h1 {
+    font-size: 44px;
+  }
+  .hero-search-card {
+    padding: 24px;
+  }
+  .hero-bottom-row {
     flex-direction: column;
-    align-items: stretch;
     gap: 20px;
   }
-
-  .checkbox-row {
-    justify-content: center;
+  .hero-actions {
     flex-wrap: wrap;
-  }
-
-  .action-buttons-row > div:last-child {
     justify-content: center;
-    flex-wrap: wrap;
   }
 }
 
-/* Tablet Portrait */
-@media (max-width: 900px) {
-  .hero-wrapper {
-    min-height: 1050px;
+/* Mobile ≤640px - 1 column, title 30px */
+@media (max-width: 640px) {
+  .hero-fields {
+    grid-template-columns: 1fr;
   }
-
-  .search-card-wrapper {
-    width: calc(100% - 24px);
+  .hero-title h1 {
+    font-size: 30px;
+  }
+  .hero-content {
+    gap: 24px;
     padding: 16px;
   }
-
-  .search-fields-grid {
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .field-group {
-    width: 100%;
-  }
-
-  .btn-search,
-  .btn-search-ai,
-  .btn-outline {
-    min-width: 140px;
-  }
-}
-
-/* Mobile */
-@media (max-width: 768px) {
-  .search-card-wrapper {
-    display: none !important;
-  }
-
-  .hero-wrapper {
-    min-height: 100vh;
-    overflow: hidden;
-  }
-
-  .mobile-hero-content {
-    display: flex !important;
-  }
-
-  .mobile-search-card {
-    display: block !important;
-    width: 100%;
-    max-width: 100%;
-  }
-}
-
-/* Small Mobile */
-@media (max-width: 480px) {
-  .mobile-search-card {
-    padding: 18px;
-    border-radius: 18px;
-  }
-
-  .mobile-form-row {
-    flex-direction: column;
-    gap: 12px;
-  }
-
-  .mobile-secondary-buttons {
-    flex-direction: column;
-  }
-
-  .mobile-clear-btn,
-  .mobile-ai-btn {
-    width: 100%;
-  }
-}
-
-/* ===== TABLET PORTRAIT (900px and below) ===== */
-@media (max-width: 900px) {
-  .hero-wrapper {
-    height: auto;
-    min-height: 550px;
-    padding-bottom: 24px;
-  }
-
-  .hero-headline-container {
-    top: 100px;
-    width: calc(100% - 40px);
-  }
-
-  .hero-headline {
-    font-size: 44px;
-    white-space: normal;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 10px;
-  }
-
-  .hero-headline-span,
-  .mobile-hero-highlight {
-    font-size: 44px;
-    width: auto;
-    height: auto;
-    padding: 10px 20px;
-  }
-}
-
-/* ===== MOBILE LARGE (768px and below) - SWITCH TO MOBILE LAYOUT ===== */
-@media (max-width: 768px) {
-  /* Hide desktop elements */
-  .hero-headline-container,
-  .search-card-wrapper {
-    display: none !important;
-  }
-
-  /* Show mobile elements */
-  .mobile-hero-content {
-    display: flex !important;
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    max-width: 400px;
-    margin: 0 auto;
-    flex-direction: column;
-    align-items: center;
-    gap: 32px;
-    padding: 120px 16px 60px; /* Increased bottom padding */
-  }
-
-  .mobile-hero-title {
-    display: block !important;
-    text-align: center;
-    color: #FFFFFF;
-    font-family: 'Lato', sans-serif;
-  }
-
-  .mobile-hero-title h1 {
-    font-size: 34px;
-    font-weight: 400;
-    margin: 0 0 8px 0;
-    line-height: 1.2;
-  }
-
-  .mobile-hero-highlight {
-    font-size: 34px;
-    width: auto;
-    height: auto;
-    padding: 5px 16px;
-  }
-
-  .mobile-search-card {
-    display: block !important;
-    background: #FFFFFF;
-    backdrop-filter: blur(20px);
-    border-radius: 24px;
-    padding: 24px;
-    width: 100%;
-    max-width: 380px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-    border: 1px solid #E5E7EB;
-    margin-bottom: 20px; /* Added margin bottom */
-  }
-
-  .hero-wrapper {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 40px; /* Added padding bottom to wrapper */
-  }
-}
-
-/* ===== MOBILE MEDIUM (640px and below) ===== */
-@media (max-width: 640px) {
-  .mobile-hero-content {
-    max-width: 100%;
-    padding: 100px 16px 50px; /* Increased bottom padding */
-    gap: 28px;
-  }
-
-  .mobile-hero-title h1 {
-    font-size: 30px;
-  }
-
-  .mobile-hero-highlight {
-    font-size: 30px;
-    padding: 4px 14px;
-  }
-
-  .mobile-search-card {
-    padding: 22px;
-    border-radius: 22px;
-    max-width: 100%;
-    margin-bottom: 20px; /* Added margin bottom */
-  }
-
-  .hero-wrapper {
-    padding-bottom: 30px; /* Added padding bottom */
-  }
-}
-
-/* ===== MOBILE SMALL (480px and below) ===== */
-@media (max-width: 480px) {
-  .mobile-hero-content {
-    padding: 90px 12px 40px; /* Increased bottom padding */
-    gap: 24px;
-  }
-
-  .mobile-hero-title h1 {
-    font-size: 26px;
-  }
-
-  .mobile-hero-highlight {
-    font-size: 26px;
-    padding: 4px 12px;
-  }
-
-  .mobile-search-card {
+  .hero-search-card {
     padding: 20px;
     border-radius: 20px;
-    margin-bottom: 20px; /* Added margin bottom */
   }
-
-  .hero-wrapper {
-    padding-bottom: 30px; /* Added padding bottom */
-  }
-}
-
-/* ===== MOBILE EXTRA SMALL (380px and below) ===== */
-@media (max-width: 380px) {
-  .mobile-hero-content {
-    padding: 80px 10px 30px; /* Increased bottom padding */
-    gap: 20px;
-  }
-
-  .mobile-hero-title h1 {
-    font-size: 22px;
-  }
-
-  .mobile-hero-highlight {
-    font-size: 22px;
-    padding: 3px 10px;
-  }
-
-  .mobile-search-card {
-    padding: 18px;
-    border-radius: 18px;
-    margin-bottom: 20px; /* Added margin bottom */
-  }
-
-  .hero-wrapper {
-    padding-bottom: 25px; /* Added padding bottom */
-  }
-}
-
-
-/* ==========================================================================
-   MOBILE HERO FORM ELEMENTS & ADDITIONAL RESPONSIVE STYLES
-   ========================================================================== */
-
-/* ===== MOBILE FORM STYLES (768px and below) ===== */
-@media (max-width: 768px) {
-  /* Mobile Tabs Row */
-  .mobile-tabs-row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 24px;
+  .hero-tabs {
     gap: 8px;
-    flex-wrap: wrap;
+    margin-bottom: 24px;
   }
-
-  .mobile-tab-btn {
+  .hero-tab {
     padding: 8px 16px;
-    border-radius: 20px;
-    font-family: 'Lato', sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    border: none;
-    background: #F3F4F6;
-    color: #6B7280;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    white-space: nowrap;
-  }
-
-  .mobile-tab-btn.active {
-    background: var(--primary-blue);
-    color: #FFFFFF;
-    font-weight: 600;
-  }
-
-  .mobile-tab-btn:hover:not(.active) {
-    background: #E5E7EB;
-  }
-
-  /* Mobile Form Fields */
-  .mobile-form-group {
-    margin-bottom: 24px;
-  }
-
-  .mobile-form-group:last-of-type {
-    margin-bottom: 28px;
-  }
-
-  .mobile-field-label {
-    font-family: 'Lato', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    color: #374151;
-    margin-bottom: 10px;
-    display: block;
-  }
-
-  .mobile-form-row {
-    display: flex;
-    gap: 16px;
-    margin-bottom: 6px;
-  }
-
-  .mobile-form-row .mobile-form-group {
-    flex: 1;
-    margin-bottom: 0;
-  }
-
-  .mobile-form-input {
-    width: 100%;
-    height: 48px;
-    background: #FFFFFF;
-    border: 1px solid #D1D5DB;
-    border-radius: 12px;
-    padding: 0 16px;
-    font-family: 'Lato', sans-serif;
-    font-size: 14px;
-    color: #374151;
-    outline: none;
-    transition: border-color 0.2s ease;
-    box-sizing: border-box;
-  }
-
-  .mobile-form-input::placeholder {
-    color: #9CA3AF;
-  }
-
-  .mobile-form-input:focus {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-
-  .mobile-form-select {
-    width: 100%;
-    height: 48px;
-    background: #FFFFFF;
-    border: 1px solid #D1D5DB;
-    border-radius: 12px;
-    padding: 0 16px;
-    font-family: 'Lato', sans-serif;
-    font-size: 14px;
-    color: #374151;
-    outline: none;
-    cursor: pointer;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
-    background-position: right 12px center;
-    background-repeat: no-repeat;
-    background-size: 16px;
-    transition: border-color 0.2s ease;
-    overflow-y: auto;
-    max-height: 48px;
-  }
-
-  .mobile-form-select:focus {
-    border-color: var(--primary-blue);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-  }
-
-  .mobile-form-select option {
-    padding: 10px;
-    font-size: 14px;
-  }
-
-  .mobile-form-select::-webkit-scrollbar {
-    width: 8px;
-  }
-
-  .mobile-form-select::-webkit-scrollbar-track {
-    background: #F3F4F6;
-    border-radius: 4px;
-  }
-
-  .mobile-form-select::-webkit-scrollbar-thumb {
-    background: #CBD5E1;
-    border-radius: 4px;
-  }
-
-  .mobile-form-select::-webkit-scrollbar-thumb:hover {
-    background: #94A3B8;
-  }
-
-  /* Mobile Checkbox Row */
-  .mobile-checkbox-row {
-    display: flex;
-    gap: 20px;
-    margin-bottom: 24px;
-  }
-
-  .mobile-checkbox-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    cursor: pointer;
-  }
-
-  .mobile-checkbox {
-    width: 18px;
-    height: 18px;
-    accent-color: var(--primary-blue);
-    cursor: pointer;
-  }
-
-  .mobile-checkbox-label {
-    font-family: 'Lato', sans-serif;
     font-size: 13px;
-    font-weight: 500;
-    color: #374151;
-    cursor: pointer;
   }
-
-  /* Mobile Action Buttons */
-  .mobile-action-buttons {
-    display: flex;
+  .hero-checkboxes {
     flex-direction: column;
-    gap: 12px;
+    gap: 16px;
   }
-
-  .mobile-search-btn {
-    background: var(--brand-green);
-    color: #FFFFFF;
-    font-family: 'Lato', sans-serif;
-    font-size: 16px;
-    font-weight: 600;
-    border: none;
-    border-radius: 12px;
-    padding: 16px 24px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
+  .hero-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+  .hero-btn {
+    width: 100%;
     justify-content: center;
-    gap: 8px;
-    transition: all 0.2s ease;
-    box-shadow: 0 4px 12px rgba(88, 164, 41, 0.3);
   }
-
-  .mobile-search-btn:hover {
-    background: var(--brand-green-hover);
-    transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(88, 164, 41, 0.4);
+  
+  /* Mobile Date Picker */
+  .hero-date-picker {
+    width: calc(100vw - 24px);
+    max-width: 380px;
   }
-
-  .mobile-secondary-buttons {
-    display: flex;
-    gap: 12px;
+  .hero-date-picker-content {
+    flex-direction: column;
+    gap: 16px;
   }
-
-  .mobile-clear-btn,
-  .mobile-ai-btn {
+  .hero-date-picker-actions {
+    justify-content: space-between;
+  }
+  .hero-date-btn {
     flex: 1;
-    background: #FFFFFF;
-    color: #374151;
-    font-family: 'Lato', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-    border: 1px solid #D1D5DB;
-    border-radius: 12px;
-    padding: 12px 16px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    transition: all 0.2s ease;
-  }
-
-  .mobile-ai-btn {
-    color: var(--primary-blue);
-    border-color: var(--primary-blue);
-  }
-
-  .mobile-clear-btn:hover {
-    background: #F9FAFB;
-    border-color: #9CA3AF;
-  }
-
-  .mobile-ai-btn:hover {
-    background: rgba(59, 130, 246, 0.05);
-  }
-
-  /* Calendar responsive adjustments for mobile */
-  .rdrCalendarWrapper {
-    max-width: 100%;
-    width: 100% !important;
-    overflow-x: hidden;
-    font-size: 11px !important;
-  }
-
-  .rdrMonth {
-    width: 100% !important;
-    max-width: 100%;
-    padding: 0 4px;
-  }
-
-  .rdrMonthAndYearWrapper {
-    padding: 6px 2px;
-    height: auto;
-  }
-
-  .rdrMonthPicker select,
-  .rdrYearPicker select {
-    font-size: 11px !important;
-    max-width: 80px;
-  }
-
-  .rdrWeekDays {
-    display: flex;
-    justify-content: space-around;
-  }
-
-  .rdrWeekDay {
-    font-size: 9px !important;
-    font-weight: 500 !important;
-    flex: 1;
-    text-align: center;
-    padding: 4px 1px;
-    line-height: 1.2;
-  }
-
-  .rdrDays {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .rdrDay {
-    font-size: 11px !important;
-    height: 32px !important;
-    line-height: 32px !important;
-    width: calc(100% / 7) !important;
-  }
-
-  .rdrDay span {
-    font-size: 11px !important;
-  }
-
-  .rdrMonthName {
-    font-size: 13px !important;
-    padding: 6px 4px;
-  }
-
-  .rdrNextPrevButton {
-    width: 24px !important;
-    height: 24px !important;
-  }
-
-  .rdrPprevButton i,
-  .rdrNextButton i {
-    border-width: 4px 4px 0 0 !important;
-  }
-
-  .rdrCalendarWrapper::-webkit-scrollbar {
-    height: 5px;
-    width: 5px;
-  }
-
-  .rdrCalendarWrapper::-webkit-scrollbar-track {
-    background: #F3F4F6;
-    border-radius: 3px;
-  }
-
-  .rdrCalendarWrapper::-webkit-scrollbar-thumb {
-    background: #CBD5E1;
-    border-radius: 3px;
-  }
-
-  .rdrCalendarWrapper::-webkit-scrollbar-thumb:hover {
-    background: #94A3B8;
   }
 }
 
-/* ===== MOBILE SMALL (480px and below) ===== */
+/* Extra small mobile ≤480px */
 @media (max-width: 480px) {
-  .mobile-tabs-row {
-    gap: 6px;
-    margin-bottom: 20px;
+  .hero-title h1 {
+    font-size: 26px;
   }
-
-  .mobile-tab-btn {
-    padding: 6px 12px;
-    font-size: 12px;
+  .hero-title-highlight {
+    padding: 6px 16px;
   }
-
-  .mobile-form-row {
-    gap: 12px;
-  }
-
-  .mobile-form-input,
-  .mobile-form-select {
+  .hero-field-input {
     height: 44px;
     padding: 0 12px;
     font-size: 13px;
   }
-
-  .mobile-checkbox-row {
-    gap: 16px;
-  }
-
-  .mobile-search-btn {
-    font-size: 15px;
-    padding: 14px 20px;
-  }
-
-  .mobile-secondary-buttons {
-    gap: 10px;
-  }
-
-  .mobile-clear-btn,
-  .mobile-ai-btn {
-    font-size: 13px;
-    padding: 10px 12px;
-  }
 }
 
-/* ===== MOBILE EXTRA SMALL (380px and below) ===== */
-@media (max-width: 380px) {
-  .mobile-tab-btn {
-    padding: 5px 10px;
-    font-size: 11px;
-  }
-
-  .mobile-form-input,
-  .mobile-form-select {
-    height: 42px;
-    padding: 0 10px;
-    font-size: 12px;
-  }
-
-  .mobile-form-row {
-    gap: 8px;
-  }
-
-  .mobile-checkbox-row {
-    flex-direction: column;
-    gap: 12px;
-  }
-}
-
-/* ===== CALENDAR RESPONSIVE STYLES ===== */
+/* Calendar responsive adjustments */
 @media (max-width: 900px) {
   .rdrCalendarWrapper {
     max-width: 100%;
-    width: 100% !important;
+    width: 100%;
     overflow-x: hidden;
-    font-size: 12px !important;
+    font-size: 12px;
   }
-
   .rdrMonth {
-    width: 100% !important;
-    max-width: 100%;
+    width: 100%;
     padding: 0 4px;
   }
-
-  .rdrMonthAndYearWrapper {
-    padding: 6px 2px;
-    height: auto;
-  }
-
-  .rdrMonthPicker select,
-  .rdrYearPicker select {
-    font-size: 12px !important;
-    padding: 3px 6px;
-    max-width: 90px;
-  }
-
-  .rdrWeekDays {
-    display: flex;
-    justify-content: space-around;
-  }
-
-  .rdrWeekDay {
-    font-size: 10px !important;
-    font-weight: 500 !important;
-    flex: 1;
-    text-align: center;
-    padding: 4px 1px;
-    line-height: 1.2;
-  }
-
-  .rdrDays {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
   .rdrDay {
-    font-size: 12px !important;
-    height: 34px !important;
-    line-height: 34px !important;
-    width: calc(100% / 7) !important;
-  }
-
-  .rdrDay span {
-    font-size: 12px !important;
-  }
-
-  .rdrMonthName {
-    font-size: 13px !important;
-    padding: 6px 4px;
-  }
-
-  .rdrNextPrevButton {
-    width: 24px !important;
-    height: 24px !important;
-  }
-
-  .rdrPprevButton i,
-  .rdrNextButton i {
-    border-width: 4px 4px 0 0 !important;
-  }
-
-  .rdrCalendarWrapper::-webkit-scrollbar {
-    height: 5px;
-    width: 5px;
-  }
-
-  .rdrCalendarWrapper::-webkit-scrollbar-track {
-    background: #F3F4F6;
-    border-radius: 3px;
-  }
-
-  .rdrCalendarWrapper::-webkit-scrollbar-thumb {
-    background: #CBD5E1;
-    border-radius: 3px;
-  }
-
-  .rdrCalendarWrapper::-webkit-scrollbar-thumb:hover {
-    background: #94A3B8;
+    font-size: 12px;
+    height: 34px;
+    line-height: 34px;
   }
 }
 
 @media (max-width: 640px) {
   .rdrCalendarWrapper {
-    font-size: 10px !important;
+    font-size: 10px;
   }
-
-  .rdrMonth {
-    padding: 0 2px;
-  }
-
-  .rdrMonthPicker select,
-  .rdrYearPicker select {
-    font-size: 10px !important;
-    padding: 2px 4px;
-    max-width: 70px;
-  }
-
   .rdrDay {
-    font-size: 10px !important;
-    height: 30px !important;
-    line-height: 30px !important;
-  }
-
-  .rdrDay span {
-    font-size: 10px !important;
-  }
-
-  .rdrWeekDay {
-    font-size: 8px !important;
-    padding: 3px 0px;
-  }
-
-  .rdrMonthName {
-    font-size: 11px !important;
-  }
-
-  .rdrNextPrevButton {
-    width: 20px !important;
-    height: 20px !important;
+    font-size: 10px;
+    height: 30px;
+    line-height: 30px;
   }
 }

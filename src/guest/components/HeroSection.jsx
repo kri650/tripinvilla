@@ -1,21 +1,22 @@
 import { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { ChevronDown, Search, Sparkles, Calendar as CalendarIcon } from 'lucide-react';
-import { DateRange, Calendar } from 'react-date-range';
+import { Search, Sparkles, Calendar as CalendarIcon } from 'lucide-react';
+import { Calendar } from 'react-date-range';
 import 'react-date-range/dist/styles.css';
 import 'react-date-range/dist/theme/default.css';
 import { format, parse } from 'date-fns';
 import { heroBgImg } from '../../assets';
 import Select from 'react-select';
 
-// Custom styles for react-select
-const customSelectStyles = {
+// Unified select styles for all breakpoints
+const selectStyles = {
   control: (base, state) => ({
     ...base,
     minHeight: '48px',
     borderRadius: '12px',
     borderColor: state.isFocused ? 'var(--primary-blue)' : '#D1D5DB',
     boxShadow: state.isFocused ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : 'none',
+    fontSize: '14px',
     '&:hover': {
       borderColor: 'var(--primary-blue)'
     }
@@ -30,21 +31,7 @@ const customSelectStyles = {
   menuList: (base) => ({
     ...base,
     maxHeight: '200px',
-    padding: '4px',
-    '::-webkit-scrollbar': {
-      width: '8px'
-    },
-    '::-webkit-scrollbar-track': {
-      background: '#F3F4F6',
-      borderRadius: '4px'
-    },
-    '::-webkit-scrollbar-thumb': {
-      background: '#CBD5E1',
-      borderRadius: '4px'
-    },
-    '::-webkit-scrollbar-thumb:hover': {
-      background: '#94A3B8'
-    }
+    padding: '4px'
   }),
   option: (base, state) => ({
     ...base,
@@ -71,33 +58,6 @@ const customSelectStyles = {
     ...base,
     color: '#9CA3AF',
     fontSize: '14px',
-    fontFamily: "'Lato', sans-serif"
-  })
-};
-
-// Desktop select styles (slightly smaller)
-const desktopSelectStyles = {
-  ...customSelectStyles,
-  control: (base, state) => ({
-    ...base,
-    minHeight: '44px',
-    borderRadius: '8px',
-    borderColor: state.isFocused ? 'var(--primary-blue)' : '#E5E7EB',
-    boxShadow: state.isFocused ? '0 0 0 2px rgba(59, 130, 246, 0.1)' : 'none',
-    '&:hover': {
-      borderColor: 'var(--primary-blue)'
-    }
-  }),
-  singleValue: (base) => ({
-    ...base,
-    color: '#111827',
-    fontSize: '13.5px',
-    fontFamily: "'Lato', sans-serif"
-  }),
-  placeholder: (base) => ({
-    ...base,
-    color: '#9CA3AF',
-    fontSize: '13.5px',
     fontFamily: "'Lato', sans-serif"
   })
 };
@@ -154,20 +114,15 @@ export default function HeroSection(props) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [pickerCoords, setPickerCoords] = useState({ top: 0, left: 0 });
   const datePickerRef = useRef(null);
-  const mobileDatePickerRef = useRef(null);
   const portalRef = useRef(null);
 
   // Function to update picker position
   const updatePickerPosition = () => {
-    const isMobile = window.innerWidth <= 768;
-    const targetRef = isMobile ? mobileDatePickerRef : datePickerRef;
-    
-    if (showDatePicker && targetRef.current) {
-      const rect = targetRef.current.getBoundingClientRect();
-      const popupWidth = window.innerWidth > 640 ? 560 : 320; // Approx widths
+    if (showDatePicker && datePickerRef.current) {
+      const rect = datePickerRef.current.getBoundingClientRect();
+      const popupWidth = window.innerWidth > 640 ? 560 : 320;
       
       let leftPos = rect.left;
-      // Constrain to viewport
       if (leftPos + popupWidth > window.innerWidth) {
         leftPos = window.innerWidth - popupWidth - 20;
       }
@@ -198,7 +153,6 @@ export default function HeroSection(props) {
     function handleClickOutside(event) {
       if (
         (datePickerRef.current && datePickerRef.current.contains(event.target)) ||
-        (mobileDatePickerRef.current && mobileDatePickerRef.current.contains(event.target)) ||
         (portalRef.current && portalRef.current.contains(event.target))
       ) {
         return;
@@ -224,620 +178,341 @@ export default function HeroSection(props) {
     };
   };
 
-  const handleSelect = (ranges) => {
-    const start = format(ranges.selection.startDate, 'yyyy-MM-dd');
-    const end = format(ranges.selection.endDate, 'yyyy-MM-dd');
-    setDates(`${start} to ${end}`);
-  };
-
   return (
     <>
-      {/* ══ HERO SECTION (Height: 712px, Width: 100%) ══ */}
       {(activeMenu !== 'Detail' && activeMenu !== 'Profile' && activeMenu !== 'Wishlist' && activeMenu !== 'Enquiries' && activeMenu !== 'Reviews' && activeMenu !== 'About Us' && activeMenu !== 'Contact' && activeMenu !== 'Terms' && activeMenu !== 'Privacy' && activeMenu !== 'Recommend By Us' && activeMenu !== 'List Your Place') && (
-        <div className="hero-wrapper">
+        <div className="relative w-full h-auto min-h-[600px] sm:min-h-[700px] md:min-h-[800px] lg:min-h-screen overflow-hidden">
           
-          {/* Background Image: Loads your exact high-resolution custom hero image */}
+          {/* Background Image */}
           <img 
             src={homepageContent?.banner?.image || heroBgImg}
-            className="hero-background"
+            className="absolute top-0 left-0 w-full h-full object-cover z-10"
             alt="Luxury Villa Background" 
           />
 
-          {/* Overlay holding the header, titles and layout layers */}
-          <div className="hero-overlay">
+          {/* Overlay */}
+          <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-black/45 via-black/20 to-black/60 flex flex-col justify-center items-center z-20 px-1 xs:px-2 sm:px-4 pt-16 xs:pt-20 sm:pt-24 md:pt-28 lg:pt-32 pb-8 xs:pb-12 sm:pb-16 md:pb-20 lg:pb-8">
             
-            {/* ══ MAIN HERO HEADLINE (Conditional based on properties tab) ══ */}
-            <div className="hero-headline-container">
-              {activeMenu === 'Properties' ? (
-                <h1 className="hero-headline">
-                  {where ? 'Best Properties In ' : 'Best Properties '}
-                  <span className="highlight-sharp-blue-box" style={{ borderRadius: 0, padding: '0 16px' }}>
-                    {where ? (where.charAt(0).toUpperCase() + where.slice(1) + (where.toLowerCase() === 'india' ? '' : ', India')) : 'For You'}
-                  </span>
-                </h1>
-              ) : (
-                <h1 className="hero-headline">{homepageContent?.banner?.title ? ( <>{homepageContent.banner.title.split(" ").slice(0, -2).join(" ")} <span className="hero-headline-span">{homepageContent.banner.title.split(" ").slice(-2).join(" ")}</span></> ) : ( <>Find Your <span className="hero-headline-span">Perfect Stay</span></> )}</h1>
-              )}
-            </div>
-
-          </div>
-
-          {/* ══ MOBILE HERO CONTENT (768px and below) ══ */}
-          <div className="mobile-hero-content">
-            {/* Mobile Hero Title */}
-            <div className="mobile-hero-title">
-              <h1>
+            {/* Hero Content Container */}
+            <div className="flex flex-col items-center gap-3 xs:gap-4 sm:gap-8 md:gap-10 lg:gap-12 w-full max-w-6xl">
+              
+              {/* Hero Title */}
+              <div className="text-center px-1 sm:px-2">
                 {activeMenu === 'Properties' ? (
-                  <>
+                  <h1 className="font-lato text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-medium text-white leading-tight m-0 break-words">
                     {where ? 'Best Properties In ' : 'Best Properties '}
-                    <span className="mobile-hero-highlight">
+                    <span className="font-bold bg-blue-600 px-2 py-1 xs:px-3 xs:py-1 sm:px-4 sm:py-2 lg:px-6 lg:py-3 rounded-lg shadow-blue-600/40 shadow-lg inline-flex items-center justify-center text-xs xs:text-sm sm:text-base md:text-lg lg:text-xl xl:text-2xl 2xl:text-3xl">
                       {where ? (where.charAt(0).toUpperCase() + where.slice(1) + (where.toLowerCase() === 'india' ? '' : ', India')) : 'For You'}
                     </span>
-                  </>
+                  </h1>
                 ) : (
-                  <>
+                  <h1 className="font-lato text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-medium text-white leading-tight m-0 break-words">
                     {homepageContent?.banner?.title ? (
                       <>
-                        {homepageContent.banner.title.split(" ").slice(0, -2).join(" ")} <span className="mobile-hero-highlight">{homepageContent.banner.title.split(" ").slice(-2).join(" ")}</span>
+                        {homepageContent.banner.title.split(" ").slice(0, -2).join(" ")} <span className="font-bold bg-blue-600 px-2 py-1 xs:px-3 xs:py-1 sm:px-4 sm:py-2 lg:px-6 lg:py-3 rounded-none shadow-blue-600/40 shadow-lg inline-flex items-center justify-center text-2xl xs:text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-7xl">{homepageContent.banner.title.split(" ").slice(-2).join(" ")}</span>
                       </>
                     ) : (
                       <>
-                        Find Your <span className="mobile-hero-highlight">Perfect Stay</span>
+                        Find Your <span className="font-bold bg-blue-600 px-2 py-1 xs:px-3 xs:py-1.5 sm:px-6 sm:py-3 md:px-8 md:py-4 lg:px-10 lg:py-5 xl:px-12 xl:py-6 rounded-none shadow-blue-600/40 shadow-lg inline-flex items-center justify-center text-xl xs:text-2xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl">Perfect Stay</span>
                       </>
                     )}
-                  </>
+                  </h1>
                 )}
-              </h1>
-            </div>
-
-            {/* Mobile Search Card */}
-            <div className="mobile-search-card">
-              {/* Mobile Tabs Row */}
-              <div className="mobile-tabs-row">
-                {['Villas', 'Homestays', 'Hotels', 'Resorts', 'More+'].map((tab) => (
-                  <button
-                    key={tab}
-                    type="button"
-                    className={`mobile-tab-btn ${activeSearchTab === tab ? 'active' : ''}`}
-                    onClick={() => setActiveSearchTab(tab)}
-                  >
-                    {tab}
-                  </button>
-                ))}
               </div>
 
-              {/* Mobile Form */}
-              <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
-                {/* Where */}
-                <div className="mobile-form-group">
-                  <label className="mobile-field-label">Where</label>
-                  <input 
-                    type="text" 
-                    className="mobile-form-input" 
-                    placeholder="Where are you going?" 
-                    value={where}
-                    onChange={(e) => setWhere(e.target.value)}
-                  />
+              {/* Hero Search Card */}
+              <form className="bg-white rounded-xl xs:rounded-2xl sm:rounded-2xl md:rounded-3xl p-3 xs:p-4 sm:p-4 md:p-6 lg:p-8 shadow-2xl border border-gray-200 w-full max-w-xs xs:max-w-sm sm:max-w-lg md:max-w-2xl lg:max-w-6xl xl:max-w-7xl mx-2 xs:mx-4" onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+                
+                {/* Hero Tabs Row */}
+                <div className="flex gap-1 xs:gap-2 sm:gap-2 md:gap-3 mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-6 overflow-x-auto scrollbar-none lg:justify-start">
+                  {['Villas', 'Homestays', 'Hotels', 'Resorts', 'More+'].map((tab) => (
+                    <button
+                      key={tab}
+                      type="button"
+                      className={`px-2 py-1.5 xs:px-3 xs:py-2 sm:px-4 sm:py-2.5 md:px-6 md:py-3 lg:px-4 lg:py-2 rounded-lg xs:rounded-xl sm:rounded-2xl lg:rounded-full font-lato text-xs sm:text-sm lg:text-sm font-medium border-none cursor-pointer transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
+                        activeSearchTab === tab 
+                          ? 'bg-blue-600 text-white font-semibold' 
+                          : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                      }`}
+                      onClick={() => setActiveSearchTab(tab)}
+                    >
+                      {tab}
+                    </button>
+                  ))}
                 </div>
 
-                {/* When and Who Row */}
-                <div className="mobile-form-row">
-                  <div className="mobile-form-group" style={{ position: 'relative' }} ref={mobileDatePickerRef}>
-                    <label className="mobile-field-label">When</label>
+                {/* Hero Fields Grid */}
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-6 gap-3 xs:gap-4 sm:gap-4 md:gap-5 lg:gap-4 mb-4 xs:mb-5 sm:mb-6 md:mb-8 lg:mb-6">
+                  
+                  {/* Field 1: Where */}
+                  <div className="flex flex-col gap-1.5 xs:gap-2 col-span-1 sm:col-span-1 lg:col-span-1">
+                    <label className="font-lato text-xs sm:text-sm lg:text-sm font-semibold text-gray-700">Where</label>
+                    <input 
+                      type="text" 
+                      className="h-10 xs:h-11 sm:h-10 md:h-12 lg:h-11 bg-white border border-gray-300 rounded-lg sm:rounded-lg md:rounded-xl lg:rounded-lg px-3 sm:px-3 md:px-4 lg:px-3 font-lato text-sm lg:text-sm text-gray-700 outline-none transition-colors duration-200 placeholder:text-gray-400 focus:border-blue-600 focus:shadow-blue-600/10 focus:shadow-lg" 
+                      placeholder="Where are you going?" 
+                      value={where}
+                      onChange={(e) => setWhere(e.target.value)}
+                    />
+                  </div>
+
+                  {/* Field 2: When */}
+                  <div className="flex flex-col gap-1.5 xs:gap-2 col-span-1 sm:col-span-1 lg:col-span-1" ref={datePickerRef}>
+                    <label className="font-lato text-xs sm:text-sm lg:text-sm font-semibold text-gray-700">When</label>
                     <div 
-                      className="mobile-form-input" 
-                      style={{ 
-                        display: 'flex', 
-                        alignItems: 'center', 
-                        gap: '8px', 
-                        cursor: 'pointer',
-                        color: dates ? '#374151' : '#9CA3AF'
-                      }}
+                      className="h-10 xs:h-11 sm:h-10 md:h-12 lg:h-11 bg-white border border-gray-300 rounded-lg sm:rounded-lg md:rounded-xl lg:rounded-lg px-3 sm:px-3 md:px-4 lg:px-3 font-lato text-sm lg:text-sm text-gray-700 outline-none transition-colors duration-200 cursor-pointer flex items-center gap-2 sm:gap-2 md:gap-3 lg:gap-2 focus-within:border-blue-600 focus-within:shadow-blue-600/10 focus-within:shadow-lg" 
                       onClick={() => setShowDatePicker(!showDatePicker)}
                     >
-                      <span style={{ flex: 1, fontSize: '13px' }}>
-                        {dates ? `${dates.split(' to ')[0] || ''} - ${dates.split(' to ')[1] || ''}` : 'Select dates'}
+                      <span className="flex-1 text-gray-400 text-xs sm:text-sm lg:text-sm truncate">
+                        {dates ? `${dates.split(' to ')[0] || ''} - ${dates.split(' to ')[1] || ''}` : 'mm/dd/yyyy - mm/dd/yyyy'}
                       </span>
-                      <CalendarIcon size={14} color="#6B7280" />
+                      <CalendarIcon size={12} className="xs:w-3.5 xs:h-3.5 sm:w-3.5 sm:h-3.5 md:w-4 md:h-4 text-gray-500 flex-shrink-0 lg:w-4 lg:h-4" />
                     </div>
 
-                    {showDatePicker && window.innerWidth <= 640 && (
-                      <div ref={portalRef} style={{
-                        position: 'fixed',
-                        top: '50%',
-                        left: '50%',
-                        transform: 'translate(-50%, -50%)',
-                        background: '#fff',
-                        borderRadius: '12px',
-                        boxShadow: '0 10px 25px rgba(0,0,0,0.15)',
-                        zIndex: 30000,
-                        padding: '10px',
-                        border: '1px solid #E5E7EB',
-                        width: 'calc(100vw - 24px)',
-                        maxWidth: '380px',
-                        maxHeight: '85vh',
-                        overflow: 'auto',
-                        boxSizing: 'border-box'
-                      }}>
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', width: '100%', boxSizing: 'border-box' }}>
-                          <div style={{ width: '100%', boxSizing: 'border-box' }}>
-                            <div style={{ fontWeight: 600, fontSize: '13px', color: '#111827', marginBottom: '6px', paddingLeft: '2px' }}>From</div>
-                            <div style={{ width: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
-                              <Calendar
-                                date={getSelectionRange().startDate}
-                                onChange={(date) => {
-                                  const start = format(date, 'yyyy-MM-dd');
-                                  const { endDate } = getSelectionRange();
-                                  setDates(`${start} to ${format(endDate, 'yyyy-MM-dd')}`);
-                                }}
-                                minDate={new Date()}
-                                color="#2563EB"
-                              />
+                    {showDatePicker && (() => {
+                      const isSmallScreen = window.innerWidth < 900;
+                      const picker = (
+                        <div 
+                          ref={portalRef} 
+                          className="bg-white rounded-xl shadow-2xl border border-gray-200 p-3 sm:p-4 max-w-full max-h-screen overflow-y-auto"
+                          style={{
+                            position: 'fixed',
+                            top: isSmallScreen ? '50%' : pickerCoords.top,
+                            left: isSmallScreen ? '50%' : pickerCoords.left,
+                            transform: isSmallScreen ? 'translate(-50%, -50%)' : 'none',
+                            zIndex: 30000,
+                            width: isSmallScreen ? 'calc(100vw - 16px)' : 'max-content',
+                            maxWidth: isSmallScreen ? '350px' : 'none'
+                          }}
+                        >
+                          <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+                            <div className="flex flex-col gap-2">
+                              <div className="font-semibold text-sm sm:text-base text-gray-800 pl-2">From</div>
+                              <div className="overflow-x-auto">
+                                <Calendar
+                                  date={getSelectionRange().startDate}
+                                  onChange={(date) => {
+                                    const start = format(date, 'yyyy-MM-dd');
+                                    const { endDate } = getSelectionRange();
+                                    setDates(`${start} to ${format(endDate, 'yyyy-MM-dd')}`);
+                                  }}
+                                  minDate={new Date()}
+                                  color="#2563EB"
+                                />
+                              </div>
                             </div>
-                          </div>
-                          
-                          <div style={{ width: '100%', boxSizing: 'border-box' }}>
-                            <div style={{ fontWeight: 600, fontSize: '13px', color: '#111827', marginBottom: '6px', paddingLeft: '2px' }}>To</div>
-                            <div style={{ width: '100%', overflow: 'hidden', boxSizing: 'border-box' }}>
-                              <Calendar
-                                date={getSelectionRange().endDate}
-                                onChange={(date) => {
-                                  const { startDate } = getSelectionRange();
-                                  const end = format(date, 'yyyy-MM-dd');
-                                  if (date < startDate) {
+                            
+                            <div className="flex flex-col gap-2">
+                              <div className="font-semibold text-sm sm:text-base text-gray-800 pl-2">To</div>
+                              <div className="overflow-x-auto">
+                                <Calendar
+                                  date={getSelectionRange().endDate}
+                                  onChange={(date) => {
+                                    const { startDate } = getSelectionRange();
+                                    const end = format(date, 'yyyy-MM-dd');
+                                    if (date < startDate) {
                                       setDates(`${format(date, 'yyyy-MM-dd')} to ${format(date, 'yyyy-MM-dd')}`);
-                                  } else {
+                                    } else {
                                       setDates(`${format(startDate, 'yyyy-MM-dd')} to ${end}`);
-                                  }
-                                }}
-                                minDate={getSelectionRange().startDate}
-                                color="#2563EB"
-                              />
+                                    }
+                                  }}
+                                  minDate={getSelectionRange().startDate}
+                                  color="#2563EB"
+                                />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', gap: '8px', marginTop: '10px', borderTop: '1px solid #F3F4F6', paddingTop: '10px' }}>
-                          <button type="button" onClick={() => { setDates(''); setShowDatePicker(false); }} style={{ flex: 1, padding: '9px 10px', background: '#fff', border: '1px solid #D1D5DB', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 500, color: '#374151' }}>Cancel</button>
-                          <button type="button" onClick={() => setShowDatePicker(false)} style={{ flex: 1, padding: '9px 10px', background: '#2563EB', border: 'none', borderRadius: '8px', cursor: 'pointer', fontSize: '12px', fontWeight: 600, color: '#fff' }}>Done</button>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="mobile-form-group">
-                    <label className="mobile-field-label">Who</label>
-                    <Select
-                      value={{ value: guests, label: guests }}
-                      onChange={(option) => setGuests(option.value)}
-                      options={[
-                        { value: 'Any Guests', label: 'Any Guests' },
-                        { value: '1 Guest', label: '1 Guest' },
-                        { value: '2 Guests', label: '2 Guests' },
-                        { value: '3 Guests', label: '3 Guests' },
-                        { value: '4+ Guests', label: '4+ Guests' },
-                      ]}
-                      styles={{
-                        control: (base, state) => ({
-                          ...base,
-                          minHeight: '48px',
-                          borderRadius: '12px',
-                          borderColor: state.isFocused ? 'var(--primary-blue)' : '#D1D5DB',
-                          boxShadow: state.isFocused ? '0 0 0 3px rgba(59, 130, 246, 0.1)' : 'none',
-                          '&:hover': {
-                            borderColor: 'var(--primary-blue)'
-                          }
-                        }),
-                        menu: (base) => ({
-                          ...base,
-                          borderRadius: '12px',
-                          overflow: 'hidden',
-                          boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
-                          zIndex: 9999
-                        }),
-                        menuList: (base) => ({
-                          ...base,
-                          maxHeight: '200px',
-                          padding: '4px',
-                          '::-webkit-scrollbar': {
-                            width: '8px'
-                          },
-                          '::-webkit-scrollbar-track': {
-                            background: '#F3F4F6',
-                            borderRadius: '4px'
-                          },
-                          '::-webkit-scrollbar-thumb': {
-                            background: '#CBD5E1',
-                            borderRadius: '4px'
-                          },
-                          '::-webkit-scrollbar-thumb:hover': {
-                            background: '#94A3B8'
-                          }
-                        }),
-                        option: (base, state) => ({
-                          ...base,
-                          backgroundColor: state.isSelected 
-                            ? 'var(--primary-blue)' 
-                            : state.isFocused 
-                            ? 'rgba(59, 130, 246, 0.1)' 
-                            : 'white',
-                          color: state.isSelected ? 'white' : '#374151',
-                          cursor: 'pointer',
-                          padding: '10px 12px',
-                          borderRadius: '8px',
-                          margin: '2px 0',
-                          fontSize: '14px',
-                          fontFamily: "'Lato', sans-serif"
-                        }),
-                        singleValue: (base) => ({
-                          ...base,
-                          color: '#374151',
-                          fontSize: '14px',
-                          fontFamily: "'Lato', sans-serif"
-                        })
-                      }}
-                      isSearchable={false}
-                      placeholder="Select guests"
-                    />
-                  </div>
-                </div>
-
-                {/* Price and Stay Type Row */}
-                <div className="mobile-form-row">
-                  <div className="mobile-form-group">
-                    <label className="mobile-field-label">Price per Night</label>
-                    <Select
-                      value={{ value: price, label: price }}
-                      onChange={(option) => setPrice(option.value)}
-                      options={[
-                        { value: 'Any', label: 'Any' },
-                        { value: '₹2,000 - ₹5,000', label: '₹2,000 - ₹5,000' },
-                        { value: '₹5,000 - ₹10,000', label: '₹5,000 - ₹10,000' },
-                        { value: '₹10,000 - ₹20,000', label: '₹10,000 - ₹20,000' },
-                        { value: '₹20,000+', label: '₹20,000+' },
-                      ]}
-                      styles={customSelectStyles}
-                      isSearchable={false}
-                      placeholder="Select price"
-                    />
-                  </div>
-
-                  <div className="mobile-form-group">
-                    <label className="mobile-field-label">Room/Stay Type</label>
-                    <Select
-                      value={{ value: stayType, label: stayType }}
-                      onChange={(option) => setStayType(option.value)}
-                      options={[
-                        { value: 'Any', label: 'Any' },
-                        ...(roomTypes.length > 0 
-                          ? roomTypes.map(rt => ({ value: rt.name, label: rt.name }))
-                          : [
-                              { value: '1 Deluxe Room', label: '1 Deluxe Room' },
-                              { value: '2 Deluxe Rooms', label: '2 Deluxe Rooms' },
-                              { value: 'Entire Villa', label: 'Entire Villa' }
-                            ]
-                        )
-                      ]}
-                      styles={customSelectStyles}
-                      isSearchable={false}
-                      placeholder="Select stay type"
-                    />
-                  </div>
-                </div>
-
-                {/* Food Preference */}
-                <div className="mobile-form-group">
-                  <label className="mobile-field-label">Food Preference</label>
-                  <Select
-                    value={{ value: foodPref, label: foodPref }}
-                    onChange={(option) => setFoodPref(option.value)}
-                    options={[
-                      { value: 'Any', label: 'Any' },
-                      { value: 'Pure Veg', label: 'Pure Veg' },
-                      { value: 'Non-Veg', label: 'Non-Veg' },
-                      { value: 'Buffet Available', label: 'Buffet Available' },
-                    ]}
-                    styles={customSelectStyles}
-                    isSearchable={false}
-                    placeholder="Select food preference"
-                  />
-                </div>
-
-                {/* Mobile Checkbox Row */}
-                <div className="mobile-checkbox-row">
-                  <div className="mobile-checkbox-item">
-                    <input 
-                      type="checkbox" 
-                      id="mobile-verified" 
-                      className="mobile-checkbox" 
-                      checked={verifiedOnly}
-                      onChange={(e) => setVerifiedOnly(e.target.checked)}
-                    />
-                    <label htmlFor="mobile-verified" className="mobile-checkbox-label">Verified only</label>
-                  </div>
-                  <div className="mobile-checkbox-item">
-                    <input 
-                      type="checkbox" 
-                      id="mobile-featured" 
-                      className="mobile-checkbox" 
-                      checked={featuredOnly}
-                      onChange={(e) => setFeaturedOnly(e.target.checked)}
-                    />
-                    <label htmlFor="mobile-featured" className="mobile-checkbox-label">Featured only</label>
-                  </div>
-                </div>
-
-                {/* Mobile Action Buttons */}
-                <div className="mobile-action-buttons">
-                  <button type="submit" className="mobile-search-btn">
-                    <Search size={16} />
-                    <span>Search Properties</span>
-                  </button>
-                  
-                  <div className="mobile-secondary-buttons">
-                    <button type="button" className="mobile-clear-btn" onClick={handleClearAll}>
-                      Clear all
-                    </button>
-                    <button type="button" className="mobile-ai-btn" onClick={handleAISearch} disabled={aiSearchLoading}>
-                      <Sparkles size={14} color="var(--primary-blue)" />
-                      <span>{aiSearchLoading ? 'Searching...' : 'AI Search'}</span>
-                    </button>
-                  </div>
-                </div>
-              </form>
-            </div>
-          </div>
-
-          {/* ══ FLOATING SEARCH CARD ══ */}
-          <form
-            className="search-card-wrapper"
-            onSubmit={(e) => { e.preventDefault(); handleSearch(); }}
-          >
-            {/* Top category bar */}
-            <div className="tabs-row">
-              {['Villas', 'Homestays', 'Hotels', 'Resorts', 'More+'].map((tab) => (
-                <button
-                  key={tab}
-                  type="button"
-                  className={`tab-btn ${activeSearchTab === tab ? 'active' : ''}`}
-                  onClick={() => setActiveSearchTab(tab)}
-                >
-                  {tab}
-                </button>
-              ))}
-            </div>
-
-            {/* Grid inputs layout */}
-            <div className="search-fields-grid">
-              
-              {/* Field 1: Where */}
-              <div className="field-group">
-                <span className="field-label">Where</span>
-                <div className="field-control-wrap">
-                  <input 
-                    type="text" 
-                    className="field-input" 
-                    placeholder="Where are you going?" 
-                    value={where}
-                    onChange={(e) => setWhere(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              {/* Field 2: When */}
-              <div className="field-group" style={{ position: 'relative' }} ref={datePickerRef}>
-                <span className="field-label">When</span>
-                <div 
-                  className="field-control-wrap" 
-                  style={{ display: 'flex', gap: '8px', cursor: 'pointer', padding: '10px 14px', background: '#fff', border: '1px solid #E5E7EB', borderRadius: '8px', alignItems: 'center', height: '44px', boxSizing: 'border-box' }}
-                  onClick={() => setShowDatePicker(!showDatePicker)}
-                >
-                  <span style={{ flex: 1, fontSize: '14px', color: dates ? '#111827' : '#9CA3AF' }}>
-                    {dates ? `${dates.split(' to ')[0] || ''} - ${dates.split(' to ')[1] || ''}` : 'mm/dd/yyyy - mm/dd/yyyy'}
-                  </span>
-                  <CalendarIcon size={16} color="#6B7280" />
-                </div>
-
-                {showDatePicker && window.innerWidth > 640 && (() => {
-                  const isSmallScreen = window.innerWidth < 900;
-                  const picker = (
-                    <div ref={portalRef} style={{ 
-                      position: 'fixed', 
-                      top: isSmallScreen ? '50%' : pickerCoords.top,
-                      left: isSmallScreen ? '50%' : pickerCoords.left,
-                      transform: isSmallScreen ? 'translate(-50%, -50%)' : 'none',
-                      background: '#fff', 
-                      borderRadius: '12px', 
-                      boxShadow: '0 10px 25px rgba(0,0,0,0.1)', 
-                      zIndex: 30000, 
-                      padding: '16px', 
-                      border: '1px solid #E5E7EB', 
-                      width: isSmallScreen ? 'calc(100vw - 32px)' : 'max-content',
-                      maxWidth: isSmallScreen ? '420px' : 'none',
-                      maxHeight: 'calc(100vh - 40px)',
-                      overflowY: 'auto'
-                    }}>
-                      <div style={{ 
-                        display: 'flex', 
-                        flexDirection: isSmallScreen ? 'column' : 'row',
-                        gap: isSmallScreen ? '20px' : '24px',
-                        overflowX: 'auto'
-                      }}>
-                        <div style={{ minWidth: isSmallScreen ? '100%' : 'auto' }}>
-                          <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>From</div>
-                          <div style={{ overflowX: 'auto' }}>
-                            <Calendar
-                              date={getSelectionRange().startDate}
-                              onChange={(date) => {
-                                const start = format(date, 'yyyy-MM-dd');
-                                const { endDate } = getSelectionRange();
-                                setDates(`${start} to ${format(endDate, 'yyyy-MM-dd')}`);
-                              }}
-                              minDate={new Date()}
-                              color="#2563EB"
-                            />
+                          <div className="flex justify-between sm:justify-end gap-2 sm:gap-3 mt-3 sm:mt-4 border-t border-gray-100 pt-3 sm:pt-4">
+                            <button type="button" className="flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md bg-white border border-gray-300 text-gray-700 text-xs sm:text-sm font-medium cursor-pointer hover:bg-gray-50" onClick={() => { setDates(''); setShowDatePicker(false); }}>
+                              Cancel
+                            </button>
+                            <button type="button" className="flex-1 sm:flex-none px-3 sm:px-4 py-2 rounded-md bg-blue-600 border-none text-white text-xs sm:text-sm font-semibold cursor-pointer hover:bg-blue-700" onClick={() => setShowDatePicker(false)}>
+                              Done
+                            </button>
                           </div>
                         </div>
-                        
-                        <div style={{ minWidth: isSmallScreen ? '100%' : 'auto' }}>
-                          <div style={{ fontWeight: 600, fontSize: '15px', color: '#111827', marginBottom: '8px', paddingLeft: '8px' }}>To</div>
-                          <div style={{ overflowX: 'auto' }}>
-                            <Calendar
-                              date={getSelectionRange().endDate}
-                              onChange={(date) => {
-                                const { startDate } = getSelectionRange();
-                                const end = format(date, 'yyyy-MM-dd');
-                                // Ensure endDate is not before startDate
-                                if (date < startDate) {
-                                    setDates(`${format(date, 'yyyy-MM-dd')} to ${format(date, 'yyyy-MM-dd')}`);
-                                } else {
-                                    setDates(`${format(startDate, 'yyyy-MM-dd')} to ${end}`);
-                                }
-                              }}
-                              minDate={getSelectionRange().startDate}
-                              color="#2563EB"
-                            />
-                          </div>
-                        </div>
-                      </div>
-                      <div style={{ display: 'flex', justifyContent: isSmallScreen ? 'space-between' : 'flex-end', gap: '12px', marginTop: '16px', borderTop: '1px solid #F3F4F6', paddingTop: '16px' }}>
-                        <button type="button" onClick={() => { setDates(''); setShowDatePicker(false); }} style={{ flex: isSmallScreen ? 1 : 'none', padding: '8px 16px', background: '#fff', border: '1px solid #D1D5DB', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 500, color: '#374151' }}>Cancel</button>
-                        <button type="button" onClick={() => setShowDatePicker(false)} style={{ flex: isSmallScreen ? 1 : 'none', padding: '8px 16px', background: '#2563EB', border: 'none', borderRadius: '6px', cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: '#fff' }}>Filter</button>
-                      </div>
+                      );
+                      return createPortal(picker, document.body);
+                    })()}
+                  </div>
+
+                  {/* Field 3: Who */}
+                  <div className="flex flex-col gap-1.5 xs:gap-2 col-span-1 sm:col-span-1 lg:col-span-1">
+                    <label className="font-lato text-xs sm:text-sm lg:text-sm font-semibold text-gray-700">Who</label>
+                    <div className="text-sm">
+                      <Select
+                        value={{ value: guests, label: guests }}
+                        onChange={(option) => setGuests(option.value)}
+                        options={[
+                          { value: 'Any Guests', label: 'Any Guests' },
+                          { value: '1 Guest', label: '1 Guest' },
+                          { value: '2 Guests', label: '2 Guests' },
+                          { value: '3 Guests', label: '3 Guests' },
+                          { value: '4+ Guests', label: '4+ Guests' },
+                        ]}
+                        styles={{
+                          ...selectStyles,
+                          control: (base, state) => ({
+                            ...selectStyles.control(base, state),
+                            minHeight: window.innerWidth >= 1024 ? '44px' : window.innerWidth >= 768 ? '48px' : window.innerWidth >= 640 ? '40px' : window.innerWidth >= 480 ? '44px' : '40px',
+                            fontSize: window.innerWidth >= 1024 ? '14px' : window.innerWidth >= 640 ? '14px' : '13px',
+                            borderRadius: window.innerWidth >= 1024 ? '8px' : window.innerWidth >= 768 ? '12px' : window.innerWidth >= 640 ? '8px' : '8px'
+                          })
+                        }}
+                        isSearchable={false}
+                        placeholder="Any Guests"
+                      />
                     </div>
-                  );
-                  return createPortal(picker, document.body);
-                })()}
-              </div>
+                  </div>
 
-              {/* Field 3: Who */}
-              <div className="field-group">
-                <span className="field-label">Who</span>
-                <Select
-                  value={{ value: guests, label: guests }}
-                  onChange={(option) => setGuests(option.value)}
-                  options={[
-                    { value: 'Any Guests', label: 'Any Guests' },
-                    { value: '1 Guest', label: '1 Guest' },
-                    { value: '2 Guests', label: '2 Guests' },
-                    { value: '3 Guests', label: '3 Guests' },
-                    { value: '4+ Guests', label: '4+ Guests' },
-                  ]}
-                  styles={desktopSelectStyles}
-                  isSearchable={false}
-                  placeholder="Select guests"
-                />
-              </div>
+                  {/* Field 4: Price per Night */}
+                  <div className="flex flex-col gap-1.5 xs:gap-2 col-span-1 sm:col-span-1 lg:col-span-1">
+                    <label className="font-lato text-xs sm:text-sm lg:text-sm font-semibold text-gray-700">Price per Night</label>
+                    <div className="text-sm">
+                      <Select
+                        value={{ value: price, label: price }}
+                        onChange={(option) => setPrice(option.value)}
+                        options={[
+                          { value: 'Any', label: 'Any' },
+                          { value: '₹2,000 - ₹5,000', label: '₹2,000 - ₹5,000' },
+                          { value: '₹5,000 - ₹10,000', label: '₹5,000 - ₹10,000' },
+                          { value: '₹10,000 - ₹20,000', label: '₹10,000 - ₹20,000' },
+                          { value: '₹20,000+', label: '₹20,000+' },
+                        ]}
+                        styles={{
+                          ...selectStyles,
+                          control: (base, state) => ({
+                            ...selectStyles.control(base, state),
+                            minHeight: window.innerWidth >= 1024 ? '44px' : window.innerWidth >= 768 ? '48px' : window.innerWidth >= 640 ? '40px' : window.innerWidth >= 480 ? '44px' : '40px',
+                            fontSize: window.innerWidth >= 1024 ? '14px' : window.innerWidth >= 640 ? '14px' : '13px',
+                            borderRadius: window.innerWidth >= 1024 ? '8px' : window.innerWidth >= 768 ? '12px' : window.innerWidth >= 640 ? '8px' : '8px'
+                          })
+                        }}
+                        isSearchable={false}
+                        placeholder="Any"
+                      />
+                    </div>
+                  </div>
 
-              {/* Field 4: Price per Night */}
-              <div className="field-group">
-                <span className="field-label">Price per Night</span>
-                <Select
-                  value={{ value: price, label: price }}
-                  onChange={(option) => setPrice(option.value)}
-                  options={[
-                    { value: 'Any', label: 'Any' },
-                    { value: '₹2,000 - ₹5,000', label: '₹2,000 - ₹5,000' },
-                    { value: '₹5,000 - ₹10,000', label: '₹5,000 - ₹10,000' },
-                    { value: '₹10,000 - ₹20,000', label: '₹10,000 - ₹20,000' },
-                    { value: '₹20,000+', label: '₹20,000+' },
-                  ]}
-                  styles={desktopSelectStyles}
-                  isSearchable={false}
-                  placeholder="Select price"
-                />
-              </div>
+                  {/* Field 5: Room/Stay Type */}
+                  <div className="flex flex-col gap-1.5 xs:gap-2 col-span-1 sm:col-span-1 lg:col-span-1">
+                    <label className="font-lato text-xs sm:text-sm lg:text-sm font-semibold text-gray-700">Room/Stay Type</label>
+                    <div className="text-sm">
+                      <Select
+                        value={{ value: stayType, label: stayType }}
+                        onChange={(option) => setStayType(option.value)}
+                        options={[
+                          { value: 'Any', label: 'Any' },
+                          ...(roomTypes.length > 0 
+                            ? roomTypes.map(rt => ({ value: rt.name, label: rt.name }))
+                            : [
+                                { value: '1 Deluxe Room', label: '1 Deluxe Room' },
+                                { value: '2 Deluxe Rooms', label: '2 Deluxe Rooms' },
+                                { value: 'Entire Villa', label: 'Entire Villa' }
+                              ]
+                          )
+                        ]}
+                        styles={{
+                          ...selectStyles,
+                          control: (base, state) => ({
+                            ...selectStyles.control(base, state),
+                            minHeight: window.innerWidth >= 1024 ? '44px' : window.innerWidth >= 768 ? '48px' : window.innerWidth >= 640 ? '40px' : window.innerWidth >= 480 ? '44px' : '40px',
+                            fontSize: window.innerWidth >= 1024 ? '14px' : window.innerWidth >= 640 ? '14px' : '13px',
+                            borderRadius: window.innerWidth >= 1024 ? '8px' : window.innerWidth >= 768 ? '12px' : window.innerWidth >= 640 ? '8px' : '8px'
+                          })
+                        }}
+                        isSearchable={false}
+                        placeholder="Any"
+                      />
+                    </div>
+                  </div>
 
-              {/* Field 5: Room/Stay Type */}
-              <div className="field-group">
-                <span className="field-label">Room/Stay Type</span>
-                <Select
-                  value={{ value: stayType, label: stayType }}
-                  onChange={(option) => setStayType(option.value)}
-                  options={[
-                    { value: 'Any', label: 'Any' },
-                    ...(roomTypes.length > 0 
-                      ? roomTypes.map(rt => ({ value: rt.name, label: rt.name }))
-                      : [
-                          { value: '1 Deluxe Room', label: '1 Deluxe Room' },
-                          { value: '2 Deluxe Rooms', label: '2 Deluxe Rooms' },
-                          { value: 'Entire Villa', label: 'Entire Villa' }
-                        ]
-                    )
-                  ]}
-                  styles={desktopSelectStyles}
-                  isSearchable={false}
-                  placeholder="Select stay type"
-                />
-              </div>
+                  {/* Field 6: Food Preference */}
+                  <div className="flex flex-col gap-1.5 xs:gap-2 col-span-1 sm:col-span-1 lg:col-span-1">
+                    <label className="font-lato text-xs sm:text-sm lg:text-sm font-semibold text-gray-700">Food Preference</label>
+                    <div className="text-sm">
+                      <Select
+                        value={{ value: foodPref, label: foodPref }}
+                        onChange={(option) => setFoodPref(option.value)}
+                        options={[
+                          { value: 'Any', label: 'Any' },
+                          { value: 'Pure Veg', label: 'Pure Veg' },
+                          { value: 'Non-Veg', label: 'Non-Veg' },
+                          { value: 'Buffet Available', label: 'Buffet Available' },
+                        ]}
+                        styles={{
+                          ...selectStyles,
+                          control: (base, state) => ({
+                            ...selectStyles.control(base, state),
+                            minHeight: window.innerWidth >= 1024 ? '44px' : window.innerWidth >= 768 ? '48px' : window.innerWidth >= 640 ? '40px' : window.innerWidth >= 480 ? '44px' : '40px',
+                            fontSize: window.innerWidth >= 1024 ? '14px' : window.innerWidth >= 640 ? '14px' : '13px',
+                            borderRadius: window.innerWidth >= 1024 ? '8px' : window.innerWidth >= 768 ? '12px' : window.innerWidth >= 640 ? '8px' : '8px'
+                          })
+                        }}
+                        isSearchable={false}
+                        placeholder="Any"
+                      />
+                    </div>
+                  </div>
 
-              {/* Field 6: Food Preference */}
-              <div className="field-group">
-                <span className="field-label">Food Preference</span>
-                <Select
-                  value={{ value: foodPref, label: foodPref }}
-                  onChange={(option) => setFoodPref(option.value)}
-                  options={[
-                    { value: 'Any', label: 'Any' },
-                    { value: 'Pure Veg', label: 'Pure Veg' },
-                    { value: 'Non-Veg', label: 'Non-Veg' },
-                    { value: 'Buffet Available', label: 'Buffet Available' },
-                  ]}
-                  styles={desktopSelectStyles}
-                  isSearchable={false}
-                  placeholder="Select food preference"
-                />
-              </div>
+                </div>
+
+                {/* Hero Bottom Row */}
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-3 xs:gap-4 lg:gap-6">
+                  
+                  {/* Checkboxes */}
+                  <div className="flex gap-3 xs:gap-4 sm:gap-6 lg:gap-6 flex-col xs:flex-row lg:flex-row order-2 lg:order-1 w-full lg:w-auto justify-start">
+                    <label className="flex items-center gap-2 cursor-pointer font-lato text-xs sm:text-sm lg:text-sm font-medium text-gray-700">
+                      <input 
+                        type="checkbox" 
+                        className="w-4 h-4 sm:w-[18px] sm:h-[18px] lg:w-4 lg:h-4 accent-blue-600 cursor-pointer" 
+                        checked={verifiedOnly}
+                        onChange={(e) => setVerifiedOnly(e.target.checked)}
+                      />
+                      <span>Verified only</span>
+                    </label>
+                    <label className="flex items-center gap-2 cursor-pointer font-lato text-xs sm:text-sm lg:text-sm font-medium text-gray-700">
+                      <input 
+                        type="checkbox" 
+                        className="w-4 h-4 sm:w-[18px] sm:h-[18px] lg:w-4 lg:h-4 accent-blue-600 cursor-pointer" 
+                        checked={featuredOnly}
+                        onChange={(e) => setFeaturedOnly(e.target.checked)}
+                      />
+                      <span>Featured only</span>
+                    </label>
+                  </div>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-1.5 xs:gap-2 sm:gap-3 lg:gap-3 flex-col sm:flex-row justify-center w-full lg:w-auto order-1 lg:order-2">
+                    <div className="flex gap-1.5 xs:gap-2 sm:gap-3 lg:gap-3">
+                      <button type="button" className="flex-1 sm:flex-none px-2.5 xs:px-3 sm:px-4 md:px-6 lg:px-4 py-2 xs:py-2.5 sm:py-3 lg:py-2.5 rounded-lg sm:rounded-xl lg:rounded-lg font-lato text-xs sm:text-sm lg:text-sm font-semibold cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400" onClick={handleCloseSearch || handleClearAll}>
+                        Close
+                      </button>
+                      <button type="button" className="flex-1 sm:flex-none px-2.5 xs:px-3 sm:px-4 md:px-6 lg:px-4 py-2 xs:py-2.5 sm:py-3 lg:py-2.5 rounded-lg sm:rounded-xl lg:rounded-lg font-lato text-xs sm:text-sm lg:text-sm font-semibold cursor-pointer flex items-center justify-center gap-2 transition-all duration-200 bg-white text-gray-700 border border-gray-300 hover:bg-gray-50 hover:border-gray-400" onClick={handleClearAll}>
+                        Clear all
+                      </button>
+                      <button type="submit" className="flex-1 sm:flex-none px-2.5 xs:px-3 sm:px-4 md:px-6 lg:px-4 py-2 xs:py-2.5 sm:py-3 lg:py-2.5 rounded-lg sm:rounded-xl lg:rounded-lg font-lato text-xs sm:text-sm lg:text-sm font-semibold cursor-pointer flex items-center justify-center gap-1.5 xs:gap-2 transition-all duration-200 bg-green-600 text-white shadow-green-600/30 shadow-lg hover:bg-green-700 hover:-translate-y-0.5 hover:shadow-green-600/40 hover:shadow-xl">
+                        <Search size={12} className="xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 lg:w-4 lg:h-4" />
+                        <span>Search</span>
+                      </button>
+                      <button type="button" className="flex-1 sm:flex-none px-2.5 xs:px-3 sm:px-4 md:px-6 lg:px-4 py-2 xs:py-2.5 sm:py-3 lg:py-2.5 rounded-lg sm:rounded-xl lg:rounded-lg font-lato text-xs sm:text-sm lg:text-sm font-semibold cursor-pointer flex items-center justify-center gap-1.5 xs:gap-2 transition-all duration-200 bg-white text-blue-600 border border-blue-600 hover:bg-blue-50 disabled:opacity-70" onClick={handleAISearch} disabled={aiSearchLoading}>
+                        <Sparkles size={12} className="xs:w-3.5 xs:h-3.5 sm:w-4 sm:h-4 lg:w-4 lg:h-4" />
+                        <span className="hidden sm:inline lg:inline">{aiSearchLoading ? 'Searching...' : 'Search with AI'}</span>
+                        <span className="sm:hidden lg:hidden">AI</span>
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
+
+              </form>
 
             </div>
 
-            {/* Action and Checkbox controls row */}
-            <div className="action-buttons-row">
-              
-              {/* Filter checkboxes */}
-              <div className="checkbox-row">
-                <label className="custom-checkbox-label">
-                  <input 
-                    type="checkbox" 
-                    className="custom-checkbox" 
-                    checked={verifiedOnly}
-                    onChange={(e) => setVerifiedOnly(e.target.checked)}
-                  />
-                  <span>Verified only</span>
-                </label>
-                <label className="custom-checkbox-label">
-                  <input 
-                    type="checkbox" 
-                    className="custom-checkbox" 
-                    checked={featuredOnly}
-                    onChange={(e) => setFeaturedOnly(e.target.checked)}
-                  />
-                  <span>Featured only</span>
-                </label>
-              </div>
-
-              {/* Execution Buttons */}
-              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <button type="button" className="btn-outline" onClick={handleCloseSearch || handleClearAll}>Close</button>
-                <button type="button" className="btn-outline" onClick={handleClearAll}>Clear all</button>
-                
-                <button type="submit" className="btn-search">
-                  <Search size={16} />
-                  <span>Search</span>
-                </button>
-
-                <button type="button" className="btn-search-ai" onClick={handleAISearch} disabled={aiSearchLoading} style={{ opacity: aiSearchLoading ? 0.7 : 1 }}>
-                  <Sparkles size={16} color="var(--primary-blue)" />
-                  <span>{aiSearchLoading ? 'Searching...' : 'Search with AI'}</span>
-                </button>
-              </div>
-
-            </div>
-
-          </form>
+          </div>
 
         </div>
       )}
-
     </>
   );
 }
