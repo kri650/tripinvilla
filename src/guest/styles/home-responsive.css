@@ -973,7 +973,7 @@
 /* ===== HERO SECTION OVERFLOW FIX AND RESPONSIVE ===== */
 @media (max-width: 1400px) {
   .hero-wrapper {
-    overflow: hidden;
+    overflow: visible;
   }
 
   .hero-headline-container {
@@ -988,7 +988,7 @@
   .hero-wrapper {
     height: auto;
     min-height: 650px;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .hero-headline-container {
@@ -1138,7 +1138,7 @@
   .hero-wrapper {
     height: auto;
     min-height: 600px;
-    overflow: hidden;
+    overflow: visible;
   }
 
   .hero-headline-container {
@@ -1191,7 +1191,7 @@
   .hero-wrapper {
     height: auto;
     min-height: 700px;
-    overflow: hidden;
+    overflow: visible;
     padding-bottom: 20px;
   }
 
@@ -1917,6 +1917,21 @@
   .btn-outline {
     height: 48px;
     font-size: 14px;
+  }
+
+  .buttons-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    margin-top: 12px;
+  }
+
+  .buttons-group button {
+    flex: 1 1 calc(50% - 4px);
+    justify-content: center;
+    min-width: 110px;
+    box-sizing: border-box;
   }
 }
 
