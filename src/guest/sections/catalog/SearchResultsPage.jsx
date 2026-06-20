@@ -109,24 +109,56 @@ export default function SearchResultsPage(props) {
                 const sliderMax = filterMaxPrice === '' ? 100000 : Number(filterMaxPrice);
                 
                 return (
-                  <div className="relative w-full h-10 mt-6 mb-3">
-                    <div className="absolute top-4 left-0 right-0 h-1 bg-gray-200 rounded-sm z-[1]" />
+                  <div className="dual-slider-container mt-6 mb-3">
                     <div 
-                      className="absolute top-4 h-1 bg-gray-900 z-[2]"
+                      className="absolute left-0 right-0 rounded-sm z-[1]" 
+                      style={{ top: '16px', height: '4px', backgroundColor: '#E5E7EB' }} 
+                    />
+                    <div 
+                      className="absolute z-[2]"
                       style={{ 
+                        top: '16px',
+                        height: '4px', 
+                        backgroundColor: '#111827',
                         left: `${((sliderMin - 100) / 99900) * 100}%`, 
                         right: `${100 - ((sliderMax - 100) / 99900) * 100}%` 
                       }}
                     />
                     <div 
-                      className="absolute -top-[18px] bg-gray-900 text-white text-[9.5px] font-bold py-[2px] px-[6px] rounded whitespace-nowrap font-['Outfit'] z-[5]"
-                      style={{ left: `${((sliderMin - 100) / 99900) * 100}%`, transform: 'translateX(-50%)' }}
+                      style={{ 
+                        position: 'absolute',
+                        top: '-12px',
+                        left: `${((sliderMin - 100) / 99900) * 100}%`, 
+                        transform: 'translateX(-50%)',
+                        backgroundColor: '#111827',
+                        color: '#FFFFFF',
+                        fontSize: '9.5px',
+                        fontWeight: 'bold',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        whiteSpace: 'nowrap',
+                        zIndex: 5,
+                        fontFamily: "'Outfit', sans-serif"
+                      }}
                     >
                       ₹ {sliderMin}
                     </div>
                     <div 
-                      className="absolute -top-[18px] bg-gray-900 text-white text-[9.5px] font-bold py-[2px] px-[6px] rounded whitespace-nowrap font-['Outfit'] z-[5]"
-                      style={{ left: `${((sliderMax - 100) / 99900) * 100}%`, transform: 'translateX(-50%)' }}
+                      style={{ 
+                        position: 'absolute',
+                        top: '-12px',
+                        left: `${((sliderMax - 100) / 99900) * 100}%`, 
+                        transform: 'translateX(-50%)',
+                        backgroundColor: '#111827',
+                        color: '#FFFFFF',
+                        fontSize: '9.5px',
+                        fontWeight: 'bold',
+                        padding: '2px 6px',
+                        borderRadius: '4px',
+                        whiteSpace: 'nowrap',
+                        zIndex: 5,
+                        fontFamily: "'Outfit', sans-serif"
+                      }}
                     >
                       ₹ {sliderMax}
                     </div>
@@ -140,7 +172,6 @@ export default function SearchResultsPage(props) {
                         const val = Math.min(Number(e.target.value), sliderMax - 1000);
                         setFilterMinPrice(val);
                       }}
-                      className="absolute w-full pointer-events-none bg-none appearance-none h-1 top-4 z-[3] m-0 outline-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-gray-900 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)] [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:bg-gray-900 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)]"
                     />
                     <input 
                       type="range" 
@@ -152,7 +183,6 @@ export default function SearchResultsPage(props) {
                         const val = Math.max(Number(e.target.value), sliderMin + 1000);
                         setFilterMaxPrice(val);
                       }}
-                      className="absolute w-full pointer-events-none bg-none appearance-none h-1 top-4 z-[4] m-0 outline-none [&::-webkit-slider-thumb]:pointer-events-auto [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:bg-gray-900 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)] [&::-moz-range-thumb]:pointer-events-auto [&::-moz-range-thumb]:w-4 [&::-moz-range-thumb]:h-4 [&::-moz-range-thumb]:bg-gray-900 [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:cursor-pointer [&::-moz-range-thumb]:border-none [&::-moz-range-thumb]:shadow-[0_2px_4px_rgba(0,0,0,0.2)]"
                     />
                   </div>
                 );
@@ -166,6 +196,7 @@ export default function SearchResultsPage(props) {
                   value={filterMinPrice}
                   onChange={e => setFilterMinPrice(e.target.value === '' ? '' : Number(e.target.value))}
                   className="flex-1 border border-gray-200 rounded-lg py-[6px] px-3 text-[13px] font-['Outfit'] text-gray-700 outline-none"
+                  style={{ minWidth: 0 }}
                 />
                 <span className="text-xs text-gray-400 font-['Outfit']">To</span>
                 <input 
@@ -174,6 +205,7 @@ export default function SearchResultsPage(props) {
                   value={filterMaxPrice}
                   onChange={e => setFilterMaxPrice(e.target.value === '' ? '' : Number(e.target.value))}
                   className="flex-1 border border-gray-200 rounded-lg py-[6px] px-3 text-[13px] font-['Outfit'] text-gray-700 outline-none"
+                  style={{ minWidth: 0 }}
                 />
                 <button 
                   type="button"
