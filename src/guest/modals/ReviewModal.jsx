@@ -70,12 +70,12 @@ export default function ReviewModal(props) {
               />
             </div>
 
-            <div className="flex flex-col w-full mb-6 max-[640px]:mb-4 max-[480px]:mb-3">
-              <label className="text-sm font-semibold text-gray-700 mb-2 text-left max-[480px]:text-xs">Your Review*</label>
+            <div className="flex flex-col w-full mb-4 min-[1024px]:mb-3 max-[768px]:mb-6 max-[640px]:mb-4 max-[480px]:mb-3">
+              <label className="text-sm font-semibold text-gray-700 mb-1.5 text-left min-[1024px]:text-xs min-[1024px]:mb-1 max-[480px]:text-xs">Your Review*</label>
               <textarea 
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg font-lato text-base text-gray-900 bg-white outline-none resize-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 min-h-[100px] max-[640px]:min-h-[80px] max-[480px]:px-2.5 max-[480px]:py-2 max-[480px]:text-sm max-[480px]:min-h-[70px] max-[360px]:px-2 max-[360px]:py-1.5 max-[360px]:text-xs max-[360px]:min-h-[60px]" 
+                className="w-full px-3 py-2.5 border border-gray-300 rounded-lg font-lato text-sm text-gray-900 bg-white outline-none resize-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 min-h-[80px] min-[1024px]:px-2.5 min-[1024px]:py-2 min-[1024px]:text-xs min-[1024px]:min-h-[70px] max-[768px]:px-4 max-[768px]:py-3 max-[768px]:text-base max-[768px]:min-h-[100px] max-[640px]:min-h-[80px] max-[480px]:px-2.5 max-[480px]:py-2 max-[480px]:text-sm max-[480px]:min-h-[70px] max-[360px]:px-2 max-[360px]:py-1.5 max-[360px]:text-xs max-[360px]:min-h-[60px]" 
                 placeholder="The travel route was smooth and the journey was comfortable."
-                rows="4"
+                rows="3"
                 value={reviewText}
                 onChange={(e) => setReviewText(e.target.value)}
                 required
@@ -84,7 +84,7 @@ export default function ReviewModal(props) {
 
             <button 
               type="submit" 
-              className="w-full bg-green-600 text-white font-semibold text-base px-6 py-3.5 rounded-lg border-none cursor-pointer transition-all duration-200 hover:bg-green-700 hover:-translate-y-0.5 hover:shadow-lg mt-4 max-[640px]:py-3 max-[640px]:text-sm max-[480px]:py-2.5 max-[480px]:text-sm max-[360px]:py-2 max-[360px]:text-xs"
+              className="w-full bg-green-600 text-white font-semibold text-sm px-5 py-3 rounded-lg border-none cursor-pointer transition-all duration-200 hover:bg-green-700 hover:-translate-y-0.5 hover:shadow-lg mt-2 min-[1024px]:text-xs min-[1024px]:py-2.5 min-[1024px]:mt-1 max-[768px]:text-base max-[768px]:py-3.5 max-[768px]:mt-4 max-[640px]:py-3 max-[640px]:text-sm max-[480px]:py-2.5 max-[480px]:text-sm max-[360px]:py-2 max-[360px]:text-xs"
             >
               Submit
             </button>
