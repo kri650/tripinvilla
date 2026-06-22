@@ -21,19 +21,19 @@ export default function ReviewModal(props) {
       onClick={() => setReviewModalOpen(false)}
     >
       <div 
-        className="relative bg-white border border-gray-200 rounded-2xl shadow-2xl w-full max-w-[560px] max-w-[95vw] p-6 xs:p-8 sm:p-10 max-[640px]:w-[calc(100vw-8px)] max-[640px]:max-w-[calc(100vw-8px)] max-[640px]:p-4 max-[640px]:rounded-xl max-[480px]:w-[calc(100vw-4px)] max-[480px]:max-w-[calc(100vw-4px)] max-[480px]:p-3 max-[480px]:rounded-lg max-[360px]:w-[calc(100vw-2px)] max-[360px]:max-w-[calc(100vw-2px)] max-[360px]:p-2" 
+        className="relative bg-white border border-gray-200 rounded-2xl shadow-2xl w-full max-w-[420px] p-5 min-[1200px]:max-w-[380px] min-[1024px]:max-w-[400px] max-[768px]:max-w-[480px] max-[640px]:w-[calc(100vw-16px)] max-[640px]:max-w-[calc(100vw-16px)] max-[640px]:p-4 max-[640px]:rounded-xl max-[480px]:w-[calc(100vw-8px)] max-[480px]:max-w-[calc(100vw-8px)] max-[480px]:p-3 max-[480px]:rounded-lg max-[360px]:w-[calc(100vw-4px)] max-[360px]:max-w-[calc(100vw-4px)] max-[360px]:p-2" 
         onClick={(e) => e.stopPropagation()}
       >
         <button 
-          className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-600 text-2xl font-normal leading-none bg-transparent border-none cursor-pointer transition-colors max-[640px]:top-2 max-[640px]:right-2 max-[640px]:w-6 max-[640px]:h-6 max-[640px]:text-lg max-[360px]:top-1 max-[360px]:right-1 max-[360px]:w-5 max-[360px]:h-5 max-[360px]:text-base" 
+          className="absolute top-3 right-3 w-7 h-7 flex items-center justify-center text-gray-400 hover:text-gray-600 text-xl font-normal leading-none bg-transparent border-none cursor-pointer transition-colors min-[1024px]:top-2.5 min-[1024px]:right-2.5 min-[1024px]:w-6 min-[1024px]:h-6 min-[1024px]:text-lg max-[640px]:top-2 max-[640px]:right-2 max-[640px]:w-6 max-[640px]:h-6 max-[640px]:text-lg max-[360px]:top-1 max-[360px]:right-1 max-[360px]:w-5 max-[360px]:h-5 max-[360px]:text-base" 
           onClick={() => setReviewModalOpen(false)}
         >
           &times;
         </button>
         
         <div className="flex flex-col items-center w-full animate-fade-in">
-          <h2 className="text-2xl xs:text-3xl sm:text-4xl font-semibold text-gray-900 text-center mb-6 max-[640px]:text-xl max-[640px]:mb-4 max-[480px]:text-lg max-[480px]:mb-3 max-[360px]:text-base max-[360px]:mb-2">
-            Share Your <span className="bg-blue-600 text-white px-3 py-1 rounded font-bold">Experience</span>
+          <h2 className="text-xl font-semibold text-gray-900 text-center mb-5 min-[1024px]:text-lg min-[1024px]:mb-4 max-[768px]:text-2xl max-[640px]:text-xl max-[640px]:mb-4 max-[480px]:text-lg max-[480px]:mb-3 max-[360px]:text-base max-[360px]:mb-2">
+            Share Your <span className="bg-blue-600 text-white px-2.5 py-0.5 rounded font-bold min-[1024px]:px-2 max-[640px]:px-3 max-[640px]:py-1">Experience</span>
           </h2>
           
           {/* Interactive Star Row */}
