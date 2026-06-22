@@ -32,7 +32,7 @@ export default function SearchResultsPage(props) {
         {showMobileFilters ? 'Hide Filters' : 'Show Filters'}
       </button>
 
-      <div className="grid grid-cols-[minmax(280px,320px)_1fr] gap-8 max-w-[1320px] w-full mx-auto my-10 mb-20 px-6 box-border max-[1100px]:grid-cols-[minmax(240px,280px)_1fr] max-[1100px]:gap-6 max-[1100px]:px-5 max-[900px]:grid-cols-1 max-[900px]:gap-[18px] max-[900px]:px-4 max-[900px]:my-[30px] max-[900px]:mb-[60px] max-[900px]:max-w-full max-[640px]:my-5 max-[640px]:mb-10 max-[640px]:px-3 max-[640px]:gap-4 max-[480px]:px-[10px] max-[480px]:gap-[14px] max-[480px]:my-4 max-[480px]:mb-8 max-[360px]:px-2 max-[360px]:gap-3 max-[360px]:my-3 max-[360px]:mb-7">
+      <div className="grid grid-cols-[minmax(280px,320px)_1fr] gap-8 max-w-[1320px] w-full mx-auto my-10 mb-20 px-6 box-border max-[1200px]:max-w-[1200px] max-[1200px]:gap-6 max-[1100px]:grid-cols-[minmax(260px,300px)_1fr] max-[1100px]:gap-5 max-[1100px]:px-5 max-[1024px]:grid-cols-[minmax(240px,280px)_1fr] max-[1024px]:gap-4 max-[1024px]:px-4 max-[1024px]:max-w-full max-[900px]:grid-cols-1 max-[900px]:gap-[18px] max-[900px]:px-4 max-[900px]:my-[30px] max-[900px]:mb-[60px] max-[900px]:max-w-full max-[640px]:my-5 max-[640px]:mb-10 max-[640px]:px-3 max-[640px]:gap-4 max-[480px]:px-[10px] max-[480px]:gap-[14px] max-[480px]:my-4 max-[480px]:mb-8 max-[360px]:px-2 max-[360px]:gap-3 max-[360px]:my-3 max-[360px]:mb-7">
         
         {/* LEFT SIDEBAR FILTERS */}
         <div className={`flex flex-col gap-6 sticky top-[100px] h-[calc(100vh-120px)] overflow-y-auto max-[900px]:static max-[900px]:h-auto max-[900px]:overflow-visible max-[640px]:${showMobileFilters ? 'flex' : 'hidden'} max-[640px]:mb-5`}>
@@ -109,7 +109,7 @@ export default function SearchResultsPage(props) {
                 const sliderMax = filterMaxPrice === '' ? 100000 : Number(filterMaxPrice);
                 
                 return (
-                  <div className="dual-slider-container mt-6 mb-3">
+                  <div className="dual-slider-container mt-6 mb-3 relative mx-[10px] max-[640px]:mx-[8px] max-[480px]:mx-[6px]">
                     <div 
                       className="absolute left-0 right-0 rounded-sm z-[1]" 
                       style={{ top: '16px', height: '4px', backgroundColor: '#E5E7EB' }} 
@@ -125,10 +125,10 @@ export default function SearchResultsPage(props) {
                       }}
                     />
                     <div 
+                      className="absolute z-[5] max-[640px]:text-[8.5px] max-[480px]:text-[8px] max-[360px]:text-[7.5px]"
                       style={{ 
-                        position: 'absolute',
                         top: '-12px',
-                        left: `${((sliderMin - 100) / 99900) * 100}%`, 
+                        left: `${Math.max(5, Math.min(95, ((sliderMin - 100) / 99900) * 100))}%`, 
                         transform: 'translateX(-50%)',
                         backgroundColor: '#111827',
                         color: '#FFFFFF',
@@ -137,17 +137,16 @@ export default function SearchResultsPage(props) {
                         padding: '2px 6px',
                         borderRadius: '4px',
                         whiteSpace: 'nowrap',
-                        zIndex: 5,
                         fontFamily: "'Outfit', sans-serif"
                       }}
                     >
                       ₹ {sliderMin}
                     </div>
                     <div 
+                      className="absolute z-[5] max-[640px]:text-[8.5px] max-[480px]:text-[8px] max-[360px]:text-[7.5px]"
                       style={{ 
-                        position: 'absolute',
                         top: '-12px',
-                        left: `${((sliderMax - 100) / 99900) * 100}%`, 
+                        left: `${Math.max(5, Math.min(95, ((sliderMax - 100) / 99900) * 100))}%`, 
                         transform: 'translateX(-50%)',
                         backgroundColor: '#111827',
                         color: '#FFFFFF',
@@ -156,7 +155,6 @@ export default function SearchResultsPage(props) {
                         padding: '2px 6px',
                         borderRadius: '4px',
                         whiteSpace: 'nowrap',
-                        zIndex: 5,
                         fontFamily: "'Outfit', sans-serif"
                       }}
                     >
@@ -172,6 +170,7 @@ export default function SearchResultsPage(props) {
                         const val = Math.min(Number(e.target.value), sliderMax - 1000);
                         setFilterMinPrice(val);
                       }}
+                      className="w-full"
                     />
                     <input 
                       type="range" 
@@ -183,6 +182,7 @@ export default function SearchResultsPage(props) {
                         const val = Math.max(Number(e.target.value), sliderMin + 1000);
                         setFilterMaxPrice(val);
                       }}
+                      className="w-full"
                     />
                   </div>
                 );
@@ -455,10 +455,10 @@ export default function SearchResultsPage(props) {
                       return (
                         <div 
                           key={idx}
-                          className="flex bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-[0_4px_15px_rgba(0,0,0,0.03)] transition-all min-h-[300px] hover:-translate-y-[2px] hover:shadow-[0_12px_25px_rgba(0,0,0,0.06)] hover:border-[#93C5FD] max-[900px]:flex-col max-[900px]:min-h-auto max-[900px]:w-full max-[640px]:rounded-2xl max-[480px]:rounded-[14px]"
+                          className="flex bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-[0_4px_15px_rgba(0,0,0,0.03)] transition-all min-h-[300px] hover:-translate-y-[2px] hover:shadow-[0_12px_25px_rgba(0,0,0,0.06)] hover:border-[#93C5FD] w-full max-[1024px]:min-h-[280px] max-[900px]:flex-col max-[900px]:min-h-auto max-[900px]:w-full max-[640px]:rounded-2xl max-[480px]:rounded-[14px]"
                         >
                           {/* Property Image */}
-                          <div className="w-80 flex-shrink-0 relative overflow-hidden max-[900px]:w-full max-[900px]:h-60 max-[640px]:h-[200px] max-[480px]:h-[180px] max-[360px]:h-40">
+                          <div className="w-80 flex-shrink-0 relative overflow-hidden max-[1200px]:w-72 max-[1024px]:w-64 max-[900px]:w-full max-[900px]:h-60 max-[640px]:h-[200px] max-[480px]:h-[180px] max-[360px]:h-40">
                             <img 
                               src={property.img || property.image} 
                               alt={property.title || property.propertyName}
@@ -467,12 +467,12 @@ export default function SearchResultsPage(props) {
                           </div>
 
                           {/* Property Info */}
-                          <div className="flex-1 p-6 flex flex-col max-[900px]:p-[18px] max-[900px]:w-full max-[900px]:box-border max-[640px]:p-4 max-[480px]:p-[14px] max-[360px]:p-3">
+                          <div className="flex-1 p-6 flex flex-col min-w-0 max-[1024px]:p-5 max-[900px]:p-[18px] max-[900px]:w-full max-[900px]:box-border max-[640px]:p-4 max-[480px]:p-[14px] max-[360px]:p-3">
                             
                             {/* Header - Title and Wishlist */}
-                            <div className="flex justify-between items-start mb-3 max-[640px]:mb-[10px]">
-                              <div>
-                                <h3 className="font-['Lato'] text-[22px] font-bold text-gray-900 m-0 mb-[6px] flex items-center gap-[10px] max-[900px]:text-[19px] max-[640px]:text-[17px] max-[640px]:leading-tight max-[480px]:text-base max-[360px]:text-[15px]">
+                            <div className="flex justify-between items-start mb-3 gap-3 max-[640px]:mb-[10px]">
+                              <div className="flex-1 min-w-0">
+                                <h3 className="font-['Lato'] text-[22px] font-bold text-gray-900 m-0 mb-[6px] flex items-center gap-[10px] flex-wrap max-[1200px]:text-[20px] max-[1024px]:text-[18px] max-[900px]:text-[19px] max-[640px]:text-[17px] max-[640px]:leading-tight max-[480px]:text-base max-[360px]:text-[15px]">
                                   {property.title || property.propertyName}
                                   {idx === 0 && (
                                     <span className="bg-[#58A429] text-white text-[11px] font-bold py-1 px-[10px] rounded-xl inline-flex items-center gap-1 max-[640px]:text-[10px] max-[640px]:py-[3px] max-[640px]:px-2 max-[360px]:text-[9px] max-[360px]:py-[2px] max-[360px]:px-[6px]">
@@ -546,7 +546,7 @@ export default function SearchResultsPage(props) {
                               </div>
                               <div className="flex items-center gap-3 max-[900px]:w-full max-[640px]:gap-[10px] max-[360px]:gap-2">
                                 <button 
-                                  className="bg-white text-[#0C6DC4] border-[3px] border-[#0C6DC4] py-[10px] px-6 rounded-full font-semibold text-sm cursor-pointer transition-all hover:bg-[#EFF6FF] shadow-sm max-[900px]:flex-1 max-[900px]:text-center max-[640px]:py-[10px] max-[640px]:px-[18px] max-[640px]:text-[13px] max-[480px]:py-[9px] max-[480px]:px-4 max-[480px]:text-xs max-[360px]:py-2 max-[360px]:px-3 max-[360px]:text-[11px]"
+                                  className="bg-white text-[#0C6DC4] border-2 border-[#0C6DC4] py-[10px] px-6 rounded-full font-semibold text-sm cursor-pointer transition-all hover:bg-[#EFF6FF] hover:border-[#0856A3] shadow-sm max-[900px]:flex-1 max-[900px]:text-center max-[640px]:py-[10px] max-[640px]:px-[18px] max-[640px]:text-[13px] max-[480px]:py-[9px] max-[480px]:px-4 max-[480px]:text-xs max-[360px]:py-2 max-[360px]:px-3 max-[360px]:text-[11px]"
                                   onClick={() => { 
                                     setSelectedProperty(property); 
                                     setActiveMenu('Detail'); 

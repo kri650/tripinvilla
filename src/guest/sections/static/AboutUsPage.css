@@ -6,6 +6,258 @@
   padding-bottom: 20px;
 }
 
+/* ==========================================================================
+   TESTIMONIALS ANIMATIONS
+   ========================================================================== */
+@keyframes slideInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  70% {
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: 200px 0;
+  }
+}
+
+/* Enhanced hover animations for testimonial cards */
+.testimonial-card-enhanced {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer;
+  will-change: transform;
+  /* Ensure hover animations don't get clipped */
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.testimonial-card-enhanced::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(88, 164, 41, 0.08),
+    transparent
+  );
+  transition: left 0.6s ease;
+  z-index: 1;
+}
+
+.testimonial-card-enhanced::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(88, 164, 41, 0.02) 0%, rgba(14, 109, 196, 0.02) 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  z-index: 1;
+}
+
+.testimonial-card-enhanced:hover::before {
+  left: 100%;
+}
+
+.testimonial-card-enhanced:hover::after {
+  opacity: 1;
+}
+
+.testimonial-card-enhanced:hover {
+  transform: translateY(-12px) scale(1.03) !important;
+  box-shadow: 0 25px 50px rgba(88, 164, 41, 0.15), 0 10px 30px rgba(0, 0, 0, 0.08) !important;
+  border-color: #58A429 !important;
+  background: linear-gradient(135deg, #ffffff 0%, #f0fdf4 100%);
+}
+
+.testimonial-card-enhanced > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Prevent container overflow clipping */
+.our-testimonials-section {
+  overflow: visible !important;
+}
+
+/* Container spacing for animations */
+#testimonials-scroll-container {
+  overflow-x: auto;
+  overflow-y: visible !important;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-top: -15px;
+  margin-bottom: -15px;
+}
+
+/* Video card enhanced hover */
+.video-card-enhanced {
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  /* Ensure hover animations don't get clipped */
+  margin-top: 15px;
+  margin-bottom: 5px;
+}
+
+.video-card-enhanced:hover {
+  transform: translateY(-10px) scale(1.03) !important;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15) !important;
+}
+
+/* Profile image hover effects */
+.profile-image-enhanced {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  cursor: pointer;
+}
+
+.profile-image-enhanced:hover {
+  transform: scale(1.1) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15) !important;
+  border-color: #58A429 !important;
+}
+
+.profile-image-enhanced:hover img {
+  transform: scale(1.05);
+}
+
+.profile-image-enhanced img {
+  transition: transform 0.3s ease;
+}
+
+/* Pulse animation for play button */
+@keyframes pulse-glow {
+  0%, 100% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.6);
+  }
+}
+
+/* Subtle floating animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+/* Add floating animation to cards */
+.testimonial-card-enhanced {
+  animation: slideInUp 0.6s ease-out, float 4s ease-in-out infinite;
+}
+
+.video-card-enhanced {
+  animation: slideInRight 0.8s ease-out, float 4s ease-in-out infinite;
+}
+
+/* Enhanced play button */
+.play-button-enhanced {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  animation: pulse 2s infinite;
+}
+
+.play-button-enhanced:hover {
+  transform: scale(1.15) !important;
+  background: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 0 25px rgba(255, 255, 255, 0.5) !important;
+}
+
+.play-button-enhanced:active {
+  transform: scale(0.95) !important;
+}
+
 .about-main-wrapper {
   width: 1280px;
   max-width: calc(100% - 160px);

@@ -910,3 +910,23 @@
   display: flex;
   gap: 4px;
 }
+/* Enquiry Form Responsive Grid */
+.enquiry-form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .enquiry-form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* Ensure form container has proper padding on mobile */
+@media (max-width: 639px) {
+  .detail-tab-target-section.border-box-style {
+    padding: 16px !important;
+    margin-left: 8px !important;
+    margin-right: 8px !important;
+  }
+}

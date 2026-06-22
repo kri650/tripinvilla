@@ -125,7 +125,7 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
 
       {/* Testimonials */}
       <div className="w-[1280px] max-w-[calc(100%-160px)] mx-auto mt-0 max-[1200px]:max-w-[calc(100%-80px)] max-[900px]:max-w-[calc(100%-40px)] max-[900px]:mt-10 max-[640px]:max-w-[calc(100%-32px)] max-[640px]:mt-8 max-[480px]:max-w-[calc(100%-24px)] max-[480px]:mt-6 max-[360px]:max-w-[calc(100%-16px)]">
-  <div className="our-testimonials-section my-20 mb-5 max-[640px]:!my-[60px] max-[640px]:!mb-5">
+  <div className="our-testimonials-section my-20 mb-5 pt-8 max-[640px]:!my-[60px] max-[640px]:!mb-5 max-[640px]:pt-6 max-[480px]:pt-5 max-[360px]:pt-4">
     <div className="section-title-wrap max-[640px]:text-center max-[640px]:mb-[30px]">
       <h2 className="section-main-headline max-[640px]:text-2xl max-[480px]:text-xl max-[360px]:text-lg">
         {renderTitle(s3?.title, <span>Our <span className="highlight-sharp-blue-box">Testimonials</span></span>, "Testimonials")}
@@ -136,16 +136,42 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
     </div>
     
     {/* Horizontal Scrollable Container with Navigation Arrows */}
-    <div className="relative mt-10 px-12 max-[640px]:px-8 max-[480px]:px-6 overflow-hidden">
+    <div className="relative mt-10 px-12 pt-6 pb-4 max-[640px]:px-8 max-[640px]:pt-5 max-[640px]:pb-3 max-[480px]:px-6 max-[480px]:pt-4 max-[480px]:pb-2 overflow-hidden">
       {/* Left Arrow - Always Visible */}
       <button
         onClick={() => {
           const container = document.getElementById('testimonials-scroll-container');
-          const cardWidth = 340; // width of one card
-          const gap = 24; // gap between cards (6 * 4px)
+          // Get current screen width to determine card width and gap
+          const screenWidth = window.innerWidth;
+          let cardWidth = 340;
+          let gap = 24;
+          
+          if (screenWidth <= 360) {
+            cardWidth = 145;
+            gap = 12;
+          } else if (screenWidth <= 480) {
+            cardWidth = 160;
+            gap = 14;
+          } else if (screenWidth <= 640) {
+            cardWidth = 170;
+            gap = 16;
+          } else if (screenWidth <= 768) {
+            cardWidth = 180;
+            gap = 16;
+          } else if (screenWidth <= 900) {
+            cardWidth = 200;
+            gap = 16;
+          } else if (screenWidth <= 1024) {
+            cardWidth = 280;
+            gap = 16;
+          } else if (screenWidth <= 1200) {
+            cardWidth = 320;
+            gap = 20;
+          }
+          
           container.scrollBy({ left: -(cardWidth + gap), behavior: 'smooth' });
         }}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-200 hover:bg-gray-50 hover:shadow-[0_6px_16px_rgba(0,0,0,0.2)] active:scale-95 max-[640px]:w-8 max-[640px]:h-8 max-[480px]:w-7 max-[480px]:h-7"
+        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-300 hover:bg-gray-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.25)] hover:scale-110 active:scale-95 animate-[fadeInLeft_0.6s_ease-out] max-[640px]:w-8 max-[640px]:h-8 max-[480px]:w-7 max-[480px]:h-7"
         aria-label="Previous testimonials"
       >
         <ChevronLeft size={20} className="text-gray-700 max-[640px]:w-4 max-[640px]:h-4 max-[480px]:w-3.5 max-[480px]:h-3.5" />
@@ -154,7 +180,7 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
       {/* Scrollable Content - Single Row */}
       <div
         id="testimonials-scroll-container"
-        className="flex gap-6 overflow-x-auto scroll-smooth max-w-[1068px] mx-auto max-[1200px]:gap-5 max-[1200px]:max-w-[980px] max-[900px]:gap-5 max-[900px]:max-w-[620px] max-[768px]:gap-4 max-[768px]:max-w-[576px] max-[640px]:gap-4 max-[640px]:max-w-[536px] max-[480px]:gap-[14px] max-[480px]:max-w-[494px] max-[360px]:gap-3 max-[360px]:max-w-[452px]"
+        className="flex gap-6 overflow-x-auto scroll-smooth max-w-[1068px] mx-auto max-[1200px]:gap-5 max-[1200px]:max-w-[980px] max-[1024px]:gap-4 max-[1024px]:max-w-[856px] max-[900px]:gap-4 max-[900px]:max-w-[616px] max-[768px]:gap-4 max-[768px]:max-w-[576px] max-[640px]:gap-4 max-[640px]:max-w-[536px] max-[480px]:gap-[14px] max-[480px]:max-w-[494px] max-[360px]:gap-3 max-[360px]:max-w-[452px]"
         style={{ 
           scrollbarWidth: 'none', 
           msOverflowStyle: 'none',
@@ -183,15 +209,34 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
         ]).map((t, i) => (
           <div 
             key={i} 
-            className="bg-white border border-[#E5E7EB] rounded-3xl p-8 flex flex-col justify-between items-start flex-shrink-0 min-w-[340px] w-[340px] h-[440px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:translate-y-[-6px] hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] max-[1200px]:min-w-[320px] max-[1200px]:w-[320px] max-[1200px]:h-[380px] max-[1200px]:p-6 max-[900px]:min-w-[300px] max-[900px]:w-[300px] max-[900px]:h-[350px] max-[900px]:p-5 max-[768px]:min-w-[280px] max-[768px]:w-[280px] max-[768px]:p-5 max-[640px]:min-w-[260px] max-[640px]:w-[260px] max-[640px]:h-[320px] max-[640px]:p-5 max-[640px]:rounded-[20px] max-[480px]:min-w-[240px] max-[480px]:w-[240px] max-[480px]:h-[300px] max-[480px]:p-4 max-[360px]:min-w-[220px] max-[360px]:w-[220px] max-[360px]:h-[280px] max-[360px]:p-[14px]"
+            className="testimonial-card-enhanced bg-white border border-[#E5E7EB] rounded-3xl p-8 flex flex-col justify-between items-start flex-shrink-0 min-w-[340px] w-[340px] h-[440px] shadow-[0_10px_30px_rgba(0,0,0,0.015)] animate-[slideInUp_0.6s_ease-out] max-[1200px]:min-w-[320px] max-[1200px]:w-[320px] max-[1200px]:h-[380px] max-[1200px]:p-6 max-[1024px]:min-w-[280px] max-[1024px]:w-[280px] max-[1024px]:h-[360px] max-[1024px]:p-5 max-[900px]:min-w-[200px] max-[900px]:w-[200px] max-[900px]:h-[320px] max-[900px]:p-4 max-[768px]:min-w-[180px] max-[768px]:w-[180px] max-[768px]:h-[300px] max-[768px]:p-4 max-[640px]:min-w-[170px] max-[640px]:w-[170px] max-[640px]:h-[280px] max-[640px]:p-4 max-[640px]:rounded-[20px] max-[480px]:min-w-[160px] max-[480px]:w-[160px] max-[480px]:h-[260px] max-[480px]:p-3 max-[360px]:min-w-[145px] max-[360px]:w-[145px] max-[360px]:h-[240px] max-[360px]:p-3"
+            style={{
+              animationDelay: `${i * 150}ms`,
+              animationFillMode: 'backwards'
+            }}
           >
-            <div className="w-14 h-14 rounded-full overflow-hidden mb-6 border border-[#E5E7EB] shadow-[0_4px_10px_rgba(0,0,0,0.05)] flex-shrink-0 max-[900px]:w-12 max-[900px]:h-12 max-[640px]:w-11 max-[640px]:h-11 max-[640px]:mb-4 max-[480px]:w-10 max-[480px]:h-10 max-[480px]:mb-[14px] max-[360px]:w-9 max-[360px]:h-9 max-[360px]:mb-3">
+            <div className="profile-image-enhanced w-14 h-14 rounded-full overflow-hidden mb-6 border border-[#E5E7EB] shadow-[0_4px_10px_rgba(0,0,0,0.05)] flex-shrink-0 animate-[bounceIn_0.8s_ease-out] max-[900px]:w-12 max-[900px]:h-12 max-[640px]:w-11 max-[640px]:h-11 max-[640px]:mb-4 max-[480px]:w-10 max-[480px]:h-10 max-[480px]:mb-[14px] max-[360px]:w-9 max-[360px]:h-9 max-[360px]:mb-3"
+              style={{
+                animationDelay: `${i * 150 + 200}ms`,
+                animationFillMode: 'backwards'
+              }}
+            >
               <img src={t.image || t.photo || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80"} alt={t.name} className="w-full h-full object-cover" />
             </div>
-            <p className="font-['Lato'] text-[14.5px] text-[#4B5563] leading-[165%] m-0 mb-6 flex-grow max-[900px]:text-[13px] max-[768px]:text-xs max-[768px]:mb-4 max-[640px]:text-[13px] max-[640px]:leading-[1.5] max-[640px]:mb-4 max-[480px]:text-xs max-[480px]:mb-[14px] max-[360px]:text-[11px] max-[360px]:mb-3">
+            <p className="font-['Lato'] text-[14.5px] text-[#4B5563] leading-[165%] m-0 mb-6 flex-grow animate-[fadeInUp_0.7s_ease-out] max-[900px]:text-[13px] max-[768px]:text-xs max-[768px]:mb-4 max-[640px]:text-[13px] max-[640px]:leading-[1.5] max-[640px]:mb-4 max-[480px]:text-xs max-[480px]:mb-[14px] max-[360px]:text-[11px] max-[360px]:mb-3"
+              style={{
+                animationDelay: `${i * 150 + 400}ms`,
+                animationFillMode: 'backwards'
+              }}
+            >
               {t.text || t.quote}
             </p>
-            <div className="flex flex-col gap-1 items-start w-full border-t border-[#F3F4F6] pt-[18px] max-[640px]:pt-4 max-[480px]:pt-4 max-[360px]:pt-4">
+            <div className="flex flex-col gap-1 items-start w-full border-t border-[#F3F4F6] pt-[18px] animate-[slideInLeft_0.6s_ease-out] max-[640px]:pt-4 max-[480px]:pt-4 max-[360px]:pt-4"
+              style={{
+                animationDelay: `${i * 150 + 600}ms`,
+                animationFillMode: 'backwards'
+              }}
+            >
               <h5 className="font-['Dancing_Script'] text-[25px] font-bold text-[#111827] m-0 tracking-[0.2px] max-[900px]:text-xl max-[640px]:text-xl max-[480px]:text-lg max-[360px]:text-base">
                 {t.name}
               </h5>
@@ -210,7 +255,12 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
             image: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=300&q=80" 
           };
           return (
-            <div className="bg-black border border-[#E5E7EB] rounded-3xl p-0 flex flex-col justify-between items-start flex-shrink-0 min-w-[340px] w-[340px] h-[440px] transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] shadow-[0_10px_30px_rgba(0,0,0,0.015)] hover:translate-y-[-6px] hover:shadow-[0_20px_40px_rgba(0,0,0,0.06)] relative overflow-hidden max-[1200px]:min-w-[320px] max-[1200px]:w-[320px] max-[1200px]:h-[380px] max-[900px]:min-w-[300px] max-[900px]:w-[300px] max-[900px]:h-[350px] max-[768px]:min-w-[280px] max-[768px]:w-[280px] max-[640px]:min-w-[260px] max-[640px]:w-[260px] max-[640px]:h-[300px] max-[640px]:rounded-[20px] max-[480px]:min-w-[240px] max-[480px]:w-[240px] max-[480px]:h-[280px] max-[360px]:min-w-[220px] max-[360px]:w-[220px] max-[360px]:h-[260px]">
+            <div className="video-card-enhanced bg-black border border-[#E5E7EB] rounded-3xl p-0 flex flex-col justify-between items-start flex-shrink-0 min-w-[340px] w-[340px] h-[440px] shadow-[0_10px_30px_rgba(0,0,0,0.015)] relative overflow-hidden animate-[slideInRight_0.8s_ease-out] max-[1200px]:min-w-[320px] max-[1200px]:w-[320px] max-[1200px]:h-[380px] max-[1024px]:min-w-[280px] max-[1024px]:w-[280px] max-[1024px]:h-[360px] max-[900px]:min-w-[200px] max-[900px]:w-[200px] max-[900px]:h-[320px] max-[768px]:min-w-[180px] max-[768px]:w-[180px] max-[768px]:h-[300px] max-[640px]:min-w-[170px] max-[640px]:w-[170px] max-[640px]:h-[280px] max-[640px]:rounded-[20px] max-[480px]:min-w-[160px] max-[480px]:w-[160px] max-[480px]:h-[260px] max-[360px]:min-w-[145px] max-[360px]:w-[145px] max-[360px]:h-[240px]"
+              style={{
+                animationDelay: '450ms',
+                animationFillMode: 'backwards'
+              }}
+            >
               {mainT.video ? (
                 <video 
                   src={mainT.video} 
@@ -224,7 +274,7 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
                   className="w-full h-full object-cover" 
                 />
               )}
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.15),rgba(0,0,0,0.85))] flex flex-col justify-between p-8 z-[2] max-[1200px]:p-6 max-[900px]:p-5 max-[640px]:p-5 max-[480px]:p-4 max-[360px]:p-[14px]">
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.15),rgba(0,0,0,0.85))] flex flex-col justify-between p-8 z-[2] max-[1200px]:p-6 max-[1024px]:p-4 max-[900px]:p-4 max-[768px]:p-3 max-[640px]:p-4 max-[480px]:p-3 max-[360px]:p-3">
                 <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-white max-[640px]:w-11 max-[640px]:h-11 max-[480px]:w-10 max-[480px]:h-10 max-[360px]:w-9 max-[360px]:h-9">
                   <img 
                     src={mainT.image || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80"} 
@@ -233,7 +283,19 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
                   />
                 </div>
                 {mainT.video && (
-                  <div className="w-14 h-14 rounded-full bg-[rgba(255,255,255,0.25)] backdrop-blur-[8px] flex items-center justify-center m-auto cursor-pointer transition-all duration-200 ease-in-out border border-[rgba(255,255,255,0.3)] hover:scale-110 hover:bg-[rgba(255,255,255,0.4)] max-[640px]:w-12 max-[640px]:h-12 max-[480px]:w-11 max-[480px]:h-11 max-[360px]:w-10 max-[360px]:h-10">
+                  <div className="play-button-enhanced w-14 h-14 rounded-full bg-[rgba(255,255,255,0.25)] backdrop-blur-[8px] flex items-center justify-center m-auto cursor-pointer border border-[rgba(255,255,255,0.3)] max-[640px]:w-12 max-[640px]:h-12 max-[480px]:w-11 max-[480px]:h-11 max-[360px]:w-10 max-[360px]:h-10"
+                    onClick={(event) => {
+                      // Add click animation
+                      const playButton = event.currentTarget;
+                      playButton.style.transform = 'scale(0.9)';
+                      setTimeout(() => {
+                        playButton.style.transform = 'scale(1.1)';
+                      }, 100);
+                      setTimeout(() => {
+                        playButton.style.transform = 'scale(1)';
+                      }, 200);
+                    }}
+                  >
                     <Play size={20} fill="#FFFFFF" color="#FFFFFF" className="ml-[3px]" />
                   </div>
                 )}
@@ -255,11 +317,37 @@ export default function AboutUsPage({ renderTitle, activeMenu }) {
       <button
         onClick={() => {
           const container = document.getElementById('testimonials-scroll-container');
-          const cardWidth = 340; // width of one card
-          const gap = 24; // gap between cards (6 * 4px)
+          // Get current screen width to determine card width and gap
+          const screenWidth = window.innerWidth;
+          let cardWidth = 340;
+          let gap = 24;
+          
+          if (screenWidth <= 360) {
+            cardWidth = 145;
+            gap = 12;
+          } else if (screenWidth <= 480) {
+            cardWidth = 160;
+            gap = 14;
+          } else if (screenWidth <= 640) {
+            cardWidth = 170;
+            gap = 16;
+          } else if (screenWidth <= 768) {
+            cardWidth = 180;
+            gap = 16;
+          } else if (screenWidth <= 900) {
+            cardWidth = 200;
+            gap = 16;
+          } else if (screenWidth <= 1024) {
+            cardWidth = 280;
+            gap = 16;
+          } else if (screenWidth <= 1200) {
+            cardWidth = 320;
+            gap = 20;
+          }
+          
           container.scrollBy({ left: (cardWidth + gap), behavior: 'smooth' });
         }}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-200 hover:bg-gray-50 hover:shadow-[0_6px_16px_rgba(0,0,0,0.2)] active:scale-95 max-[640px]:w-8 max-[640px]:h-8 max-[480px]:w-7 max-[480px]:h-7"
+        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 rounded-full bg-white shadow-[0_4px_12px_rgba(0,0,0,0.15)] flex items-center justify-center transition-all duration-300 hover:bg-gray-50 hover:shadow-[0_8px_20px_rgba(0,0,0,0.25)] hover:scale-110 active:scale-95 animate-[fadeInRight_0.6s_ease-out] max-[640px]:w-8 max-[640px]:h-8 max-[480px]:w-7 max-[480px]:h-7"
         aria-label="Next testimonials"
       >
         <ChevronRight size={20} className="text-gray-700 max-[640px]:w-4 max-[640px]:h-4 max-[480px]:w-3.5 max-[480px]:h-3.5" />

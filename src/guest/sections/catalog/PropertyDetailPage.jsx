@@ -55,7 +55,12 @@ export default function PropertyDetailPage(props) {
 
     const addSpec = (label, value, iconName) => {
       if (value !== undefined && value !== null && value !== '' && value !== false) {
-        specs.push({ label, value: typeof value === 'boolean' ? 'Yes' : value, iconName });
+        // Format numbers with commas for better readability
+        const formattedValue = typeof value === 'boolean' ? 'Yes' : 
+                             typeof value === 'number' && Number.isInteger(value) && value >= 1000 ? 
+                             value.toLocaleString('en-IN') : 
+                             value;
+        specs.push({ label, value: formattedValue, iconName });
       }
     };
 
@@ -177,14 +182,14 @@ export default function PropertyDetailPage(props) {
   // Gracefully calculate price display values
   const rawVal = activeDetailProp.priceRaw || (activeDetailProp.price ? Number(String(activeDetailProp.price).replace(/[^\d]/g, '')) : 1400);
   const priceString = activeDetailProp.price && String(activeDetailProp.price).startsWith('₹') 
-    ? activeDetailProp.price 
+    ? `₹${Number(String(activeDetailProp.price).replace(/[^\d]/g, '')).toLocaleString('en-IN')}`
     : `₹${Number(rawVal).toLocaleString('en-IN')}`;
   const oldPriceString = activeDetailProp.originalPrice 
     ? `₹${Number(activeDetailProp.originalPrice).toLocaleString('en-IN')}`
     : null;
 
   return (
-    <div className="w-[1440px] max-w-[calc(100%-158px)] mx-auto pt-[150px] overflow-x-hidden box-border fade-in max-[1100px]:max-w-[calc(100%-80px)] max-[900px]:max-w-[calc(100%-32px)] max-[900px]:pt-[100px] max-[640px]:!max-w-full max-[640px]:!px-3 max-[640px]:!pt-[60px] max-[480px]:!px-2 max-[480px]:!pt-[50px] max-[360px]:!pt-10">
+    <div className="w-[1440px] max-w-[calc(100%-158px)] mx-auto pt-[150px] overflow-x-hidden box-border fade-in max-[1100px]:max-w-[calc(100%-80px)] max-[900px]:max-w-[calc(100%-48px)] max-[900px]:pt-[100px] max-[640px]:!max-w-[calc(100%-24px)] max-[640px]:!pt-[60px] max-[480px]:!max-w-[calc(100%-16px)] max-[480px]:!pt-[50px] max-[360px]:!pt-10 max-[360px]:!max-w-[calc(100%-12px)]">
       {/* Breadcrumb row */}
       <div className="flex items-center gap-2 font-['Lato'] text-sm font-medium text-[#6B7280] mb-6 flex-wrap max-[640px]:text-[11px] max-[640px]:mb-4 max-[640px]:gap-[6px] max-[480px]:text-[10px] max-[480px]:gap-1">
         <span onClick={() => setActiveMenu('Home')} className="cursor-pointer transition-colors hover:text-[var(--primary-blue)]">Home</span>
@@ -310,7 +315,7 @@ export default function PropertyDetailPage(props) {
                 <div className="text-[28px] font-bold text-[#66AB3B] leading-none max-[640px]:!text-2xl">{priceString}/night</div>
               </div>
               <div className="text-left text-[13px] text-[#6B7280] leading-[1.4] max-[640px]:!text-xs max-[640px]:!text-left max-[640px]:!ml-0">
-                +{activeDetailProp.taxAmount || 212} taxes & fees per<br />room per night
+                +{Number(activeDetailProp.taxAmount || 212).toLocaleString('en-IN')} taxes & fees per<br />room per night
               </div>
             </div>
 
@@ -541,7 +546,7 @@ export default function PropertyDetailPage(props) {
 
                     <div className="room-card-pricing-col">
                       <div className="room-pricing-text-group">
-                        <span className="room-taxes-label">+{room.tax_amount || room.taxAmount || activeDetailProp.taxAmount || 212} taxes & fees per<br />room per night</span>
+                        <span className="room-taxes-label">+{Number(room.tax_amount || room.taxAmount || activeDetailProp.taxAmount || 212).toLocaleString('en-IN')} taxes & fees per<br />room per night</span>
                         {(room.original_price || room.originalPrice || room.original_rate) && (
                           <span className="room-old-strike">₹{Number(room.original_price || room.originalPrice || room.original_rate).toLocaleString('en-IN')}/night</span>
                         )}
@@ -863,7 +868,7 @@ export default function PropertyDetailPage(props) {
           <h3 className="section-subtitle-title" style={{ marginBottom: '16px', borderBottom: '1px solid #F3F4F6', paddingBottom: '12px' }}>
             Still have questions? Enquire Now
           </h3>
-          <form onSubmit={handleEnquirySubmit} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+          <form onSubmit={handleEnquirySubmit} className="enquiry-form-grid" style={{ gap: '16px' }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <label style={{ fontSize: '13px', color: '#4B5563', fontWeight: 600, textAlign: 'left' }}>Your Name*</label>
               <input 

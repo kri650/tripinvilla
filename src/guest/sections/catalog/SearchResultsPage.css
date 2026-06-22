@@ -142,10 +142,120 @@ input[type="range"]::-moz-range-thumb {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
+/* Dual Slider Container */
+.dual-slider-container {
+  position: relative;
+  width: 100%;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.dual-slider-container input[type="range"] {
+  position: absolute;
+  width: 100%;
+  height: 20px;
+  background: transparent;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  pointer-events: none;
+}
+
+.dual-slider-container input[type="range"]::-webkit-slider-thumb {
+  pointer-events: auto;
+}
+
+.dual-slider-container input[type="range"]::-moz-range-thumb {
+  pointer-events: auto;
+}
+
+/* Mobile responsive slider adjustments */
+@media (max-width: 640px) {
+  .dual-slider-container {
+    padding: 0 8px;
+  }
+  
+  .dual-slider-container input[type="range"]::-webkit-slider-thumb {
+    width: 14px;
+    height: 14px;
+  }
+  
+  .dual-slider-container input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .dual-slider-container {
+    padding: 0 6px;
+  }
+  
+  .dual-slider-container input[type="range"]::-webkit-slider-thumb {
+    width: 12px;
+    height: 12px;
+  }
+  
+  .dual-slider-container input[type="range"]::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+  }
+}
+
 
 /* ==========================================================================
    RESPONSIVE STYLES FOR SEARCH RESULTS PAGE
    ========================================================================== */
+
+/* Tablet - 1024px to 1200px */
+@media (max-width: 1200px) {
+  .search-results-layout {
+    max-width: 1200px;
+    gap: 24px;
+    padding: 0 24px;
+  }
+  
+  .horiz-card-img {
+    width: 288px;
+  }
+  
+  .horiz-card-info {
+    padding: 20px;
+    min-width: 0;
+  }
+}
+
+/* Tablet - 900px to 1024px */
+@media (max-width: 1024px) {
+  .search-results-layout {
+    gap: 20px;
+    padding: 0 16px;
+    max-width: 100%;
+  }
+  
+  .horiz-card-img {
+    width: 256px;
+  }
+  
+  .horiz-card-info {
+    padding: 20px;
+  }
+  
+  .horiz-card-header h3 {
+    font-size: 18px;
+    line-height: 1.3;
+  }
+  
+  .horizontal-property-card {
+    min-height: 280px;
+    width: 100%;
+  }
+  
+  .btn-view-details {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}
 
 /* Tablet - 900px to 1024px */
 @media (max-width: 1024px) {
