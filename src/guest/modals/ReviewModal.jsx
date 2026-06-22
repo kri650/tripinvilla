@@ -37,20 +37,20 @@ export default function ReviewModal(props) {
           </h2>
           
           {/* Interactive Star Row */}
-          <div className="flex justify-center gap-2 mb-6 max-[640px]:gap-1.5 max-[640px]:mb-5 max-[480px]:gap-1 max-[480px]:mb-4 max-[360px]:gap-0.5 max-[360px]:mb-3">
+          <div className="flex justify-center gap-1.5 mb-5 min-[1024px]:gap-1 min-[1024px]:mb-4 max-[768px]:gap-2 max-[768px]:mb-6 max-[640px]:gap-1.5 max-[640px]:mb-5 max-[480px]:gap-1 max-[480px]:mb-4 max-[360px]:gap-0.5 max-[360px]:mb-3">
             {[1, 2, 3, 4, 5].map((num) => (
               <button 
                 key={num}
                 type="button"
-                className="bg-transparent border-none cursor-pointer outline-none transition-transform duration-100 hover:scale-110 p-1 max-[640px]:p-0.5 max-[480px]:p-0.5 max-[360px]:p-0"
+                className="bg-transparent border-none cursor-pointer outline-none transition-transform duration-100 hover:scale-110 p-0.5 min-[1024px]:p-0 max-[768px]:p-1 max-[640px]:p-0.5 max-[480px]:p-0.5 max-[360px]:p-0"
                 onClick={() => setReviewRating(num)}
               >
                 <Star 
-                  size={32} 
+                  size={28} 
                   fill={num <= reviewRating ? "var(--accent-orange)" : "none"} 
                   color={num <= reviewRating ? "var(--accent-orange)" : "#D1D5DB"} 
                   strokeWidth={2}
-                  className="w-8 h-8 max-[640px]:w-7 max-[640px]:h-7 max-[480px]:w-6 max-[480px]:h-6 max-[360px]:w-5 max-[360px]:h-5"
+                  className="w-7 h-7 min-[1024px]:w-6 min-[1024px]:h-6 max-[768px]:w-8 max-[768px]:h-8 max-[640px]:w-7 max-[640px]:h-7 max-[480px]:w-6 max-[480px]:h-6 max-[360px]:w-5 max-[360px]:h-5"
                 />
               </button>
             ))}
@@ -58,11 +58,11 @@ export default function ReviewModal(props) {
 
           <form onSubmit={handleReviewFormSubmit} className="w-full flex flex-col">
             
-            <div className="flex flex-col w-full mb-4 max-[640px]:mb-3 max-[480px]:mb-2.5">
-              <label className="text-sm font-semibold text-gray-700 mb-2 text-left max-[480px]:text-xs">Your Name*</label>
+            <div className="flex flex-col w-full mb-3 min-[1024px]:mb-2.5 max-[768px]:mb-4 max-[640px]:mb-3 max-[480px]:mb-2.5">
+              <label className="text-sm font-semibold text-gray-700 mb-1.5 text-left min-[1024px]:text-xs min-[1024px]:mb-1 max-[480px]:text-xs">Your Name*</label>
               <input 
                 type="text"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg font-lato text-base text-gray-900 bg-white outline-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 max-[480px]:px-2.5 max-[480px]:py-2 max-[480px]:text-sm max-[360px]:px-2 max-[360px]:py-1.5 max-[360px]:text-xs" 
+                className="w-full px-3 py-2.5 border border-gray-300 rounded-lg font-lato text-sm text-gray-900 bg-white outline-none transition-colors focus:border-blue-600 focus:ring-2 focus:ring-blue-600/20 min-[1024px]:px-2.5 min-[1024px]:py-2 min-[1024px]:text-xs max-[768px]:px-4 max-[768px]:py-3 max-[768px]:text-base max-[480px]:px-2.5 max-[480px]:py-2 max-[480px]:text-sm max-[360px]:px-2 max-[360px]:py-1.5 max-[360px]:text-xs" 
                 placeholder="John Doe"
                 value={reviewName}
                 onChange={(e) => setReviewName(e.target.value)}
