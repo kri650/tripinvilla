@@ -455,98 +455,107 @@ export default function SearchResultsPage(props) {
                       return (
                         <div 
                           key={idx}
-                          className="flex bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-[0_4px_15px_rgba(0,0,0,0.03)] transition-all min-h-[300px] hover:-translate-y-[2px] hover:shadow-[0_12px_25px_rgba(0,0,0,0.06)] hover:border-[#93C5FD] w-full max-[1024px]:min-h-[280px] max-[900px]:flex-col max-[900px]:min-h-auto max-[900px]:w-full max-[640px]:rounded-2xl max-[480px]:rounded-[14px]"
+                          className="flex bg-white rounded-[20px] overflow-hidden border border-gray-200 shadow-[0_4px_15px_rgba(0,0,0,0.03)] transition-all min-h-[260px] hover:-translate-y-[2px] hover:shadow-[0_12px_25px_rgba(0,0,0,0.06)] hover:border-[#93C5FD] w-full max-[1024px]:min-h-[240px] max-[900px]:flex-col max-[900px]:min-h-auto max-[900px]:w-full max-[640px]:rounded-2xl max-[480px]:rounded-[14px]"
                         >
                           {/* Property Image */}
-                          <div className="w-80 flex-shrink-0 relative overflow-hidden max-[1200px]:w-72 max-[1024px]:w-64 max-[900px]:w-full max-[900px]:h-60 max-[640px]:h-[200px] max-[480px]:h-[180px] max-[360px]:h-40">
+                          <div className="w-64 flex-shrink-0 relative overflow-hidden max-[1200px]:w-60 max-[1024px]:w-56 max-[900px]:w-full max-[900px]:h-52 max-[768px]:h-48 max-[640px]:h-44 max-[540px]:h-40 max-[480px]:h-36 max-[420px]:h-32 max-[360px]:h-28">
+                            
                             <img 
                               src={property.img || property.image} 
                               alt={property.title || property.propertyName}
                               className="w-full h-full object-cover absolute top-0 left-0"
                             />
                           </div>
-
+{/* <div className="w-80 flex-shrink-0 relative overflow-hidden max-[1200px]:w-72 max-[1024px]:w-64 max-[900px]:w-full max-[900px]:h-60 max-[768px]:h-56 max-[640px]:h-48 max-[540px]:h-44 max-[480px]:h-40 max-[420px]:h-36 max-[360px]:h-32">
+  <img 
+    src={property.img || property.image} 
+    alt={property.title || property.propertyName}
+    // Added max-[1024px]:object-contain to fix tablet cropping
+    className="w-full h-full absolute top-0 left-0 object-cover max-[1024px]:object-contain"
+  />
+</div> */}
                           {/* Property Info */}
-                          <div className="flex-1 p-6 flex flex-col min-w-0 max-[1024px]:p-5 max-[900px]:p-[18px] max-[900px]:w-full max-[900px]:box-border max-[640px]:p-4 max-[480px]:p-[14px] max-[360px]:p-3">
+                          <div className="flex-1 p-5 flex flex-col min-w-0 max-[1024px]:p-4 max-[900px]:p-[18px] max-[900px]:w-full max-[900px]:box-border max-[640px]:p-4 max-[480px]:p-[14px] max-[360px]:p-3">
                             
                             {/* Header - Title and Wishlist */}
-                            <div className="flex justify-between items-start mb-3 gap-3 max-[640px]:mb-[10px]">
+                            <div className="flex justify-between items-start mb-4 gap-4 min-[1024px]:mb-6 min-[1024px]:gap-6 max-[640px]:mb-3">
                               <div className="flex-1 min-w-0">
-                                <h3 className="font-['Lato'] text-[22px] font-bold text-gray-900 m-0 mb-[6px] flex items-center gap-[10px] flex-wrap max-[1200px]:text-[20px] max-[1024px]:text-[18px] max-[900px]:text-[19px] max-[640px]:text-[17px] max-[640px]:leading-tight max-[480px]:text-base max-[360px]:text-[15px]">
+                                <h3 className="font-['Lato'] text-xl font-bold text-gray-900 m-0 mb-2 flex items-center gap-3 flex-wrap min-[1024px]:text-2xl min-[1024px]:mb-3 max-[1200px]:text-[22px] max-[1024px]:text-xl max-[900px]:text-[21px] max-[640px]:text-lg max-[640px]:leading-tight max-[480px]:text-[17px] max-[360px]:text-base">
                                   {property.title || property.propertyName}
                                   {idx === 0 && (
-                                    <span className="bg-[#58A429] text-white text-[11px] font-bold py-1 px-[10px] rounded-xl inline-flex items-center gap-1 max-[640px]:text-[10px] max-[640px]:py-[3px] max-[640px]:px-2 max-[360px]:text-[9px] max-[360px]:py-[2px] max-[360px]:px-[6px]">
-                                      <Star size={10} fill="white" /> Premium
+                                    <span className="bg-[#58A429] text-white text-xs font-bold py-[5px] px-3 rounded-xl inline-flex items-center gap-1 min-[1024px]:text-sm min-[1024px]:py-2 min-[1024px]:px-4 max-[640px]:text-[11px] max-[640px]:py-1 max-[640px]:px-2 max-[360px]:text-[10px] max-[360px]:py-[3px] max-[360px]:px-[7px]">
+                                      <Star size={12} fill="white" className="min-[1024px]:w-4 min-[1024px]:h-4" /> Premium
                                     </span>
                                   )}
                                 </h3>
-                                <p className="text-gray-500 text-sm m-0 flex items-center gap-1 max-[640px]:text-[13px] max-[480px]:text-xs max-[360px]:text-[11px]">
-                                  <MapPin size={14} color="#9CA3AF" /> {property.location}
+                                <p className="text-gray-500 text-sm m-0 flex items-center gap-2 min-[1024px]:text-[15px] min-[1024px]:gap-3 max-[640px]:text-sm max-[480px]:text-[13px] max-[360px]:text-xs">
+                                  <MapPin size={16} color="#9CA3AF" className="min-[1024px]:w-5 min-[1024px]:h-5" /> {property.location}
                                 </p>
                               </div>
                               <button 
-                                className="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center cursor-pointer transition-all hover:bg-gray-100 hover:border-gray-300 max-[640px]:w-9 max-[640px]:h-9 max-[480px]:w-[34px] max-[480px]:h-[34px] max-[360px]:w-8 max-[360px]:h-8"
+                                className="w-10 h-10 rounded-full border border-gray-200 bg-white flex items-center justify-center cursor-pointer transition-all hover:bg-gray-100 hover:border-gray-300 min-[1024px]:w-11 min-[1024px]:h-11 max-[640px]:w-10 max-[640px]:h-10 max-[480px]:w-9 max-[480px]:h-9 max-[360px]:w-8 max-[360px]:h-8"
                                 onClick={(e) => toggleWishlist(property._id, e)}
                               >
                                 <Heart 
-                                  size={18} 
+                                  size={20} 
                                   fill={isWishlisted ? '#EF4444' : 'none'} 
                                   color={isWishlisted ? '#EF4444' : '#6B7280'} 
+                                  className="min-[1024px]:w-6 min-[1024px]:h-6"
                                 />
                               </button>
                             </div>
 
                             {/* Rating */}
-                            <div className="flex items-center gap-3 mb-4 text-sm text-gray-600 max-[640px]:mb-3 max-[640px]:gap-[10px] max-[640px]:text-[13px] max-[480px]:gap-2 max-[480px]:text-xs max-[360px]:text-[11px]">
+                            <div className="flex items-center gap-4 mb-4 text-sm text-gray-600 min-[1024px]:gap-5 min-[1024px]:mb-5 min-[1024px]:text-[15px] max-[640px]:mb-4 max-[640px]:gap-3 max-[640px]:text-sm max-[480px]:gap-2 max-[480px]:text-[13px] max-[360px]:text-xs">
                               {property.reviewsCount > 0 ? (
                                 <>
-                                  <span className="bg-[#58A429] text-white text-sm font-bold py-1 px-2 rounded-md max-[640px]:text-[13px] max-[640px]:py-[3px] max-[640px]:px-[7px] max-[480px]:text-xs max-[480px]:py-[2px] max-[480px]:px-[6px] max-[360px]:text-[11px] max-[360px]:py-[2px] max-[360px]:px-[5px]">
+                                  <span className="bg-[#58A429] text-white text-sm font-bold py-[5px] px-3 rounded-md min-[1024px]:text-[15px] min-[1024px]:py-[6px] min-[1024px]:px-3 max-[640px]:text-sm max-[640px]:py-1 max-[640px]:px-2 max-[480px]:text-[13px] max-[480px]:py-[3px] max-[480px]:px-[7px] max-[360px]:text-xs max-[360px]:py-[2px] max-[360px]:px-[6px]">
                                     {property.rating}
                                   </span>
                                   <span className="flex flex-col">
-                                    <span className="text-gray-600 font-medium">{property.ratingLabel}</span>
-                                    <span className="text-gray-400 text-[13px] max-[640px]:text-xs">{property.reviews}</span>
+                                    <span className="text-gray-600 font-medium text-sm min-[1024px]:text-[15px] max-[640px]:text-sm">{property.ratingLabel}</span>
+                                    <span className="text-gray-400 text-[13px] min-[1024px]:text-sm max-[640px]:text-[13px]">{property.reviews}</span>
                                   </span>
                                 </>
                               ) : (
                                 <span className="flex flex-col">
-                                  <span className="text-gray-400 font-medium italic">Not Rated Yet</span>
-                                  <span className="text-gray-400 text-[13px] max-[640px]:text-xs">0 Genuine Reviews</span>
+                                  <span className="text-gray-400 font-medium italic text-sm min-[1024px]:text-[15px] max-[640px]:text-sm">Not Rated Yet</span>
+                                  <span className="text-gray-400 text-[13px] min-[1024px]:text-sm max-[640px]:text-[13px]">0 Genuine Reviews</span>
                                 </span>
                               )}
                             </div>
 
                             {/* Highlights */}
-                            <div className="flex flex-col gap-2 flex-1">
+                            <div className="flex flex-col gap-2 flex-1 min-[1024px]:gap-3">
                               {(property.highlights && property.highlights.length > 0) ? (
                                 property.highlights.slice(0, 3).map((hl, i) => (
                                   <span 
                                     key={i}
-                                    className="flex items-center gap-2 text-[13.5px] text-gray-600 font-medium max-[640px]:text-xs max-[640px]:gap-[6px] max-[480px]:text-[11px] max-[360px]:text-[10px]"
+                                    className="flex items-center gap-2 text-sm text-gray-600 font-medium min-[1024px]:text-[15px] min-[1024px]:gap-3 max-[640px]:text-sm max-[640px]:gap-2 max-[480px]:text-[13px] max-[360px]:text-xs"
                                   >
-                                    <CheckCircle size={16} fill="#0C6DC4" color="white" /> {hl}
+                                    <CheckCircle size={16} fill="#0C6DC4" color="white" className="min-[1024px]:w-[18px] min-[1024px]:h-[18px]" /> {hl}
                                   </span>
                                 ))
                               ) : (
-                                <span className="flex items-center gap-2 text-[13.5px] text-gray-400 font-medium italic max-[640px]:text-xs max-[480px]:text-[11px] max-[360px]:text-[10px]">
+                                <span className="flex items-center gap-2 text-sm text-gray-400 font-medium italic min-[1024px]:text-[15px] min-[1024px]:gap-3 max-[640px]:text-sm max-[480px]:text-[13px] max-[360px]:text-xs">
                                   No special highlights listed
                                 </span>
                               )}
                             </div>
 
                             {/* Footer - Price and Actions */}
-                            <div className="flex justify-between items-end mt-auto pt-4 border-t border-dashed border-gray-200 max-[900px]:flex-col max-[900px]:items-start max-[900px]:gap-[14px] max-[900px]:w-full max-[640px]:pt-3 max-[640px]:gap-3">
+                            <div className="flex justify-between items-end mt-auto pt-4 border-t border-dashed border-gray-200 min-[1024px]:pt-5 min-[1024px]:gap-5 max-[900px]:flex-col max-[900px]:items-start max-[900px]:gap-4 max-[900px]:w-full max-[640px]:pt-4 max-[640px]:gap-3">
                               <div>
-                                <p className="text-[13px] text-gray-400 m-0 mb-1 line-through max-[640px]:text-xs max-[480px]:text-[11px]">
+                                <p className="text-[13px] text-gray-400 m-0 mb-2 line-through min-[1024px]:text-sm min-[1024px]:mb-2 max-[640px]:text-[13px] max-[480px]:text-xs">
                                   ₹{(Number(String(property.price || property.bestRoomRate || 0).replace(/[^\d]/g, '')) + 500).toLocaleString('en-IN')}/night
                                 </p>
-                                <h4 className="text-[22px] font-bold text-[#58A429] m-0 max-[640px]:text-xl max-[480px]:text-lg max-[360px]:text-[17px]">
+                                <h4 className="text-xl font-bold text-[#58A429] m-0 min-[1024px]:text-2xl max-[640px]:text-[20px] max-[480px]:text-lg max-[360px]:text-base">
                                   ₹{Number(String(property.price || property.bestRoomRate || 0).replace(/[^\d]/g, '')).toLocaleString('en-IN')}/night
                                 </h4>
                               </div>
-                              <div className="flex items-center gap-3 max-[900px]:w-full max-[640px]:gap-[10px] max-[360px]:gap-2">
+                              <div className="flex items-center gap-3 min-[1024px]:gap-4 max-[900px]:w-full max-[640px]:gap-3 max-[360px]:gap-2">
                                 <button 
-                                  className="bg-white text-[#0C6DC4] border-2 border-[#0C6DC4] py-[10px] px-6 rounded-full font-semibold text-sm cursor-pointer transition-all hover:bg-[#EFF6FF] hover:border-[#0856A3] shadow-sm max-[900px]:flex-1 max-[900px]:text-center max-[640px]:py-[10px] max-[640px]:px-[18px] max-[640px]:text-[13px] max-[480px]:py-[9px] max-[480px]:px-4 max-[480px]:text-xs max-[360px]:py-2 max-[360px]:px-3 max-[360px]:text-[11px]"
+                                  className="bg-white text-[#0C6DC4] border border-gray-300 py-[10px] px-6 rounded-full font-semibold text-sm cursor-pointer transition-all hover:bg-[#EFF6FF] hover:border-gray-400 min-[1024px]:py-3 min-[1024px]:px-7 min-[1024px]:text-[15px] max-[900px]:flex-1 max-[900px]:text-center max-[640px]:py-[11px] max-[640px]:px-5 max-[640px]:text-sm max-[480px]:py-[10px] max-[480px]:px-4 max-[480px]:text-[13px] max-[360px]:py-[9px] max-[360px]:px-3 max-[360px]:text-xs"
                                   onClick={() => { 
                                     setSelectedProperty(property); 
                                     setActiveMenu('Detail'); 
@@ -555,14 +564,14 @@ export default function SearchResultsPage(props) {
                                   View Details
                                 </button>
                                 <button 
-                                  className="w-10 h-10 rounded-full border-[3px] border-[#58A429] text-[#58A429] bg-white flex items-center justify-center cursor-pointer transition-all hover:bg-[#F0FDF4] shadow-sm max-[640px]:w-[38px] max-[640px]:h-[38px] max-[480px]:w-9 max-[480px]:h-9 max-[360px]:w-[34px] max-[360px]:h-[34px]"
+                                  className="w-11 h-11 rounded-full border-[3px] border-[#58A429] text-[#58A429] bg-white flex items-center justify-center cursor-pointer transition-all hover:bg-[#F0FDF4] shadow-sm min-[1024px]:w-12 min-[1024px]:h-12 max-[640px]:w-10 max-[640px]:h-10 max-[480px]:w-9 max-[480px]:h-9 max-[360px]:w-[34px] max-[360px]:h-[34px]"
                                   onClick={() => { 
                                     setSelectedProperty(property); 
                                     setContactStep(1); 
                                     setContactModalOpen(true); 
                                   }}
                                 >
-                                  <Phone size={18} />
+                                  <Phone size={18} className="min-[1024px]:w-5 min-[1024px]:h-5" />
                                 </button>
                               </div>
                             </div>

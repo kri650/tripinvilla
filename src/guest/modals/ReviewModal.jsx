@@ -84,7 +84,7 @@ export default function ReviewModal(props) {
 
             <button 
               type="submit" 
-              className="w-full bg-green-600 text-white font-semibold text-sm px-5 py-3 rounded-lg border-none cursor-pointer transition-all duration-200 hover:bg-green-700 hover:-translate-y-0.5 hover:shadow-lg mt-2 min-[1024px]:text-xs min-[1024px]:py-2.5 min-[1024px]:mt-1 max-[768px]:text-base max-[768px]:py-3.5 max-[768px]:mt-4 max-[640px]:py-3 max-[640px]:text-sm max-[480px]:py-2.5 max-[480px]:text-sm max-[360px]:py-2 max-[360px]:text-xs"
+              className="w-full bg-[#58A429] text-white font-semibold text-sm px-5 py-3 rounded-lg border-none cursor-pointer transition-all duration-200 hover:bg-[#4A8E20] hover:-translate-y-0.5 hover:shadow-lg mt-2 min-[1024px]:text-xs min-[1024px]:py-2.5 min-[1024px]:mt-1 max-[768px]:text-base max-[768px]:py-3.5 max-[768px]:mt-4 max-[640px]:py-3 max-[640px]:text-sm max-[480px]:py-2.5 max-[480px]:text-sm max-[360px]:py-2 max-[360px]:text-xs"
             >
               Submit
             </button>
