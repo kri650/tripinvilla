@@ -1026,7 +1026,7 @@ export default function AllProperties() {
                         </span>
                       </td>
                       <td style={{ color: "#111827", fontWeight: 600 }}>
-                        ₹{(p.bestRoomRate || p.price || 0).toLocaleString()}
+                        ₹{(p.bestRoomRate || p.price || 0).toLocaleString('en-IN')}
                       </td>
                       <td style={{ color: "#6B7280" }}>
                         {p.rooms || p.bedRooms || "—"}
@@ -1717,7 +1717,7 @@ export default function AllProperties() {
                           <div style={{ flex: 1 }}>
                             <span style={{ fontWeight: 700, color: '#111827', fontSize: 13 }}>{room.roomName || room.roomType}</span>
                             <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed · {room.maxGuests} guests · {room.count} room{room.count > 1 ? 's' : ''}</span>
-                            <span style={{ color: '#58A429', fontWeight: 600, fontSize: 13, marginLeft: 8 }}>₹{room.pricePerNight}/night</span>
+                            <span style={{ color: '#58A429', fontWeight: 600, fontSize: 13, marginLeft: 8 }}>₹{Number(room.pricePerNight).toLocaleString('en-IN')}/night</span>
                           </div>
                           {/* Edit button */}
                           <button type="button"

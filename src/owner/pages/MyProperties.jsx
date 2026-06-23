@@ -1551,7 +1551,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                       <div style={{ flex: 1 }}>
                         <span style={{ fontWeight: 700, color: '#111827', fontSize: 13 }}>{room.roomName || room.roomType}</span>
                         <span style={{ color: '#6B7280', fontSize: 12, marginLeft: 8 }}>{room.roomType} · {room.bedType} bed</span>
-                        <span style={{ color: '#58A429', fontWeight: 600, fontSize: 13, marginTop: 4, display: 'block' }}>₹{room.pricePerNight}/night</span>
+                        <span style={{ color: '#58A429', fontWeight: 600, fontSize: 13, marginTop: 4, display: 'block' }}>₹{Number(room.pricePerNight).toLocaleString('en-IN')}/night</span>
                       </div>
                       <button type="button" onClick={() => setRoomsList(prev => prev.filter((_, i) => i !== idx))}
                         style={{ background: 'none', border: 'none', color: '#EF4444', cursor: 'pointer', fontSize: 18, lineHeight: 1 }}>×</button>
@@ -1809,7 +1809,7 @@ export default function MyProperties({ autoOpenForm = false }) {
                     <td style={{ padding: '14px' }}>
                       <span className="category-pill" style={{ display: 'inline-block', padding: '3px 10px', borderRadius: '4px', fontSize: '11px', fontWeight: 500, background: '#DCFCE7', color: '#58A429' }}>{p.type}</span>
                     </td>
-                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px', fontSize: '13px' }}>₹{(p.price_per_night !== undefined ? p.price_per_night : p.price)?.toLocaleString()}</td>
+                    <td style={{ color: '#111827', fontWeight: 600, padding: '14px', fontSize: '13px' }}>₹{(p.price_per_night !== undefined ? p.price_per_night : p.price)?.toLocaleString('en-IN')}</td>
                     <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}>{p.bedRooms || 1}</td>
                     <td style={{ color: '#374151', fontWeight: 500, padding: '14px', fontSize: '13px' }}>{enquiryCounts[p._id] || 0}</td>
                     <td style={{ color: '#D97706', fontWeight: 600, padding: '14px', fontSize: '13px' }}>{p.rating || '—'}</td>

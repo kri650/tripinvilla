@@ -216,11 +216,11 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
           <div style={{ padding: '16px 18px', background: '#F9FAFB', borderRadius: '12px', border: '1px solid #E5E7EB' }}>
             <div style={{ fontSize: '11px', color: '#6B7280', marginBottom: '8px', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}><IndianRupee size={13} /> Pricing</div>
             <div style={{ fontSize: '22px', fontWeight: 800, color: '#58A429', display: 'flex', alignItems: 'center', gap: 2 }}>
-              <IndianRupee size={18} />{Number(price).toLocaleString()}
+              <IndianRupee size={18} />{Number(price).toLocaleString('en-IN')}
             </div>
             <div style={{ fontSize: '12px', color: '#6B7280', marginTop: 2 }}>per night / room</div>
-            {originalPrice > 0 && <div style={{ fontSize: '12px', color: '#9CA3AF', textDecoration: 'line-through', marginTop: 2 }}>₹{Number(originalPrice).toLocaleString()}</div>}
-            {taxAmount > 0 && <div style={{ fontSize: '12px', color: '#6B7280' }}>+₹{taxAmount} tax & fees</div>}
+            {originalPrice > 0 && <div style={{ fontSize: '12px', color: '#9CA3AF', textDecoration: 'line-through', marginTop: 2 }}>₹{Number(originalPrice).toLocaleString('en-IN')}</div>}
+            {taxAmount > 0 && <div style={{ fontSize: '12px', color: '#6B7280' }}>+₹{Number(taxAmount).toLocaleString('en-IN')} tax & fees</div>}
             {price === 0 && (
               <div style={{ fontSize: '12px', color: '#9CA3AF', fontStyle: 'italic' }}>Price not set</div>
             )}
@@ -363,7 +363,7 @@ const rooms = (Array.isArray(dynamicRooms) && dynamicRooms.length > 0)
                             </div>
                             <div style={{ textAlign: 'right' }}>
                               <div style={{ fontSize: '18px', fontWeight: 700, color: '#58A429' }}>
-                                ₹{Number(roomPrice).toLocaleString()}
+                                ₹{Number(roomPrice).toLocaleString('en-IN')}
                               </div>
                               <div style={{ fontSize: '12px', color: '#6B7280' }}>per night</div>
                             </div>

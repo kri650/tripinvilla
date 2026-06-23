@@ -537,7 +537,7 @@ export default function PropertyRequests() {
                         <img src={room._preview_img || 'https://via.placeholder.com/48'} alt={room.room_type} className="queue-item-img" />
                         <div className="queue-item-info">
                           <div className="queue-item-name">{room.room_type}</div>
-                          <div className="queue-item-price">₹{room.price_per_room}/night</div>
+                          <div className="queue-item-price">₹{Number(room.price_per_room).toLocaleString('en-IN')}/night</div>
                         </div>
                         <div className="queue-item-actions">
                           <button type="button" onClick={() => handleEditFromQueue(idx)} className="btn-edit-queue"><Plus size={14} /></button>

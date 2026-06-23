@@ -422,11 +422,11 @@ export default function PropertyRoomManager({ property, onClose }) {
                         </div>
                         <div style={{marginBottom:8}}>
                           <span className="prm-room-price">
-                            ₹{Number(room.price || room.price_per_room || room.pricePerNight || 0).toLocaleString()}
+                            ₹{Number(room.price || room.price_per_room || room.pricePerNight || 0).toLocaleString('en-IN')}
                           </span>
                           {(room.originalPrice || room.original_price) && (
                             <span className="prm-room-orig">
-                              ₹{Number(room.originalPrice || room.original_price).toLocaleString()}
+                              ₹{Number(room.originalPrice || room.original_price).toLocaleString('en-IN')}
                             </span>
                           )}
                           <span className="prm-room-per">/night</span>

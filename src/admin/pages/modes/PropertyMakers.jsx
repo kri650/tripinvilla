@@ -2182,7 +2182,7 @@ export default function PropertyMakers() {
                         <td style={{ padding: '8px 12px', color: '#374151' }}>{room.roomType}</td>
                         <td style={{ padding: '8px 12px', color: '#6B7280' }}>{room.bedType}</td>
                         <td style={{ padding: '8px 12px', color: '#6B7280' }}>{Array.isArray(room.amenities) ? room.amenities.join(', ') : room.amenitiesText || '—'}</td>
-                        <td style={{ padding: '8px 12px', color: '#111827', fontWeight: 600 }}>₹{room.pricePerNight}/night</td>
+                        <td style={{ padding: '8px 12px', color: '#111827', fontWeight: 600 }}>₹{Number(room.pricePerNight).toLocaleString('en-IN')}/night</td>
                         <td style={{ padding: '8px 12px', color: '#6B7280' }}>{room.offer || '—'}</td>
                         <td style={{ padding: '8px 12px' }}>
                           <div style={{ display: 'flex', gap: '12px' }}>

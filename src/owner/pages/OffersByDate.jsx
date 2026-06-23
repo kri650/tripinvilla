@@ -378,7 +378,7 @@ export default function OffersByDate() {
               <input 
                 type="text" 
                 className="form-input" 
-                value={price ? `₹${price} per night` : ''} 
+                value={price ? `₹${Number(String(price).replace(/[^\d]/g, '')).toLocaleString('en-IN')} per night` : ''} 
                 readOnly 
                 disabled 
                 placeholder="Select property first"
@@ -556,7 +556,7 @@ export default function OffersByDate() {
                       </span>
                     </td>
                     <td style={{ color: '#111827', fontWeight: 500, padding: '14px 16px' }}>
-                      {o.price ? `₹${o.price}` : 'N/A'}
+                      {o.price ? `₹${Number(String(o.price).replace(/[^\d]/g, '')).toLocaleString('en-IN')}` : 'N/A'}
                     </td>
                     <td style={{ color: '#4B5563', padding: '14px 16px' }}>{o.foods}</td>
                     <td style={{ color: '#4B5563', padding: '14px 16px', whiteSpace: 'normal', maxWidth: '160px' }}><ReadMore lines={2}>{o.amenities}</ReadMore></td>

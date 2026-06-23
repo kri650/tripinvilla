@@ -224,7 +224,7 @@ export default function OffersbyDate() {
                       </td>
                       <td style={{ padding: '14px' }}><span className="category-pill">{o.category}</span></td>
                       <td style={{ color: '#111827', fontWeight: 500, padding: '14px' }}>
-                        {o.price || o.price_per_room || (o.property_id && (o.property_id.price || o.property_id.bestRoomRate)) ? `₹${o.price || o.price_per_room || (o.property_id && (o.property_id.price || o.property_id.bestRoomRate))}` : 'N/A'}
+                        {o.price || o.price_per_room || (o.property_id && (o.property_id.price || o.property_id.bestRoomRate)) ? `₹${Number(String(o.price || o.price_per_room || (o.property_id && (o.property_id.price || o.property_id.bestRoomRate))).replace(/[^\d]/g, '')).toLocaleString('en-IN')}` : 'N/A'}
                       </td>
                       <td style={{ color: '#6B7280', padding: '14px' }}>
                         {(() => {

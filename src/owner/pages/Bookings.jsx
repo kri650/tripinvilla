@@ -31,7 +31,7 @@ export default function Bookings() {
   const bookingStats = [
     { label: "Total Bookings", value: bookingsList.length, icon: <CheckSquare size={18} />, color: "#10b981" },
     { label: "Active Stays", value: bookingsList.filter(b => b.status === 'Confirmed').length, icon: <Calendar size={18} />, color: "#3b82f6" },
-    { label: "Total Revenue", value: `₹${bookingsList.reduce((sum, b) => sum + b.totalPrice, 0).toLocaleString()}`, icon: <Clock size={18} />, color: "#f59e0b" },
+    { label: "Total Revenue", value: `₹${bookingsList.reduce((sum, b) => sum + b.totalPrice, 0).toLocaleString('en-IN')}`, icon: <Clock size={18} />, color: "#f59e0b" },
     { label: "Cancelled", value: bookingsList.filter(b => b.status === 'Cancelled').length, icon: <UserX size={18} />, color: "#ef4444" }
   ];
 
@@ -189,7 +189,7 @@ export default function Bookings() {
                     <td style={{ padding: '14px', color: '#6B7280' }}>{new Date(booking.checkIn).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
                     <td style={{ padding: '14px', color: '#6B7280' }}>{new Date(booking.checkOut).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</td>
                     <td style={{ padding: '14px' }}>{Math.ceil((new Date(booking.checkOut) - new Date(booking.checkIn)) / (1000 * 60 * 60 * 24))}</td>
-                    <td style={{ fontWeight: 600, color: '#111827', padding: '14px' }}>₹{booking.totalPrice}</td>
+                    <td style={{ fontWeight: 600, color: '#111827', padding: '14px' }}>₹{booking.totalPrice?.toLocaleString('en-IN')}</td>
                     <td style={{ padding: '14px' }}>
                       <span style={{
                         padding: '3px 10px', borderRadius: 20, fontSize: 11, fontWeight: 600,

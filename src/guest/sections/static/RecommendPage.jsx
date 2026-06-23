@@ -84,10 +84,10 @@ export default function RecommendPage(props) {
                   </div>
                   <div className="recommend-price-tag-row">
                     <span className="price-label">Starting from </span>
-                    <span className="price-green-bold">₹{item.price}/night</span>
+                    <span className="price-green-bold">₹{Number(String(item.price).replace(/[^\d]/g, '')).toLocaleString('en-IN')}/night</span>
                   </div>
                   <div className="recommend-actions-row">
-                    <button className="recommend-details-btn-blue" onClick={() => { setSelectedProperty({ title: item.name, location: item.location, price: `₹${item.price}`, img: item.img, images: [item.img] }); setActiveMenu('Detail'); }}>View Details</button>
+                    <button className="recommend-details-btn-blue" onClick={() => { setSelectedProperty({ title: item.name, location: item.location, price: `₹${Number(String(item.price).replace(/[^\d]/g, '')).toLocaleString('en-IN')}`, img: item.img, images: [item.img] }); setActiveMenu('Detail'); }}>View Details</button>
                     <button className="recommend-contact-btn-green" onClick={() => alert(`Connecting with the owner of "${item.name}"...`)}>Contact Owner</button>
                   </div>
                 </div>

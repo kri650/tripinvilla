@@ -35,8 +35,49 @@ import {
   buildStaticPagesProps,
 } from './props/pageProps';
 
+const getMenuFromPath = (path) => {
+  switch (path.toLowerCase().replace(/\/$/, '')) {
+    case '/profile': return 'Profile';
+    case '/wishlist': return 'Wishlist';
+    case '/enquiries': return 'Enquiries';
+    case '/reviews': return 'Reviews';
+    case '/about-us': return 'About Us';
+    case '/contact-us': return 'Contact';
+    case '/terms': return 'Terms';
+    case '/privacy': return 'Privacy';
+    case '/recommend-by-us': return 'Recommend By Us';
+    case '/list-your-place': return 'List Your Place';
+    case '/properties': return 'Properties';
+    case '/search': return 'Search';
+    case '/property-detail': return 'Detail';
+    case '/detail': return 'Detail';
+    default: return 'Home';
+  }
+};
+
+const getPathFromMenu = (menu) => {
+  switch (menu) {
+    case 'Profile': return '/profile';
+    case 'Wishlist': return '/wishlist';
+    case 'Enquiries': return '/enquiries';
+    case 'Reviews': return '/reviews';
+    case 'About Us': return '/about-us';
+    case 'Contact': return '/contact-us';
+    case 'Terms': return '/terms';
+    case 'Privacy': return '/privacy';
+    case 'Recommend By Us': return '/recommend-by-us';
+    case 'List Your Place': return '/list-your-place';
+    case 'Properties': return '/properties';
+    case 'Search': return '/search';
+    case 'Detail': return '/property-detail';
+    default: return '/';
+  }
+};
+
 export default function GuestApp() {
   const [activeMenu, setActiveMenu] = useState(() => {
+    const pathMenu = getMenuFromPath(window.location.pathname);
+    if (pathMenu !== 'Home') return pathMenu;
     return sessionStorage.getItem('activeMenu') || 'Home';
   });
 
@@ -47,11 +88,8 @@ export default function GuestApp() {
   // Handle browser back button
   React.useEffect(() => {
     const handlePopState = (event) => {
-      if (event.state && event.state.activeMenu) {
-        setActiveMenu(event.state.activeMenu);
-      } else {
-        setActiveMenu('Home');
-      }
+      const pathMenu = getMenuFromPath(window.location.pathname);
+      setActiveMenu(pathMenu);
     };
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
@@ -60,7 +98,8 @@ export default function GuestApp() {
   // Wrap setActiveMenu to also push state
   const handleSetActiveMenu = (newMenu) => {
     if (newMenu !== activeMenu) {
-      window.history.pushState({ activeMenu: newMenu }, '', window.location.pathname);
+      const newPath = getPathFromMenu(newMenu);
+      window.history.pushState({ activeMenu: newMenu }, '', newPath);
       setActiveMenu(newMenu);
     }
   };
@@ -131,7 +170,7 @@ export default function GuestApp() {
     handleEditProfileSubmit,
     avatarFile,
     setAvatarFile,
-  } = useGuestAuth({ API_BASE, API_ORIGIN, setActiveMenu });
+  } = useGuestAuth({ API_BASE, API_ORIGIN, setActiveMenu: handleSetActiveMenu });
 
   const {
     // tabs
@@ -200,7 +239,7 @@ export default function GuestApp() {
     handleClearAll,
     handleCloseSearch,
     buildSearchParams,
-  } = useGuestSearch({ API_BASE, setActiveMenu });
+  } = useGuestSearch({ API_BASE, setActiveMenu: handleSetActiveMenu });
 
   const mapDbProperties = (dbProps, defaultList) =>
     mapDbPropertiesRaw(dbProps, defaultList, where);
@@ -444,7 +483,7 @@ const {
     const protectedMenus = ['Wishlist', 'Enquiries', 'Profile'];
     if (protectedMenus.includes(activeMenu) && !token) {
       openLoginModal();
-      setActiveMenu('Home');
+      handleSetActiveMenu('Home');
     }
   }, [activeMenu, token, openLoginModal]);
 

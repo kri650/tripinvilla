@@ -292,7 +292,7 @@ export default function Dashboard() {
                     <td style={{ fontWeight: 500, color: '#111827' }}>{p.name}</td>
                     <td><div className="location-text"><ReadMore maxWords={6}>{p.location}</ReadMore></div></td>
                     <td><span className="category-pill">{p.category}</span></td>
-                    <td style={{ fontWeight: 600, color: '#111827' }}>{typeof p.bestRoomRate === 'number' ? `₹${p.bestRoomRate.toLocaleString()}` : p.bestRoomRate}</td>
+                    <td style={{ fontWeight: 600, color: '#111827' }}>{typeof p.bestRoomRate === 'number' ? `₹${p.bestRoomRate.toLocaleString('en-IN')}` : p.bestRoomRate}</td>
                     <td>{p.rooms}</td>
                     <td style={{ fontWeight: 700, color: '#58A429' }}>{p.totalEnquiries ?? 0}</td>
                     <td style={{ color: '#374151' }}>{p.rating || '—'}</td>

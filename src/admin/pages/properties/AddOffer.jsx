@@ -73,7 +73,7 @@ export default function AddOffer() {
                 return fp;
               })(),
               amenities: offerData.amenities ? (Array.isArray(offerData.amenities) ? offerData.amenities.join(', ') : offerData.amenities) : '',
-              price: offerData.price ? `₹${offerData.price} per night` : '',
+              price: offerData.price ? `₹${Number(String(offerData.price).replace(/[^\d]/g, '')).toLocaleString('en-IN')} per night` : '',
               dateFrom: offerData.dateFrom ? new Date(offerData.dateFrom).toISOString().split('T')[0] : (offerData.offer_date ? new Date(offerData.offer_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
               dateTo: offerData.dateTo ? new Date(offerData.dateTo).toISOString().split('T')[0] : (offerData.offer_date ? new Date(offerData.offer_date).toISOString().split('T')[0] : new Date().toISOString().split('T')[0]),
               timeFrom: offerData.offer_time ? offerData.offer_time.split(' to ')[0] : '12:00',
@@ -105,7 +105,7 @@ export default function AddOffer() {
                 setFormData(prev => ({
                   ...prev,
                   amenities: prev.amenities || amenitiesArr.join(', '),
-                  price: prev.price || (priceVal ? `₹${priceVal} per night` : ''),
+                  price: prev.price || (priceVal ? `₹${Number(String(priceVal).replace(/[^\d]/g, '')).toLocaleString('en-IN')} per night` : ''),
                   foods: prev.foods && prev.foods !== 'None' ? prev.foods : formattedFood
                 }));
               }
@@ -160,7 +160,7 @@ export default function AddOffer() {
         category: prop.type || prop.propertyType || 'Homestay',
         room: rooms[0]?.roomType || 'Deluxe Room',
         amenities: amenitiesArr.join(', '),
-        price: priceVal ? `₹${priceVal} per night` : '',
+        price: priceVal ? `₹${Number(String(priceVal).replace(/[^\d]/g, '')).toLocaleString('en-IN')} per night` : '',
         foods: formattedFood,
       }));
     } catch (err) {
