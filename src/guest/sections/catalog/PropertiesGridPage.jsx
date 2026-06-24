@@ -167,7 +167,7 @@ export default function PropertiesGridPage(props) {
 
                     <div className="recommend-price-tag-row">
                       <span className="price-label">Starting from</span>
-                      <span className="price-green-bold">{String(propData.price).startsWith('₹') ? propData.price : '₹' + propData.price}/night</span>
+                      <span className="price-green-bold">₹{Number(String(propData.price || 0).replace(/[^\d]/g, '')).toLocaleString('en-IN')}/night</span>
                     </div>
                     <div className="recommend-actions-row">
                       <button className="recommend-details-btn-blue" onClick={() => { setSelectedProperty(propData); setActiveMenu('Detail'); }}>View Details</button>
