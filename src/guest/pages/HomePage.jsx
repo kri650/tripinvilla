@@ -241,7 +241,7 @@ export default function HomePage(props) {
 
                       <div className="villa-card-price-row">
                         <span className="price-label">Starting from</span>
-                        <span className="price-value-highlight">{villa.price}/night</span>
+                        <span className="price-value-highlight">₹{Number(String(villa.price || 0).replace(/[^\d]/g, '')).toLocaleString('en-IN')}/night</span>
                       </div>
 
                       <div className="villa-card-actions">
@@ -329,7 +329,7 @@ export default function HomePage(props) {
 
                       <div className="curated-card-price-row">
                         <span className="price-label">Starting from</span>
-                        <span className="price-value-highlight">{item.price}/night</span>
+                        <span className="price-value-highlight">₹{Number(String(item.price || 0).replace(/[^\d]/g, '')).toLocaleString('en-IN')}/night</span>
                       </div>
 
                       <div className="curated-card-actions">
